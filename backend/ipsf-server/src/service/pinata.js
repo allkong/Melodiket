@@ -7,10 +7,10 @@ const pinata = new PinataSDK({
     pinataGateway: pinataConfig.gateway,
 })
 
-export async function testFunction() {
+export async function uploadAndPin(file) {
     try {
-        const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
-        const upload = await pinata.upload.file(file);
+        const uploadingFile = new File(file.buffer, file.originalname, { type: file.mimetype });
+        const upload = await pinata.upload.file(uploadingFile);
         console.log(upload);
     } catch (error) {
         console.log(error);
