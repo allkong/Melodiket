@@ -1,4 +1,6 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: release
+    import:
+      - file:release.env[.properties]
