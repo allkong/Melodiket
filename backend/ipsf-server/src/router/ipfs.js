@@ -1,36 +1,32 @@
 import express from "express";
+import stream from 'stream';
 
-import { upload } from '../util/file-process.js'
-import { uploadAndPin, getPinnedData, testFunction } from "../service/pinata.js";
-import { calculateTotalPinnedSize, pinToLocal, isPinnedInLocal, getFileMimetype } from '../service/local-ipfs.js';
+import { fileUploadMiddleware } from '../middleware/file-process.js'
+import { uploadAndGetCid, getByCid } from "../service/ipfs.js";
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-    console.log('Total size:', await calculateTotalPinnedSize());
-    res.send();
-})
-
-router.post('/', upload.single('file'), async (req, res) => {
+router.post('/', fileUploadMiddleware.single('file'), async (req, res) => {
     const { file } = req;
-    const result = await uploadAndPin(file);
-    pinToLocal(result.IpfsHash);
-    res.send(result);
+    const cid = (await uploadAndGetCid(file)).toString();
+    res.send({
+        cid
+    });
 })
 
-router.get('/:hash', async (req, res) => {
-    const { hash } = req.params;
-    
-    const pinnedData = await getPinnedData(hash);
-    console.log(pinnedData);
-    
-    const mimeType = await getFileMimetype(pinnedData.data);
-    res.setHeader('Content-Type', mimeType || 'application/octet-stream');
-    res.setHeader('Content-Disposition', `attachment; filename="${hash}"`);
 
-    pinnedData.data.arrayBuffer().then((buf) => {
-        res.send(Buffer.from(buf))
-    });
+router.get('/:cid', async (req, res) => {
+    const { cid } = req.params;
+    
+    const pinnedData = await getByCid(cid);
+    const {file, originalName, mimetype} = pinnedData;
+    
+    const buffer = Buffer.from(file, 'base64');
+    res.setHeader('Content-Type', mimetype || 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${originalName}"`);
+    const readStream = new stream.PassThrough();
+    readStream.end(buffer);
+    readStream.pipe(res);
 })
 
 export default router;
