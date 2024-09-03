@@ -1,7 +1,7 @@
 {
-  "name": "ipsf-server",
+  "name": "ipfs-server",
   "version": "1.0.0",
-  "description": "IPSF server for Melodiket service",
+  "description": "IPFS server for Melodiket service",
   "main": "index.js",
   "type": "module",
   "scripts": {
