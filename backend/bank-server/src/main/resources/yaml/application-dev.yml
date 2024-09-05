@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - file:dev.env[.properties]
+server:
+  port: ${SERVER_PORT}
+security:
+  allowed-origins: http://localhost:3000;
+jwt:
+  secret: ${JWT_SECRET}
+  issuer: localhost
