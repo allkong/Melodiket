@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: a310-bank
+  config:
+    import:
+      - classpath:/yaml/application-dev.yml
+      - file:.env[.properties]
+
+  profiles:
+    group:
+      dev: dev
+      release: release
+    active: ${CURRENT_ENV}
