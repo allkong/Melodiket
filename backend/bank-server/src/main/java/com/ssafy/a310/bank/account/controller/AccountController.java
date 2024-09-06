@@ -1,8 +1,11 @@
 package com.ssafy.a310.bank.account.controller;
 
 import com.ssafy.a310.bank.account.controller.dto.BankAccountCursorPagingParam;
+import com.ssafy.a310.bank.account.controller.dto.BankTransactionCursorPagingParam;
+import com.ssafy.a310.bank.account.controller.dto.TransferReq;
 import com.ssafy.a310.bank.account.service.BankAccountService;
 import com.ssafy.a310.bank.account.service.domain.BankAccount;
+import com.ssafy.a310.bank.account.service.domain.BankTransaction;
 import com.ssafy.a310.bank.common.controller.query.dto.CursorPageResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,18 +31,22 @@ public class AccountController {
     @GetMapping("/me")
     public ResponseEntity<CursorPageResp<BankAccount>> getMyAccounts(Principal principal,
                                                                      @Validated BankAccountCursorPagingParam pagingParam) {
-        String uuid = principal.getName();
-        CursorPageResp<BankAccount> accounts = bankAccountService.getBankAccountsOf(uuid, pagingParam);
+        String userUuid = principal.getName();
+        CursorPageResp<BankAccount> accounts = bankAccountService.getBankAccountsOf(userUuid, pagingParam);
         return ResponseEntity.ok(accounts);
     }
 
     @GetMapping("/{accountNumber}/transactions")
-    public String getTransactions(@PathVariable String accountNumber) {
-        return "Transactions of account " + accountNumber;
+    public ResponseEntity<CursorPageResp<BankTransaction>> getTransactions(Principal principal, @PathVariable String accountNumber, @Validated BankTransactionCursorPagingParam pagingParam) {
+        String userUuid = principal.getName();
+        CursorPageResp<BankTransaction> transaction = bankAccountService.getTransactionsOf(userUuid, accountNumber, pagingParam);
+        return ResponseEntity.ok(transaction);
     }
 
     @PostMapping("/{accountNumber}/transfer")
-    public String transfer(@PathVariable String accountNumber) {
-        return "Transfer to account " + accountNumber;
+    public ResponseEntity<BankTransaction> transfer(Principal principal, @PathVariable String accountNumber, @Validated @RequestBody TransferReq reqDto) {
+        String userUuid = principal.getName();
+        BankTransaction transaction = bankAccountService.transfer(userUuid, accountNumber, reqDto);
+        return ResponseEntity.ok(transaction);
     }
 }

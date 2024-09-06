@@ -36,6 +36,7 @@ public enum ErrorDetail {
     ALREADY_EXIST_USER(HttpStatus.CONFLICT, "E409100", "Already Exist User"),
     LACK_OF_BALANCE(HttpStatus.CONFLICT, "E409101", "Lack of Balance"),
     MAX_ACCOUNT_COUNT(HttpStatus.CONFLICT, "E409102", "Max Account Count"),
+    ALREADY_EXIST_ACCOUNT(HttpStatus.CONFLICT, "E409103", "Already Exist Account"),
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500000", "Internal Server Error");
 

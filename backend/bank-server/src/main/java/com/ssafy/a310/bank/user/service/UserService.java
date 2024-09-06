@@ -19,7 +19,7 @@ public interface UserService {
      * @param name   사용자 이름
      * @param yymmdd 사용자 생년월일
      * @return 사용자 정보
-     * @throws HttpResponseException 사용자 정보를 찾을 수 없는 경우 USER_NOT_FOUND(E404101)
+     * @throws HttpResponseException 사용자 정보를 찾을 수 없는 경우 USER_NOT_FOUND(E404100)
      */
     User getUserByLoginReq(String name, String yymmdd) throws HttpResponseException;
 
@@ -28,7 +28,7 @@ public interface UserService {
      *
      * @param uuid 사용자 UUID
      * @return 사용자 정보
-     * @throws HttpResponseException 사용자 정보를 찾을 수 없는 경우 ErrorDetail#USER_NOT_FOUND(E404101)
+     * @throws HttpResponseException 사용자 정보를 찾을 수 없는 경우 ErrorDetail#USER_NOT_FOUND(E404100)
      */
     User getUserByUuid(String uuid) throws HttpResponseException;
 
@@ -40,4 +40,26 @@ public interface UserService {
      * @throws HttpResponseException 이미 사용 중인 이름, 생년월일 조합인 경우 ErrorDetail#ALREADY_EXIST_USER(E409100)
      */
     void createUser(String name, String yymmdd) throws HttpResponseException;
+
+    /**
+     * 사용자 이름이 사용 가능한지 확인한다.
+     *
+     * @param name 사용자 이름
+     * @return 사용자 이름 사용 가능 여부
+     */
+    boolean isAvailableName(String name);
+
+    /**
+     * 시스템 사용자를 생성한다.
+     *
+     * @return 시스템 사용자
+     */
+    User createSystemUser();
+
+    /**
+     * 시스템 사용자를 조회한다.
+     *
+     * @return 시스템 사용자
+     */
+    User getSystemUser();
 }
