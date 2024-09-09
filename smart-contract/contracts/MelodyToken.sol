@@ -16,4 +16,9 @@ contract MelodyToken is ERC20, Ownable {
     function burn(uint256 amount) public {
         _burn(msg.sender, amount);
     }
+
+    // 소수점 자리를 0으로 설정
+    function decimals() public view virtual override returns (uint8) {
+        return 0;
+    }
 }

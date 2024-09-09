@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 import "./MelodyToken.sol"; // MelodyToken 컨트랙트 가져오기
 import "./TicketNFT.sol";   // TicketNFT 컨트랙트 가져오기
+import "hardhat/console.sol";
 
 contract ConcertManager {
     uint256 private _concertIdCounter;
@@ -123,11 +124,11 @@ contract ConcertManager {
         Concert storage concert = concerts[_concertId];
         require(concert.isActive, "Concert is not active.");
         require(concert.allMusiciansAgreed, "Not all musicians have agreed.");
-        require(melodyToken.balanceOf(msg.sender) >= concert.ticketPrice, "Insufficient Melody Token");
-
-        melodyToken.transferFrom(msg.sender, address(this), concert.ticketPrice);
+        require(melodyToken.balanceOf(msg.sender) < concert.ticketPrice, "Insufficient Melody Token");
 
         uint256 ticketId = ticketNFT.mintTicket(msg.sender);
+        melodyToken.transferFrom(msg.sender, address(this), concert.ticketPrice);
+
         concert.totalTicketsSold += 1;
 
         // 최애 뮤지션 투표

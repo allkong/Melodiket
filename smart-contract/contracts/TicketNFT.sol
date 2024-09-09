@@ -11,13 +11,13 @@ contract TicketNFT is ERC721, Ownable {
     constructor(address initialOwner) ERC721("TicketNFT", "TICKET") Ownable(initialOwner) {}
 
     // ConcertManager만 티켓을 발행할 수 있도록 설정
-    modifier onlyConcertManager() {
-        require(concertManagers[msg.sender], "Only authorized ConcertManager can mint tickets");
+    modifier onlyConcertManager(address manager) {
+        require(concertManagers[manager], "Only authorized ConcertManager can mint tickets");
         _;
     }
 
     // ConcertManager가 티켓을 발행할 수 있게 변경
-    function mintTicket(address to) public onlyConcertManager returns (uint256) {
+    function mintTicket(address to) public returns (uint256) {
         _tokenIdCounter++;
         uint256 newItemId = _tokenIdCounter;
         _mint(to, newItemId);

@@ -1,13 +1,13 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
 module.exports = buildModule("ConcertManager", (m) => {
-  const deployer = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+  const deployer = "0x6009560432b36eFC5E0F649B62a7783e4ecD0B03";
 
   // ConcertManager 배포
   const concertManager = m.contract("ConcertManager", 
-    ["0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9", //멜로디토큰
-      "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707" , // 티켓 NFT
-       deployer]);
+    ["0xdA46A09167EbcE0bc27847eaD2Ebc31cF060F71E", //멜로디토큰
+      "0xb01BCdD0Fa0Ca96Cdc4bf368dc09f1a0DB58dA09" // 티켓 NFT
+      ]);
 
   return { concertManager };// , ticketNFT, concertManager };
 });
