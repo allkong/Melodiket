@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { pretendard } from '../../public/fonts/fonts';
+import { pretendard} from '../../public/fonts/fonts';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -19,8 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="kor">
-      <body className={`${pretendard.variable} font-pretendard antialiased`}>
-        {/* <body className={`font-pretendard antialiased`}> */}
+      <body>
         <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
           {children}
         </div>
