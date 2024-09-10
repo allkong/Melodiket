@@ -1,11 +1,6 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
-import './globals.css';
-
-const pretendard = localFont({
-  src: './fonts/PretendardVariable.woff2',
-  variable: '--font-pretendard',
-});
+import { pretendard } from '../../public/fonts/fonts';
+import '../styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'melodiket',
@@ -23,9 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='kor'>
+    <html lang="kor">
       <body className={`${pretendard.variable} font-pretendard antialiased`}>
-        <div className='max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md'>
+        {/* <body className={`font-pretendard antialiased`}> */}
+        <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
           {children}
         </div>
       </body>
