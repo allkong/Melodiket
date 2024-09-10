@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract MelodyToken is ERC20, Ownable {
     constructor(uint256 initialSupply, address initialOwner) ERC20("MelodyToken", "MLDY") Ownable(initialOwner) {
         _mint(initialOwner, initialSupply);
+        transferOwnership(initialOwner);
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
