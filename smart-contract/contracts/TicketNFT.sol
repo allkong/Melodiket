@@ -5,32 +5,59 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TicketNFT is ERC721, Ownable {
+    enum TicketStatus {
+        UNUSED, // 사용되지 않은 티켓
+        USED, // 사용된 티켓
+        REFUNDED // 환불된 티켓
+    }
+
+    struct Ticket {
+        uint256 id;
+        address owner;
+        address concertAddress;
+        TicketStatus status;
+        address favoriteMusicianAddress;
+        bool isStanding;
+        uint256 seatRow;
+        uint256 seatColumn;
+    }
+
     uint256 private _tokenIdCounter;
-    mapping(address => bool) public concertManagers; // 여러 ConcertManager의 주소를 저장
+    mapping(uint256 => TicketNFT.Ticket) public tickets;
 
-    constructor(address initialOwner) ERC721("TicketNFT", "TICKET") Ownable(initialOwner) {}
+    constructor(address initialOwner) ERC721("TicketNFT", "TICKET") Ownable(initialOwner) { }
 
-    // ConcertManager만 티켓을 발행할 수 있도록 설정
-    modifier onlyConcertManager(address manager) {
-        require(concertManagers[manager], "Only authorized ConcertManager can mint tickets");
-        _;
-    }
-
-    // ConcertManager가 티켓을 발행할 수 있게 변경
-    function mintTicket(address to) public returns (uint256) {
+    function mintTicket(address to, address _favoriteMusician, bool _isStanding, uint256 _seatRow, uint256 _seatColumn) public returns (uint256) {
         _tokenIdCounter++;
-        uint256 newItemId = _tokenIdCounter;
-        _mint(to, newItemId);
-        return newItemId;
+        
+        uint256 newTicketId = _tokenIdCounter;
+        _safeMint(to, newTicketId);
+
+        tickets[newTicketId] = Ticket({
+            id: newTicketId,
+            owner: to,
+            concertAddress: msg.sender,
+            status: TicketStatus.UNUSED,
+            favoriteMusicianAddress: _favoriteMusician,
+            isStanding: _isStanding,
+            seatRow: _seatRow,
+            seatColumn: _seatColumn
+        });
+
+        return newTicketId;
     }
 
-    // ConcertManager를 추가하는 함수
-    function addConcertManager(address _concertManager) public onlyOwner {
-        concertManagers[_concertManager] = true;
+    function useTicket(uint256 _ticketId) public {
+        Ticket storage ticket = tickets[_ticketId];
+        ticket.status = TicketStatus.USED;
     }
 
-    // ConcertManager를 제거하는 함수
-    function removeConcertManager(address _concertManager) public onlyOwner {
-        concertManagers[_concertManager] = false;
+    function refundTicket(uint256 _ticketId) public {
+        Ticket storage ticket = tickets[_ticketId];
+        ticket.status = TicketStatus.REFUNDED;
+    }
+
+    function getTicketWithId(uint256 _ticketId) public view returns (Ticket memory) {
+        return tickets[_ticketId];
     }
 }

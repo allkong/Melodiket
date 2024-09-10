@@ -6,7 +6,8 @@ module.exports = {
   solidity: {
     version: "0.8.24", // Solidity 버전
     settings: {
-      evmVersion: "london" // EVM 버전을 london으로 설정
+      evmVersion: "london", // EVM 버전을 london으로 설정
+      viaIR: true,
     },
   },
   networks: {
