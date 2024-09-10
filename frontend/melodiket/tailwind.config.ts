@@ -28,9 +28,6 @@ const config: Config = {
           600: '#3E3E3E',
         },
       },
-      fontFamily: {
-        pretendard: ['var(--font-pretendard)', 'sans-serif'],
-      },
     },
   },
   plugins: [],
