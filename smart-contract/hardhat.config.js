@@ -8,6 +8,10 @@ module.exports = {
     settings: {
       evmVersion: "london", // EVM 버전을 london으로 설정
       viaIR: true,
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      }
     },
   },
   networks: {
