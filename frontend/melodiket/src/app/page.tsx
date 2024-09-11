@@ -1,10 +1,9 @@
-import Button from '@/components/Button';
+import Header from '@/components/organisms/navigation/Header';
 
 export default function Home() {
   return (
     <div>
-      메인
-      <Button />
+      <Header />
     </div>
   );
 }
