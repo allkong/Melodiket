@@ -14,7 +14,7 @@ contract TicketNFT is ERC721, Ownable {
     struct Ticket {
         uint256 id;
         address owner;
-        address concertAddress;
+        uint256 concertId;
         TicketStatus status;
         address favoriteMusicianAddress;
         bool isStanding;
@@ -27,7 +27,7 @@ contract TicketNFT is ERC721, Ownable {
 
     constructor(address initialOwner) ERC721("TicketNFT", "TICKET") Ownable(initialOwner) { }
 
-    function mintTicket(address to, address _favoriteMusician, bool _isStanding, uint256 _seatRow, uint256 _seatColumn) public returns (uint256) {
+    function mintTicket(address to, uint256 _concertId, address _favoriteMusician, bool _isStanding, uint256 _seatRow, uint256 _seatColumn) public returns (uint256) {
         _tokenIdCounter++;
         
         uint256 newTicketId = _tokenIdCounter;
@@ -36,7 +36,7 @@ contract TicketNFT is ERC721, Ownable {
         tickets[newTicketId] = Ticket({
             id: newTicketId,
             owner: to,
-            concertAddress: msg.sender,
+            concertId: _concertId,
             status: TicketStatus.UNUSED,
             favoriteMusicianAddress: _favoriteMusician,
             isStanding: _isStanding,
