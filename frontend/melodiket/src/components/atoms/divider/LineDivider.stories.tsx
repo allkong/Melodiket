@@ -9,7 +9,5 @@ const meta: Meta<typeof LineDivider> = {
 type Story = StoryObj<typeof LineDivider>;
 
 export const Default: Story = {
-  args: {
-    onClick: () => alert('구분선'),
-  },
+  args: {},
 };
