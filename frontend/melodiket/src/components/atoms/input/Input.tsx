@@ -28,7 +28,7 @@ const Input = forwardRef(
     }: InputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
-    const isControlled = !controlledValue;
+    const isControlled = controlledValue !== undefined;
 
     const [value, setValue] = useState('');
 
