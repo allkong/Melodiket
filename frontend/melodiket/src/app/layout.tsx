@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Providers from '@/app/providers';
 import '../styles/globals.css';
 
 export const metadata: Metadata = {
@@ -19,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="kor">
       <body>
-        <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
-          {children}
-        </div>
+        <Providers>
+          <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
