@@ -1,9 +1,7 @@
 const LineDivider = () => {
     return (
-        <div>
-            
-        </div>
+        <div className="w-full h-2 bg-gray-300 my-4" />
     );
-  };
-  
-  export default LineDivider;
+};
+
+export default LineDivider;
