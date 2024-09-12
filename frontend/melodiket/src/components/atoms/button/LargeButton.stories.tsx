@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import LargeButton from './LargeButton';
 import { fn } from '@storybook/test';
+import { QrCode } from '@/public/icons';
 
 const meta: Meta<typeof LargeButton> = {
   component: LargeButton,
@@ -39,6 +40,6 @@ export const Icon: Story = {
   args: {
     label: 'QR코드 확인',
     disabled: true,
-    icon: 'qrCode',
+    icon: <QrCode />,
   },
 };

@@ -1,38 +1,19 @@
 'use client';
 
 import clsx from 'clsx';
-import { QrCode, Ticket } from '@/public/icons';
+import { cloneElement, ReactElement } from 'react';
 
-interface IconType {
-  icon: 'default' | 'qrCode' | 'ticket';
-}
-
-interface LargeButtonProps extends Partial<IconType> {
+interface LargeButtonProps {
   label: string;
   onClick?: () => void;
   disabled?: boolean;
+  icon?: ReactElement;
 }
-
-const getIcon = (type?: IconType['icon']) => {
-  switch (type) {
-    case 'qrCode': {
-      return QrCode;
-    }
-    case 'ticket': {
-      return Ticket;
-    }
-    default: {
-      return null;
-    }
-  }
-};
 
 const LargeButton = ({ label, onClick, disabled, icon }: LargeButtonProps) => {
   const handleClickButton = () => {
     onClick?.();
   };
-
-  const Icon = getIcon(icon);
 
   return (
     <button
@@ -47,9 +28,11 @@ const LargeButton = ({ label, onClick, disabled, icon }: LargeButtonProps) => {
       disabled={disabled}
     >
       <div className="flex items-center justify-center gap-1">
-        <div className="w-6 h-6 flex items-center justify-center overflow-hidden">
-          {icon && <Icon className="fill-current" />}
-        </div>
+        {icon && (
+          <div className="w-6 h-6 flex items-center justify-center overflow-hidden">
+            {cloneElement(icon, { className: 'fill-current' })}
+          </div>
+        )}
         <p>{label}</p>
       </div>
     </button>
