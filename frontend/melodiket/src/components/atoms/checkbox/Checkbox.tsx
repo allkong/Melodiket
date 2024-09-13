@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { Check } from '@/public/icons';
+import { ForwardedRef, forwardRef, useState } from 'react';
 
 interface CheckboxProps {
   isChecked?: boolean;
@@ -9,36 +10,53 @@ interface CheckboxProps {
   rounded?: boolean;
 }
 
-const Checkbox = ({ isChecked, onChange, rounded }: CheckboxProps) => {
-  const handleChange = () => {
-    onChange?.(!isChecked);
-  };
+const Checkbox = forwardRef(
+  (
+    { isChecked: controlledIsChecked, onChange, rounded }: CheckboxProps,
+    ref?: ForwardedRef<HTMLInputElement>
+  ) => {
+    const isControlled = controlledIsChecked !== undefined;
 
-  return (
-    <>
-      <div
-        onClick={handleChange}
-        className={clsx(
-          'cursor-pointer flex items-center justify-center',
-          {
-            'w-6 h-6 rounded-full border': rounded,
-            'w-fit h-fit': !rounded,
-          },
-          {
-            'text-primary border-primary': isChecked,
-            'text-gray-400 border-gray-400': !isChecked,
-          },
-          {
-            'bg-purple-100': rounded && isChecked,
-            'bg-white': rounded && !isChecked,
-          }
-        )}
-      >
-        <Check className="fill-current" />
-      </div>
-      <input hidden type="checkbox" checked={isChecked} />
-    </>
-  );
-};
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleChange = () => {
+      if (!isControlled) {
+        setIsChecked(!isChecked);
+      }
+
+      onChange?.(!controlledIsChecked);
+    };
+
+    const checkedState = isControlled ? controlledIsChecked : isChecked;
+
+    return (
+      <>
+        <div
+          onClick={handleChange}
+          className={clsx(
+            'cursor-pointer flex items-center justify-center',
+            {
+              'w-6 h-6 rounded-full border': rounded,
+              'w-fit h-fit': !rounded,
+            },
+            {
+              'text-primary border-primary': checkedState,
+              'text-gray-400 border-gray-400': !checkedState,
+            },
+            {
+              'bg-purple-100': rounded && checkedState,
+              'bg-white': rounded && !checkedState,
+            }
+          )}
+        >
+          <Check className="fill-current" />
+        </div>
+        <input ref={ref} hidden type="checkbox" checked={checkedState} />
+      </>
+    );
+  }
+);
+
+Checkbox.displayName = 'Checkbox';
 
 export default Checkbox;
