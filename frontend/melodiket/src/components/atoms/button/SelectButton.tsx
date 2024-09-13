@@ -3,13 +3,26 @@ import ArrowButton from './ArrowButton';
 
 interface SelectButtonProps {
   options: string[];
+  selectedOption: string | null;
   isSelected?: boolean;
+  onSelect: (option: string) => void;
 }
 
-const SelectButton = ({ options, isSelected = false }: SelectButtonProps) => {
+const SelectButton = ({
+  options,
+  selectedOption,
+  isSelected = false,
+  onSelect,
+}: SelectButtonProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onSelect(e.target.value);
+  };
+
   return (
     <div className="relative inline-block">
       <select
+        value={selectedOption || ''}
+        onChange={handleChange}
         className={clsx(
           'px-4 py-2 rounded-full text-sm appearance-none pr-10',
           isSelected
@@ -17,10 +30,14 @@ const SelectButton = ({ options, isSelected = false }: SelectButtonProps) => {
             : 'text-gray-400 bg-gray-100'
         )}
       >
-        <option disabled value="">
+        <option value="" disabled>
           선택
         </option>
-        {options?.map((option, index) => <option key={index}>{option}</option>)}
+        {options.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>
+        ))}
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
         <ArrowButton
