@@ -3,16 +3,17 @@ import { clsx } from 'clsx';
 interface OptionButtonProps {
   label: string;
   isSelected?: boolean;
-  //   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const OptionButton = ({
   label,
   isSelected = false,
-  //   onClick,
+  onClick,
 }: OptionButtonProps) => {
   return (
     <button
+      onClick={onClick}
       className={clsx(
         'px-4 py-2 rounded-full text-sm',
         isSelected
