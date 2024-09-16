@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
@@ -8,17 +7,18 @@ import LoginLabel from '@/components/organisms/label/LoginLabel';
 import LoginRoleRadio from '@/components/organisms/radio/LoginRoleRadio';
 
 import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
+import useSignUpStore from '@/store/signUpStore';
 
 const Page = () => {
   const router = useRouter();
 
-  const [checkedValue, setCheckedValue] = useState<string>();
+  const { role, setRole } = useSignUpStore();
 
   const handleChange = (value: string) => {
-    setCheckedValue(value);
+    setRole(value);
   };
 
-  const isCheckValid = checkedValue !== undefined;
+  const isCheckValid = role !== '';
 
   return (
     <div className="w-full max-w-full h-full flex flex-col">
@@ -35,7 +35,7 @@ const Page = () => {
               subLabel={data.subLabel}
               value={data.value}
               name="role"
-              checked={checkedValue === data.value}
+              checked={role === data.value}
               onChange={handleChange}
             />
           ))}
