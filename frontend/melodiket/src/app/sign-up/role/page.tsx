@@ -22,7 +22,7 @@ const Page = () => {
 
   return (
     <div className="w-full max-w-full h-full flex flex-col">
-      <div className="flex-grow">
+      <div className="flex-grow mt-24">
         <SignUpLabel
           mainLabel="역할을 선택해주세요."
           subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요."
