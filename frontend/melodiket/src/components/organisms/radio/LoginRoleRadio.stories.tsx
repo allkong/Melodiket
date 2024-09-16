@@ -11,31 +11,39 @@ type Story = StoryObj<typeof LoginRoleRadio>;
 
 export const Default: Story = {
   render: () => {
-    const [isChecked, setIsChecked] = useState(false);
+    const [selectedValue, setSelectedValue] = useState<string>();
 
-    const handleChange = (value: boolean) => {
-      setIsChecked(value);
+    const handleChange = (value: string) => {
+      setSelectedValue(value);
     };
 
     return (
-      <LoginRoleRadio
-        isChecked={isChecked}
-        onChange={handleChange}
-        mainLabel="역할"
-        subLabel="역할 설명"
-      />
-    );
-  },
-};
-
-export const Groups: Story = {
-  render: () => {
-    return (
-      <>
-        <LoginRoleRadio group="role" mainLabel="1" subLabel="test" />
-        <LoginRoleRadio group="role" mainLabel="2" subLabel="test" />
-        <LoginRoleRadio group="role" mainLabel="3" subLabel="test" />
-      </>
+      <div>
+        <LoginRoleRadio
+          mainLabel="관객"
+          subLabel="뮤지션이 진행하는 공연을 즐기고 싶어요."
+          name="group"
+          checked={selectedValue === 'AUDIENCE'}
+          onChange={handleChange}
+          value="AUDIENCE"
+        />
+        <LoginRoleRadio
+          mainLabel="뮤지션"
+          subLabel="제 공연을 관객들에게 선보이고 싶어요."
+          name="group"
+          checked={selectedValue === 'MUSICIAN'}
+          onChange={handleChange}
+          value="MUSICIAN"
+        />
+        <LoginRoleRadio
+          mainLabel="매니저"
+          subLabel="제 공연장을 제공하고 싶어요."
+          name="group"
+          checked={selectedValue === 'MANAGER'}
+          onChange={handleChange}
+          value="MANAGER"
+        />
+      </div>
     );
   },
 };

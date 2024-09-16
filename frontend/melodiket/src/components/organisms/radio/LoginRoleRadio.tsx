@@ -4,61 +4,62 @@ import { ChangeEvent } from 'react';
 interface LoginRoleRadio {
   mainLabel?: string;
   subLabel?: string;
-  group?: string;
-  isChecked?: boolean;
-  onChange?: (value: boolean) => void;
+  name?: string;
+  checked?: boolean;
+  onChange?: (value: string) => void;
+  disabled?: boolean;
+  value: string;
 }
 
 const LoginRoleRadio = ({
   mainLabel,
   subLabel,
-  group,
-  isChecked,
+  name,
+  checked,
   onChange,
+  disabled,
+  value,
 }: LoginRoleRadio) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { checked } = e.target;
-    onChange?.(checked);
-  };
-
-  const onClick = () => {
-    onChange?.(!isChecked);
+    const { value } = e.target;
+    onChange?.(value);
   };
 
   return (
-    <div
+    <label
       className={clsx(
         'w-full min-w-80 h-fit min-h-24 flex flex-col justify-center gap-1 px-5 py-6 rounded-3xl cursor-pointer',
         {
-          'bg-purple-100 ': isChecked,
-          'bg-gray-100 ': !isChecked,
+          'bg-purple-100 ': checked,
+          'bg-gray-100 ': !checked,
         }
       )}
-      onClick={onClick}
     >
       <p
         className={clsx('text-xl', {
-          'text-purple-400': isChecked,
+          'text-purple-400': checked,
         })}
       >
         {mainLabel}
       </p>
       <p
         className={clsx('text-sm', {
-          'text-purple-200': isChecked,
-          'text-gray-500': !isChecked,
+          'text-purple-200': checked,
+          'text-gray-500': !checked,
         })}
       >
         {subLabel}
       </p>
       <input
         type="radio"
-        checked={isChecked}
+        name={name}
+        checked={checked}
         onChange={handleChange}
-        name={group}
+        disabled={disabled}
+        value={value}
         hidden
       />
-    </div>
+    </label>
   );
 };
 
