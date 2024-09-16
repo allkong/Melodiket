@@ -6,9 +6,27 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import LoginLabel from '@/components/organisms/label/LoginLabel';
 import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
+import { useRouter } from 'next/navigation';
+
+interface LabelCheckboxData {
+  key: number;
+  label: string;
+  isEssential: boolean;
+}
+
+const LABEL_CHECKBOX_DATAS: LabelCheckboxData[] = [
+  { key: 0, label: '[필수] 만 14세 이상입니다.', isEssential: true },
+  { key: 1, label: '[필수] 이용약관, 개인정보 수집/이용', isEssential: true },
+  { key: 2, label: '[선택] 위치 기반 서비스 이용', isEssential: false },
+  { key: 3, label: '[선택] 홍보성 정보 수신', isEssential: false },
+];
 
 const Page = () => {
-  const [isChecked, setIsChecked] = useState([false, false, false, false]);
+  const router = useRouter();
+
+  const [isChecked, setIsChecked] = useState(
+    LABEL_CHECKBOX_DATAS.map(() => false)
+  );
 
   const handleCheck = (targetIdx: number, newValue: boolean) => {
     setIsChecked(
@@ -22,7 +40,9 @@ const Page = () => {
 
   const isCheckedAll = isChecked.every((value) => value);
 
-  const isCheckValid = isChecked[0] && isChecked[1];
+  const isCheckValid = isChecked
+    .filter((_, idx) => LABEL_CHECKBOX_DATAS[idx].isEssential)
+    .every((value) => value);
 
   return (
     <div className="w-full max-w-full h-full flex flex-col">
@@ -37,30 +57,22 @@ const Page = () => {
             isChecked={isCheckedAll}
             onChange={handleCheckAll}
           />
-          <LabelCheckbox
-            label="[필수] 만 14세 이상입니다."
-            isChecked={isChecked[0]}
-            onChange={(value) => handleCheck(0, value)}
-          />
-          <LabelCheckbox
-            label="[필수] 이용약관, 개인정보 수집/이용"
-            isChecked={isChecked[1]}
-            onChange={(value) => handleCheck(1, value)}
-          />
-          <LabelCheckbox
-            label="[선택] 위치 기반 서비스 이용"
-            isChecked={isChecked[2]}
-            onChange={(value) => handleCheck(2, value)}
-          />
-          <LabelCheckbox
-            label="[선택] 홍보성 정보 수신"
-            isChecked={isChecked[3]}
-            onChange={(value) => handleCheck(3, value)}
-          />
+          {LABEL_CHECKBOX_DATAS.map((data, idx) => (
+            <LabelCheckbox
+              key={data.key}
+              label={data.label}
+              isChecked={isChecked[idx]}
+              onChange={(value) => handleCheck(idx, value)}
+            />
+          ))}
         </div>
       </div>
       <div className="my-4 h-fit">
-        <LargeButton label="다음" disabled={!isCheckValid} />
+        <LargeButton
+          label="다음"
+          disabled={!isCheckValid}
+          onClick={() => router.push('/sign-up/role')}
+        />
       </div>
     </div>
   );
