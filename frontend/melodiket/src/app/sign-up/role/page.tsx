@@ -7,33 +7,7 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import LoginLabel from '@/components/organisms/label/LoginLabel';
 import LoginRoleRadio from '@/components/organisms/radio/LoginRoleRadio';
 
-interface SignupRole {
-  key: number;
-  mainLabel: string;
-  subLabel: string;
-  value: string;
-}
-
-const SIGN_UP_ROLE_DATAS: SignupRole[] = [
-  {
-    key: 0,
-    mainLabel: '관객',
-    subLabel: '뮤지션이 진행하는 공연을 즐기고 싶어요.',
-    value: 'AUDIENCE',
-  },
-  {
-    key: 1,
-    mainLabel: '뮤지션',
-    subLabel: '제 공연을 관객들에게 선보이고 싶어요.',
-    value: 'MUSICIAN',
-  },
-  {
-    key: 2,
-    mainLabel: '매니저',
-    subLabel: '제 공연장을 제공하고 싶어요.',
-    value: 'MANAGER',
-  },
-];
+import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
 
 const Page = () => {
   const router = useRouter();
