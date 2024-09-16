@@ -1,11 +1,11 @@
 import { Note } from '@/public/icons';
 
-interface LoginLabelProps {
+interface SignUpLabelProps {
   mainLabel?: string;
   subLabel?: string;
 }
 
-const LoginLabel = ({ mainLabel, subLabel }: LoginLabelProps) => {
+const SignUpLabel = ({ mainLabel, subLabel }: SignUpLabelProps) => {
   return (
     <div>
       <Note />
@@ -17,4 +17,4 @@ const LoginLabel = ({ mainLabel, subLabel }: LoginLabelProps) => {
   );
 };
 
-export default LoginLabel;
+export default SignUpLabel;

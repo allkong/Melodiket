@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LoginRoleRadio from './LoginRoleRadio';
+import SignUpRoleRadio from './SignUpRoleRadio';
 import { useState } from 'react';
 
-const meta: Meta<typeof LoginRoleRadio> = {
-  component: LoginRoleRadio,
+const meta: Meta<typeof SignUpRoleRadio> = {
+  component: SignUpRoleRadio,
 };
 
 export default meta;
-type Story = StoryObj<typeof LoginRoleRadio>;
+type Story = StoryObj<typeof SignUpRoleRadio>;
 
 export const Default: Story = {
   render: () => {
@@ -19,7 +19,7 @@ export const Default: Story = {
 
     return (
       <div>
-        <LoginRoleRadio
+        <SignUpRoleRadio
           mainLabel="관객"
           subLabel="뮤지션이 진행하는 공연을 즐기고 싶어요."
           name="group"
@@ -27,7 +27,7 @@ export const Default: Story = {
           onChange={handleChange}
           value="AUDIENCE"
         />
-        <LoginRoleRadio
+        <SignUpRoleRadio
           mainLabel="뮤지션"
           subLabel="제 공연을 관객들에게 선보이고 싶어요."
           name="group"
@@ -35,7 +35,7 @@ export const Default: Story = {
           onChange={handleChange}
           value="MUSICIAN"
         />
-        <LoginRoleRadio
+        <SignUpRoleRadio
           mainLabel="매니저"
           subLabel="제 공연장을 제공하고 싶어요."
           name="group"

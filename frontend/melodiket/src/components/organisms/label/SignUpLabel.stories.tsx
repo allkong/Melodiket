@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import LoginLabel from './LoginLabel';
+import SignUpLabel from './SignUpLabel';
 
-const meta: Meta<typeof LoginLabel> = {
-  component: LoginLabel,
+const meta: Meta<typeof SignUpLabel> = {
+  component: SignUpLabel,
 };
 
 export default meta;
-type Story = StoryObj<typeof LoginLabel>;
+type Story = StoryObj<typeof SignUpLabel>;
 
 export const Default: Story = {
   args: {
