@@ -8,18 +8,7 @@ import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
 import { useRouter } from 'next/navigation';
 
-interface SignupPolicy {
-  key: number;
-  label: string;
-  isEssential: boolean;
-}
-
-const SIGN_UP_POLICY_DATAS: SignupPolicy[] = [
-  { key: 0, label: '[필수] 만 14세 이상입니다.', isEssential: true },
-  { key: 1, label: '[필수] 이용약관, 개인정보 수집/이용', isEssential: true },
-  { key: 2, label: '[선택] 위치 기반 서비스 이용', isEssential: false },
-  { key: 3, label: '[선택] 홍보성 정보 수신', isEssential: false },
-];
+import { SIGN_UP_POLICY_DATAS } from '@/constants/signUp';
 
 const Page = () => {
   const router = useRouter();
