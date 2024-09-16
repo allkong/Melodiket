@@ -8,13 +8,13 @@ import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
 import { useRouter } from 'next/navigation';
 
-interface LabelCheckboxData {
+interface SignupPolicy {
   key: number;
   label: string;
   isEssential: boolean;
 }
 
-const LABEL_CHECKBOX_DATAS: LabelCheckboxData[] = [
+const SIGN_UP_POLICY_DATAS: SignupPolicy[] = [
   { key: 0, label: '[필수] 만 14세 이상입니다.', isEssential: true },
   { key: 1, label: '[필수] 이용약관, 개인정보 수집/이용', isEssential: true },
   { key: 2, label: '[선택] 위치 기반 서비스 이용', isEssential: false },
@@ -25,7 +25,7 @@ const Page = () => {
   const router = useRouter();
 
   const [isChecked, setIsChecked] = useState(
-    LABEL_CHECKBOX_DATAS.map(() => false)
+    SIGN_UP_POLICY_DATAS.map(() => false)
   );
 
   const handleCheck = (targetIdx: number, newValue: boolean) => {
@@ -41,7 +41,7 @@ const Page = () => {
   const isCheckedAll = isChecked.every((value) => value);
 
   const isCheckValid = isChecked
-    .filter((_, idx) => LABEL_CHECKBOX_DATAS[idx].isEssential)
+    .filter((_, idx) => SIGN_UP_POLICY_DATAS[idx].isEssential)
     .every((value) => value);
 
   return (
@@ -57,7 +57,7 @@ const Page = () => {
             isChecked={isCheckedAll}
             onChange={handleCheckAll}
           />
-          {LABEL_CHECKBOX_DATAS.map((data, idx) => (
+          {SIGN_UP_POLICY_DATAS.map((data, idx) => (
             <LabelCheckbox
               key={data.key}
               label={data.label}
