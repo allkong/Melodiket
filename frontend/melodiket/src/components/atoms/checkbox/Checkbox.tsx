@@ -31,8 +31,7 @@ const Checkbox = forwardRef(
 
     return (
       <>
-        <div
-          onClick={handleChange}
+        <label
           className={clsx(
             'cursor-pointer flex items-center justify-center',
             {
@@ -50,8 +49,14 @@ const Checkbox = forwardRef(
           )}
         >
           <Check className="fill-current" />
-        </div>
-        <input ref={ref} hidden type="checkbox" checked={checkedState} />
+          <input
+            ref={ref}
+            hidden
+            type="checkbox"
+            checked={checkedState}
+            onChange={handleChange}
+          />
+        </label>
       </>
     );
   }
