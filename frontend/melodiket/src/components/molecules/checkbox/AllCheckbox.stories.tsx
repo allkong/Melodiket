@@ -9,12 +9,6 @@ const meta: Meta<typeof AllCheckbox> = {
 export default meta;
 type Story = StoryObj<typeof AllCheckbox>;
 
-export const Default: Story = {
-  args: {
-    label: '전체 동의',
-  },
-};
-
 export const Controlled: Story = {
   render: () => {
     const [isChecked, setIsChecked] = useState(false);

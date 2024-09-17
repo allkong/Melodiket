@@ -14,9 +14,14 @@ const AllCheckbox = ({ label, isChecked, onChange }: AllCheckboxProps) => {
   };
 
   return (
-    <div onClick={handleClick} className="w-full flex items-center gap-2">
+    <div className="w-full flex items-center gap-2">
       <Checkbox rounded isChecked={isChecked} onChange={onChange} />
-      <p className="flex-grow text-lg font-semibold cursor-pointer">{label}</p>
+      <p
+        onClick={handleClick}
+        className="flex-grow text-lg font-semibold cursor-pointer"
+      >
+        {label}
+      </p>
     </div>
   );
 };
