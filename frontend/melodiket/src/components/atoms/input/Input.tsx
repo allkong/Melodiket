@@ -13,6 +13,7 @@ interface InputProps {
   value?: string;
   onChange?: (value: string) => void;
   onClickEnter?: () => void;
+  onBlur?: () => void;
   placeholder?: string;
   type?: Extract<ComponentProps<'input'>['type'], 'text' | 'password'>;
 }
@@ -23,6 +24,7 @@ const Input = forwardRef(
       value: controlledValue,
       onChange,
       onClickEnter,
+      onBlur,
       placeholder,
       type,
     }: InputProps,
@@ -56,6 +58,7 @@ const Input = forwardRef(
         value={isControlled ? controlledValue : value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        onBlur={onBlur}
       />
     );
   }
