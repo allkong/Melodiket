@@ -6,6 +6,8 @@ interface SignUpState {
   setLoginId: (newValue: string) => void;
   password: string;
   setPassword: (newValue: string) => void;
+  passwordConfirm: string;
+  setPasswordConfirm: (newValue: string) => void;
   nickname: string;
   setNickname: (newValue: string) => void;
   description: string;
@@ -21,6 +23,9 @@ const useSignUpStore = create<SignUpState>()(
     setLoginId: (newValue: string) => set({ loginId: newValue }),
     password: '',
     setPassword: (newValue: string) => set({ password: newValue }),
+    passwordConfirm: '',
+    setPasswordConfirm: (newValue: string) =>
+      set({ passwordConfirm: newValue }),
     nickname: '',
     setNickname: (newValue: string) => set({ nickname: newValue }),
     description: '',
@@ -31,6 +36,7 @@ const useSignUpStore = create<SignUpState>()(
       set({
         loginId: '',
         password: '',
+        passwordConfirm: '',
         nickname: '',
         description: '',
         role: '',
