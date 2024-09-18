@@ -1,53 +1,58 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import {
+  SORT_OPTIONS,
+  FILTER_OPTIONS,
+  SELECT_OPTIONS,
+} from '@/constants/controlOptions';
 
 import OptionButton from '@/components/atoms/button/OptionButton';
 import SelectButton from '@/components/atoms/button/SelectButton';
 
 const ControlsBar = () => {
-  const [sortOption, setSortOption] = useState<string | null>('가나다순');
-  const [isFilter, setIsFilter] = useState(false);
-  const [selectedDropdownOption, setSelectedDropdownOption] = useState<
-    string | null
-  >(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const sortQuery = searchParams.get('sort') || SORT_OPTIONS.alphabetical;
+  const filterQuery = searchParams.get('filter') === 'true';
+  const selectOptions = Object.values(SELECT_OPTIONS);
+
+  const updateQueryParams = (key: string, value: string | boolean) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(key, value.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const handleOptionSelect = (option: string) => {
-    setSortOption(option);
-    setSelectedDropdownOption(null);
+    updateQueryParams('sort', option);
   };
 
   const handleFilterClick = () => {
-    setIsFilter((prev) => !prev);
-  };
-
-  const handleSelectChange = (option: string) => {
-    setSortOption(option);
-    setSelectedDropdownOption(option);
+    updateQueryParams('filter', !filterQuery);
   };
 
   return (
     <div className="flex flex-row gap-3 px-6 py-3 bg-white">
+      {Object.values(SORT_OPTIONS).map((option) => (
+        <OptionButton
+          key={option}
+          label={option}
+          isSelected={sortQuery === option}
+          onClick={() => handleOptionSelect(option)}
+        />
+      ))}
       <OptionButton
-        label="가나다순"
-        isSelected={sortOption === '가나다순'}
-        onClick={() => handleOptionSelect('가나다순')}
-      />
-      <OptionButton
-        label="인기순"
-        isSelected={sortOption === '인기순'}
-        onClick={() => handleOptionSelect('인기순')}
-      />
-      <OptionButton
-        label="예매 중"
-        isSelected={isFilter}
+        label={FILTER_OPTIONS.booking}
+        isSelected={filterQuery}
         onClick={handleFilterClick}
       />
       <SelectButton
-        options={['등록순', '최신순']}
-        selectedOption={selectedDropdownOption}
-        isSelected={sortOption === '등록순' || sortOption === '최신순'}
-        onSelect={handleSelectChange}
+        options={selectOptions}
+        selectedOption={selectOptions.includes(sortQuery) ? sortQuery : null}
+        isSelected={selectOptions.includes(sortQuery)}
+        onSelect={handleOptionSelect}
       />
     </div>
   );
