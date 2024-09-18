@@ -22,13 +22,15 @@ const Header = () => {
   return (
     <header
       className={clsx(
-        'flex items-center justify-between px-6 py-4 fixed top-0 left-0 right-0 w-full transition-colors duration-300',
+        'fixed top-0 left-0 right-0 w-full transition-colors duration-300',
         isScrolled ? 'bg-white' : 'bg-transparent'
       )}
     >
-      <MenuButton />
-      <LogoText />
-      <SearchButton />
+      <div className="flex items-center justify-between px-6 py-4 max-w-xl mx-auto">
+        <MenuButton />
+        <LogoText />
+        <SearchButton />
+      </div>
     </header>
   );
 };
