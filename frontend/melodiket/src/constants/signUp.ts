@@ -29,3 +29,9 @@ export const SIGN_UP_ROLE_DATAS: SignUpRole[] = [
     value: 'MANAGER',
   },
 ] as const;
+
+// 회원가입 글자수 제한
+export const SIGN_UP_DATA_LENGTH_LIMITS = {
+  MIN_NICKNAME_LENGTH: 2,
+  MAX_NICKNAME_LENGTH: 20,
+} as const;
