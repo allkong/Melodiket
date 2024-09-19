@@ -1,9 +1,9 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
-import com.ssafy.jdbc.melodiket.user.controller.dto.LoginReq;
-import com.ssafy.jdbc.melodiket.user.controller.dto.LoginResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.SignUpReq;
-import com.ssafy.jdbc.melodiket.user.controller.dto.SignUpResp;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.LoginReq;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.LoginResp;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.SignUpReq;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.SignUpResp;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
 import jakarta.validation.Valid;

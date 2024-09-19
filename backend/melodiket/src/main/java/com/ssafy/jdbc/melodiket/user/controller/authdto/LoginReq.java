@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.controller.dto;
+package com.ssafy.jdbc.melodiket.user.controller.authdto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
