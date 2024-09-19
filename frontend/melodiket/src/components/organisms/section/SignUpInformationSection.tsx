@@ -17,12 +17,21 @@ const SignUpInformationSection = ({
   onNext,
 }: SignUpInformationSectionProps) => {
   const [loginId, setLoginId] = useState('');
+  const [isLoginIdValid, setIsLoginIdValid] = useState(true);
+
   const [nickname, setNickname] = useState('');
+  const [isNicknameValid, setIsNicknameValid] = useState(true);
+
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
   const isFormValid =
-    !!loginId && !!nickname && !!password && password === passwordConfirm;
+    !!loginId &&
+    isLoginIdValid &&
+    !!nickname &&
+    isNicknameValid &&
+    !!password &&
+    password === passwordConfirm;
 
   return (
     <div className="w-full max-w-full h-full flex flex-col">
@@ -32,7 +41,11 @@ const SignUpInformationSection = ({
           subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
         <div className="flex flex-col mt-9 gap-3">
-          <SignUpNicknameInput nickname={nickname} setNickname={setNickname} />
+          <SignUpNicknameInput
+            nickname={nickname}
+            setNickname={setNickname}
+            setIsNicknameValid={setIsNicknameValid}
+          />
           <SignUpLoginIdInput loginId={loginId} setLoginId={setLoginId} />
           <SignUpPasswordInput
             password={password}
