@@ -33,11 +33,12 @@ const SelectButton = ({
         <option value="" disabled>
           선택
         </option>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
+        {options &&
+          options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
         <ArrowButton
