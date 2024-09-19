@@ -5,7 +5,7 @@ import MusicianItem from '@/components/molecules/item/MusicianItem';
 const Page = () => {
   return (
     <div>
-      <Header />
+      <Header isFixed />
       <div className="h-40 bg-gray-200"></div>
       <ControlsBar />
       <div>

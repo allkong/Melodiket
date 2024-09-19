@@ -7,7 +7,11 @@ import MenuButton from '@/components/atoms/button/MenuButton';
 import SearchButton from '@/components/atoms/button/SearchButton';
 import { LogoText } from '@/public/icons';
 
-const Header = () => {
+interface HeaderProps {
+  isFixed?: boolean;
+}
+
+const Header = ({ isFixed = false }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -15,18 +19,21 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+    if (isFixed) {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll, isFixed]);
 
   return (
     <header
       className={clsx(
-        'fixed top-0 left-0 right-0 w-full transition-colors duration-300',
-        isScrolled ? 'bg-white' : 'bg-transparent'
+        isFixed ? 'fixed top-0 left-0 right-0 w-full' : 'relative',
+        'transition-colors duration-300 z-10',
+        isFixed && isScrolled ? 'bg-white' : 'bg-transparent'
       )}
     >
-      <div className="flex items-center justify-between px-6 py-4 max-w-xl mx-auto">
+      <div className="flex items-center justify-between max-w-xl px-6 py-4 mx-auto">
         <MenuButton />
         <LogoText />
         <SearchButton />
