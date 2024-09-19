@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.concert.entity;
 
 import com.ssafy.jdbc.melodiket.stage.entity.Stage;
 import com.ssafy.jdbc.melodiket.ticket.entity.Ticket;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -66,4 +67,7 @@ public class Concert {
 
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertParticipantMusician> concertParticipantMusicians = new ArrayList<>();
+
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
 }
