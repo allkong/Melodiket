@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import SignUpLabel from '@/components/organisms/label/SignUpLabel';
 import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
-import { useRouter } from 'next/navigation';
 
 import { SIGN_UP_POLICY_DATAS } from '@/constants/signUp';
 
@@ -24,7 +24,7 @@ const Page = () => {
   };
 
   const handleCheckAll = (value: boolean) => {
-    setIsChecked([value, value, value, value]);
+    setIsChecked(SIGN_UP_POLICY_DATAS.map(() => value));
   };
 
   const isCheckedAll = isChecked.every((value) => value);
