@@ -34,4 +34,6 @@ export const SIGN_UP_ROLE_DATAS: SignUpRole[] = [
 export const SIGN_UP_DATA_LENGTH_LIMITS = {
   MIN_NICKNAME_LENGTH: 2,
   MAX_NICKNAME_LENGTH: 20,
+  MIN_LOGIN_ID_LENGTH: 5,
+  MAX_LOGIN_ID_LENGTH: 20,
 } as const;
