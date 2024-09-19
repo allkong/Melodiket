@@ -46,7 +46,11 @@ const SignUpInformationSection = ({
             setNickname={setNickname}
             setIsNicknameValid={setIsNicknameValid}
           />
-          <SignUpLoginIdInput loginId={loginId} setLoginId={setLoginId} />
+          <SignUpLoginIdInput
+            loginId={loginId}
+            setLoginId={setLoginId}
+            setIsLoginIdValid={setIsLoginIdValid}
+          />
           <SignUpPasswordInput
             password={password}
             passwordConfirm={passwordConfirm}
