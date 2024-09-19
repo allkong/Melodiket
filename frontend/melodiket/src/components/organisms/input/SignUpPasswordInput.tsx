@@ -37,6 +37,7 @@ const SignUpPasswordInput = ({
   const handlePasswordChange = (password: string) => {
     setPassword(password);
     setIsLengthValid(validatePasswordLength(password));
+    setIsPasswordMatch(validatePasswordMatch(password, passwordConfirm));
   };
 
   const handlePasswordConfirmChange = (passwordConfirm: string) => {
