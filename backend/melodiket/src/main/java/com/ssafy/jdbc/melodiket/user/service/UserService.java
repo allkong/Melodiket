@@ -4,16 +4,16 @@ import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
-import com.ssafy.jdbc.melodiket.user.controller.dto.LoginResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.SignUpReq;
-import com.ssafy.jdbc.melodiket.user.controller.dto.SignUpResp;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.LoginResp;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.SignUpReq;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.SignUpResp;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.ssafy.jdbc.melodiket.user.controller.dto.LoginReq;
+import com.ssafy.jdbc.melodiket.user.controller.authdto.LoginReq;
 import com.ssafy.jdbc.melodiket.user.entity.AppUser;
 import com.ssafy.jdbc.melodiket.user.util.PasswordUtil;
 
@@ -77,7 +77,7 @@ public class UserService implements AuthService{
                 JwtType.AUTH_ACCESS,  // 토큰 타입
                 Map.of("uuid", user.getUuid().toString(),
                         "role", user.getRole().name()
-                        ),  // Payload에 사용자 UUID 추가
+                ),  // Payload에 사용자 UUID 추가
 
                 3600000  // 1시간
         );
@@ -103,5 +103,21 @@ public class UserService implements AuthService{
     public AppUser findUserByLoginId(String loginId) throws HttpResponseException {
         return appUserRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.NOT_FOUND));
+    }
+
+    @Override
+    public boolean checkLoginIdDuplication(String loginId) {
+        if(loginId == null || loginId.trim().isEmpty()){
+            throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
+        }
+        return appUserRepository.existsByLoginId(loginId);
+    }
+
+    @Override
+    public boolean checkNicknameDuplication(String nickname) {
+        if(nickname == null || nickname.trim().isEmpty()){
+            throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
+        }
+        return appUserRepository.existsByNickname(nickname);
     }
 }
