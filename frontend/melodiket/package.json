@@ -16,6 +16,7 @@
     "@tanstack/react-query-devtools": "^5.55.4",
     "clsx": "^2.1.1",
     "concurrently": "^9.0.0",
+    "envinfo": "^7.14.0",
     "immer": "^10.1.1",
     "next": "14.2.9",
     "react": "^18",
