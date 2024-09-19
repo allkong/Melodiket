@@ -4,6 +4,20 @@ spring:
       on-profile: dev
     import:
       - file:dev.env[.properties]
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  sql:
+    init:
+      platform: h2
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
 server:
   port: ${SERVER_PORT}
 blockchain:
@@ -15,3 +29,7 @@ blockchain:
   contract-addresses:
     melodiket: ${MELODIKET_CONTRACT_ADDRESS}
     melody-token: ${MELODY_TOKEN_CONTRACT_ADDRESS}
+security:
+  allowed-origins: "${SECURITY_ALLOWED_ORIGINS}"
+jwt:
+  issuer: localhost
