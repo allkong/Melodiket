@@ -24,6 +24,7 @@ const SignUpInformationSection = ({
 
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const isFormValid =
     !!loginId &&
@@ -31,7 +32,8 @@ const SignUpInformationSection = ({
     !!nickname &&
     isNicknameValid &&
     !!password &&
-    password === passwordConfirm;
+    !!passwordConfirm &&
+    isPasswordValid;
 
   return (
     <div className="w-full max-w-full h-full flex flex-col">
@@ -53,9 +55,10 @@ const SignUpInformationSection = ({
           />
           <SignUpPasswordInput
             password={password}
-            passwordConfirm={passwordConfirm}
             setPassword={setPassword}
+            passwordConfirm={passwordConfirm}
             setPasswordConfirm={setPasswordConfirm}
+            setIsPasswordValid={setIsPasswordValid}
           />
         </div>
       </div>
