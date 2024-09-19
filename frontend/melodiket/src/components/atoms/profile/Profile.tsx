@@ -14,7 +14,7 @@ const Profile = ({ src, size }: ProfileProps) => {
         {
           'p-0.5 w-14 h-14': size === 'sm',
           'p-[0.2rem] w-20 h-20': size === 'md',
-          'p-1 w-28 h-28': size === 'lg',
+          'p-[0.3rem] w-28 h-28': size === 'lg',
         }
       )}
     >
