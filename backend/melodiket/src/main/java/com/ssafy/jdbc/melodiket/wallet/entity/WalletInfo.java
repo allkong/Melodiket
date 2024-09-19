@@ -29,5 +29,4 @@ public class WalletInfo {
     @Column(unique = true, nullable = false)
     private String publicKey;
 
-
 }
