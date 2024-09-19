@@ -10,7 +10,7 @@ export const SIGN_UP_POLICY_DATAS: SignupPolicy[] = [
   { key: 1, label: '[필수] 이용약관, 개인정보 수집/이용', isEssential: true },
   { key: 2, label: '[선택] 위치 기반 서비스 이용', isEssential: false },
   { key: 3, label: '[선택] 홍보성 정보 수신', isEssential: false },
-];
+] as const;
 
 // 회원가입 역할
 interface SignupRole {
@@ -39,4 +39,4 @@ export const SIGN_UP_ROLE_DATAS: SignupRole[] = [
     subLabel: '제 공연장을 제공하고 싶어요.',
     value: 'MANAGER',
   },
-];
+] as const;

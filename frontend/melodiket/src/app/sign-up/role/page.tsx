@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 import LargeButton from '@/components/atoms/button/LargeButton';
 import SignUpLabel from '@/components/organisms/label/SignUpLabel';
 import SignUpRoleRadio from '@/components/organisms/radio/SignUpRoleRadio';
-
-import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
 import useSignUpStore from '@/store/signUpStore';
+import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
 
 const Page = () => {
   const router = useRouter();
