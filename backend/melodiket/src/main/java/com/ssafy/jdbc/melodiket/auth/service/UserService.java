@@ -1,21 +1,19 @@
-package com.ssafy.jdbc.melodiket.user.service;
+package com.ssafy.jdbc.melodiket.auth.service;
 
-import com.ssafy.jdbc.melodiket.auth.service.JwtService;
-import com.ssafy.jdbc.melodiket.auth.service.JwtType;
+import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
-import com.ssafy.jdbc.melodiket.user.controller.authdto.LoginResp;
-import com.ssafy.jdbc.melodiket.user.controller.authdto.SignUpReq;
-import com.ssafy.jdbc.melodiket.user.controller.authdto.SignUpResp;
-import com.ssafy.jdbc.melodiket.user.entity.Role;
-import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
+import com.ssafy.jdbc.melodiket.auth.entity.Role;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.ssafy.jdbc.melodiket.user.controller.authdto.LoginReq;
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
-import com.ssafy.jdbc.melodiket.user.util.PasswordUtil;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
+import com.ssafy.jdbc.melodiket.auth.entity.AppUser;
+import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
 
 import java.util.Map;
 import java.util.UUID;
