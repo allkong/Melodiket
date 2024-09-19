@@ -20,6 +20,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
 
   useEffect(() => {
     if (isFixed) {
+      handleScroll();
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
     }
