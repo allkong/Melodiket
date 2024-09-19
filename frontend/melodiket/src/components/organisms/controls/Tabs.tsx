@@ -1,5 +1,5 @@
+import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import TabButton from '@/components/molecules/item/TabButton';
-import { FAVORITE_TYPE } from '@/constants/favoriteType';
 
 interface TabsProps {
   tabs: string[];
@@ -13,7 +13,7 @@ const Tabs = ({ tabs, activeTab, onClick }: TabsProps) => {
       {tabs.map((tab) => (
         <TabButton
           key={tab}
-          label={FAVORITE_TYPE[tab as keyof typeof FAVORITE_TYPE]}
+          label={FAVORITE_TYPES[tab as keyof typeof FAVORITE_TYPES]}
           isSelected={tab === activeTab}
           onClick={() => onClick(tab)}
         />
