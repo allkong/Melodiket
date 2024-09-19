@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.entity;
+package com.ssafy.jdbc.melodiket.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

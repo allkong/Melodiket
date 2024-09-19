@@ -2,7 +2,7 @@ package com.ssafy.jdbc.melodiket.common.config;
 
 import com.ssafy.jdbc.melodiket.auth.filter.JwtFilter;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
-import com.ssafy.jdbc.melodiket.user.service.UserService;
+import com.ssafy.jdbc.melodiket.auth.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

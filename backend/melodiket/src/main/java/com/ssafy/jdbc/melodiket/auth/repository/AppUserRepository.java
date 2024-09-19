@@ -1,8 +1,8 @@
-package com.ssafy.jdbc.melodiket.user.repository;
+package com.ssafy.jdbc.melodiket.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
+import com.ssafy.jdbc.melodiket.auth.entity.AppUser;
 
 import java.util.Optional;
 import java.util.UUID;
