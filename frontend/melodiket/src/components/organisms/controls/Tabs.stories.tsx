@@ -10,6 +10,6 @@ type Story = StoryObj<typeof Tabs>;
 
 export const Default: Story = {
   args: {
-    tabs: ['공연', '뮤지션'],
+    tabs: ['concert', 'musician'],
   },
 };
