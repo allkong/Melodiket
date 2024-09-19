@@ -1,23 +1,25 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/organisms/label/SignUpLabel';
-import SignUpRoleRadio from '@/components/organisms/radio/SignUpRoleRadio';
-import useSignUpStore from '@/store/signUpStore';
+import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import SignUpRoleRadio from '@/components/molecules/radio/SignUpRoleRadio';
 import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
+import type { SignUpRole } from '@/types/signUp';
 
-const Page = () => {
-  const router = useRouter();
+interface SignUpRoleSectionProps {
+  onNext: (value: SignUpRole['value']) => void;
+}
 
-  const { role, setRole } = useSignUpStore();
+const SignUpRoleSection = ({ onNext }: SignUpRoleSectionProps) => {
+  const [role, setRole] = useState<SignUpRole['value'] | null>(null);
 
   const handleChange = (value: string) => {
-    setRole(value);
+    setRole(value as SignUpRole['value']);
   };
 
-  const isCheckValid = role !== '';
+  const isCheckValid = role !== null;
 
   return (
     <div className="w-full max-w-full h-full flex flex-col">
@@ -44,11 +46,15 @@ const Page = () => {
         <LargeButton
           label="다음"
           disabled={!isCheckValid}
-          onClick={() => router.push('/sign-up/information')}
+          onClick={() => {
+            if (isCheckValid) {
+              onNext(role);
+            }
+          }}
         />
       </div>
     </div>
   );
 };
 
-export default Page;
+export default SignUpRoleSection;

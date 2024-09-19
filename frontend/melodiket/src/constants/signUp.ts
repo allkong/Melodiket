@@ -1,11 +1,7 @@
-// 회원가입 약관
-interface SignupPolicy {
-  key: number;
-  label: string;
-  isEssential: boolean;
-}
+import type { SignUpPolicy, SignUpRole } from '@/types/signUp';
 
-export const SIGN_UP_POLICY_DATAS: SignupPolicy[] = [
+// 회원가입 약관
+export const SIGN_UP_POLICY_DATAS: SignUpPolicy[] = [
   { key: 0, label: '[필수] 만 14세 이상입니다.', isEssential: true },
   { key: 1, label: '[필수] 이용약관, 개인정보 수집/이용', isEssential: true },
   { key: 2, label: '[선택] 위치 기반 서비스 이용', isEssential: false },
@@ -13,14 +9,7 @@ export const SIGN_UP_POLICY_DATAS: SignupPolicy[] = [
 ] as const;
 
 // 회원가입 역할
-interface SignupRole {
-  key: number;
-  mainLabel: string;
-  subLabel: string;
-  value: string;
-}
-
-export const SIGN_UP_ROLE_DATAS: SignupRole[] = [
+export const SIGN_UP_ROLE_DATAS: SignUpRole[] = [
   {
     key: 0,
     mainLabel: '관객',

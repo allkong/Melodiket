@@ -1,18 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/organisms/label/SignUpLabel';
+import SignUpLabel from '@/components/molecules/label/SignUpLabel';
 import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
-
 import { SIGN_UP_POLICY_DATAS } from '@/constants/signUp';
 
-const Page = () => {
-  const router = useRouter();
+interface SignUpPolicySectionProps {
+  onNext: () => void;
+}
 
+const SignUpPolicySection = ({ onNext }: SignUpPolicySectionProps) => {
   const [isChecked, setIsChecked] = useState(
     SIGN_UP_POLICY_DATAS.map(() => false)
   );
@@ -57,14 +57,10 @@ const Page = () => {
         </div>
       </div>
       <div className="my-4 h-fit">
-        <LargeButton
-          label="다음"
-          disabled={!isCheckValid}
-          onClick={() => router.push('/sign-up/role')}
-        />
+        <LargeButton label="다음" disabled={!isCheckValid} onClick={onNext} />
       </div>
     </div>
   );
 };
 
-export default Page;
+export default SignUpPolicySection;

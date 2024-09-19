@@ -1,4 +1,4 @@
-import { Note } from '@/public/icons';
+import { LogoImage } from '@/public/icons';
 
 interface SignUpLabelProps {
   mainLabel?: string;
@@ -8,7 +8,7 @@ interface SignUpLabelProps {
 const SignUpLabel = ({ mainLabel, subLabel }: SignUpLabelProps) => {
   return (
     <div>
-      <Note />
+      <LogoImage width="44" height="44" />
       <p className="whitespace-pre-line font-semibold text-2xl mt-3">
         {mainLabel}
       </p>

@@ -2,11 +2,16 @@
 
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
-import useSignUpStore from '@/store/signUpStore';
 
-const SignUpLoginIdInput = () => {
-  const { loginId, setLoginId } = useSignUpStore();
+interface SignUpLoginIdInputProps {
+  loginId: string;
+  setLoginId: (value: string) => void;
+}
 
+const SignUpLoginIdInput = ({
+  loginId,
+  setLoginId,
+}: SignUpLoginIdInputProps) => {
   const handleLoginIdDuplicate = () => {
     // loginId를 서버로 보내 응답 얻어오기
     // 중복됐다면, AlertLabel 보여주기
