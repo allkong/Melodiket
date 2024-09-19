@@ -10,13 +10,21 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: password
+
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${MYSQL_URL}
+#    username: ${MYSQL_USERNAME}
+#    password: ${MYSQL_PASSWORD}
+
   sql:
     init:
       platform: h2
+#      platform: mysql
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+#    show-sql: true
 
 server:
   port: ${SERVER_PORT}

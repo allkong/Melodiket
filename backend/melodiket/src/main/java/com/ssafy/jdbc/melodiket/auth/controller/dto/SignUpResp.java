@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.auth.controller.dto;
 
-import com.ssafy.jdbc.melodiket.auth.entity.Role;
+import com.ssafy.jdbc.melodiket.user.entity.Role;
 
 import java.util.UUID;
 

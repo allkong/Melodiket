@@ -5,8 +5,8 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
-import com.ssafy.jdbc.melodiket.auth.entity.AppUser;
-import com.ssafy.jdbc.melodiket.auth.entity.Role;
+import com.ssafy.jdbc.melodiket.user.entity.AppUser;
+import com.ssafy.jdbc.melodiket.user.entity.Role;
 
 public interface AuthService {
     SignUpResp signUp(SignUpReq signUpReq, Role role);
