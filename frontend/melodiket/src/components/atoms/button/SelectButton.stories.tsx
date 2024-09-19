@@ -9,5 +9,7 @@ export default meta;
 type Story = StoryObj<typeof SelectButton>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    options: ['등록순', '최신순'],
+  },
 };
