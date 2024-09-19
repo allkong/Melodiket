@@ -34,6 +34,7 @@ public class SecurityConfig {
             // login, logout
             Pattern.compile("^/api/v1/auth/sign-up$"),
             Pattern.compile("^/api/v1/auth/login$"),
+            Pattern.compile("^/api/v1/users/[^/]+/field-duplication-check$"),
             Pattern.compile("^/$")
     };
 
