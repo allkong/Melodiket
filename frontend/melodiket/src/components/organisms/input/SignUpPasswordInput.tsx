@@ -2,12 +2,20 @@
 
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
-import useSignUpStore from '@/store/signUpStore';
 
-const SignUpPasswordInput = () => {
-  const { password, setPassword, passwordConfirm, setPasswordConfirm } =
-    useSignUpStore();
+interface SignUpPasswordInputProps {
+  password: string;
+  setPassword: (value: string) => void;
+  passwordConfirm: string;
+  setPasswordConfirm: (value: string) => void;
+}
 
+const SignUpPasswordInput = ({
+  password,
+  passwordConfirm,
+  setPassword,
+  setPasswordConfirm,
+}: SignUpPasswordInputProps) => {
   const isPasswordValid = password === passwordConfirm;
 
   return (

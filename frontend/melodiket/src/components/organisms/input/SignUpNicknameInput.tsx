@@ -2,11 +2,16 @@
 
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
-import useSignUpStore from '@/store/signUpStore';
 
-const SignUpNicknameInput = () => {
-  const { nickname, setNickname } = useSignUpStore();
+interface SignUpNicknameInputProps {
+  nickname: string;
+  setNickname: (value: string) => void;
+}
 
+const SignUpNicknameInput = ({
+  nickname,
+  setNickname,
+}: SignUpNicknameInputProps) => {
   const handleNicknameDuplicate = () => {
     // nickname을 서버로 보내 응답 얻어오기
     // 중복됐다면, AlertLabel 보여주기
