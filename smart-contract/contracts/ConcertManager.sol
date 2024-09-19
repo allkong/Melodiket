@@ -147,7 +147,7 @@ contract ConcertManager {
     event MusicianAgreed(uint256 concertId, address musician);
     event MusicianDenied(uint256 concertId, address musician);
     event AllMusicianAgreed(uint256 concertId);
-    event ConcertCancled(uint256 concertId);
+    event ConcertCancelled(uint256 concertId);
     event TicketPurchased(uint256 concertId, address buyer, uint256 ticketId);
     event TicketPriceTransferred(uint256 concertId);
 
@@ -370,8 +370,8 @@ contract ConcertManager {
 
         // 한 명의 뮤지션이라도 거절하면 공연 자체가 취소됨
         emit MusicianDenied(_concertId, msg.sender);
-        concert.status = "CANCLED";
-        emit ConcertCancled(_concertId);
+        concert.status = "CANCELLED";
+        emit ConcertCancelled(_concertId);
 
         return true;
     }
@@ -484,7 +484,7 @@ contract ConcertManager {
 
         // 공연 시작 후 1일이 지나야 정산 가능
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
-        require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be cancled before transfer available after.");
+        require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be cancelled before transfer available after.");
 
         // 환불로 인한 토큰이 있다면, 공연장 관리자와 뮤지션이 동등하게 수익을 나눠 받음
         MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
@@ -510,13 +510,13 @@ contract ConcertManager {
         emit TicketPriceTransferred(_concertId);
     }
 
-    function cancleConcert(uint256 _concertId) public onlyConcertManager(_concertId) {
+    function cancelConcert(uint256 _concertId) public onlyConcertManager(_concertId) {
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "ACTIVE"), "Concert status must be ACTIVE.");
         require(block.timestamp < concert.concertStartAt, "Concert is already started.");
 
-        concert.status = "CANCLED";
+        concert.status = "CANCELLED";
 
         // 티켓 구매자들에게 전액 환불
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
@@ -528,6 +528,72 @@ contract ConcertManager {
                 melodyToken.transfer(ticket.owner, ticketPriceInfo.ticketPrice);
             }
         }
-        emit ConcertCancled(_concertId);
+        emit ConcertCancelled(_concertId);
+    }
+
+    struct TotalConcertInfo {
+        Concert concertInfo;
+        MusicianInvitationInfo musicianInfo;
+        FavoriteVoteInfo favoriteVoteInfo;
+        TicketPriceInfo ticketPriceInfo;
+        TicketingPlanInfo ticketingInfo;
+        ConcertSeatingInfo seatingInfo;
+    }
+
+    function getTotalConcertInfo(uint256 _concertId) public view returns (
+        uint256 id,
+        string memory status,
+        address manager,
+        string memory posterCid,
+        uint256 concertStartAt,
+        address[] memory pendingMusicianAddresses,
+        address[] memory agreedMusicianAddresses,
+        address[] memory deniedMusicianAddresses,
+        address[] memory favoriteMusicianAddresses,
+        uint256[] memory favoriteVotes,
+        uint256 ticketPrice,
+        uint256 venueEarningsPerTicket,
+        uint256 musicianBaseEarningsPerTicket,
+        uint256 favoriteBonus,
+        uint256 refundedTokenAmount,
+        uint256 transferAvailableAfter,
+        uint256[] memory tickets,
+        uint256 numOfRestTickets,
+        uint256 ticketingStartAt,
+        bool[][] memory isReserved,
+        bool isStanding,
+        uint256[] memory seatSizes
+    ) {
+        Concert storage concert = concertBasicInfos[_concertId];
+        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[_concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
+
+        return (
+            concert.id,
+            concert.status,
+            concert.manager,
+            concert.posterCid,
+            concert.concertStartAt,
+            musicianInfo.pendingMusicianAddresses,
+            musicianInfo.agreedMusicianAddresses,
+            musicianInfo.deniedMusicianAddresses,
+            favoriteVoteInfo.favoriteMusicianAddresses,
+            favoriteVoteInfo.favoriteVotes,
+            ticketPriceInfo.ticketPrice,
+            ticketPriceInfo.venueEarningsPerTicket,
+            ticketPriceInfo.musicianBaseEarningsPerTicket,
+            ticketPriceInfo.favoriteBonus,
+            ticketPriceInfo.refundedTokenAmount,
+            ticketPriceInfo.transferAvailableAfter,
+            ticketingInfo.tickets,
+            ticketingInfo.numOfRestTickets,
+            ticketingInfo.ticketingStartAt,
+            ticketingInfo.isReserved,
+            seatingInfo.isStanding,
+            seatingInfo.seatSizes
+        );
     }
 }
