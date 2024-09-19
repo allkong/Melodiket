@@ -15,19 +15,25 @@ public class BlockchainConfig {
     private final String rpcUrl;
     private final String melodiketContractAddress;
     private final String melodyTokenContractAddress;
+    private final long minGasPrice;
+    private final long maxGasPrice;
 
     public BlockchainConfig(
             @Value("${blockchain.system-private-key}") String systemPrivateKey,
             @Value("${blockchain.system-wallet-address}") String systemWalletAddress,
             @Value("${blockchain.rpc-url}") String rpcUrl,
             @Value("${blockchain.contract-addresses.melodiket}") String melodiketContractAddress,
-            @Value("${blockchain.contract-addresses.melody-token}") String melodyTokenContractAddress
+            @Value("${blockchain.contract-addresses.melody-token}") String melodyTokenContractAddress,
+            @Value("${blockchain.min-gas-price}") long minGasPrice,
+            @Value("${blockchain.max-gas-price}") long maxGasPrice
     ) {
         this.systemPrivateKey = systemPrivateKey;
         this.systemWalletAddress = systemWalletAddress;
         this.rpcUrl = rpcUrl;
         this.melodiketContractAddress = melodiketContractAddress;
         this.melodyTokenContractAddress = melodyTokenContractAddress;
+        this.minGasPrice = minGasPrice;
+        this.maxGasPrice = maxGasPrice;
     }
 
     @Bean

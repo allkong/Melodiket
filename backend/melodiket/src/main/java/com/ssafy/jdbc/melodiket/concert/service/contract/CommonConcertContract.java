@@ -9,7 +9,6 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
@@ -77,8 +76,8 @@ public class CommonConcertContract extends Contract {
 
     private final BlockchainConfig blockchainConfig;
 
-    public CommonConcertContract(BlockchainConfig blockchainConfig, Web3j web3j, Credentials credentials) {
-        super(blockchainConfig.getMelodiketContractAddress(), web3j, credentials, BigInteger.valueOf(0), BigInteger.valueOf(1000000000));
+    public CommonConcertContract(BlockchainConfig blockchainConfig, Credentials credentials) {
+        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getMinGasPrice()), BigInteger.valueOf(blockchainConfig.getMaxGasPrice()));
         this.blockchainConfig = blockchainConfig;
     }
 
