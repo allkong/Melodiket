@@ -6,3 +6,10 @@ spring:
       - file:dev.env[.properties]
 server:
   port: ${SERVER_PORT}
+blockchain:
+  system-private-key: ${BLOCKCHAIN_PRIVATE_KEY}
+  system-wallet-address: ${BLOCKCHAIN_WALLET_ADDRESS}
+  rpc-url: ${BLOCKCHAIN_RPC_URL}
+  contract-addresses:
+    melodiket: ${MELODIKET_CONTRACT_ADDRESS}
+    melody-token: ${MELODY_TOKEN_CONTRACT_ADDRESS}
