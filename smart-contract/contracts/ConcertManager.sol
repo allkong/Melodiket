@@ -147,7 +147,7 @@ contract ConcertManager {
     event MusicianAgreed(uint256 concertId, address musician);
     event MusicianDenied(uint256 concertId, address musician);
     event AllMusicianAgreed(uint256 concertId);
-    event ConcertCancelled(uint256 concertId);
+    event ConcertCanceled(uint256 concertId);
     event TicketPurchased(uint256 concertId, address buyer, uint256 ticketId);
     event TicketPriceTransferred(uint256 concertId);
 
@@ -335,6 +335,7 @@ contract ConcertManager {
 
         require(isPendingMusician, "Musician not found.");
 
+        emit MusicianAgreed(_concertId, msg.sender);
         // 모든 뮤지션이 수락하면 콘서트 상태를 활성화로 변경
         if (invitationInfo.pendingMusicianAddresses.length == 0 && invitationInfo.deniedMusicianAddresses.length == 0) {
             concert.status = "ACTIVE";
@@ -344,7 +345,7 @@ contract ConcertManager {
         return true;
     }
 
-    function denyConert(uint256 _concertId) public returns (bool) {
+    function denyToConcert(uint256 _concertId) public returns (bool) {
         // 준비 중인 콘서트이며, 뮤지션이 아직 응답하지 않은 경우에만 거절 가능
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
@@ -370,8 +371,8 @@ contract ConcertManager {
 
         // 한 명의 뮤지션이라도 거절하면 공연 자체가 취소됨
         emit MusicianDenied(_concertId, msg.sender);
-        concert.status = "CANCELLED";
-        emit ConcertCancelled(_concertId);
+        concert.status = "CANCELED";
+        emit ConcertCanceled(_concertId);
 
         return true;
     }
@@ -484,7 +485,7 @@ contract ConcertManager {
 
         // 공연 시작 후 1일이 지나야 정산 가능
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
-        require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be cancelled before transfer available after.");
+        require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be canceled before transfer available after.");
 
         // 환불로 인한 토큰이 있다면, 공연장 관리자와 뮤지션이 동등하게 수익을 나눠 받음
         MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
@@ -516,7 +517,7 @@ contract ConcertManager {
         require(isSameString(concert.status, "ACTIVE"), "Concert status must be ACTIVE.");
         require(block.timestamp < concert.concertStartAt, "Concert is already started.");
 
-        concert.status = "CANCELLED";
+        concert.status = "CANCELED";
 
         // 티켓 구매자들에게 전액 환불
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
@@ -528,7 +529,7 @@ contract ConcertManager {
                 melodyToken.transfer(ticket.owner, ticketPriceInfo.ticketPrice);
             }
         }
-        emit ConcertCancelled(_concertId);
+        emit ConcertCanceled(_concertId);
     }
 
     struct TotalConcertInfo {

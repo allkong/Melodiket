@@ -98,7 +98,7 @@ public class Concert {
     enum Status {
         PREPARING, // 뮤지션 초대가 발송된 상황
         ACTIVE, // 모든 뮤지션이 초대를 수락한 상황
-        CANCELLED, // 뮤지션 중 하나라도 초대를 거절한 상황
+        CANCELED, // 뮤지션 중 하나라도 초대를 거절한 상황
         TRANSFERRED, // 토큰이 전송된 상황
     }
 }
