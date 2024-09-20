@@ -6,7 +6,7 @@ public record UserProfileResp(
         String nickname,
         String description,
         String imageUrl,
-        WalletInfo walletInfo
+        Wallet wallet
 ) implements UserProfile {
-    public record WalletInfo(String address, long tokenBalance) {}
+    public record Wallet(String address, long tokenBalance) {}
 }

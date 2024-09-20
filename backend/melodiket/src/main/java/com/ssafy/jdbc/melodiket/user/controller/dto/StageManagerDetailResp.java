@@ -6,7 +6,7 @@ public record StageManagerDetailResp(
         String nickname,
         String description,
         String imageUrl,
-        WalletInfo wallet
+        Wallet wallet
 ) implements UserProfile {
-    public record WalletInfo(String address, long tokenBalance) {}
+    public record Wallet(String address, long tokenBalance) {}
 }
