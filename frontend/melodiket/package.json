@@ -18,9 +18,11 @@
     "concurrently": "^9.0.0",
     "envinfo": "^7.14.0",
     "immer": "^10.1.1",
+    "js-confetti": "^0.12.0",
     "next": "14.2.9",
     "react": "^18",
     "react-dom": "^18",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
