@@ -2,7 +2,7 @@ package com.ssafy.jdbc.melodiket.common.config;
 
 import com.ssafy.jdbc.melodiket.auth.filter.JwtFilter;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
-import com.ssafy.jdbc.melodiket.auth.service.UserService;
+import com.ssafy.jdbc.melodiket.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +35,8 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/auth/sign-up$"),
             Pattern.compile("^/api/v1/auth/login$"),
             Pattern.compile("^/api/v1/users/[^/]+/field-duplication-check$"),
+            Pattern.compile("^/api/v1/users/stage-managers$"),
+            Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
             Pattern.compile("^/$")
     };
 
