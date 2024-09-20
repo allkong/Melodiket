@@ -7,8 +7,8 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUser;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
-import com.ssafy.jdbc.melodiket.user.entity.controller.dto.UpdateUserReq;
-import com.ssafy.jdbc.melodiket.user.entity.controller.dto.UserProfileResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 
 import java.util.UUID;
 
