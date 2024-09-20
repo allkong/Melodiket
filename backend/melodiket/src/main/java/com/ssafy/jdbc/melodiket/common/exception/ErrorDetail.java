@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorDetail {
     // 400 Bad Request
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "E400000", "Bad Request"),
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "E400001", "Invalid Input Value"),
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "E400001", "입력 값이 유효하지 않습니다."),
     // 401 Unauthorized
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "E401000", "Unauthorized"),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "E401001", "아이디 또는 비밀번호 오류입니다."),
