@@ -10,7 +10,8 @@ type Story = StoryObj<typeof TextBanner>;
 
 export const Default: Story = {
   args: {
-    mainLabel: '멜로디켓 회원가입을 위해\n약관에 동의해 주세요',
-    subLabel: '멜로디켓 서비스는 블록체인을 사용한 서비스에요',
+    title: '멜로디켓 회원가입을 위해\n약관에 동의해 주세요',
+    description: '멜로디켓 서비스는 블록체인을 사용한 서비스에요',
+    hasLogo: true,
   },
 };

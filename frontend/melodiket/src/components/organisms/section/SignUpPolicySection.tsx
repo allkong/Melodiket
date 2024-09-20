@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import TextBanner from '@/components/molecules/label/TextBanner';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
 import { SIGN_UP_POLICY_DATAS } from '@/constants/signUp';
@@ -37,8 +37,8 @@ const SignUpPolicySection = ({ onNext }: SignUpPolicySectionProps) => {
     <div className="w-full max-w-full h-full flex flex-col">
       <div className="flex-grow mt-24">
         <TextBanner
-          mainLabel={'멜로디켓 회원가입을 위해\n약관에 동의해 주세요.'}
-          subLabel={'멜로디켓 서비스는 블록체인을 사용한 서비스에요.'}
+          title={'멜로디켓 회원가입을 위해\n약관에 동의해 주세요.'}
+          description={'멜로디켓 서비스는 블록체인을 사용한 서비스에요.'}
         />
         <div className="mt-9 flex flex-col gap-4">
           <AllCheckbox

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import TextBanner from '@/components/molecules/label/TextBanner';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import Textarea from '@/components/atoms/textarea/Textarea';
 
 interface SignUpDescriptionSectionProps {
@@ -19,8 +19,8 @@ const SignUpDescriptionSection = ({
     <div className="w-full max-w-full h-full flex flex-col">
       <div className="flex-grow mt-24">
         <TextBanner
-          mainLabel="회원 소개를 입력해주세요"
-          subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
+          title="회원 소개를 입력해주세요"
+          description="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
         <div className="flex flex-col mt-9 gap-3">
           <Textarea value={value} onChange={setValue} rows={5} limit={150} />

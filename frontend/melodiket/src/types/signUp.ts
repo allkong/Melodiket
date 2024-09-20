@@ -14,7 +14,7 @@ export interface SignUpPolicy {
 
 export interface SignUpRole {
   key: number;
-  mainLabel: string;
-  subLabel: string;
+  title: string;
+  description: string;
   value: 'AUDIENCE' | 'MUSICIAN' | 'MANAGER';
 }
