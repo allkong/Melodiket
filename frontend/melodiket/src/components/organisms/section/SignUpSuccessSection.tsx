@@ -1,11 +1,21 @@
+'use client';
+
 import LargeButton from '@/components/atoms/button/LargeButton';
 import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import useConfetti from '@/hooks/useConfetti';
+import { useEffect } from 'react';
 
 interface SignUpSuccessSectionProps {
   onNext: () => void;
 }
 
 const SignUpSuccessSection = ({ onNext }: SignUpSuccessSectionProps) => {
+  const { fire } = useConfetti();
+
+  useEffect(() => {
+    fire();
+  }, [fire]);
+
   return (
     <div className="w-full max-w-full h-full flex flex-col">
       <div className="flex-grow mt-24">
