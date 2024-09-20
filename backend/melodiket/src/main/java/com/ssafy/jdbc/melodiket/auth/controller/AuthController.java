@@ -6,7 +6,7 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
-import com.ssafy.jdbc.melodiket.auth.service.UserService;
+import com.ssafy.jdbc.melodiket.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
