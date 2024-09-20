@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.repository;
+package com.ssafy.jdbc.melodiket.auth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

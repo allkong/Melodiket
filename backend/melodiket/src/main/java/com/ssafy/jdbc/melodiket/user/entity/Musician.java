@@ -1,7 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusician;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

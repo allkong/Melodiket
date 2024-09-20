@@ -3,7 +3,7 @@ package com.ssafy.jdbc.melodiket.auth.filter;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.common.config.SecurityConfig;
 import com.ssafy.jdbc.melodiket.user.entity.AppUser;
-import com.ssafy.jdbc.melodiket.user.service.UserService;
+import com.ssafy.jdbc.melodiket.auth.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
