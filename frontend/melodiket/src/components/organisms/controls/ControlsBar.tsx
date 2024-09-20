@@ -15,9 +15,12 @@ const ControlsBar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const sortQuery = searchParams.get('sort') || SORT_OPTIONS.alphabetical;
+  const sortQuery = searchParams.get('sort') || 'alphabetical';
   const filterQuery = searchParams.get('filter') === 'true';
-  const selectOptions = Object.values(SELECT_OPTIONS);
+  const selectOptions = Object.entries(SELECT_OPTIONS).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
 
   const updateQueryParams = (key: string, value: string | boolean) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -35,10 +38,10 @@ const ControlsBar = () => {
 
   return (
     <div className="flex flex-row gap-3 px-6 py-3 bg-white">
-      {Object.values(SORT_OPTIONS).map((option) => (
+      {Object.keys(SORT_OPTIONS).map((option) => (
         <OptionButton
           key={option}
-          label={option}
+          label={SORT_OPTIONS[option as keyof typeof SORT_OPTIONS]}
           isSelected={sortQuery === option}
           onClick={() => handleOptionSelect(option)}
         />
@@ -50,8 +53,12 @@ const ControlsBar = () => {
       />
       <SelectButton
         options={selectOptions}
-        selectedOption={selectOptions.includes(sortQuery) ? sortQuery : null}
-        isSelected={selectOptions.includes(sortQuery)}
+        selectedOption={
+          selectOptions.some((option) => option.value === sortQuery)
+            ? sortQuery
+            : null
+        }
+        isSelected={selectOptions.some((option) => option.value === sortQuery)}
         onSelect={handleOptionSelect}
       />
     </div>
