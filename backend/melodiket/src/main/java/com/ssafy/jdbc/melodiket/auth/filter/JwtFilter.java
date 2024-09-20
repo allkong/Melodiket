@@ -43,13 +43,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 회원가입시엔 filter 거치지 않음
-        String path = request.getServletPath();
-        if (path.startsWith("/api/v1/auth/sign-up")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         // 요청에서 JWT 토큰 추출
         String uuid = getValidIdentifier(request);
 
@@ -58,10 +51,12 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 AppUser user = userService.findUserByUuid(uuid);
                 // 식별자를 저장 (role 저장)
-                Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user.getUuid(), null, new ArrayList<>());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        user.getAuthorities()
+                );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                // 다음 필터로 넘기기
-                filterChain.doFilter(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
