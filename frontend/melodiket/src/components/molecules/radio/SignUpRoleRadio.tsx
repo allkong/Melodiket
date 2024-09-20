@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { ChangeEvent } from 'react';
 
-interface LoginRoleRadio {
+interface SignUpRoleRadioProps {
   mainLabel?: string;
   subLabel?: string;
   name?: string;
@@ -11,7 +11,7 @@ interface LoginRoleRadio {
   value: string;
 }
 
-const LoginRoleRadio = ({
+const SignUpRoleRadio = ({
   mainLabel,
   subLabel,
   name,
@@ -19,7 +19,7 @@ const LoginRoleRadio = ({
   onChange,
   disabled,
   value,
-}: LoginRoleRadio) => {
+}: SignUpRoleRadioProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     onChange?.(value);
@@ -63,4 +63,4 @@ const LoginRoleRadio = ({
   );
 };
 
-export default LoginRoleRadio;
+export default SignUpRoleRadio;

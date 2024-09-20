@@ -1,14 +1,15 @@
 'use client';
 
-import { FAVORITE_TYPE } from '@/constants/favoriteType';
+import { useState } from 'react';
+
+import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 
 import Header from '@/components/organisms/navigation/Header';
 import FavoriteTitle from '@/components/molecules/title/FavoriteTitle';
 import Tabs from '@/components/organisms/controls/Tabs';
-import { useState } from 'react';
 
 const Page = () => {
-  const [activeTab, setActiveTab] = useState(Object.keys(FAVORITE_TYPE)[0]);
+  const [activeTab, setActiveTab] = useState(Object.keys(FAVORITE_TYPES)[0]);
 
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
@@ -17,9 +18,12 @@ const Page = () => {
   return (
     <div>
       <Header />
-      <FavoriteTitle type={activeTab as keyof typeof FAVORITE_TYPE} total={3} />
+      <FavoriteTitle
+        type={activeTab as keyof typeof FAVORITE_TYPES}
+        total={3}
+      />
       <Tabs
-        tabs={Object.keys(FAVORITE_TYPE)}
+        tabs={Object.keys(FAVORITE_TYPES)}
         activeTab={activeTab}
         onClick={handleTabClick}
       />
