@@ -41,3 +41,17 @@ security:
   allowed-origins: "${SECURITY_ALLOWED_ORIGINS}"
 jwt:
   issuer: localhost
+
+
+# AWS S3
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_BUCKET_NAME}
+cloudfront:
+  domain: ${CLOUDFRONT_DOMAIN}
