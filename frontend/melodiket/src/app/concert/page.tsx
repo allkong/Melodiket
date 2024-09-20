@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { CONCERT_TYPES } from '@/constants/concertTypes';
 
@@ -10,12 +11,15 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState(Object.keys(CONCERT_TYPES)[0]);
+  const router = useRouter();
 
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
   };
 
-  console.log(Object.keys(CONCERT_TYPES));
+  const handleRegisterClick = () => {
+    router.push('/concert/register/step1');
+  };
 
   return (
     <div>
@@ -27,7 +31,7 @@ const Page = () => {
         labelMap={CONCERT_TYPES}
       />
       <div className="my-4 h-fit ml-4 mr-4">
-        <LargeButton label="공연 등록" />
+        <LargeButton label="공연 등록" onClick={handleRegisterClick} />
       </div>
     </div>
   );
