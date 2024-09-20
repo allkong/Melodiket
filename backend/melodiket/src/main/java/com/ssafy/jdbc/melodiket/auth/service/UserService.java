@@ -7,6 +7,8 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
+import com.ssafy.jdbc.melodiket.user.entity.controller.dto.UpdateUserReq;
+import com.ssafy.jdbc.melodiket.user.entity.controller.dto.UserProfileResp;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,5 +119,50 @@ public class UserService implements AuthService{
             throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
         }
         return appUserRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    public UserProfileResp getUserProfileByLoginId(String loginId) {
+        AppUser appUser = appUserRepository.findByLoginId(loginId)
+                .orElseThrow(()-> new HttpResponseException(ErrorDetail.NOT_FOUND));
+
+        return new UserProfileResp(
+                appUser.getLoginId(),
+                appUser.getRole().name(),
+                appUser.getNickname(),
+                appUser.getDescription()
+        );
+    }
+
+    @Override
+    public UserProfileResp updateUser(UUID uuid, UpdateUserReq updateUserReq) {
+        AppUser user = appUserRepository.findByUuid(uuid)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.NOT_FOUND));
+
+        // 닉네임 유효성 검사
+        if (updateUserReq.nickname().isPresent()) {
+            String newNickname = updateUserReq.nickname().get();
+            if (newNickname.length() < 2) {
+                throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
+            }
+            // 닉네임 중복 검사
+            if (!newNickname.equals(user.getNickname()) && appUserRepository.existsByNickname(newNickname)) {
+                throw new HttpResponseException(ErrorDetail.DUPLICATED_NICKNAME);
+            }
+        }
+
+        // 통과하면 변경
+        AppUser updateUser = user.toBuilder()
+                .nickname(updateUserReq.nickname().orElse(user.getNickname()))
+                .description(updateUserReq.description().orElse(user.getDescription()))
+                .build();
+        appUserRepository.save(updateUser);
+
+        return new UserProfileResp(
+                updateUser.getLoginId(),
+                updateUser.getRole().name(),
+                updateUser.getNickname(),
+                updateUser.getDescription()
+        );
     }
 }
