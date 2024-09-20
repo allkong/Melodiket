@@ -18,11 +18,11 @@ const Page = () => {
   };
 
   const handleRegisterClick = () => {
-    router.push('/concert/register/step1');
+    router.push('/concert/register');
   };
 
   return (
-    <div>
+    <div className="w-full h-full flex flex-col">
       <Header />
       <Tabs
         tabs={Object.keys(CONCERT_TYPES)}
@@ -30,7 +30,8 @@ const Page = () => {
         onClick={handleTabClick}
         labelMap={CONCERT_TYPES}
       />
-      <div className="my-4 h-fit ml-4 mr-4">
+
+      <div className="w-full p-4">
         <LargeButton label="공연 등록" onClick={handleRegisterClick} />
       </div>
     </div>
