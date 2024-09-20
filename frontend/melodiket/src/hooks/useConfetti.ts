@@ -20,5 +20,5 @@ export default function useConfetti() {
     }
   }, [isReady]);
 
-  return { fire };
+  return fire;
 }
