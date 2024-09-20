@@ -10,7 +10,7 @@ interface SignUpSuccessSectionProps {
 }
 
 const SignUpSuccessSection = ({ onNext }: SignUpSuccessSectionProps) => {
-  const { fire } = useConfetti();
+  const fire = useConfetti();
 
   useEffect(() => {
     fire();
