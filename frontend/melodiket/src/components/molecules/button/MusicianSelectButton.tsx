@@ -3,13 +3,13 @@ import Checkbox from '@/components/atoms/checkbox/Checkbox';
 
 interface MusicianSelectButtonProps {
   label: string;
-  selected: boolean;
-  onClick: () => void;
+  selected?: boolean;
+  onClick?: () => void;
 }
 
 const MusicianSelectButton = ({
   label,
-  selected,
+  selected = false,
   onClick,
 }: MusicianSelectButtonProps) => {
   return (
