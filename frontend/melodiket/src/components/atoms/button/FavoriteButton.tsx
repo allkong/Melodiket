@@ -3,15 +3,24 @@ import clsx from 'clsx';
 
 interface FavoriteButtonProps {
   isOn?: boolean;
+  size?: 'md' | 'lg';
   onClick?: () => void;
 }
 
-const FavoriteButton = ({ isOn = false, onClick }: FavoriteButtonProps) => {
+const FavoriteButton = ({
+  isOn = false,
+  size = 'md',
+  onClick,
+}: FavoriteButtonProps) => {
   return (
     <div>
-      {/* 사이즈 조정 필요함 */}
       <Heart
-        className={clsx('w-7', isOn ? 'text-primary' : 'text-gray-300')}
+        className={clsx({
+          'text-primary': isOn,
+          'text-gray-300': !isOn,
+          'w-7': size == 'md',
+          'w-10': size == 'lg',
+        })}
         fill="currentColor"
         onClick={onClick}
       />
