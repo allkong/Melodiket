@@ -3,13 +3,13 @@ import Checkbox from '@/components/atoms/checkbox/Checkbox';
 
 interface MusicianSelectButtonProps {
   label: string;
-  selected?: boolean;
+  isSelected?: boolean;
   onClick?: () => void;
 }
 
 const MusicianSelectButton = ({
   label,
-  selected = false,
+  isSelected = false,
   onClick,
 }: MusicianSelectButtonProps) => {
   return (
@@ -17,14 +17,14 @@ const MusicianSelectButton = ({
       className={clsx(
         'w-full px-5 py-3 bg-white flex items-center justify-between font-medium',
         {
-          'text-black': !selected,
-          'text-purple-500': selected,
+          'text-black': !isSelected,
+          'text-purple-500': isSelected,
         }
       )}
       onClick={onClick}
     >
       <span>{label}</span>
-      <Checkbox isChecked={selected} rounded={true} />
+      <Checkbox isChecked={isSelected} rounded={true} />
     </div>
   );
 };
