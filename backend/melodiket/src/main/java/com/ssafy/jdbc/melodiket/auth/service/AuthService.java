@@ -5,6 +5,8 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUser;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
@@ -26,6 +28,12 @@ public interface AuthService {
     UserProfileResp getUserProfileByLoginId(String loginId) throws HttpResponseException;
     // 유저 정보 업데이트
     UserProfileResp updateUser(UUID uuid, UpdateUserReq updateUserReq);
+
+    // PageNation 기법 활용 공연관리자들 조회
+    StageManagerResp getStageManagers(int pageNo, int pageSize);
+    // StageManager 상세조회
+    StageManagerDetailResp getStageManagerDetail(UUID id);
+
 
 }
 
