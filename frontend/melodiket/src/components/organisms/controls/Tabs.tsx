@@ -5,15 +5,16 @@ interface TabsProps {
   tabs: string[];
   activeTab: string;
   onClick: (tabValue: string) => void;
+  labelMap: Record<string, string>;
 }
 
-const Tabs = ({ tabs, activeTab, onClick }: TabsProps) => {
+const Tabs = ({ tabs, activeTab, onClick, labelMap }: TabsProps) => {
   return (
     <div className="flex w-full border-b border-gray-200">
       {tabs.map((tab) => (
         <TabButton
           key={tab}
-          label={FAVORITE_TYPES[tab as keyof typeof FAVORITE_TYPES]}
+          label={labelMap[tab]}
           isSelected={tab === activeTab}
           onClick={() => onClick(tab)}
         />
