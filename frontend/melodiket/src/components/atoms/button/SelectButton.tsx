@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import ArrowButton from './ArrowButton';
 
 interface SelectButtonProps {
-  options: string[];
+  options: { value: string; label: string }[];
   selectedOption: string | null;
   isSelected?: boolean;
   onSelect: (option: string) => void;
@@ -35,8 +35,8 @@ const SelectButton = ({
         </option>
         {options &&
           options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
+            <option key={index} value={option.value}>
+              {option.label}
             </option>
           ))}
       </select>
