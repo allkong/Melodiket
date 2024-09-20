@@ -1,11 +1,11 @@
 import { LogoImage } from '@/public/icons';
 
-interface SignUpLabelProps {
+interface TextBannerProps {
   mainLabel?: string;
   subLabel?: string;
 }
 
-const SignUpLabel = ({ mainLabel, subLabel }: SignUpLabelProps) => {
+const TextBanner = ({ mainLabel, subLabel }: TextBannerProps) => {
   return (
     <div>
       <LogoImage width="44" height="44" />
@@ -17,4 +17,4 @@ const SignUpLabel = ({ mainLabel, subLabel }: SignUpLabelProps) => {
   );
 };
 
-export default SignUpLabel;
+export default TextBanner;

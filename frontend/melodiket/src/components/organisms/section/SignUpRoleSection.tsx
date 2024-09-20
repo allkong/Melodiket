@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import TextBanner from '@/components/molecules/label/TextBanner';
 import SignUpRoleRadio from '@/components/molecules/radio/SignUpRoleRadio';
 import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
 import type { SignUpRole } from '@/types/signUp';
@@ -24,7 +24,7 @@ const SignUpRoleSection = ({ onNext }: SignUpRoleSectionProps) => {
   return (
     <div className="w-full max-w-full h-full flex flex-col">
       <div className="flex-grow mt-24">
-        <SignUpLabel
+        <TextBanner
           mainLabel="역할을 선택해주세요."
           subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요."
         />
