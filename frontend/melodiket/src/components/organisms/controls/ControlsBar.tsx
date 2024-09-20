@@ -37,7 +37,7 @@ const ControlsBar = () => {
   };
 
   return (
-    <div className="flex flex-row gap-3 px-6 py-3 bg-white">
+    <div className="flex flex-row gap-3 px-6 py-3 bg-white overflow-x-auto whitespace-nowrap scrollbar-hide">
       {Object.keys(SORT_OPTIONS).map((option) => (
         <OptionButton
           key={option}

@@ -1,4 +1,6 @@
 import type { Config } from 'tailwindcss';
+// @ts-expect-error: TypeScript types for tailwind-scrollbar-hide are not available
+import scrollbarHide from 'tailwind-scrollbar-hide';
 
 const config: Config = {
   content: [
@@ -40,6 +42,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [scrollbarHide],
 };
 export default config;
