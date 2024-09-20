@@ -57,6 +57,7 @@ public class SecurityConfig {
                         // 혹시 나중에 swagger 테스트 할수도 있어서 미리
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/users/me").authenticated()
                         .requestMatchers(request -> {
                             String path = request.getServletPath();
                             return isAnonymousAllowedPath(path);
