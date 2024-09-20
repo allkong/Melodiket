@@ -1,10 +1,10 @@
-package com.ssafy.jdbc.melodiket.user.entity.controller;
+package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.UserService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUser;
-import com.ssafy.jdbc.melodiket.user.entity.controller.dto.UpdateUserReq;
-import com.ssafy.jdbc.melodiket.user.entity.controller.dto.UserProfileResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

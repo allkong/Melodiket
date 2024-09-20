@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.entity.controller.dto;
+package com.ssafy.jdbc.melodiket.user.controller.dto;
 
 public record UserProfileResp(
         String loginId,
