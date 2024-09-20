@@ -42,6 +42,7 @@ export const Password: Story = {
   args: {
     type: 'password',
     onClickEnter: fn(),
+    onBlur: fn(),
     placeholder: 'password',
   },
 };
