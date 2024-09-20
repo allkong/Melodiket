@@ -22,8 +22,8 @@ const SignUpRoleSection = ({ onNext }: SignUpRoleSectionProps) => {
   const isCheckValid = role !== null;
 
   return (
-    <div className="w-full max-w-full h-full flex flex-col">
-      <div className="flex-grow mt-24">
+    <div className="flex flex-col h-full">
+      <div className="flex flex-col justify-center flex-grow">
         <SignUpLabel
           mainLabel="역할을 선택해주세요."
           subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요."
@@ -42,7 +42,7 @@ const SignUpRoleSection = ({ onNext }: SignUpRoleSectionProps) => {
           ))}
         </div>
       </div>
-      <div className="my-4 h-fit">
+      <div className="my-4 h-fit min-h-0">
         <LargeButton
           label="다음"
           disabled={!isCheckValid}

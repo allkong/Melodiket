@@ -16,8 +16,8 @@ const SignUpDescriptionSection = ({
   const [value, setValue] = useState('');
 
   return (
-    <div className="w-full max-w-full h-full flex flex-col">
-      <div className="flex-grow mt-24">
+    <div className="flex flex-col h-full">
+      <div className="flex flex-col justify-center flex-grow">
         <SignUpLabel
           mainLabel="회원 소개를 입력해주세요"
           subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요"

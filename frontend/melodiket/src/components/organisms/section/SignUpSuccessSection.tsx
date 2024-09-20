@@ -17,8 +17,8 @@ const SignUpSuccessSection = ({ onNext }: SignUpSuccessSectionProps) => {
   }, [fire]);
 
   return (
-    <div className="w-full max-w-full h-full flex flex-col">
-      <div className="flex-grow mt-24">
+    <div className="flex flex-col h-full">
+      <div className="flex flex-col justify-center flex-grow">
         <SignUpLabel
           mainLabel="회원가입 완료!"
           subLabel="멜로디켓에서 원하는 공연을 찾아보세요."
