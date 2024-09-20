@@ -9,6 +9,7 @@ import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
+import com.ssafy.jdbc.melodiket.common.page.PageInfo;
 import com.ssafy.jdbc.melodiket.user.controller.dto.*;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import lombok.Builder;
@@ -25,7 +26,6 @@ import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
