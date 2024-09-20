@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.controller.dto;
+package com.ssafy.jdbc.melodiket.auth.controller.dto;
 
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 

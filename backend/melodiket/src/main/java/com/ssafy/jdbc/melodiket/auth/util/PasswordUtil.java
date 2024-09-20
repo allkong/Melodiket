@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.util;
+package com.ssafy.jdbc.melodiket.auth.util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

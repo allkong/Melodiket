@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.user.controller.dto;
+package com.ssafy.jdbc.melodiket.auth.controller.dto;
 
 public record LoginResp(
         String accessToken,
