@@ -19,7 +19,7 @@ const MusicianItem = ({
   return (
     <div className="flex flex-row items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
       <div className="flex flex-row items-center space-x-4">
-        <Profile src={src} />
+        <Profile src={src} size="sm" />
         <div className="space-y-1">
           <p className="font-medium">{musicianName}</p>
           <div className="flex flex-row space-x-2.5">
