@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { LogoText } from '@/public/icons';
 import Input from '@/components/atoms/input/Input';
@@ -7,11 +9,14 @@ import TextBanner from '@/components/molecules/text/TextBanner';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 
 const Page = () => {
+  const router = useRouter();
+
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     // 로그인 실행
+    router.push('/');
   };
 
   return (
@@ -36,7 +41,13 @@ const Page = () => {
             type="password"
           />
         </div>
-        <p className="text-sm text-gray-400">ID/PW 찾기 | 회원가입</p>
+        <div className="flex flex-row space-x-2.5 text-sm text-gray-400">
+          <p onClick={() => alert('준비중🔨')} className="cursor-pointer">
+            ID/PW 찾기
+          </p>
+          <p>|</p>
+          <Link href={'/auth/sign-up'}>회원가입</Link>
+        </div>
       </div>
       <FixedButton
         label="로그인"
