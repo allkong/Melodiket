@@ -4,6 +4,28 @@ spring:
       on-profile: dev
     import:
       - file:dev.env[.properties]
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${MYSQL_URL}
+#    username: ${MYSQL_USERNAME}
+#    password: ${MYSQL_PASSWORD}
+
+  sql:
+    init:
+      platform: h2
+#      platform: mysql
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    show-sql: true
+
 server:
   port: ${SERVER_PORT}
 blockchain:
@@ -16,3 +38,21 @@ blockchain:
     melodiket: ${MELODIKET_CONTRACT_ADDRESS}
     melody-token: ${MELODY_TOKEN_CONTRACT_ADDRESS}
     ticket: ${TICKET_CONTRACT_ADDRESS}
+security:
+  allowed-origins: "${SECURITY_ALLOWED_ORIGINS}"
+jwt:
+  issuer: localhost
+
+
+# AWS S3
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_BUCKET_NAME}
+cloudfront:
+  domain: ${CLOUDFRONT_DOMAIN}

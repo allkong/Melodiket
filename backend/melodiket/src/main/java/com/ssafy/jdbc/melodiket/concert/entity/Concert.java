@@ -1,0 +1,73 @@
+package com.ssafy.jdbc.melodiket.concert.entity;
+
+import com.ssafy.jdbc.melodiket.stage.entity.Stage;
+import com.ssafy.jdbc.melodiket.ticket.entity.Ticket;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Table(name = "concert")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Concert {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stage_id", nullable = false)
+    private Stage stage;
+
+    @Column(nullable = false)
+    private Date startAt;
+
+    @Column(nullable = false)
+    private Date ticketingAt;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Date createdAt;
+
+    @Column(nullable = false)
+    private Long availableTickets;
+
+    private String description;
+
+    @Column(nullable = false)
+    private String posterCid;
+
+    @Column(nullable = false)
+    private Long ticketPrice;
+
+    @Column(nullable = false)
+    private Long ownerStake;
+
+    @Column(nullable = false)
+    private Long musicianStake;
+
+    @Column(nullable = false)
+    private Long favoriteMusicianStake;
+
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConcertParticipantMusician> concertParticipantMusicians = new ArrayList<>();
+
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
+}
