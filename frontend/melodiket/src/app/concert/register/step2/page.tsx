@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import LargeButton from '@/components/atoms/button/LargeButton';
-import RegisterLabel from '@/components/molecules/label/RegisterLabel';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import Input from '@/components/atoms/input/Input';
 import MusicianSelectButton from '@/components/molecules/button/MusicianSelectButton';
 
@@ -11,9 +11,9 @@ const Step2 = ({ onNext }: { onNext: () => void }) => {
 
   return (
     <div className="w-full p-4">
-      <RegisterLabel
-        mainLabel="공연 등록을 위해 공연 정보를 입력해주세요"
-        subLabel="뮤지션을 선택해주세요"
+      <TextBanner
+        title="공연 등록을 위해 공연 정보를 입력해주세요"
+        description="뮤지션을 선택해주세요"
       />
       <div className="mt-10 mb-4">
         <Input placeholder="이름" />
