@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import type { SignUpData, SignUpRole } from '@/types/signUp';
-import PolicySection from '@/components/organisms/section/SignUpPolicySection';
-import RoleSection from '@/components/organisms/section/SignUpRoleSection';
-import InformationSection from '@/components/organisms/section/SignUpInformationSection';
-import DescriptionSection from '@/components/organisms/section/SignUpDescriptionSection';
-import SuccessSection from '@/components/organisms/section/SignUpSuccessSection';
+import SignUpPolicy from './_components/sign-up-policy';
+import SignUpRoleSelect from './_components/sign-up-role-select';
+import SignUpInformation from './_components/sign-up-information';
+import SignUpDescription from './_components/sign-up-description';
+import SignUpSuccess from './_components/sign-up-success';
 
 const Page = () => {
   const [signUpData, setSignUpData] = useState<SignUpData>({
@@ -26,9 +26,9 @@ const Page = () => {
 
   return (
     <>
-      {step === 'POLICY' && <PolicySection onNext={() => setStep('ROLE')} />}
+      {step === 'POLICY' && <SignUpPolicy onNext={() => setStep('ROLE')} />}
       {step === 'ROLE' && (
-        <RoleSection
+        <SignUpRoleSelect
           onNext={(value: SignUpRole['value']) => {
             setSignUpData((prev) => ({ ...prev, role: value }));
             setStep('INFORMATION');
@@ -36,7 +36,7 @@ const Page = () => {
         />
       )}
       {step === 'INFORMATION' && (
-        <InformationSection
+        <SignUpInformation
           onNext={(value: Omit<SignUpData, 'role' | 'description'>) => {
             setSignUpData((prev) => ({ ...prev, ...value }));
             setStep('DESCRIPTION');
@@ -44,7 +44,7 @@ const Page = () => {
         />
       )}
       {step === 'DESCRIPTION' && (
-        <DescriptionSection
+        <SignUpDescription
           onNext={(value) => {
             const data: SignUpData = { ...signUpData, description: value };
             console.log(data); // 서버에 mutate 요청 및 로딩 처리
@@ -53,7 +53,7 @@ const Page = () => {
         />
       )}
       {step === 'SUCCESS' && (
-        <SuccessSection
+        <SignUpSuccess
           onNext={() => {
             router.push('/');
           }}
