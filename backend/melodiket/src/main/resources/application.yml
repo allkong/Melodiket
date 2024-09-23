@@ -13,3 +13,6 @@ spring:
       release: release
     active: ${CURRENT_ENV}
 
+jwt:
+  secret: ${JWT_SECRET}
+
