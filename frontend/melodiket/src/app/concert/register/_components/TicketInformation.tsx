@@ -5,7 +5,7 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import RegisterLabel from '@/components/molecules/label/RegisterLabel';
 import Input from '@/components/atoms/input/Input';
 
-const Step3 = ({ onNext }: { onNext: () => void }) => {
+const TicketInformation = ({ onNext }: { onNext: () => void }) => {
   const [ticketPrice, setTicketPrice] = useState('');
 
   return (
@@ -29,4 +29,4 @@ const Step3 = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default Step3;
+export default TicketInformation;

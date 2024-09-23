@@ -6,7 +6,7 @@ import RegisterLabel from '@/components/molecules/label/RegisterLabel';
 import Input from '@/components/atoms/input/Input';
 import MusicianSelectButton from '@/components/molecules/button/MusicianSelectButton';
 
-const Step2 = ({ onNext }: { onNext: () => void }) => {
+const MusicianInformation = ({ onNext }: { onNext: () => void }) => {
   const [musicians, setMusicians] = useState<string[]>([]);
 
   return (
@@ -30,4 +30,4 @@ const Step2 = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default Step2;
+export default MusicianInformation;
