@@ -7,6 +7,9 @@ import Heart from './heart.svg';
 import QrCode from './qr-code.svg';
 import Ticket from './ticket.svg';
 import Check from './check.svg';
+import Calendar from './calendar.svg';
+import Help from './help.svg';
+import Upload from './upload.svg';
 
 export {
   LogoText,
@@ -18,4 +21,7 @@ export {
   Check,
   Arrow,
   Heart,
+  Calendar,
+  Help,
+  Upload,
 };
