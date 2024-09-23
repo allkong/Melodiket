@@ -1,30 +1,89 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-import Header from '@/components/organisms/navigation/Header';
-import Step1 from './step1/page';
-import Step2 from './step2/page';
-import Step3 from './step3/page';
-import Step4 from './step4/page';
-import Step5 from './step5/page';
+import type { ConcertData } from '@/types/concert';
+import ConcertInformation from './_components/concert-information';
+import MusicianInformation from './_components/musician-information';
+import TicketInformation from './_components/ticket-information';
+import StageInformation from './_components/stage-information';
+import RegisterSuccess from './_components/register-success';
 
 const RegisterConcert = () => {
-  const [step, setStep] = useState(1);
+  const [concertData, setConcertData] = useState<ConcertData>({
+    concertName: '',
+    startAt: new Date(),
+    ticketingAt: new Date(),
+    concertDescription: '',
+    concertPoster: new File([], ''),
+    musicianList: {},
+    ticketPrice: 0,
+    ownerStake: 0,
+    musicianStake: 0,
+    favoriteMusicianStake: 0,
+    stageInformation: {
+      stageName: '',
+      stageAddress: '',
+      isStanding: true,
+      capacity: undefined,
+      numOfRow: undefined,
+      numOfCol: undefined,
+    },
+  });
+  const [step, setStep] = useState<
+    'CONCERT' | 'MUSICIAN' | 'TICKET' | 'STAGE' | 'SUCCESS'
+  >('CONCERT');
 
-  const nextStep = () => setStep(step + 1);
+  const router = useRouter();
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <Header />
-      <div>
-        {step === 1 && <Step1 onNext={nextStep} />}
-        {step === 2 && <Step2 onNext={nextStep} />}
-        {step === 3 && <Step3 onNext={nextStep} />}
-        {step === 4 && <Step4 onNext={nextStep} />}
-        {step === 5 && <Step5 />}
-      </div>
-    </div>
+    <>
+      {step === 'CONCERT' && (
+        <ConcertInformation
+          concertData={concertData}
+          onNext={(data) => {
+            setConcertData((prev) => ({ ...prev, ...data }));
+            setStep('MUSICIAN');
+          }}
+        />
+      )}
+      {step === 'MUSICIAN' && (
+        <MusicianInformation
+          concertData={concertData}
+          onNext={(data) => {
+            setConcertData((prev) => ({ ...prev, ...data }));
+            setStep('TICKET');
+          }}
+        />
+      )}
+      {step === 'TICKET' && (
+        <TicketInformation
+          concertData={concertData}
+          onNext={(data) => {
+            setConcertData((prev) => ({ ...prev, ...data }));
+            setStep('STAGE');
+          }}
+        />
+      )}
+      {step === 'STAGE' && (
+        <StageInformation
+          concertData={concertData}
+          onNext={(data) => {
+            setConcertData((prev) => ({ ...prev, ...data }));
+            console.log(concertData);
+            setStep('SUCCESS');
+          }}
+        />
+      )}
+      {step === 'SUCCESS' && (
+        <RegisterSuccess
+          onNext={() => {
+            router.push('/');
+          }}
+        />
+      )}
+    </>
   );
 };
 
