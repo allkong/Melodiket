@@ -1,7 +1,7 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
 import com.ssafy.jdbc.melodiket.stage.entity.Stage;
-import com.ssafy.jdbc.melodiket.ticket.entity.Ticket;
+import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Concert {
+public class ConcertEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,12 +62,12 @@ public class Concert {
     @Column(nullable = false)
     private Long favoriteMusicianStake;
 
-    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TicketEntity> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ConcertParticipantMusician> concertParticipantMusicians = new ArrayList<>();
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConcertParticipantMusicianEntity> concertParticipantMusicians = new ArrayList<>();
 
-    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
 }

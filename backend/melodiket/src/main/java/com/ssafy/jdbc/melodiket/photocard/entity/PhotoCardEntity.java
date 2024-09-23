@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.photocard.entity;
 
-import com.ssafy.jdbc.melodiket.ticket.entity.Ticket;
+import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PhotoCard {
+public class PhotoCardEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,6 @@ public class PhotoCard {
 
     @OneToOne
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
-    private Ticket ticket;
+    private TicketEntity ticketEntity;
 
 }
