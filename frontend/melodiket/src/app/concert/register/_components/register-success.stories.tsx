@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import RegisterSuccess from './RegisterSuccess';
+import RegisterSuccess from './register-success';
 
 const meta: Meta<typeof RegisterSuccess> = {
   component: RegisterSuccess,

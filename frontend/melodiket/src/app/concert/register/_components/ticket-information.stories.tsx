@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import TicketInformation from './TicketInformation';
+import TicketInformation from './ticket-information';
 
 const meta: Meta<typeof TicketInformation> = {
   component: TicketInformation,

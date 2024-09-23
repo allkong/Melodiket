@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import MusicianInformation from './MusicianInformation';
+import MusicianInformation from './musician-information';
 
 const meta: Meta<typeof MusicianInformation> = {
   component: MusicianInformation,
