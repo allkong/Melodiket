@@ -1,7 +1,7 @@
 package com.ssafy.jdbc.melodiket.user.entity.favorite;
 
-import com.ssafy.jdbc.melodiket.user.entity.Audience;
-import com.ssafy.jdbc.melodiket.user.entity.Musician;
+import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
+import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +19,10 @@ public class FavoriteMusician {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id", nullable = false)
-    private Audience audience;
+    private AudienceEntity audienceEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "musician_id", nullable = false)
-    private Musician musician;
+    private MusicianEntity musicianEntity;
 
 }

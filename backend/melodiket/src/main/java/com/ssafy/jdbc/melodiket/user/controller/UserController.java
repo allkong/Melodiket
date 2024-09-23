@@ -1,14 +1,14 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
-import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
-import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,7 +34,7 @@ public class UserController {
 
     @PatchMapping("/me")
     public ResponseEntity<UserProfileResp> updateUser(@RequestBody UpdateUserReq updateUserReq, Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         UserProfileResp updateUser = authService.updateUser(user.getUuid(), updateUserReq);
         return ResponseEntity.ok(updateUser);
     }
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @GetMapping("/musicians/{id}")
-    public ResponseEntity<MusicianDetailResp> getMusicianDetail(@PathVariable UUID id){
+    public ResponseEntity<MusicianDetailResp> getMusicianDetail(@PathVariable UUID id) {
         MusicianDetailResp musicianDetailResp = authService.getMusicianDetail(id);
         return ResponseEntity.ok(musicianDetailResp);
     }

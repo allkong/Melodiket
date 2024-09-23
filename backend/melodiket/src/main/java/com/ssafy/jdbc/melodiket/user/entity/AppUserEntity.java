@@ -1,7 +1,7 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
-import com.ssafy.jdbc.melodiket.account.entity.Account;
-import com.ssafy.jdbc.melodiket.account.entity.AccountCertification;
+import com.ssafy.jdbc.melodiket.account.entity.AccountCertificationEntity;
+import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class AppUser implements UserDetails {
+public class AppUserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,11 +51,11 @@ public class AppUser implements UserDetails {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accounts = new ArrayList<>();
+    @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccountEntity> accounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AccountCertification> accountCertifications = new ArrayList<>();
+    @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

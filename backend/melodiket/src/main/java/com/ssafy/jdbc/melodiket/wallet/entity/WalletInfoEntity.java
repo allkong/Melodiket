@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.wallet.entity;
 
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalletInfo {
+public class WalletInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private AppUser user;
+    private AppUserEntity user;
 
     @Column(unique = true, nullable = false)
     private String walletAddress;

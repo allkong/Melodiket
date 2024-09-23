@@ -1,7 +1,7 @@
 package com.ssafy.jdbc.melodiket.ticket.entity;
 
-import com.ssafy.jdbc.melodiket.concert.entity.Concert;
-import com.ssafy.jdbc.melodiket.user.entity.Audience;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ticket {
+public class TicketEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,11 @@ public class Ticket {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id", nullable = false)
-    private Audience audience;
+    private AudienceEntity audienceEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id", nullable = false)
-    private Concert concert;
+    private ConcertEntity concertEntity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
