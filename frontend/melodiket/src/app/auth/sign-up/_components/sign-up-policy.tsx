@@ -8,11 +8,11 @@ import AllCheckbox from '@/components/molecules/checkbox/AllCheckbox';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
 import { SIGN_UP_POLICY_DATAS } from '@/constants/signUp';
 
-interface SignUpPolicySectionProps {
+interface SignUpPolicyProps {
   onNext: () => void;
 }
 
-const SignUpPolicySection = ({ onNext }: SignUpPolicySectionProps) => {
+const SignUpPolicy = ({ onNext }: SignUpPolicyProps) => {
   const [isChecked, setIsChecked] = useState(
     SIGN_UP_POLICY_DATAS.map(() => false)
   );
@@ -34,9 +34,10 @@ const SignUpPolicySection = ({ onNext }: SignUpPolicySectionProps) => {
     .every((value) => value);
 
   return (
-    <div className="w-full max-w-full h-full flex flex-col">
-      <div className="flex-grow mt-24">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow pt-[10vh] overflow-y-auto">
         <TextBanner
+          hasLogo
           title={'멜로디켓 회원가입을 위해\n약관에 동의해 주세요.'}
           description={'멜로디켓 서비스는 블록체인을 사용한 서비스에요.'}
         />
@@ -63,4 +64,4 @@ const SignUpPolicySection = ({ onNext }: SignUpPolicySectionProps) => {
   );
 };
 
-export default SignUpPolicySection;
+export default SignUpPolicy;
