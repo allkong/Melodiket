@@ -12,20 +12,20 @@ export const SIGN_UP_POLICY_DATAS: SignUpPolicy[] = [
 export const SIGN_UP_ROLE_DATAS: SignUpRole[] = [
   {
     key: 0,
-    mainLabel: '관객',
-    subLabel: '뮤지션이 진행하는 공연을 즐기고 싶어요.',
+    title: '관객',
+    description: '뮤지션이 진행하는 공연을 즐기고 싶어요.',
     value: 'AUDIENCE',
   },
   {
     key: 1,
-    mainLabel: '뮤지션',
-    subLabel: '제 공연을 관객들에게 선보이고 싶어요.',
+    title: '뮤지션',
+    description: '제 공연을 관객들에게 선보이고 싶어요.',
     value: 'MUSICIAN',
   },
   {
     key: 2,
-    mainLabel: '매니저',
-    subLabel: '제 공연장을 제공하고 싶어요.',
+    title: '매니저',
+    description: '제 공연장을 제공하고 싶어요.',
     value: 'MANAGER',
   },
 ] as const;
