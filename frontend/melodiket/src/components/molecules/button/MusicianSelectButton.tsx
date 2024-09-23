@@ -15,7 +15,7 @@ const MusicianSelectButton = ({
   return (
     <div
       className={clsx(
-        'w-full px-5 py-3 bg-white flex items-center justify-between font-medium',
+        'w-full px-5 py-3 flex items-center justify-between font-medium',
         {
           'text-black': !isSelected,
           'text-purple-500': isSelected,
