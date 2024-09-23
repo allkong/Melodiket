@@ -5,17 +5,11 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TicketNFT is ERC721, Ownable {
-    enum TicketStatus {
-        UNUSED, // 사용되지 않은 티켓
-        USED, // 사용된 티켓
-        REFUNDED // 환불된 티켓
-    }
-
     struct Ticket {
         uint256 id;
         address owner;
         uint256 concertId;
-        TicketStatus status;
+        string status;
         address favoriteMusicianAddress;
         bool isStanding;
         uint256 seatRow;
@@ -33,31 +27,53 @@ contract TicketNFT is ERC721, Ownable {
         uint256 newTicketId = _tokenIdCounter;
         _safeMint(to, newTicketId);
 
-        tickets[newTicketId] = Ticket({
-            id: newTicketId,
-            owner: to,
-            concertId: _concertId,
-            status: TicketStatus.UNUSED,
-            favoriteMusicianAddress: _favoriteMusician,
-            isStanding: _isStanding,
-            seatRow: _seatRow,
-            seatColumn: _seatColumn
-        });
+        Ticket storage ticket = tickets[newTicketId];
+        ticket.id = newTicketId;
+        ticket.owner = to;
+        ticket.concertId = _concertId;
+        ticket.status = "UNUSED";
+        ticket.favoriteMusicianAddress = _favoriteMusician;
+        ticket.isStanding = _isStanding;
+        ticket.seatRow = _seatRow;
+        ticket.seatColumn = _seatColumn;
 
         return newTicketId;
     }
 
     function useTicket(uint256 _ticketId) public {
         Ticket storage ticket = tickets[_ticketId];
-        ticket.status = TicketStatus.USED;
+        ticket.status = "USED";
     }
 
     function refundTicket(uint256 _ticketId) public {
         Ticket storage ticket = tickets[_ticketId];
-        ticket.status = TicketStatus.REFUNDED;
+        ticket.status = "REFUNDED";
     }
 
     function getTicketWithId(uint256 _ticketId) public view returns (Ticket memory) {
         return tickets[_ticketId];
+    }
+
+    function getTicketInfoArrayWithId(uint256 _ticketId) public view returns (
+        uint256 id,
+        address owner,
+        uint256 concertId,
+        string memory status,
+        address favoriteMusicianAddress,
+        bool isStanding,
+        uint256 seatRow,
+        uint256 seatColumn
+    ) {
+        Ticket storage ticket = tickets[_ticketId];
+        return (
+            ticket.id,
+            ticket.owner,
+            ticket.concertId,
+            ticket.status,
+            ticket.favoriteMusicianAddress,
+            ticket.isStanding,
+            ticket.seatRow,
+            ticket.seatColumn
+        );
     }
 }

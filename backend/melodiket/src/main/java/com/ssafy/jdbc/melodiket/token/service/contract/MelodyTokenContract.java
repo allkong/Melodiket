@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MelodyTokenContract extends Contract {
     public MelodyTokenContract(BlockchainConfig blockchainConfig, Credentials credentials) {
-        super(blockchainConfig.getMelodyTokenContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getMinGasPrice()), BigInteger.valueOf(blockchainConfig.getMaxGasPrice()));
+        super(blockchainConfig.getMelodyTokenContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getGasPrice()), BigInteger.valueOf(blockchainConfig.getGasLimit()));
     }
 
     public long balanceOf(String owner) {
@@ -52,6 +52,24 @@ public class MelodyTokenContract extends Contract {
             e.printStackTrace();
             return false;
         }
+    }
 
+    public boolean approve(String allowedAddress, long value) {
+        RemoteCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new org.web3j.abi.datatypes.Function(
+                "approve",
+                List.of(
+                        new Address(allowedAddress),
+                        new Uint256(BigInteger.valueOf(value))
+                ),
+                Collections.singletonList(new org.web3j.abi.TypeReference<Bool>() {
+                })));
+
+        try {
+            TransactionReceipt result = functionCall.send();
+            return result.isStatusOK();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

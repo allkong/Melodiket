@@ -54,4 +54,16 @@ public abstract class ConcertEvents {
                     } // concertId
             )
     );
+
+    public static final Event TICKET_PURCHASED = new Event(
+            "TicketPurchased",
+            List.of(
+                    new TypeReference<Uint256>() {
+                    }, // concertId
+                    new TypeReference<Address>() {
+                    }, // owner address
+                    new TypeReference<Uint256>() {
+                    } // ticket id
+            )
+    );
 }
