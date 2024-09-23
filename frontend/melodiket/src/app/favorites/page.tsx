@@ -26,6 +26,7 @@ const Page = () => {
         tabs={Object.keys(FAVORITE_TYPES)}
         activeTab={activeTab}
         onClick={handleTabClick}
+        labelMap={FAVORITE_TYPES}
       />
     </div>
   );
