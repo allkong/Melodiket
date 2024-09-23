@@ -14,16 +14,16 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StageManager extends AppUser {
+public class StageManagerEntity extends AppUserEntity {
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private AppUser user;
+    private AppUserEntity user;
 
     private String description;
 
     private String imageUrl;
 
-    @OneToMany(mappedBy = "stageManager", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "stageManagerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StageAssignment> stageAssignments = new ArrayList<>();
 
 }

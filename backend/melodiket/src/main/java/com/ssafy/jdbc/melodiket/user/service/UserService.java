@@ -1,20 +1,24 @@
 package com.ssafy.jdbc.melodiket.user.service;
 
+import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
+import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
+import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
-import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
-import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
-import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.common.page.PageInfo;
-import com.ssafy.jdbc.melodiket.user.controller.dto.*;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
+import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
-import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class UserService implements AuthService {
         String salt = PasswordUtil.generateSalt();
         String hashedPassword = PasswordUtil.hashPassword(signUpReq.password(), salt);
 
-        AppUser appUser = AppUser.builder()
+        AppUserEntity appUserEntity = AppUserEntity.builder()
                 .uuid(UUID.randomUUID())
                 .loginId(signUpReq.loginId())
                 .password(hashedPassword)
@@ -62,7 +63,7 @@ public class UserService implements AuthService {
                 .description(signUpReq.description())
                 .build();
 
-        AppUser user = appUserRepository.save(appUser);
+        AppUserEntity user = appUserRepository.save(appUserEntity);
 
         return new SignUpResp(
                 user.getId(),
@@ -76,7 +77,7 @@ public class UserService implements AuthService {
 
     @Override
     public LoginResp login(LoginReq loginReq) {
-        AppUser user = appUserRepository.findByLoginId(loginReq.loginId())
+        AppUserEntity user = appUserRepository.findByLoginId(loginReq.loginId())
                 //Todo : Exception 재정의
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.UNAUTHORIZED));
 
@@ -105,13 +106,13 @@ public class UserService implements AuthService {
     }
 
     @Override
-    public AppUser findUserByUuid(String uuid) throws HttpResponseException {
+    public AppUserEntity findUserByUuid(String uuid) throws HttpResponseException {
         return appUserRepository.findByUuid(UUID.fromString(uuid))
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
     }
 
     @Override
-    public AppUser findUserByLoginId(String loginId) throws HttpResponseException {
+    public AppUserEntity findUserByLoginId(String loginId) throws HttpResponseException {
         return appUserRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
     }
@@ -134,22 +135,22 @@ public class UserService implements AuthService {
 
     @Override
     public UserProfileResp getUserProfileByLoginId(String loginId) {
-        AppUser appUser = appUserRepository.findByLoginId(loginId)
+        AppUserEntity appUserEntity = appUserRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         return new UserProfileResp(
-                        appUser.getLoginId(),
-                        appUser.getRole().name(),
-                        appUser.getNickname(),
-                        appUser.getDescription(),
-                        null, // imageUrl 선개발시 처리
-                        null  // walletInfo 선개발시 처리
+                appUserEntity.getLoginId(),
+                appUserEntity.getRole().name(),
+                appUserEntity.getNickname(),
+                appUserEntity.getDescription(),
+                null, // imageUrl 선개발시 처리
+                null  // walletInfo 선개발시 처리
         );
     }
 
     @Override
     public UserProfileResp updateUser(UUID uuid, UpdateUserReq updateUserReq) {
-        AppUser user = appUserRepository.findByUuid(uuid)
+        AppUserEntity user = appUserRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         // 닉네임 유효성 검사
@@ -164,35 +165,35 @@ public class UserService implements AuthService {
         }
 
         // 유저 정보 변경
-        AppUser updateUser = user.toBuilder()
+        AppUserEntity updateUser = user.toBuilder()
                 .nickname(updateUserReq.nickname().orElse(user.getNickname()))
                 .description(updateUserReq.description().orElse(user.getDescription()))
                 .build();
         appUserRepository.save(updateUser);
 
         return new UserProfileResp(
-                        updateUser.getLoginId(),
-                        updateUser.getRole().name(),
-                        updateUser.getNickname(),
-                        updateUser.getDescription(),
-                        null, // imageUrl 선개발시 처리
-                        null  // walletInfo 선개발시 처리
+                updateUser.getLoginId(),
+                updateUser.getRole().name(),
+                updateUser.getNickname(),
+                updateUser.getDescription(),
+                null, // imageUrl 선개발시 처리
+                null  // walletInfo 선개발시 처리
         );
     }
 
     // StageManager 들 조회
     public StageManagerResp getStageManagers(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<AppUser> stageManagerPage = appUserRepository.findByRole(Role.STAGE_MANAGER, pageable);
+        Page<AppUserEntity> stageManagerPage = appUserRepository.findByRole(Role.STAGE_MANAGER, pageable);
 
         List<UserProfileResp> stageManagers = stageManagerPage.getContent().stream()
                 .map(user -> new UserProfileResp(
-                                user.getLoginId(),
-                                user.getRole().name(),
-                                user.getNickname(),
-                                user.getDescription(),
+                        user.getLoginId(),
+                        user.getRole().name(),
+                        user.getNickname(),
+                        user.getDescription(),
                         null,  // TODO : imageUrl 선개발시 null 처리
-                                null   // TODO :walletInfo 선개발시 null 처리
+                        null   // TODO :walletInfo 선개발시 null 처리
                 ))
                 .toList();
 
@@ -210,23 +211,23 @@ public class UserService implements AuthService {
 
     @Override
     public StageManagerDetailResp getStageManagerDetail(UUID id) {
-        AppUser user = appUserRepository.findByUuid(id)
+        AppUserEntity user = appUserRepository.findByUuid(id)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         return new StageManagerDetailResp(
-                        user.getLoginId(),
-                        user.getRole().name(),
-                        user.getNickname(),
-                        user.getDescription(),
-                        null,  // TODO : imageUrl 선개발시 null 처리
-                        null   // TODO :walletInfo 선개발시 null 처리
+                user.getLoginId(),
+                user.getRole().name(),
+                user.getNickname(),
+                user.getDescription(),
+                null,  // TODO : imageUrl 선개발시 null 처리
+                null   // TODO :walletInfo 선개발시 null 처리
         );
     }
 
     @Override
     public MusicianResp getMusicians(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<AppUser> musicianPage = appUserRepository.findByRole(Role.MUSICIAN, pageable);
+        Page<AppUserEntity> musicianPage = appUserRepository.findByRole(Role.MUSICIAN, pageable);
         List<UserProfileResp> musicians = musicianPage.getContent().stream()
                 .map(user -> new UserProfileResp(
                         user.getLoginId(),
@@ -252,8 +253,8 @@ public class UserService implements AuthService {
 
     @Override
     public MusicianDetailResp getMusicianDetail(UUID id) {
-        AppUser user = appUserRepository.findByUuid(id)
-                .orElseThrow(()-> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+        AppUserEntity user = appUserRepository.findByUuid(id)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
         return new MusicianDetailResp(
                 user.getLoginId(),
                 user.getRole().name(),

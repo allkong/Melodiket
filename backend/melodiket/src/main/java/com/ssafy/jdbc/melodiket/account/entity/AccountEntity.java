@@ -1,21 +1,19 @@
 package com.ssafy.jdbc.melodiket.account.entity;
 
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Entity
-@Table(name="account_certification")
+@Table(name = "bank_account")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountCertification {
+public class AccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +28,8 @@ public class AccountCertification {
     @Column(nullable = false)
     private String bankName;
 
-    @Column(nullable = false)
-    private String secret;
-
-    @Column(nullable = false)
-    private Date expiresAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private AppUser appUser;
+    private AppUserEntity appUserEntity;
+
 }
