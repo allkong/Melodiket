@@ -11,6 +11,8 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.common.page.PageInfo;
 import com.ssafy.jdbc.melodiket.user.controller.dto.*;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
