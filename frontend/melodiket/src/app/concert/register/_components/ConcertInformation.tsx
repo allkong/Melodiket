@@ -6,11 +6,10 @@ import RegisterLabel from '@/components/molecules/label/RegisterLabel';
 import Input from '@/components/atoms/input/Input';
 import Textarea from '@/components/atoms/textarea/Textarea';
 
-const Step1 = ({ onNext }: { onNext: () => void }) => {
+const ConcertInformation = ({ onNext }: { onNext: () => void }) => {
   const [concertDate, setConcertDate] = useState('');
   const [ticketingDate, setTicketingDate] = useState('');
   const [concertContent, setConcertContent] = useState('');
-  const [concertPoster, setConcertPoster] = useState<File | null>(null);
 
   return (
     <div className="w-full p-4">
@@ -39,4 +38,4 @@ const Step1 = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default Step1;
+export default ConcertInformation;

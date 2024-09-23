@@ -4,7 +4,7 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import RegisterLabel from '@/components/molecules/label/RegisterLabel';
 import StageItem from '@/components/molecules/item/StageItem';
 
-const Step4 = ({ onNext }: { onNext: () => void }) => {
+const SelectStage = ({ onNext }: { onNext: () => void }) => {
   return (
     <div className="w-full p-4">
       <RegisterLabel
@@ -30,4 +30,4 @@ const Step4 = ({ onNext }: { onNext: () => void }) => {
   );
 };
 
-export default Step4;
+export default SelectStage;
