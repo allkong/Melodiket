@@ -15,16 +15,14 @@ const MusicianSelectButton = ({
   return (
     <div
       className={clsx(
-        'w-full px-5 py-3 flex items-center justify-between font-medium',
+        'w-full px-5 py-3 flex items-center justify-between font-medium cursor-pointer',
         {
           'text-black': !isSelected,
-          'text-purple-500': isSelected,
         }
       )}
-      onClick={onClick}
     >
       <span>{label}</span>
-      <Checkbox isChecked={isSelected} rounded={true} />
+      <Checkbox isChecked={isSelected} onChange={onClick} rounded={true} />
     </div>
   );
 };
