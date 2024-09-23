@@ -10,8 +10,8 @@ const ControlsBar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const filterQuery = searchParams.get('filter') === 'true';
-  const sortQuery = searchParams.get('sort') || 'alphabetical';
+  const filterQuery = searchParams.get('filter') !== 'false';
+  const sortQuery = searchParams.get('sort') || 'popularity';
 
   const updateQueryParams = (key: string, value: string | boolean) => {
     const params = new URLSearchParams(searchParams.toString());
