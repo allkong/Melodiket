@@ -1,9 +1,10 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
-import com.ssafy.jdbc.melodiket.stage.entity.Stage;
-import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerDetailResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUser;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
@@ -49,5 +50,18 @@ public class UserController {
     public ResponseEntity<StageManagerDetailResp> getStageManagerDetail(@PathVariable UUID id) {
         StageManagerDetailResp stageManagerDetail = authService.getStageManagerDetail(id);
         return ResponseEntity.ok(stageManagerDetail);
+    }
+
+    @GetMapping("/musicians")
+    public ResponseEntity<MusicianResp> getMusicians(@RequestParam(defaultValue = "1") int pageNo,
+                                                     @RequestParam(defaultValue = "10") int pageSize) {
+        MusicianResp musicianResp = authService.getMusicians(pageNo, pageSize);
+        return ResponseEntity.ok(musicianResp);
+    }
+
+    @GetMapping("/musicians/{id}")
+    public ResponseEntity<MusicianDetailResp> getMusicianDetail(@PathVariable UUID id){
+        MusicianDetailResp musicianDetailResp = authService.getMusicianDetail(id);
+        return ResponseEntity.ok(musicianDetailResp);
     }
 }
