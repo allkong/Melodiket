@@ -15,8 +15,22 @@ module.exports = {
     },
   },
   networks: {
+    hardhat: {
+      initialBaseFeePerGas: 0,  // 가스비를 0으로 설정
+      gasPrice: 0,  // 기본 가스 가격을 0으로 설정
+      mining: {
+        auto: true,  // 자동으로 블록을 생성
+        interval: 0  // 즉시 블록을 생성
+      }
+    },
     localhost: {
       url: process.env.LOCALHOST_URL, // .env 파일의 LOCALHOST_URL을 사용합니다.
+      initialBaseFeePerGas: 0,
+      gasPrice: 0,
+      mining: {
+        auto: true,
+        interval: 0,
+      }
     },
     sepolia: {
       url: process.env.SEPOLIA_URL, // .env 파일의 SEPOLIA_URL을 사용합니다.
