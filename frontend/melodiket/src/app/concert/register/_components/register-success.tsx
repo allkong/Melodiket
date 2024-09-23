@@ -1,14 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import RegisterLabel from '@/components/molecules/label/RegisterLabel';
+import TextBanner from '@/components/molecules/text/TextBanner';
 
 import useConfetti from '@/hooks/useConfetti';
 
-const RegisterSuccess = () => {
+interface RegisterSuccessProps {
+  onNext: () => void;
+}
+
+const RegisterSuccess = ({ onNext }: RegisterSuccessProps) => {
   const fire = useConfetti();
 
   useEffect(() => {
@@ -17,11 +20,11 @@ const RegisterSuccess = () => {
 
   return (
     <div className="w-full p-4">
-      <RegisterLabel
-        mainLabel="공연 등록 완료!"
-        subLabel="뮤지션들에게 공연 승인 알람을 보냈어요"
+      <TextBanner
+        title="공연 등록 완료!"
+        description="뮤지션들에게 공연 승인 알람을 보냈어요"
       />
-      <LargeButton label="이동" />
+      <LargeButton label="완료" onClick={() => onNext()} />
     </div>
   );
 };
