@@ -1,0 +1,15 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import CarouselButton from './CarouselButton';
+
+const meta: Meta<typeof CarouselButton> = {
+  component: CarouselButton,
+};
+
+export default meta;
+type Story = StoryObj<typeof CarouselButton>;
+
+export const Default: Story = {
+  args: {
+    isSelected: false,
+  },
+};
