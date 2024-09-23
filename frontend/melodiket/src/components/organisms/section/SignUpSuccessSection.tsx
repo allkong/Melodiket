@@ -1,7 +1,7 @@
 'use client';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import useConfetti from '@/hooks/useConfetti';
 import { useEffect } from 'react';
 
@@ -19,9 +19,9 @@ const SignUpSuccessSection = ({ onNext }: SignUpSuccessSectionProps) => {
   return (
     <div className="w-full max-w-full h-full flex flex-col">
       <div className="flex-grow mt-24">
-        <SignUpLabel
-          mainLabel="회원가입 완료!"
-          subLabel="멜로디켓에서 원하는 공연을 찾아보세요."
+        <TextBanner
+          title="회원가입 완료!"
+          description="멜로디켓에서 원하는 공연을 찾아보세요."
         />
       </div>
       <div className="my-4 h-fit">
