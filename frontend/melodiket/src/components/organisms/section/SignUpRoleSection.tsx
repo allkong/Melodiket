@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import SignUpRoleRadio from '@/components/molecules/radio/SignUpRoleRadio';
 import { SIGN_UP_ROLE_DATAS } from '@/constants/signUp';
 import type { SignUpRole } from '@/types/signUp';
@@ -24,16 +24,16 @@ const SignUpRoleSection = ({ onNext }: SignUpRoleSectionProps) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex flex-col justify-center flex-grow">
-        <SignUpLabel
-          mainLabel="역할을 선택해주세요."
-          subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요."
+        <TextBanner
+          title="역할을 선택해주세요."
+          description="멜로디켓 서비스는 블록체인을 사용한 서비스에요."
         />
         <div className="mt-9 flex flex-col gap-4">
           {SIGN_UP_ROLE_DATAS.map((data) => (
             <SignUpRoleRadio
               key={data.key}
-              mainLabel={data.mainLabel}
-              subLabel={data.subLabel}
+              title={data.title}
+              description={data.description}
               value={data.value}
               name="role"
               checked={role === data.value}

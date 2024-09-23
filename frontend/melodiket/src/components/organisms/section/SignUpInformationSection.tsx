@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import SignUpNicknameInput from '@/components/organisms/input/SignUpNicknameInput';
 import SignUpLoginIdInput from '@/components/organisms/input/SignUpLoginIdInput';
 import SignUpPasswordInput from '@/components/organisms/input/SignUpPasswordInput';
@@ -38,9 +38,9 @@ const SignUpInformationSection = ({
   return (
     <div className="flex flex-col h-full">
       <div className="flex flex-col justify-center flex-grow">
-        <SignUpLabel
-          mainLabel="회원 정보를 입력해주세요"
-          subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
+        <TextBanner
+          title="회원 정보를 입력해주세요"
+          description="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
         <div className="flex flex-col mt-9 gap-3">
           <SignUpNicknameInput
