@@ -3,19 +3,17 @@
 import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import SignUpLabel from '@/components/molecules/label/SignUpLabel';
+import TextBanner from '@/components/molecules/text/TextBanner';
 import SignUpNicknameInput from '@/components/organisms/input/SignUpNicknameInput';
 import SignUpLoginIdInput from '@/components/organisms/input/SignUpLoginIdInput';
 import SignUpPasswordInput from '@/components/organisms/input/SignUpPasswordInput';
 import type { SignUpData } from '@/types/signUp';
 
-interface SignUpInformationSectionProps {
+interface SignUpInformationProps {
   onNext: (value: Omit<SignUpData, 'role' | 'description'>) => void;
 }
 
-const SignUpInformationSection = ({
-  onNext,
-}: SignUpInformationSectionProps) => {
+const SignUpInformation = ({ onNext }: SignUpInformationProps) => {
   const [loginId, setLoginId] = useState('');
   const [isLoginIdValid, setIsLoginIdValid] = useState(true);
 
@@ -36,11 +34,12 @@ const SignUpInformationSection = ({
     isPasswordValid;
 
   return (
-    <div className="w-full max-w-full h-full flex flex-col">
-      <div className="flex-grow mt-24">
-        <SignUpLabel
-          mainLabel="회원 정보를 입력해주세요"
-          subLabel="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow h-0 pt-[10vh] overflow-y-auto">
+        <TextBanner
+          hasLogo
+          title="회원 정보를 입력해주세요"
+          description="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
         <div className="flex flex-col mt-9 gap-3">
           <SignUpNicknameInput
@@ -73,4 +72,4 @@ const SignUpInformationSection = ({
   );
 };
 
-export default SignUpInformationSection;
+export default SignUpInformation;
