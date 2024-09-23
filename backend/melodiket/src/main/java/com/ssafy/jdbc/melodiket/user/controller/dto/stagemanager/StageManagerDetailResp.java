@@ -1,4 +1,6 @@
-package com.ssafy.jdbc.melodiket.user.controller.dto;
+package com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager;
+
+import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfile;
 
 public record StageManagerDetailResp(
         String loginId,

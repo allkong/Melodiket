@@ -12,10 +12,12 @@ import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageInfo;
-import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerDetailResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import lombok.Builder;
@@ -190,8 +192,8 @@ public class UserService implements AuthService {
                         user.getRole().name(),
                         user.getNickname(),
                         user.getDescription(),
-                        null,  // imageUrl 선개발시 처리
-                        null   // walletInfo 선개발시 처리
+                        null,  // TODO : imageUrl 선개발시 null 처리
+                        null   // TODO :walletInfo 선개발시 null 처리
                 ))
                 .toList();
 
@@ -217,8 +219,49 @@ public class UserService implements AuthService {
                 user.getRole().name(),
                 user.getNickname(),
                 user.getDescription(),
-                null,  // imageUrl 선개발시 처리
-                null   // walletInfo 선개발시 처리
+                null,  // TODO : imageUrl 선개발시 null 처리
+                null   // TODO :walletInfo 선개발시 null 처리
+        );
+    }
+
+    @Override
+    public MusicianResp getMusicians(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<AppUserEntity> musicianPage = appUserRepository.findByRole(Role.MUSICIAN, pageable);
+        List<UserProfileResp> musicians = musicianPage.getContent().stream()
+                .map(user -> new UserProfileResp(
+                        user.getLoginId(),
+                        user.getRole().name(),
+                        user.getNickname(),
+                        user.getDescription(),
+                        null,  // TODO : imageUrl 선개발시 null 처리
+                        null   // TODO :walletInfo 선개발시 null 처리
+                ))
+                .toList();
+
+        return new MusicianResp(
+                new PageInfo(
+                        musicianPage.hasNext(),
+                        musicianPage.hasPrevious(),
+                        pageNo,
+                        pageSize,
+                        musicianPage.getNumberOfElements()
+                ),
+                musicians
+        );
+    }
+
+    @Override
+    public MusicianDetailResp getMusicianDetail(UUID id) {
+        AppUserEntity user = appUserRepository.findByUuid(id)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+        return new MusicianDetailResp(
+                user.getLoginId(),
+                user.getRole().name(),
+                user.getNickname(),
+                user.getDescription(),
+                null,// TODO : imageUrl 선개발시 null 처리
+                null   // TODO :walletInfo 선개발시 null 처리
         );
     }
 
