@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
-import com.ssafy.jdbc.melodiket.user.entity.Musician;
+import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConcertParticipantMusician {
+public class ConcertParticipantMusicianEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class ConcertParticipantMusician {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id", nullable = false)
-    private Concert concert;
+    private ConcertEntity concertEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "musician_id", nullable = false)
-    private Musician musician;
+    private MusicianEntity musicianEntity;
 
 }

@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
-import com.ssafy.jdbc.melodiket.ticket.entity.Ticket;
+import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
 import jakarta.persistence.*;
@@ -16,22 +16,22 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Audience extends AppUser {
+public class AudienceEntity extends AppUserEntity {
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
-    private AppUser user;
+    private AppUserEntity user;
 
     private String description;
 
     private String imageUrl;
 
-    @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TicketEntity> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteMusician> favoriteMusicians = new ArrayList<>();
 
 }
