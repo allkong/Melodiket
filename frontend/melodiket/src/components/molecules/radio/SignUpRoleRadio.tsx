@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import { ChangeEvent } from 'react';
 
 interface SignUpRoleRadioProps {
-  mainLabel?: string;
-  subLabel?: string;
+  title?: string;
+  description?: string;
   name?: string;
   checked?: boolean;
   onChange?: (value: string) => void;
@@ -12,8 +12,8 @@ interface SignUpRoleRadioProps {
 }
 
 const SignUpRoleRadio = ({
-  mainLabel,
-  subLabel,
+  title,
+  description,
   name,
   checked,
   onChange,
@@ -28,7 +28,7 @@ const SignUpRoleRadio = ({
   return (
     <label
       className={clsx(
-        'w-full min-w-80 h-fit min-h-24 flex flex-col justify-center gap-1 px-5 py-6 rounded-3xl cursor-pointer',
+        'w-full min-w-fit h-fit min-h-24 flex flex-col justify-center gap-1 px-5 py-6 rounded-3xl cursor-pointer',
         {
           'bg-purple-100 ': checked,
           'bg-gray-100 ': !checked,
@@ -40,7 +40,7 @@ const SignUpRoleRadio = ({
           'text-purple-400': checked,
         })}
       >
-        {mainLabel}
+        {title}
       </p>
       <p
         className={clsx('text-sm', {
@@ -48,7 +48,7 @@ const SignUpRoleRadio = ({
           'text-gray-500': !checked,
         })}
       >
-        {subLabel}
+        {description}
       </p>
       <input
         type="radio"

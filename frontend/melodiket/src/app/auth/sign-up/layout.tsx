@@ -7,11 +7,11 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="w-full max-w-full h-screen min-h-screen flex flex-col items-center px-6">
-      <div className="my-7">
+    <div className="w-full max-w-full h-screen max-h-screen flex flex-col items-center px-6 overflow-hidden">
+      <div className="my-7 min-h-0">
         <LogoText />
       </div>
-      {children}
+      <div className="flex-grow w-full">{children}</div>
     </div>
   );
 };
