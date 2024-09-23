@@ -6,19 +6,18 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import Textarea from '@/components/atoms/textarea/Textarea';
 
-interface SignUpDescriptionSectionProps {
+interface SignUpDescriptionProps {
   onNext: (value: string) => void;
 }
 
-const SignUpDescriptionSection = ({
-  onNext,
-}: SignUpDescriptionSectionProps) => {
+const SignUpDescription = ({ onNext }: SignUpDescriptionProps) => {
   const [value, setValue] = useState('');
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col justify-center flex-grow">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow h-0 pt-[10vh] overflow-y-auto">
         <TextBanner
+          hasLogo
           title="회원 소개를 입력해주세요"
           description="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
@@ -33,4 +32,4 @@ const SignUpDescriptionSection = ({
   );
 };
 
-export default SignUpDescriptionSection;
+export default SignUpDescription;

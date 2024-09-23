@@ -9,13 +9,11 @@ import SignUpLoginIdInput from '@/components/organisms/input/SignUpLoginIdInput'
 import SignUpPasswordInput from '@/components/organisms/input/SignUpPasswordInput';
 import type { SignUpData } from '@/types/signUp';
 
-interface SignUpInformationSectionProps {
+interface SignUpInformationProps {
   onNext: (value: Omit<SignUpData, 'role' | 'description'>) => void;
 }
 
-const SignUpInformationSection = ({
-  onNext,
-}: SignUpInformationSectionProps) => {
+const SignUpInformation = ({ onNext }: SignUpInformationProps) => {
   const [loginId, setLoginId] = useState('');
   const [isLoginIdValid, setIsLoginIdValid] = useState(true);
 
@@ -36,9 +34,10 @@ const SignUpInformationSection = ({
     isPasswordValid;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col justify-center flex-grow">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow h-0 pt-[10vh] overflow-y-auto">
         <TextBanner
+          hasLogo
           title="회원 정보를 입력해주세요"
           description="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
@@ -73,4 +72,4 @@ const SignUpInformationSection = ({
   );
 };
 
-export default SignUpInformationSection;
+export default SignUpInformation;
