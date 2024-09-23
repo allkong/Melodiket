@@ -52,7 +52,7 @@ const Input = forwardRef(
     return (
       <input
         ref={ref}
-        className="w-full h-12 px-5 text-base border outline-none rounded-2xl"
+        className="w-full h-12 px-5 text-base border outline-none rounded-2xl placeholder:text-gray-200"
         type={type}
         placeholder={placeholder}
         value={isControlled ? controlledValue : value}
