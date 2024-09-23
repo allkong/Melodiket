@@ -16,7 +16,7 @@ const StageItem = ({ title, content }: StageItemProps) => {
   return (
     <div
       onClick={handleClick}
-      className="w-full px-5 py-3 bg-white flex items-center justify-between"
+      className="w-full px-5 py-3 flex items-center justify-between"
     >
       <div>
         <p className="text-black font-semibold">{title}</p>
