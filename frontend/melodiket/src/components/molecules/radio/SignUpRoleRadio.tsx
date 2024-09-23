@@ -28,7 +28,7 @@ const SignUpRoleRadio = ({
   return (
     <label
       className={clsx(
-        'w-full min-w-80 h-fit min-h-24 flex flex-col justify-center gap-1 px-5 py-6 rounded-3xl cursor-pointer',
+        'w-full min-w-fit h-fit min-h-24 flex flex-col justify-center gap-1 px-5 py-6 rounded-3xl cursor-pointer',
         {
           'bg-purple-100 ': checked,
           'bg-gray-100 ': !checked,
