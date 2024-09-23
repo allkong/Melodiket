@@ -1,4 +1,3 @@
-import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import TabButton from '@/components/molecules/item/TabButton';
 
 interface TabsProps {
@@ -10,7 +9,7 @@ interface TabsProps {
 
 const Tabs = ({ tabs, activeTab, onClick, labelMap }: TabsProps) => {
   return (
-    <div className="flex w-full border-b border-gray-200">
+    <div className="flex w-full">
       {tabs.map((tab) => (
         <TabButton
           key={tab}
