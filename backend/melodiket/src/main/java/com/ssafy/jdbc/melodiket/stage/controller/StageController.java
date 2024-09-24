@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.stage.controller;
 
-import com.ssafy.jdbc.melodiket.stage.dto.CreateStageRequest;
+import com.ssafy.jdbc.melodiket.stage.dto.StageRequest;
 import com.ssafy.jdbc.melodiket.stage.dto.StageCursorPageResponse;
 import com.ssafy.jdbc.melodiket.stage.dto.StageInfoResponse;
 import com.ssafy.jdbc.melodiket.stage.service.StageService;
@@ -19,7 +19,7 @@ public class StageController {
     private final StageService stageService;
 
     @PostMapping
-    public ResponseEntity<StageInfoResponse> createStage(@RequestBody @Valid CreateStageRequest createStageRequest) {
+    public ResponseEntity<StageInfoResponse> createStage(@RequestBody @Valid StageRequest createStageRequest) {
         StageInfoResponse response = stageService.createStage(createStageRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -39,7 +39,7 @@ public class StageController {
     @PutMapping("/{uuid}")
     public ResponseEntity<StageInfoResponse> updateStage(
             @PathVariable("uuid") UUID stageUuid,
-            @RequestBody @Valid CreateStageRequest updateStageRequest
+            @RequestBody @Valid StageRequest updateStageRequest
     ) {
         StageInfoResponse response = stageService.updateStage(stageUuid, updateStageRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
