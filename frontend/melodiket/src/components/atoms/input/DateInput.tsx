@@ -2,7 +2,6 @@
 
 import {
   ChangeEvent,
-  ComponentProps,
   ForwardedRef,
   forwardRef,
   KeyboardEvent,
@@ -10,7 +9,6 @@ import {
 } from 'react';
 
 interface DateInputProps {
-  value?: string;
   onChange?: (value: string) => void;
   onClickEnter?: () => void;
   onBlur?: () => void;
@@ -19,31 +17,17 @@ interface DateInputProps {
 
 const DateInput = forwardRef(
   (
-    {
-      value: controlledValue,
-      onChange,
-      onClickEnter,
-      onBlur,
-      placeholder,
-    }: DateInputProps,
+    { onChange, onBlur, placeholder }: DateInputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
-    const isControlled = controlledValue !== undefined;
-
     const [value, setValue] = useState('');
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      const eventValue = e.target.value;
-      if (!isControlled) {
-        setValue(eventValue);
-      }
+      const newValue = e.target.value;
+      setValue(newValue);
 
-      onChange?.(eventValue);
-    };
-
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        onClickEnter?.();
+      if (onChange) {
+        onChange(newValue);
       }
     };
 
@@ -54,17 +38,9 @@ const DateInput = forwardRef(
           className="w-full h-12 pl-5 pr-10 text-base border outline-none rounded-2xl placeholder:text-gray-200"
           type="date"
           placeholder={placeholder}
-          value={isControlled ? controlledValue : value}
+          value={value}
           onChange={handleChange}
-          onKeyDown={handleKeyDown}
           onBlur={onBlur}
-          // appearance 제거를 위해 모든 브라우저에 대해 적용
-          style={{
-            appearance: 'none',
-            WebkitAppearance: 'none',
-            MozAppearance: 'none',
-            position: 'relative',
-          }}
         />
         <div
           className="absolute right-9 bg-white top-1/2 transform -translate-y-1/2 pointer-events-none z-10"
@@ -73,6 +49,7 @@ const DateInput = forwardRef(
             height: '24px',
             background: "url('/icons/calendar.svg') no-repeat center",
             backgroundSize: '24px',
+            backgroundColor: 'white',
           }}
         />
       </div>
