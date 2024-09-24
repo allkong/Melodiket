@@ -1,30 +1,26 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+import useAuthStore from '@/store/authStore';
 
-const accessToken = '';
-// RequestInit
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const accessToken = useAuthStore.getState().accessToken;
+
 type JsonRequestInit = Omit<NonNullable<RequestInit>, 'body'> & {
   body?: object;
 };
 
-const customFetch = async (url: string, options: JsonRequestInit) => {
+const customFetch = async <T>(url: string, options?: JsonRequestInit) => {
   const defaultHeaders = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`,
   };
 
-  //   const processedBody =
-  //     options.body && typeof options.body === 'object'
-  //       ? JSON.stringify(options.body)
-  //       : options.body;
-
   const fetchOptions: RequestInit = {
     headers: {
       ...defaultHeaders,
-      ...options.headers,
+      ...options?.headers,
     },
-    method: options.method || 'GET',
+    method: options?.method || 'GET',
     ...options,
-    body: options.body && JSON.stringify(options.body),
+    body: options?.body && JSON.stringify(options?.body),
   };
 
   try {

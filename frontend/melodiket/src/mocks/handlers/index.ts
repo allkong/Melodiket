@@ -1,3 +1,4 @@
+import { auth } from './auth';
 import { accountInfo } from './accountInfo';
 
 export const delay = (ms: number) =>
@@ -5,4 +6,4 @@ export const delay = (ms: number) =>
     setTimeout(res, ms);
   });
 
-export const handlers = [...accountInfo];
+export const handlers = [...auth, ...accountInfo];
