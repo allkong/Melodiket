@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react';
 import LineDivider from './LineDivider';
 
 const meta: Meta<typeof LineDivider> = {
-    component: LineDivider,
-  };
+  component: LineDivider,
+};
 
-  export default meta;
+export default meta;
 type Story = StoryObj<typeof LineDivider>;
 
 export const Default: Story = {

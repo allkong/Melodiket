@@ -4,15 +4,14 @@
     "next/typescript",
     "plugin:storybook/recommended"
   ],
-  "plugins": [
-    "prettier"
-  ],
+  "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    "@typescript-eslint/no-unused-vars": "warn"
   }
 }

@@ -1,6 +1,11 @@
+import dynamic from 'next/dynamic';
+
 import Header from '@/components/organisms/navigation/Header';
-import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import MusicianItem from '@/components/molecules/item/MusicianItem';
+const ControlsBar = dynamic(
+  () => import('@/components/organisms/controls/ControlsBar'),
+  { ssr: false }
+);
 
 const Page = () => {
   return (
