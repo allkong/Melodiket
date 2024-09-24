@@ -5,9 +5,14 @@ spring:
     import:
       - classpath:/yaml/application-dev.yml
       - file:.env[.properties]
-
   profiles:
     group:
       dev: dev
       release: release
     active: ${CURRENT_ENV}
+server:
+  port: ${SERVER_PORT}
+jwt:
+  secret: ${JWT_SECRET}
+manager:
+  api-key: ${MANAGER_API_KEY}
