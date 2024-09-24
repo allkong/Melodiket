@@ -49,16 +49,20 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
       </div>
       <div className="mb-4">
         <h2 className="font-semibold mb-2">수익 분배</h2>
-        <Input
-          placeholder="공연장"
-          value={ownerStake}
-          onChange={setOwnerStake}
-        />
-        <Input
-          placeholder="뮤지션"
-          value={musicianStake}
-          onChange={setMusicianStake}
-        />
+        <div className="mb-2">
+          <Input
+            placeholder="공연장"
+            value={ownerStake}
+            onChange={setOwnerStake}
+          />
+        </div>
+        <div className="mb-2">
+          <Input
+            placeholder="뮤지션"
+            value={musicianStake}
+            onChange={setMusicianStake}
+          />
+        </div>
         <Input
           placeholder="추가 비율"
           value={favoriteMusicianStake}
