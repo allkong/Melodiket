@@ -1,17 +1,52 @@
-import clsx from 'clsx';
-import type { ConcertData } from '@/types/concert';
-import { ReactElement } from 'react';
+'use client';
 
-// 최상위 Carousel에서만 datas와 size를 받는다.
-// CarouselImage는 ContextAPI를 통해 size props를 받는다.
-// 컴포넌트마다 Context API를 따로 설정하려면?
+import { useEffect, useRef, useState } from 'react';
+
+import clsx from 'clsx';
+
+import type { Concert } from '@/types/concert';
+import CarouselImage from '@/components/molecules/carousel/CarouselImage';
+import CarouselIndicator from '@/components/molecules/carousel/CarouselIndicator';
+import useElementSize from '@/hooks/useElementSize';
+
 interface CarouselProps {
-  datas: ConcertData[];
+  datas: Concert[];
   size?: 'md' | 'lg';
-  children?: ReactElement[];
 }
 
-const Carousel = ({ size = 'md', children }: CarouselProps) => {
+const IMAGE_GAP = 4;
+
+// 여러개의 값을 받아 렌더링 하고, DOM 요소의 크기를 계산하기 때문에 이후에 최적화를 진행해줘도 좋을 것 같다.
+const Carousel = ({ size = 'md', datas }: CarouselProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { width } = useElementSize(containerRef);
+
+  const getTranslate = (index: number, width: number) =>
+    -index * (width + IMAGE_GAP);
+
+  const [translate, setTranslate] = useState(
+    datas.map((_, index) => getTranslate(index, width))
+  );
+
+  const handleClickIndicator = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev === datas.length - 1 ? 0 : prev + 1));
+    }, 4000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [currentIndex, datas.length]);
+
+  useEffect(() => {
+    setTranslate(datas.map((_, index) => getTranslate(index, width)));
+  }, [width]);
+
   return (
     <div
       className={clsx('relative w-full', {
@@ -19,7 +54,26 @@ const Carousel = ({ size = 'md', children }: CarouselProps) => {
         'h-[360px]': size === 'lg',
       })}
     >
-      {children}
+      <div className="w-full h-full overflow-hidden" ref={containerRef}>
+        <div
+          className="w-full h-full flex"
+          style={{
+            translate: translate[currentIndex],
+            transitionDuration: '400ms',
+            transitionTimingFunction: 'ease-in-out',
+            columnGap: IMAGE_GAP,
+          }}
+        >
+          {datas.map((data) => (
+            <CarouselImage key={data.index} size={size} image={data.image} />
+          ))}
+        </div>
+      </div>
+      <CarouselIndicator
+        size={datas.length}
+        currentIndex={currentIndex}
+        onClick={handleClickIndicator}
+      />
     </div>
   );
 };

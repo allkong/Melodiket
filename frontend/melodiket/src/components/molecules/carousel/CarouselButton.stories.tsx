@@ -9,7 +9,11 @@ export default meta;
 type Story = StoryObj<typeof CarouselButton>;
 
 export const Default: Story = {
+  args: {},
+};
+
+export const Selected: Story = {
   args: {
-    isSelected: false,
+    isSelected: true,
   },
 };

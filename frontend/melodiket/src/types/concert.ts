@@ -1,4 +1,4 @@
-export interface ConcertData {
+export interface Concert {
   index: number;
   image: string;
   title: string;
