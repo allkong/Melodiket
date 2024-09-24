@@ -1,7 +1,10 @@
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
+import { useLogin } from '@/hooks/auth/useLogin';
 
 import { LogoText } from '@/public/icons';
 import Input from '@/components/atoms/input/Input';
@@ -10,12 +13,13 @@ import FixedButton from '@/components/organisms/controls/FixedButton';
 
 const Page = () => {
   const router = useRouter();
+  const { mutate: login } = useLogin();
 
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // 로그인 실행
+    login({ loginId, password });
     router.push('/');
   };
 
