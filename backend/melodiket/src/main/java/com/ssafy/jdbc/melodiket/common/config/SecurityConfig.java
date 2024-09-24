@@ -33,12 +33,15 @@ public class SecurityConfig {
 
             // login, logout
             Pattern.compile("^/api/v1/auth/sign-up$"),
+            Pattern.compile("^/api/v1/auth/sign-up/[^/]+$"),
             Pattern.compile("^/api/v1/auth/login$"),
             Pattern.compile("^/api/v1/users/[^/]+/field-duplication-check$"),
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
             Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
+            Pattern.compile("^/api/v1/users/musicians/like/me$"),
+            Pattern.compile("^/api/v1/users/musicians/[0-9a-fA-F-]{36}/like$"),
             Pattern.compile("^/$")
     };
 
@@ -87,6 +90,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
     public boolean isAnonymousAllowedPath(String path) {
         for (Pattern pattern : anonymousAllowedPatterns) {
             Matcher matcher = pattern.matcher(path);
