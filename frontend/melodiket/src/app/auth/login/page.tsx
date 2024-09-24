@@ -17,6 +17,14 @@ const Page = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
+    if (loginId.length < 5) {
+      alert('ID를 5글자 이상 입력해 주세요🙄');
+      return;
+    } else if (password.length < 5) {
+      alert('비밀번호를 5글자 이상 입력해 주세요🙄');
+      return;
+    }
+
     login({ loginId, password });
   };
 
