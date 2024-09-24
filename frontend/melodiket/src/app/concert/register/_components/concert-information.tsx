@@ -8,6 +8,8 @@ import Textarea from '@/components/atoms/textarea/Textarea';
 import TextBanner from '@/components/molecules/text/TextBanner';
 
 import { ConcertData } from '@/types/concert';
+import FileInput from '@/components/atoms/input/FileInput';
+import DateInput from '@/components/atoms/input/DateInput';
 
 interface ConcertInformationProps {
   concertData: ConcertData;
@@ -25,7 +27,11 @@ const ConcertInformation = ({
   const [concertPoster, setConcertPoster] = useState<File | null>();
 
   const isFormValid =
-    concertName && startAt && ticketingAt && concertDescription;
+    concertName &&
+    startAt &&
+    ticketingAt &&
+    concertDescription &&
+    concertPoster;
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
@@ -55,14 +61,18 @@ const ConcertInformation = ({
       </div>
       <div className="mb-4">
         <h2 className="font-semibold mb-2">공연 일시</h2>
-        <Input value={startAt} onChange={setStartAt} placeholder="공연 일시" />
+        <DateInput
+          value={startAt}
+          onChange={setStartAt}
+          placeholder="공연 일시"
+        />
       </div>
       <div className="mb-4">
-        <h2 className="font-semibold mb-2">티켓팅 시작 일시</h2>
-        <Input
+        <h2 className="font-semibold mb-2">티케팅 시작 일시</h2>
+        <DateInput
           value={ticketingAt}
           onChange={setTicketingAt}
-          placeholder="티켓팅 시작 일시"
+          placeholder="티케팅 시작 일시"
         />
       </div>
       <div className="mb-4">
@@ -75,11 +85,7 @@ const ConcertInformation = ({
       </div>
       <div className="mb-14">
         <h2 className="font-semibold mb-2">공연 포스터</h2>
-        <Input
-          value={ticketingAt}
-          onChange={setTicketingAt}
-          placeholder="공연 포스터"
-        />
+        <FileInput onChange={setConcertPoster} />
       </div>
       <LargeButton label="다음" onClick={handleNext} disabled={!isFormValid} />
     </div>
