@@ -47,4 +47,13 @@ public class StageEntity {
     @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertEntity> concerts = new ArrayList<>();
 
+    public void update(String name, String address, Boolean isStanding, Long numOfRow, Long numOfCol, Long capacity) {
+        this.name = name;
+        this.address = address;
+        this.isStanding = isStanding;
+        this.numOfRow = numOfRow;
+        this.numOfCol = numOfCol;
+        this.capacity = capacity;
+    }
+
 }
