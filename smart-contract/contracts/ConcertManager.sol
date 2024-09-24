@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import '@openzeppelin/contracts/utils/Strings.sol';
+
 import "./MelodyToken.sol"; // MelodyToken 컨트랙트 가져오기
 import "./TicketNFT.sol";   // TicketNFT 컨트랙트 가져오기
 import "hardhat/console.sol";
@@ -10,28 +12,6 @@ contract ConcertManager {
 
     MelodyToken public melodyToken;
     TicketNFT public ticketNFT;
-
-    struct Musician {
-        address musicianAddress; // 뮤지션의 지갑 주소
-        string status; // 뮤지션의 공연 승인 상태
-        uint256 favoriteVotes; // 최애 뮤지션으로 받은 투표 수
-    }
-
-
-    struct ConcertCreateRequest {
-        // 기본 정보
-        address[] musicians; // 수락한 뮤지션들의 지갑 주소 배열
-        // 금액 관련 정보
-        uint256 ticketPrice; // 티켓 한 장의 가격 (= venueEarningsPerTicket + (musicians.length * musicianBaseEarningsPerTicket) + favoriteBonus)
-        uint256 venueEarningsPerTicket; // 공연장에게 주는 금액
-        uint256 musicianBaseEarningsPerTicket; // 뮤지션에게 주는 공통 금액
-        uint256 favoriteBonus; // 최애 뮤지션에게 주는 보너스 금액
-        // 티켓팅 관련 정보
-        uint256 numOfTickets; // 남은 티켓 수
-        uint256 ticketingStartAt; // 티켓팅 시작 일시
-        uint256 concertStartAt; // 콘서트 시작 일시
-        uint256 transferAvailableAfter; // 정산 가능 일시
-    }
 
     // 공연 기본 정보
     struct Concert {
@@ -188,7 +168,8 @@ contract ConcertManager {
         // 티켓팅 시작 일시는 콘서트 시작 일시보다 빠르거나 같아야 함
         require(_ticketingStartAt <= _concertStartAt, "Ticketing start time should be earlier than concert start time");
         // 정산 가능 일시는 콘서트 시작 일시의 하루 뒤로 설정
-        uint256 _transferAvailableAfter = _concertStartAt + 1 days;
+        // uint256 _transferAvailableAfter = _concertStartAt + 1 days;
+        uint256 _transferAvailableAfter = _concertStartAt; // For debug
 
         // 콘서트 ID 생성
         _concertIdCounter++;
@@ -316,11 +297,16 @@ contract ConcertManager {
         require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "PREPARING"), "Concert is not preparing.");
         
-        // 공연까지 하루 이상 남은 경우에만 거절 가능
-        require(block.timestamp + 1 days < concert.concertStartAt, "Only available before 1 day of concert.");
+        // 공연까지 하루 이상 남은 경우에만 수락 가능
+        // require(block.timestamp + 1 days <= concert.concertStartAt, "Only available before 1 day of concert.");
+        string memory message = string.concat(string.concat(string.concat("Only available before 1 day of concert.", Strings.toString(block.timestamp)), ", "), Strings.toString(concert.concertStartAt));
+        // require(block.timestamp <= concert.concertStartAt, message); // For debug
 
         // 뮤지션 수락 처리
         MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
+        // 뮤지션 선호 정보 초기화
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        
         // 수락 대기 중인 뮤지션 목록에 있는 경우에만 거절 가능
         bool isPendingMusician = false;
         for (uint256 i = 0; i < invitationInfo.pendingMusicianAddresses.length; i++) {
@@ -328,6 +314,8 @@ contract ConcertManager {
                 invitationInfo.pendingMusicianAddresses[i] = invitationInfo.pendingMusicianAddresses[invitationInfo.pendingMusicianAddresses.length - 1];
                 invitationInfo.pendingMusicianAddresses.pop();
                 invitationInfo.agreedMusicianAddresses.push(msg.sender);
+                favoriteVoteInfo.favoriteMusicianAddresses.push(msg.sender);
+                favoriteVoteInfo.favoriteVotes.push(0);
                 isPendingMusician = true;
                 break;
             }
@@ -352,7 +340,8 @@ contract ConcertManager {
         require(isSameString(concert.status, "PREPARING"), "Concert is not preparing.");
 
         // 공연까지 하루 이상 남은 경우에만 거절 가능
-        require(block.timestamp + 1 days < concert.concertStartAt, "Only available before 1 day of concert.");
+        // require(block.timestamp + 1 days <= concert.concertStartAt, "Only available before 1 day of concert.");
+        // require(block.timestamp <= concert.concertStartAt, "Only available before 1 day of concert."); // For debug
 
         MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
         // 수락 대기 중인 뮤지션 목록에 있는 경우에만 거절 가능
@@ -381,20 +370,21 @@ contract ConcertManager {
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "ACTIVE"), "Concert is not active.");
-        require(block.timestamp < concert.concertStartAt, "Concert is already started.");
+
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
+        // require(block.timestamp > ticketingInfo.ticketingStartAt, "Ticketing is not started yet."); // For debug
+        // require(block.timestamp < concert.concertStartAt, "Concert is already started."); // For debug
 
         // 티켓 구매 가능 여부 확인
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
-        require(block.timestamp < ticketingInfo.ticketingStartAt, "Ticketing is not started yet.");
         require(ticketingInfo.numOfRestTickets > 0, "Sold out.");
         
         // 티켓 가격 확인
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
-        require(melodyToken.balanceOf(msg.sender) < ticketPriceInfo.ticketPrice, "Insufficient Melody Token");
+        require(melodyToken.balanceOf(caller()) >= ticketPriceInfo.ticketPrice, "Insufficient Melody Token");
         
         // 좌석 정보 확인
         ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
-        if (seatingInfo.isStanding) {
+        if (!seatingInfo.isStanding) {
             require(isBetween(0, _seatRow, seatingInfo.seatSizes[0]-1), "Invalid seat row");
             require(isBetween(0, _seatCol, seatingInfo.seatSizes[1]-1), "Invalid seat column");
             require(!ticketingInfo.isReserved[_seatRow][_seatCol], "Seat is already reserved.");
@@ -413,19 +403,23 @@ contract ConcertManager {
 
         require(isJoinedMusician, "Favorite musician not found.");
 
-        uint256 ticketId = ticketNFT.mintTicket(msg.sender, _concertId, _favoriteMusicianAddress, seatingInfo.isStanding, _seatRow, _seatCol);
+        uint256 ticketId = ticketNFT.mintTicket(caller(), _concertId, _favoriteMusicianAddress, seatingInfo.isStanding, _seatRow, _seatCol);
         ticketingInfo.numOfRestTickets--;
         if (!seatingInfo.isStanding) {
             ticketingInfo.isReserved[_seatRow][_seatCol] = true;
         }
-        melodyToken.transferFrom(msg.sender, address(this), ticketPriceInfo.ticketPrice);
+        melodyToken.transferFrom(caller(), address(this), ticketPriceInfo.ticketPrice);
 
         // 발급 티켓 목록에 추가
         ticketingInfo.tickets.push(ticketId);
 
-        emit TicketPurchased(_concertId, msg.sender, ticketId);
+        emit TicketPurchased(_concertId, caller(), ticketId);
     }
-    
+
+    function caller() public view returns (address) {
+        return msg.sender;
+    }
+
     function useTicket(uint256 _concertId, uint256 _ticketId) public {
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
@@ -434,7 +428,7 @@ contract ConcertManager {
 
         TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithId(_ticketId);
         require(ticket.id != 0, "Ticket not found.");
-        require(ticket.status == TicketNFT.TicketStatus.UNUSED, "Ticket is already used.");
+        require(isSameString(ticket.status, "UNUSED"), "Ticket is already used.");
         ticketNFT.useTicket(_ticketId);
     }
 
@@ -445,30 +439,48 @@ contract ConcertManager {
         TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithId(_ticketId);
 
         require(ticket.owner == msg.sender, "Only ticket owner can call this function.");
-        require(ticket.status == TicketNFT.TicketStatus.UNUSED, "Ticket is already used.");
-        require(block.timestamp < concert.concertStartAt, "Refund is not available because concert is started.");
+        require(isSameString(ticket.status, "UNUSED"), "Ticket is already used.");
+        // require(block.timestamp < concert.concertStartAt, "Refund is not available because concert is started."); // For debug
 
-        ticket.status = TicketNFT.TicketStatus.REFUNDED;
+        ticket.status = "REFUNDED";
         // 공연 시작까지 10일 미만 남았으면 100%, 7일 미만 남았으면 80%, 3일 미만 남았으면 70% 환불
         uint256 refundRate = 100;
-        if (block.timestamp > concert.concertStartAt - 10 days) {
+        if (block.timestamp + 10 days <= concert.concertStartAt) {
             refundRate = 100;
-        } else if (block.timestamp > concert.concertStartAt - 7 days) {
+        } else if (block.timestamp + 7 days <= concert.concertStartAt) {
             refundRate = 80;
-        } else if (block.timestamp > concert.concertStartAt - 3 days) {
+        } else {
             refundRate = 70;
         }
 
         // 토큰 환불 및 수수료 계산
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
-        uint256 refundAmount = (ticketPriceInfo.ticketPrice * refundRate) / 100;
+        uint256 refundAmount = ticketPriceInfo.ticketPrice * refundRate / 100;
         uint256 feeAmount = ticketPriceInfo.ticketPrice - refundAmount;
         ticketPriceInfo.refundedTokenAmount += feeAmount;
-        melodyToken.transfer(msg.sender, refundAmount);
+        // melodyToken.transferFrom(address(this), msg.sender, refundAmount);
+        melodyToken.approve(ticket.owner, refundAmount);
+        melodyToken.transfer(ticket.owner, refundAmount);
 
         // 좌석 및 표 수 복구
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
         ticketingInfo.numOfRestTickets++;
+        for(uint256 i = 0; i < ticketingInfo.tickets.length; i++) {
+            if (ticketingInfo.tickets[i] == _ticketId) {
+                ticketingInfo.tickets[i] = ticketingInfo.tickets[ticketingInfo.tickets.length - 1];
+                ticketingInfo.tickets.pop();
+                break;
+            }
+        }
+
+        // 인기 투표 내리기
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        for (uint256 i = 0; i < favoriteVoteInfo.favoriteMusicianAddresses.length; i++) {
+            if (favoriteVoteInfo.favoriteMusicianAddresses[i] == ticket.favoriteMusicianAddress) {
+                favoriteVoteInfo.favoriteVotes[i]--;
+                break;
+            }
+        }
 
         ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
         if (!seatingInfo.isStanding) {
@@ -485,27 +497,31 @@ contract ConcertManager {
 
         // 공연 시작 후 1일이 지나야 정산 가능
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
-        require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be canceled before transfer available after.");
+        // require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be canceled before transfer available after. "); // Debug
 
         // 환불로 인한 토큰이 있다면, 공연장 관리자와 뮤지션이 동등하게 수익을 나눠 받음
         MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
         uint256 numOfMusicians = invitationInfo.agreedMusicianAddresses.length;
         uint256 refundedTokenPerMembers = ticketPriceInfo.refundedTokenAmount / (numOfMusicians + 1);
 
-        // 공연장 관리자 수익 분배
+        // 공연장 관리자 수익 분배 (깔끔하게 다 분배하기 위해 뮤지션이 가져가고 남은 금액을 모두 전송 = 나눗셈 연산 오차 범위는 공연장 관리자의 몫)
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
-        uint256 totalManagerEarnings = (ticketingInfo.tickets.length * ticketPriceInfo.venueEarningsPerTicket) + refundedTokenPerMembers;
-        melodyToken.transfer(concert.manager, totalManagerEarnings);
+        uint256 totalManagerEarnings = ticketingInfo.tickets.length * ticketPriceInfo.ticketPrice + ticketPriceInfo.refundedTokenAmount;
 
         // 뮤지션 수익 분배
-        uint256 musicianBaseEarnings = (ticketingInfo.tickets.length * ticketPriceInfo.musicianBaseEarningsPerTicket) / numOfMusicians;
+        uint256 musicianBaseEarnings = ticketingInfo.tickets.length * ticketPriceInfo.musicianBaseEarningsPerTicket;
         FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
         for (uint256 i = 0; i < numOfMusicians; i++) {
             address musicianAddress = favoriteVoteInfo.favoriteMusicianAddresses[i];
             uint256 favoriteBonus = ticketPriceInfo.favoriteBonus * favoriteVoteInfo.favoriteVotes[i];
             uint256 musicianTotalEarnings = musicianBaseEarnings + favoriteBonus + refundedTokenPerMembers;
+
             melodyToken.transfer(musicianAddress, musicianTotalEarnings);
+            totalManagerEarnings -= musicianTotalEarnings;
         }
+
+        // 공연장 관리자에게 남은 금액 일괄 송금
+        melodyToken.transfer(concert.manager, totalManagerEarnings);
 
         concert.status = "TRANSFERRED";
         emit TicketPriceTransferred(_concertId);
@@ -524,7 +540,7 @@ contract ConcertManager {
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
         for (uint256 i = 0; i < ticketingInfo.tickets.length; i++) {
             TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithId(ticketingInfo.tickets[i]);
-            if (ticket.status == TicketNFT.TicketStatus.UNUSED) {
+            if (isSameString(ticket.status, "UNUSED")) {
                 ticketNFT.refundTicket(ticket.id);
                 melodyToken.transfer(ticket.owner, ticketPriceInfo.ticketPrice);
             }

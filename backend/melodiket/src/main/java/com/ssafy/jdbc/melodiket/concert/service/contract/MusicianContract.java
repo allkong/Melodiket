@@ -17,10 +17,10 @@ import java.util.List;
 @Slf4j
 public class MusicianContract extends Contract {
     public MusicianContract(BlockchainConfig blockchainConfig, Credentials credentials) {
-        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getMinGasPrice()), BigInteger.valueOf(blockchainConfig.getMaxGasPrice()));
+        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getGasPrice()), BigInteger.valueOf(blockchainConfig.getGasLimit()));
     }
 
-    public boolean agreeToConcert(int concertId) throws Exception {
+    public boolean agreeToConcert(long concertId) throws Exception {
         RemoteFunctionCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new Function(
                 "agreeToConcert",
                 List.of(new Uint256(BigInteger.valueOf(concertId))),
@@ -37,7 +37,7 @@ public class MusicianContract extends Contract {
         }
     }
 
-    public boolean denyToConcert(int concertId) throws Exception {
+    public boolean denyToConcert(long concertId) throws Exception {
         RemoteFunctionCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new Function(
                 "denyToConcert",
                 List.of(new Uint256(BigInteger.valueOf(concertId))),

@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.stage.entity;
 
-import com.ssafy.jdbc.melodiket.concert.entity.Concert;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,10 +41,10 @@ public class StageEntity {
     @Column(nullable = false)
     private Long capacity;
 
-    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Concert> concerts = new ArrayList<>();
+    @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConcertEntity> concerts = new ArrayList<>();
 
 }
