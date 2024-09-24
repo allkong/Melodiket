@@ -9,6 +9,7 @@ import MusicianInformation from './_components/musician-information';
 import TicketInformation from './_components/ticket-information';
 import StageInformation from './_components/stage-information';
 import RegisterSuccess from './_components/register-success';
+import Header from '@/components/organisms/navigation/Header';
 
 const RegisterConcert = () => {
   const [concertData, setConcertData] = useState<ConcertData>({
@@ -39,6 +40,7 @@ const RegisterConcert = () => {
 
   return (
     <>
+      <Header />
       {step === 'CONCERT' && (
         <ConcertInformation
           concertData={concertData}
