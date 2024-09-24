@@ -1,7 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
-import com.ssafy.jdbc.melodiket.stage.entity.Stage;
 import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
