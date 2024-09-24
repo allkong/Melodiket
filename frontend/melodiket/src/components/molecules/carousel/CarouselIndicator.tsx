@@ -1,4 +1,4 @@
-import CarouselButton from '@/components/molecules/carousel/CarouselButton';
+import CarouselIndicatorButton from '@/components/molecules/carousel/CarouselIndicatorButton';
 
 interface CarouselIndicatorProps {
   size: number;
@@ -15,7 +15,7 @@ const CarouselIndicator = ({
     <div className="absolute bottom-3 right-3">
       <div className="flex items-center gap-[5px]">
         {Array.from({ length: size }, (_, index) => index).map((index) => (
-          <CarouselButton
+          <CarouselIndicatorButton
             key={index}
             index={index}
             onClick={onClick}
