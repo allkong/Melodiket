@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
-import com.ssafy.jdbc.melodiket.stage.entity.Stage;
+import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import jakarta.persistence.*;
@@ -30,7 +30,7 @@ public class ConcertEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
-    private Stage stage;
+    private StageEntity stageEntity;
 
     @Column(nullable = false)
     private Date startAt;

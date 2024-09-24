@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StageAssignment {
+public class StageAssignmentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class StageAssignment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
-    private Stage stage;
+    private StageEntity stageEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_manager_id", nullable = false)
