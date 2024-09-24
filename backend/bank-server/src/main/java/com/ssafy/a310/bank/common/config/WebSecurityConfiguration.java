@@ -21,6 +21,8 @@ import java.util.regex.Pattern;
 public class WebSecurityConfiguration {
     // 로그인 하지 않아도 접근 가능한 경로
     private final Pattern[] anonymousAllowedPatterns = {
+            // Server time
+            Pattern.compile("^/$"),
             // UserController
             Pattern.compile("^/api/v1/users/register$"),
             Pattern.compile("^/api/v1/users/login$"),

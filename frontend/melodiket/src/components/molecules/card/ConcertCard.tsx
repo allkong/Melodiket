@@ -27,7 +27,7 @@ const ConcertCard = ({
 }: ConcertCardProps) => {
   return (
     <Link href={href ?? '/'}>
-      <div className="w-44 p-1 bg-white flex flex-col space-y-2">
+      <div className="w-44 p-1 flex flex-col space-y-2">
         {/* 이미지 영역 */}
         <div className="relative w-[10.6rem] h-60">
           <Image
