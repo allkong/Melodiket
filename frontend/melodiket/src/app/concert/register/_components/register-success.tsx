@@ -19,12 +19,16 @@ const RegisterSuccess = ({ onNext }: RegisterSuccessProps) => {
   }, [fire]);
 
   return (
-    <div className="w-full p-4">
-      <TextBanner
-        title="공연 등록 완료!"
-        description="뮤지션들에게 공연 승인 알람을 보냈어요"
-      />
-      <LargeButton label="완료" onClick={() => onNext()} />
+    <div className="flex flex-col h-full p-4">
+      <div className="flex-grow h-0 overflow-y-auto">
+        <TextBanner
+          title="공연 등록 완료!"
+          description="뮤지션들에게 공연 승인 알람을 보냈어요"
+        />
+      </div>
+      <div className="my-4 h-fit">
+        <LargeButton label="완료" onClick={() => onNext()} />
+      </div>
     </div>
   );
 };
