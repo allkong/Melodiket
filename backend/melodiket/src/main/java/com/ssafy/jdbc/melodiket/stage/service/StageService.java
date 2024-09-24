@@ -48,22 +48,16 @@ public class StageService {
     }
 
     public StageCursorPageResponse getStages(Boolean isFirstPage, UUID lastUuid, int pageSize, String segment, String orderKey, String orderDirection){
-        // 정렬 기준 설정
         Sort sort = Sort.by(Sort.Order.by(orderKey).with(Sort.Direction.fromString(orderDirection)));
 
-        // 페이징 데이터 가져오기 (pageSize + 1개)
-        List<StageEntity> stages = stageCursorRepository.findWithPagination(sort, lastUuid, isFirstPage, pageSize + 1);
+        List<StageEntity> stages = stageCursorRepository.findWithPagination(sort, lastUuid, isFirstPage, pageSize);
 
-        // hasNext 계산: 페이지 크기보다 많은 데이터가 있으면 다음 페이지가 존재
         boolean hasNext = stages.size() > pageSize;
 
-        // 실제 반환할 데이터: 페이지 크기에 맞춰서 잘라내기
         List<StageEntity> resultStages = hasNext ? stages.subList(0, pageSize) : stages;
 
-        // 다음 커서: 다음 페이지를 가져오기 위한 커서 설정 (마지막 데이터의 UUID)
         UUID nextCursor = hasNext ? resultStages.get(resultStages.size() - 1).getUuid() : null;
 
-        // 반환할 DTO 구성
         List<StageInfoResponse> stageInfoResponses = resultStages.stream()
                 .map(stage -> StageInfoResponse.builder()
                         .uuid(stage.getUuid())
