@@ -31,12 +31,20 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@Validated @RequestBody RegisterReq registerReq) {
+        if (!isAvailableName(registerReq.name())) {
+            throw new HttpResponseException(ErrorDetail.ALREADY_EXIST_USER);
+        }
+
         userService.createUser(registerReq.name(), registerReq.yymmdd());
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResp> login(@Validated @RequestBody RegisterReq registerReq) {
+        if (!isAvailableName(registerReq.name())) {
+            throw new HttpResponseException(ErrorDetail.ALREADY_EXIST_USER);
+        }
+
         try {
             User user = userService.getUserByLoginReq(registerReq.name(), registerReq.yymmdd());
             String accessToken = jwtService
@@ -46,5 +54,9 @@ public class UserController {
         } catch (Exception e) {
             throw new HttpResponseException(ErrorDetail.UNKNOWN_USER_INFO);
         }
+    }
+
+    public boolean isAvailableName(String name) {
+        return userService.isAvailableName(name);
     }
 }

@@ -55,7 +55,7 @@ const Page = () => {
       {step === 'SUCCESS' && (
         <SignUpSuccess
           onNext={() => {
-            router.push('/');
+            router.push('/auth/login');
           }}
         />
       )}
