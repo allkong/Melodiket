@@ -77,7 +77,7 @@ public class CommonConcertContract extends Contract {
     private final BlockchainConfig blockchainConfig;
 
     public CommonConcertContract(BlockchainConfig blockchainConfig, Credentials credentials) {
-        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getMinGasPrice()), BigInteger.valueOf(blockchainConfig.getMaxGasPrice()));
+        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getGasPrice()), BigInteger.valueOf(blockchainConfig.getGasLimit()));
         this.blockchainConfig = blockchainConfig;
     }
 
@@ -100,7 +100,7 @@ public class CommonConcertContract extends Contract {
         return null;
     }
 
-    public Concert getConcertById(int concertId) {
+    public Concert getConcertById(long concertId) {
         Function function = new Function(
                 "getTotalConcertInfo",
                 Collections.singletonList(new Uint256(concertId)),
@@ -121,5 +121,10 @@ public class CommonConcertContract extends Contract {
         }
 
         return new Concert(decoded);
+    }
+
+    public boolean isStandingConcert(long concertId) {
+        Concert concert = getConcertById(concertId);
+        return concert.isStanding;
     }
 }

@@ -1,12 +1,13 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
-import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerDetailResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.StageManagerResp;
-import com.ssafy.jdbc.melodiket.user.service.UserService;
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class UserController {
 
     private final AuthService authService;
-    private final UserService userService;
+
 
     @GetMapping("/me")
     public ResponseEntity<UserProfileResp> getAuthenticatedUserProfile(Principal principal) {
@@ -32,7 +33,7 @@ public class UserController {
 
     @PatchMapping("/me")
     public ResponseEntity<UserProfileResp> updateUser(@RequestBody UpdateUserReq updateUserReq, Authentication authentication) {
-        AppUser user = (AppUser) authentication.getPrincipal();
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         UserProfileResp updateUser = authService.updateUser(user.getUuid(), updateUserReq);
         return ResponseEntity.ok(updateUser);
     }
@@ -48,5 +49,18 @@ public class UserController {
     public ResponseEntity<StageManagerDetailResp> getStageManagerDetail(@PathVariable UUID id) {
         StageManagerDetailResp stageManagerDetail = authService.getStageManagerDetail(id);
         return ResponseEntity.ok(stageManagerDetail);
+    }
+
+    @GetMapping("/musicians")
+    public ResponseEntity<MusicianResp> getMusicians(@RequestParam(defaultValue = "1") int pageNo,
+                                                     @RequestParam(defaultValue = "10") int pageSize) {
+        MusicianResp musicianResp = authService.getMusicians(pageNo, pageSize);
+        return ResponseEntity.ok(musicianResp);
+    }
+
+    @GetMapping("/musicians/{id}")
+    public ResponseEntity<MusicianDetailResp> getMusicianDetail(@PathVariable UUID id) {
+        MusicianDetailResp musicianDetailResp = authService.getMusicianDetail(id);
+        return ResponseEntity.ok(musicianDetailResp);
     }
 }

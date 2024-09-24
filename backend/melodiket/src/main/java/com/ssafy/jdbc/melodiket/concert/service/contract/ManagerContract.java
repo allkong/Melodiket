@@ -11,13 +11,17 @@ import org.web3j.tx.Contract;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ssafy.jdbc.melodiket.concert.service.contract.CommonConcertContract.extractCreatedConcertIdFrom;
 
 public class ManagerContract extends Contract {
+    private final BlockchainConfig blockchainConfig;
+
     public ManagerContract(BlockchainConfig blockchainConfig, org.web3j.crypto.Credentials credentials) {
-        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getMinGasPrice()), BigInteger.valueOf(blockchainConfig.getMaxGasPrice()));
+        super(blockchainConfig.getMelodiketContractAddress(), blockchainConfig.web3j(), credentials, BigInteger.valueOf(blockchainConfig.getGasPrice()), BigInteger.valueOf(blockchainConfig.getGasLimit()));
+        this.blockchainConfig = blockchainConfig;
     }
 
     public long createStandingConcert(StandingConcertCreateReq req) throws Exception {
@@ -75,5 +79,39 @@ public class ManagerContract extends Contract {
         }
 
         throw new RuntimeException("Failed to create a concert.");
+    }
+
+    public boolean closeConcert(long concertId) throws Exception {
+        RemoteFunctionCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new org.web3j.abi.datatypes.Function(
+                "closeConcert",
+                Collections.singletonList(new org.web3j.abi.datatypes.Uint(BigInteger.valueOf(concertId))),
+                Collections.emptyList()
+        ));
+
+        TransactionReceipt result = functionCall.send();
+        return result.isStatusOK();
+    }
+
+    public void useTicket(long concertId, long ticketId) throws Exception {
+        RemoteFunctionCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new org.web3j.abi.datatypes.Function(
+                "useTicket",
+                List.of(
+                        new org.web3j.abi.datatypes.Uint(BigInteger.valueOf(concertId)),
+                        new org.web3j.abi.datatypes.Uint(BigInteger.valueOf(ticketId))
+                ),
+                Collections.emptyList()
+        ));
+
+        TransactionReceipt receipt = functionCall.send();
+    }
+
+    public void cancelConcert(long concertId) throws Exception {
+        RemoteFunctionCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new org.web3j.abi.datatypes.Function(
+                "cancelConcert",
+                Collections.singletonList(new org.web3j.abi.datatypes.Uint(BigInteger.valueOf(concertId))),
+                Collections.emptyList()
+        ));
+
+        TransactionReceipt receipt = functionCall.send();
     }
 }

@@ -2,15 +2,15 @@ package com.ssafy.jdbc.melodiket.auth.filter;
 
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.common.config.SecurityConfig;
-import com.ssafy.jdbc.melodiket.user.entity.AppUser;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // JWT 토큰이 존재
         if (uuid != null) {
             try {
-                AppUser user = userService.findUserByUuid(uuid);
+                AppUserEntity user = userService.findUserByUuid(uuid);
                 // 식별자를 저장 (role 저장)
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         user,
