@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.a310.bank.account.repository.QBankAccountEntity;
+import com.ssafy.a310.bank.account.repository.TransactionEntity;
 import com.ssafy.a310.bank.account.service.query.BankAccountNumberQueryDslOrdering;
 import com.ssafy.a310.bank.common.controller.query.dto.CursorPageResp;
 import com.ssafy.a310.bank.common.controller.query.dto.CursorPagingParam;
@@ -64,11 +65,18 @@ public class CursorPagingRepository<T> {
         List<T> entities = query.fetch();
         entities = entities.subList(0, Math.min(entities.size(), param.getPageSize()));
 
+        System.out.println("Query : " + query);
+
         PageInfoResp pageInfoResp = new PageInfoResp(
                 entities.size() > param.getPageSize(),
                 param.getPageSize(),
                 entities.size()
         );
+
+        System.out.println("Result size : " + entities.size());
+        if (entities.size() > 1 && entities.get(0) instanceof TransactionEntity transactionEntity) {
+            System.out.println("HELP : " + transactionEntity.getReceiver().getNumber());
+        }
 
         return new CursorPageResp<>(pageInfoResp, entities);
     }
