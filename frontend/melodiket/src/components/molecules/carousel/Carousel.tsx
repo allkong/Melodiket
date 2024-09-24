@@ -15,6 +15,7 @@ interface CarouselProps {
   size?: 'md' | 'lg';
   delay?: number;
   gap?: number;
+  rounded?: boolean;
 }
 
 const Carousel = ({
@@ -22,6 +23,7 @@ const Carousel = ({
   datas,
   delay = 4000,
   gap = 0,
+  rounded = false,
 }: CarouselProps) => {
   const [autoIndex, setAutoIndex] = useAutoIndex(0, 0, datas.length - 1, delay);
   const handleClickIndicator = (index: number) => {
@@ -60,7 +62,12 @@ const Carousel = ({
           }}
         >
           {datas.map((data) => (
-            <CarouselImage key={data.index} size={size} data={data} />
+            <CarouselImage
+              key={data.index}
+              size={size}
+              data={data}
+              rounded={rounded}
+            />
           ))}
         </div>
       </div>
