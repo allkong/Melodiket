@@ -45,10 +45,4 @@ public class Ticket {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Date createdAt;
-
-    private enum Status {
-        NOT_USED,
-        USED,
-        REFUNDED
-    }
 }
