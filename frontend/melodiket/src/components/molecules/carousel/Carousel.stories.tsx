@@ -10,7 +10,9 @@ export default meta;
 type Story = StoryObj<typeof Carousel>;
 
 export const Default: Story = {
-  render: () => {
-    return <Carousel datas={CAROUSEL_DATAS} size="lg" />;
+  args: {
+    datas: CAROUSEL_DATAS,
+    size: 'md',
+    rounded: false,
   },
 };

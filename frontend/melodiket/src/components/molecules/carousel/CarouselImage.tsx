@@ -6,11 +6,16 @@ import { Location, CalendarFilled } from '@/public/icons';
 import type { Concert } from '@/types/concert';
 
 interface CarouselImageProps {
-  size?: 'md' | 'lg';
   data: Concert;
+  size?: 'md' | 'lg';
+  rounded?: boolean;
 }
 
-const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
+const CarouselImage = ({
+  data,
+  size = 'md',
+  rounded = false,
+}: CarouselImageProps) => {
   return (
     <div
       className={clsx('relative w-full flex-shrink-0', {
@@ -21,7 +26,9 @@ const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
       <Image
         src={data.image}
         alt="carousel 이미지"
-        className="object-cover"
+        className={clsx('object-cover', {
+          'rounded-lg': rounded,
+        })}
         fill
       />
       <div
@@ -30,7 +37,8 @@ const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
           {
             'h-[250px]': size === 'md',
             'h-[360px]': size === 'lg',
-          }
+          },
+          { 'rounded-lg': rounded }
         )}
       ></div>
       <div className="absolute flex flex-col bottom-3 left-3 text-white">
