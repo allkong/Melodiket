@@ -1,6 +1,7 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
@@ -8,13 +9,16 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
-import com.ssafy.jdbc.melodiket.user.service.UserService;
+import com.ssafy.jdbc.melodiket.user.service.FavoriteMusicianService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +27,7 @@ import java.util.UUID;
 public class UserController {
 
     private final AuthService authService;
-    private final UserService userService;
+    private final FavoriteMusicianService favoriteMusicianService;
 
     @GetMapping("/me")
     public ResponseEntity<UserProfileResp> getAuthenticatedUserProfile(Principal principal) {
@@ -63,5 +67,29 @@ public class UserController {
     public ResponseEntity<MusicianDetailResp> getMusicianDetail(@PathVariable UUID id) {
         MusicianDetailResp musicianDetailResp = authService.getMusicianDetail(id);
         return ResponseEntity.ok(musicianDetailResp);
+    }
+
+    @PostMapping("/musicians/{id}/like")
+    public ResponseEntity<Map<String, Object>> toggleLikeMusician(@RequestParam UUID audienceId, @PathVariable UUID id) {
+
+        boolean isLiked = favoriteMusicianService.toggleLikeMusician(audienceId, id);
+
+        // TODO : responseBody 확인 과정 으로 Map 으로 선구현, 나중에 Void 로다시변경
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", isLiked ? "찜 등록 성공" : "찜 해제 성공");
+        response.put("musicianId", id);
+
+        return ResponseEntity.ok(response);
+//        favoriteMusicianService.toggleLikeMusician(audienceId, id);
+//        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/musicians/liked/me")
+    public ResponseEntity<PageResponse<UserProfileResp>> getLikedMusicians(
+            @RequestParam UUID audienceId,
+            Pageable pageable
+    ) {
+        PageResponse<UserProfileResp> response = favoriteMusicianService.findLikedMusiciansByAudience(audienceId, pageable);
+        return ResponseEntity.ok(response);
     }
 }
