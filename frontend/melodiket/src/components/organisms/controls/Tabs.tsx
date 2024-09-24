@@ -1,4 +1,3 @@
-import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import TabButton from '@/components/molecules/item/TabButton';
 
 interface TabsProps {

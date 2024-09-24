@@ -10,6 +10,15 @@ type Story = StoryObj<typeof SelectButton>;
 
 export const Default: Story = {
   args: {
-    options: ['등록순', '최신순'],
+    options: [
+      {
+        value: 'registration',
+        label: '등록순',
+      },
+      {
+        value: 'latest',
+        label: '최신순',
+      },
+    ],
   },
 };

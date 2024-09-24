@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import Image from 'next/image';
+import defaultUserImage from '@/public/images/default-user-image.jpg';
 
 interface ProfileProps {
   src: string;
@@ -19,7 +20,12 @@ const Profile = ({ src, size }: ProfileProps) => {
       )}
     >
       <div className="relative flex items-center justify-center w-full h-full overflow-hidden rounded-full">
-        <Image src={src} alt="profile" className="object-cover" fill />
+        <Image
+          src={src || defaultUserImage}
+          alt="profile"
+          className="object-cover"
+          fill
+        />
       </div>
     </div>
   );

@@ -8,10 +8,14 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
-public abstract class QueryDslFilteringCondition {
+public class QueryDslFilteringCondition {
     protected String key;
     protected FilteringSegmentOperator operator;
     protected Object value;
+
+    public static QueryDslFilteringCondition of(String key, FilteringSegmentOperator operator, Object value) {
+        return new QueryDslFilteringCondition(key, operator, value);
+    }
 
     @Override
     public String toString() {
