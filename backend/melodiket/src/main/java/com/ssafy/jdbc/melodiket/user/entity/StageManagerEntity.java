@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
-import com.ssafy.jdbc.melodiket.stage.entity.StageAssignment;
+import com.ssafy.jdbc.melodiket.stage.entity.StageAssignmentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +24,6 @@ public class StageManagerEntity extends AppUserEntity {
     private String imageUrl;
 
     @OneToMany(mappedBy = "stageManagerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StageAssignment> stageAssignments = new ArrayList<>();
+    private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
 
 }
