@@ -49,11 +49,11 @@ const ConcertCard = ({
             {musicians && musicians.join(' ')}
           </p>
           <div className="flex items-center gap-1 text-[8px] text-gray-500">
-            <CalendarFilled className="fill-current" />
+            <CalendarFilled width="6" height="8" className="fill-current" />
             {ticketingAt && <p>{ticketingAt}</p>}
           </div>
           <div className="flex items-center gap-1 text-[8px] text-gray-500 truncate">
-            <Location className="fill-current" />
+            <Location width="6" height="8" className="fill-current" />
             {stage && <p>{stage}</p>}
           </div>
         </div>
