@@ -6,10 +6,10 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
 import Textarea from '@/components/atoms/textarea/Textarea';
 import TextBanner from '@/components/molecules/text/TextBanner';
-
-import { ConcertData } from '@/types/concert';
 import FileInput from '@/components/atoms/input/FileInput';
 import DateInput from '@/components/atoms/input/DateInput';
+
+import { ConcertData } from '@/types/concert';
 
 interface ConcertInformationProps {
   concertData: ConcertData;
@@ -24,7 +24,7 @@ const ConcertInformation = ({
   const [startAt, setStartAt] = useState('');
   const [ticketingAt, setTicketingAt] = useState('');
   const [concertDescription, setConcertDescription] = useState('');
-  const [concertPoster, setConcertPoster] = useState<File | null>();
+  const [concertPoster, setConcertPoster] = useState<File | null>(null);
 
   const isFormValid =
     concertName &&
@@ -37,8 +37,8 @@ const ConcertInformation = ({
     const updatedConcertData: ConcertData = {
       ...concertData,
       concertName: concertName,
-      startAt: new Date(),
-      ticketingAt: new Date(),
+      startAt: new Date(startAt),
+      ticketingAt: new Date(ticketingAt),
       concertDescription: concertDescription,
       concertPoster: concertPoster as File,
     };
