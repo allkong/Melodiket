@@ -13,6 +13,8 @@ interface DateInputProps {
   onChange?: (value: string) => void;
   onBlur?: () => void;
   placeholder?: string;
+  minDate?: string;
+  maxDate?: string;
 }
 
 const DateInput = forwardRef(
@@ -22,6 +24,8 @@ const DateInput = forwardRef(
       onChange,
       onBlur,
       placeholder,
+      minDate,
+      maxDate,
     }: DateInputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
@@ -50,6 +54,8 @@ const DateInput = forwardRef(
           value={value}
           onChange={handleChange}
           onBlur={onBlur}
+          min={minDate}
+          max={maxDate}
         />
         <div
           className="absolute right-9 bg-white top-1/2 transform -translate-y-1/2 pointer-events-none z-10"

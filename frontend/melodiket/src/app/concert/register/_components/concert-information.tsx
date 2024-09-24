@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
@@ -25,6 +25,19 @@ const ConcertInformation = ({
   const [ticketingAt, setTicketingAt] = useState('');
   const [concertDescription, setConcertDescription] = useState('');
   const [concertPoster, setConcertPoster] = useState<File | null>(null);
+
+  const today = new Date().toISOString().split('T')[0];
+
+  const getMinTicketingDate = () => {
+    if (!startAt) return '';
+    const startDate = new Date(startAt);
+    startDate.setDate(startDate.getDate() - 1);
+    return startDate.toISOString().split('T')[0];
+  };
+
+  useEffect(() => {
+    setTicketingAt('');
+  }, [startAt]);
 
   const isFormValid =
     concertName &&
@@ -66,6 +79,7 @@ const ConcertInformation = ({
             value={startAt}
             onChange={setStartAt}
             placeholder="공연 일시"
+            minDate={today}
           />
         </div>
         <div className="mb-4">
@@ -74,6 +88,8 @@ const ConcertInformation = ({
             value={ticketingAt}
             onChange={setTicketingAt}
             placeholder="티케팅 시작 일시"
+            minDate={today}
+            maxDate={getMinTicketingDate()}
           />
         </div>
         <div className="mb-4 flex-grow">
