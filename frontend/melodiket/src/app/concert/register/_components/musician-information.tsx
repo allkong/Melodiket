@@ -61,37 +61,45 @@ const MusicianInformation = ({
   );
 
   return (
-    <div className="w-full p-4">
-      <TextBanner
-        title="공연 등록을 위해 공연 정보를 입력해주세요"
-        description="뮤지션을 선택해주세요"
-      />
-      <div className="mt-10 mb-4">
-        <Input
-          placeholder="뮤지션 이름 입력"
-          value={musicianName}
-          onChange={setMusicianName}
+    <div className="flex flex-col h-full p-4">
+      <div className="flex-grow h-0 overflow-y-auto">
+        <TextBanner
+          title="공연 등록을 위해 공연 정보를 입력해주세요"
+          description="뮤지션을 선택해주세요"
+        />
+        <div className="mt-10 mb-4">
+          <Input
+            placeholder="뮤지션 이름 입력"
+            value={musicianName}
+            onChange={setMusicianName}
+          />
+        </div>
+        <div className="overflow-y-auto">
+          {selectedMusicians.map((musician) => (
+            <MusicianSelectButton
+              key={musician}
+              label={musician}
+              isSelected={!!musicianList[musician]}
+              onClick={() => toggleMusician(musician)}
+            />
+          ))}
+          {unselectedMusicians.map((musician) => (
+            <MusicianSelectButton
+              key={musician}
+              label={musician}
+              isSelected={!!musicianList[musician]}
+              onClick={() => toggleMusician(musician)}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="my-4 h-fit">
+        <LargeButton
+          label="다음"
+          onClick={handleNext}
+          disabled={!isFormValid}
         />
       </div>
-      <div className="my-4">
-        {selectedMusicians.map((musician) => (
-          <MusicianSelectButton
-            key={musician}
-            label={musician}
-            isSelected={!!musicianList[musician]}
-            onClick={() => toggleMusician(musician)}
-          />
-        ))}
-        {unselectedMusicians.map((musician) => (
-          <MusicianSelectButton
-            key={musician}
-            label={musician}
-            isSelected={!!musicianList[musician]}
-            onClick={() => toggleMusician(musician)}
-          />
-        ))}
-      </div>
-      <LargeButton label="다음" onClick={handleNext} disabled={!isFormValid} />
     </div>
   );
 };

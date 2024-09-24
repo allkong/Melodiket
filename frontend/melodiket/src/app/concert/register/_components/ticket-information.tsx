@@ -34,42 +34,50 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
   };
 
   return (
-    <div className="w-full p-4">
-      <TextBanner
-        title="공연 등록을 위해 공연 정보를 입력해주세요"
-        description="티켓 정보를 입력해주세요"
-      />
-      <div className="mt-10 mb-4">
-        <h2 className="font-semibold mb-2">티켓 가격</h2>
-        <Input
-          value={ticketPrice}
-          onChange={setTicketPrice}
-          placeholder="티켓 가격"
+    <div className="flex flex-col h-full p-4">
+      <div className="flex-grow h-0 overflow-y-auto">
+        <TextBanner
+          title="공연 등록을 위해 공연 정보를 입력해주세요"
+          description="티켓 정보를 입력해주세요"
         />
-      </div>
-      <div className="mb-4">
-        <h2 className="font-semibold mb-2">수익 분배</h2>
-        <div className="mb-2">
+        <div className="mt-10 mb-4">
+          <h2 className="font-semibold mb-2">티켓 가격</h2>
           <Input
-            placeholder="공연장"
-            value={ownerStake}
-            onChange={setOwnerStake}
+            value={ticketPrice}
+            onChange={setTicketPrice}
+            placeholder="티켓 가격"
           />
         </div>
-        <div className="mb-2">
+        <div className="mb-4">
+          <h2 className="font-semibold mb-2">수익 분배</h2>
+          <div className="mb-2">
+            <Input
+              placeholder="공연장"
+              value={ownerStake}
+              onChange={setOwnerStake}
+            />
+          </div>
+          <div className="mb-2">
+            <Input
+              placeholder="뮤지션"
+              value={musicianStake}
+              onChange={setMusicianStake}
+            />
+          </div>
           <Input
-            placeholder="뮤지션"
-            value={musicianStake}
-            onChange={setMusicianStake}
+            placeholder="추가 비율"
+            value={favoriteMusicianStake}
+            onChange={setFavoriteMusicianStake}
           />
         </div>
-        <Input
-          placeholder="추가 비율"
-          value={favoriteMusicianStake}
-          onChange={setFavoriteMusicianStake}
+      </div>
+      <div className="my-4 h-fit">
+        <LargeButton
+          label="다음"
+          onClick={handleNext}
+          disabled={!isFormValid}
         />
       </div>
-      <LargeButton label="다음" onClick={handleNext} disabled={!isFormValid} />
     </div>
   );
 };
