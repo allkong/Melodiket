@@ -8,6 +8,18 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    domains: process.env.NODE_ENV === 'development' ? ['*'] : ['example.com'],
+    remotePatterns:
+      process.env.NODE_ENV === 'development'
+        ? [
+            {
+              protocol: 'https',
+              hostname: '**',
+            },
+          ]
+        : [],
+  },
 };
 
 export default nextConfig;
