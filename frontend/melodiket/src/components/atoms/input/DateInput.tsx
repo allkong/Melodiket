@@ -4,23 +4,32 @@ import {
   ChangeEvent,
   ForwardedRef,
   forwardRef,
-  KeyboardEvent,
   useState,
+  useEffect,
 } from 'react';
 
 interface DateInputProps {
+  value?: string;
   onChange?: (value: string) => void;
-  onClickEnter?: () => void;
   onBlur?: () => void;
   placeholder?: string;
 }
 
 const DateInput = forwardRef(
   (
-    { onChange, onBlur, placeholder }: DateInputProps,
+    {
+      value: controlledValue = '',
+      onChange,
+      onBlur,
+      placeholder,
+    }: DateInputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(controlledValue);
+
+    useEffect(() => {
+      setValue(controlledValue);
+    }, [controlledValue]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -35,7 +44,7 @@ const DateInput = forwardRef(
       <div className="relative w-full">
         <input
           ref={ref}
-          className="w-full h-12 pl-5 pr-10 text-base border outline-none rounded-2xl placeholder:text-gray-200"
+          className="w-full h-12 pl-5 pr-10 text-base border outline-none rounded-2xl text-gray-200"
           type="date"
           placeholder={placeholder}
           value={value}
