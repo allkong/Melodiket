@@ -16,9 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MusicianEntity extends AppUserEntity {
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private AppUserEntity user;
+
+//    @OneToOne
+//    @JoinColumn(name = "id", referencedColumnName = "id")
+//    private AppUserEntity user;
 
     private String description;
 
