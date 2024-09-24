@@ -26,7 +26,7 @@ const SignUpSuccess = ({ onNext }: SignUpSuccessProps) => {
         />
       </div>
       <div className="my-4 h-fit">
-        <LargeButton label="다음" onClick={() => onNext()} />
+        <LargeButton label="로그인" onClick={() => onNext()} />
       </div>
     </div>
   );

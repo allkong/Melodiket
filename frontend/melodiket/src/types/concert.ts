@@ -13,3 +13,12 @@ export interface ConcertData {
   favoriteMusicianStake: number;
   stageInformation: StageData;
 }
+
+export interface Concert {
+  index: number;
+  image: string;
+  title: string;
+  description: string;
+  startedAt: string;
+  location: string;
+}
