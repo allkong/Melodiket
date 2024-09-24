@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.stage.entity;
 import com.ssafy.jdbc.melodiket.concert.entity.Concert;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stage {
+@Builder
+public class StageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +42,7 @@ public class Stage {
     private Long capacity;
 
     @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StageAssignment> stageAssignments = new ArrayList<>();
+    private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
 
     @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Concert> concerts = new ArrayList<>();
