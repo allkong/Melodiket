@@ -6,5 +6,5 @@ public record PageInfoCursor(
         boolean hasNextPage,
         int requestedSize,
         int responsedSize,
-        UUID uuid
+        UUID lastUuid
 ) {}
