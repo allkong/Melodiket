@@ -32,7 +32,6 @@ const customFetch = async <T>(url: string, options?: JsonRequestInit) => {
 
     return await response.json();
   } catch (error) {
-    console.error('Fetch Error:', error);
     throw error;
   }
 };

@@ -36,7 +36,6 @@ export const useLogin = () => {
       router.push('/');
     },
     onError: (error: Error) => {
-      console.error(error);
       alert('로그인 실패😥');
     },
   });
