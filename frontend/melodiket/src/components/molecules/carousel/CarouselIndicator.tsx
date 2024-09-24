@@ -1,23 +1,25 @@
 import CarouselButton from '@/components/molecules/carousel/CarouselButton';
-import type { ConcertData } from '@/types/concert';
 
 interface CarouselIndicatorProps {
-  datas: ConcertData[]; // ContextAPI 설정 후 datas 삭제 필요
-  align?: 'left' | 'middle' | 'right';
+  size: number;
+  currentIndex: number;
+  onClick: (value: number) => void;
 }
 
 const CarouselIndicator = ({
-  datas,
-  // align = 'middle',
+  size,
+  currentIndex,
+  onClick,
 }: CarouselIndicatorProps) => {
   return (
     <div className="absolute bottom-3 right-3">
       <div className="flex items-center gap-[5px]">
-        {datas.map((data) => (
+        {Array.from({ length: size }, (_, index) => index).map((index) => (
           <CarouselButton
-            key={data.index}
-            index={data.index}
-            isSelected={data.index === 0 ? true : false}
+            key={index}
+            index={index}
+            onClick={onClick}
+            isSelected={index === currentIndex ? true : false}
           />
         ))}
       </div>

@@ -3,6 +3,13 @@ import CarouselIndicator from './CarouselIndicator';
 
 const meta: Meta<typeof CarouselIndicator> = {
   component: CarouselIndicator,
+  decorators: [
+    (Story) => (
+      <div style={{ position: 'relative', width: 50, marginTop: 25 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
@@ -10,52 +17,8 @@ type Story = StoryObj<typeof CarouselIndicator>;
 
 export const Default: Story = {
   args: {
-    datas: [
-      {
-        description: '기타 설명(참여 가수 목록 등)0',
-        index: 0,
-        location: '장소명',
-        title: '콘서트 제목',
-        startedAt: 'YYYY.MM.DD',
-        image:
-          'https://an2-img.amz.wtchn.net/image/v2/zhP6BveaBByYE74o9uUFYg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qZ3dOVEUxTmprM01EZzRNVFEyTVRBM0luMC5rRnByMkxWT2hNajZjclBXY1YwOXhWNXpVNGdMbW9pSnMwSm5XQWZVNHpR',
-      },
-      {
-        description: '기타 설명(참여 가수 목록 등)1',
-        index: 1,
-        location: '장소명',
-        title: '콘서트 제목',
-        startedAt: 'YYYY.MM.DD',
-        image:
-          'https://an2-img.amz.wtchn.net/image/v2/zhP6BveaBByYE74o9uUFYg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qZ3dOVEUxTmprM01EZzRNVFEyTVRBM0luMC5rRnByMkxWT2hNajZjclBXY1YwOXhWNXpVNGdMbW9pSnMwSm5XQWZVNHpR',
-      },
-      {
-        description: '기타 설명(참여 가수 목록 등)2',
-        index: 2,
-        location: '장소명',
-        title: '콘서트 제목',
-        startedAt: 'YYYY.MM.DD',
-        image:
-          'https://an2-img.amz.wtchn.net/image/v2/zhP6BveaBByYE74o9uUFYg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qZ3dOVEUxTmprM01EZzRNVFEyTVRBM0luMC5rRnByMkxWT2hNajZjclBXY1YwOXhWNXpVNGdMbW9pSnMwSm5XQWZVNHpR',
-      },
-      {
-        description: '기타 설명(참여 가수 목록 등)3',
-        index: 3,
-        location: '장소명',
-        title: '콘서트 제목',
-        startedAt: 'YYYY.MM.DD',
-        image:
-          'https://an2-img.amz.wtchn.net/image/v2/zhP6BveaBByYE74o9uUFYg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qZ3dOVEUxTmprM01EZzRNVFEyTVRBM0luMC5rRnByMkxWT2hNajZjclBXY1YwOXhWNXpVNGdMbW9pSnMwSm5XQWZVNHpR',
-      },
-      {
-        description: '기타 설명(참여 가수 목록 등)4',
-        index: 4,
-        location: '장소명',
-        title: '콘서트 제목',
-        startedAt: 'YYYY.MM.DD',
-        image:
-          'https://an2-img.amz.wtchn.net/image/v2/zhP6BveaBByYE74o9uUFYg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qZ3dOVEUxTmprM01EZzRNVFEyTVRBM0luMC5rRnByMkxWT2hNajZjclBXY1YwOXhWNXpVNGdMbW9pSnMwSm5XQWZVNHpR',
-      },
-    ],
+    size: 5,
+    currentIndex: 0,
+    onClick: () => {},
   },
 };

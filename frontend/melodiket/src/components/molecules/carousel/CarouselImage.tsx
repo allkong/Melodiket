@@ -1,15 +1,16 @@
-import clsx from 'clsx';
 import Image from 'next/image';
 
+import clsx from 'clsx';
+
 interface CarouselImageProps {
+  size?: 'md' | 'lg';
   image: string;
-  size?: 'md' | 'lg'; // Context API 설정 후 size 삭제 필요
 }
 
-const CarouselImage = ({ image, size = 'md' }: CarouselImageProps) => {
+const CarouselImage = ({ size = 'md', image }: CarouselImageProps) => {
   return (
     <div
-      className={clsx('relative w-full', {
+      className={clsx('relative w-full flex-shrink-0', {
         'h-[250px]': size === 'md',
         'h-[360px]': size === 'lg',
       })}
