@@ -12,6 +12,7 @@ import Help from './help.svg';
 import Upload from './upload.svg';
 import CalendarFilled from './calendar-filled.svg';
 import Location from './location-filled.svg';
+import SubwayMark from './subway-mark.svg';
 
 export {
   LogoText,
@@ -28,4 +29,5 @@ export {
   Upload,
   CalendarFilled,
   Location,
+  SubwayMark,
 };
