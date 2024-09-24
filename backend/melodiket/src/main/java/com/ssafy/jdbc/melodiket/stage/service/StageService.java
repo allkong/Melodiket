@@ -3,7 +3,7 @@ package com.ssafy.jdbc.melodiket.stage.service;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageInfoCursor;
-import com.ssafy.jdbc.melodiket.stage.dto.CreateStageRequest;
+import com.ssafy.jdbc.melodiket.stage.dto.StageRequest;
 import com.ssafy.jdbc.melodiket.stage.dto.StageCursorPageResponse;
 import com.ssafy.jdbc.melodiket.stage.dto.StageInfoResponse;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
@@ -29,20 +29,20 @@ public class StageService {
      * 스테이지에 대한 UUID를 생성하고, 이를 데이터베이스에 저장합니다.
      * 생성된 스테이지 정보를 응답 DTO로 반환합니다.
      *
-     * @param createStageRequest 생성할 스테이지의 세부 정보가 담긴 요청 객체.
+     * @param stageRequest 생성할 스테이지의 세부 정보가 담긴 요청 객체.
      * @return StageInfoResponse 생성된 스테이지의 정보를 담은 응답 DTO.
      */
-    public StageInfoResponse createStage(CreateStageRequest createStageRequest) {
+    public StageInfoResponse createStage(StageRequest stageRequest) {
         UUID uuid = UUID.randomUUID();
 
         StageEntity s = stageRepository.save(StageEntity.builder()
                 .uuid(uuid)
-                .name(createStageRequest.getName())
-                .isStanding(createStageRequest.getIsStanding())
-                .address(createStageRequest.getAddress())
-                .numOfRow(createStageRequest.getNumOfRow())
-                .numOfCol(createStageRequest.getNumOfCol())
-                .capacity(createStageRequest.getCapacity())
+                .name(stageRequest.getName())
+                .isStanding(stageRequest.getIsStanding())
+                .address(stageRequest.getAddress())
+                .numOfRow(stageRequest.getNumOfRow())
+                .numOfCol(stageRequest.getNumOfCol())
+                .capacity(stageRequest.getCapacity())
                 .build()
         );
 
@@ -107,7 +107,7 @@ public class StageService {
      * @param updateStageRequest 수정할 데이터가 담긴 요청 객체.
      * @return StageInfoResponse 수정된 스테이지 정보를 담은 응답 DTO.
      */
-    public StageInfoResponse updateStage(UUID stageUuid, CreateStageRequest updateStageRequest) {
+    public StageInfoResponse updateStage(UUID stageUuid, StageRequest updateStageRequest) {
         // 해당 UUID의 스테이지를 조회 (존재하지 않으면 예외 발생)
         StageEntity stageEntity = stageRepository.findByUuid(stageUuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
