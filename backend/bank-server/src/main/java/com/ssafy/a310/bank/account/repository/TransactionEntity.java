@@ -4,13 +4,13 @@ import com.ssafy.a310.bank.common.repository.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
 @Table(name = "transaction")
 @Entity
 public class TransactionEntity extends BaseEntity {

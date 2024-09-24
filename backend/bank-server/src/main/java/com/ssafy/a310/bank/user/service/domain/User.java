@@ -5,6 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class User {
+    public static final String SYSTEM_USER_NAME = "SYSTEM";
+    public static final String SYSTEM_USER_YYMMDD = "000000";
+
     private final String uuid;
     private final String name;
     private final String yymmdd;
