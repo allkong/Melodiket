@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.auth.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 public record SignUpReq(
 
@@ -18,6 +19,9 @@ public record SignUpReq(
         @Size(min = 2, max = 15, message = "닉네임은 2자 이상 15자 이하이어야 합니다.")
         String nickname,
 
-        String description
+        String description,
+
+        @URL(message = "유효하지 않은 url 형태입니다.")
+        String imageUrl
 ) {
 }
