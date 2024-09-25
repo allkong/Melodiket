@@ -2,7 +2,7 @@ import Carousel from '@/components/molecules/carousel/Carousel';
 import Header from '@/components/organisms/navigation/Header';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import ConcertCard from '@/components/molecules/card/ConcertCard';
-import { CAROUSEL_DATAS, CONCERT_LIST } from '@/constants/concertList';
+import { CAROUSEL_DATAS, CONCERT_LIST } from '@/constants/concertMocks';
 
 const Page = () => {
   return (
