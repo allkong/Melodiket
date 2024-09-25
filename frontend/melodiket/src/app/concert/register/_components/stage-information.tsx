@@ -28,7 +28,7 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
       stageInformation: {
         ...concertData.stageInformation,
         stageName: selectedStage || '',
-        stageAddress: '서울특별시 구로구 경인로 430', // 이 예시에서는 주소를 고정했지만, 실제로는 동적으로 받을 수 있습니다.
+        stageAddress: '서울특별시 구로구 경인로 430',
       },
     };
     onNext(updatedConcertData);
