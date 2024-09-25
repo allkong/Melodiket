@@ -4,10 +4,9 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
-import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
-import com.ssafy.jdbc.melodiket.auth.repository.AudienceRepository;
-import com.ssafy.jdbc.melodiket.auth.repository.MusicianRepository;
-import com.ssafy.jdbc.melodiket.auth.repository.StageMangerRepository;
+import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
+import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
+import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
@@ -22,6 +21,7 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.*;
+import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class UserService implements AuthService {
     private final AppUserRepository appUserRepository;
     private final AudienceRepository audienceRepository;
     private final MusicianRepository musicianRepository;
-    private final StageMangerRepository stageMangerRepository;
+    private final StageManagerRepository stageMangerRepository;
     private final JwtService jwtService;
 
     @Override
