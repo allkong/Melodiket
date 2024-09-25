@@ -33,7 +33,6 @@ input[type='date']::-webkit-datetime-edit-day-field {
 }
 
 * {
-  overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
