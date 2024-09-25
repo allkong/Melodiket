@@ -74,7 +74,6 @@ const RegisterConcert = () => {
             concertData={concertData}
             onNext={(data) => {
               setConcertData((prev) => ({ ...prev, ...data }));
-              console.log(concertData);
               setStep('SUCCESS');
             }}
           />
