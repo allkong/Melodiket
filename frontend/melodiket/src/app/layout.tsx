@@ -26,6 +26,7 @@ export default function RootLayout({
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
           </div>
+          <div id="menu-portal" className="max-w-xl min-h-screen mx-auto"></div>
         </Providers>
       </body>
     </html>
