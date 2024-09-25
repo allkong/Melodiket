@@ -14,6 +14,8 @@ import CalendarFilled from './calendar-filled.svg';
 import Location from './location-filled.svg';
 import SubwayMark from './subway-mark.svg';
 import RoundQueueMusic from './round-queue-music.svg';
+import Home from './home.svg';
+import Notification from './notification.svg';
 
 export {
   LogoText,
@@ -32,4 +34,6 @@ export {
   Location,
   SubwayMark,
   RoundQueueMusic,
+  Home,
+  Notification,
 };
