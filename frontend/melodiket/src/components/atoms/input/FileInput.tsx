@@ -38,14 +38,7 @@ const FileInput = forwardRef(
           type="file"
           onChange={handleChange}
           onBlur={onBlur}
-          style={{
-            position: 'absolute',
-            width: 0,
-            height: 0,
-            padding: 0,
-            overflow: 'hidden',
-            border: 0,
-          }}
+          className="absolute w-0 h-0 p-0 overflow-hidden border-0"
         />
 
         <div className="w-full h-12 pl-5 pr-10 text-base bg-white border outline-none rounded-2xl placeholder:text-gray-200 flex items-center justify-between">
@@ -53,12 +46,9 @@ const FileInput = forwardRef(
             {fileName ? fileName : '파일 선택'}
           </span>
           <div
-            className="cursor-pointer z-10"
+            className="cursor-pointer z-10 bg-no-repeat bg-center w-6 h-6"
             style={{
-              width: '24px',
-              height: '24px',
-              background: "url('/icons/upload.svg') no-repeat center",
-              backgroundSize: '24px',
+              backgroundImage: "url('/icons/upload.svg')",
             }}
             onClick={handleIconClick}
           />

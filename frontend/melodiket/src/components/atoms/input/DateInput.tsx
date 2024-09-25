@@ -58,13 +58,9 @@ const DateInput = forwardRef(
           max={maxDate}
         />
         <div
-          className="absolute right-9 bg-white top-1/2 transform -translate-y-1/2 pointer-events-none z-10"
+          className="absolute right-9 bg-white top-1/2 transform -translate-y-1/2 pointer-events-none z-10 w-6 h-6 bg-no-repeat bg-center"
           style={{
-            width: '24px',
-            height: '24px',
-            background: "url('/icons/calendar.svg') no-repeat center",
-            backgroundSize: '24px',
-            backgroundColor: 'white',
+            backgroundImage: "url('/icons/calendar.svg')",
           }}
         />
       </div>
