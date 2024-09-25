@@ -7,6 +7,7 @@ import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import Header from '@/components/organisms/navigation/Header';
 import FavoriteTitle from '@/components/molecules/title/FavoriteTitle';
 import Tabs from '@/components/organisms/controls/Tabs';
+import MusicianItem from '@/components/molecules/item/MusicianItem';
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState(Object.keys(FAVORITE_TYPES)[0]);
@@ -28,6 +29,17 @@ const Page = () => {
         onClick={handleTabClick}
         labelMap={FAVORITE_TYPES}
       />
+      {activeTab === 'musician' && (
+        <div>
+          <MusicianItem
+            src={''}
+            musicianName={'장원영'}
+            favoriteCount={10}
+            bookingCount={2}
+            isFavorite
+          />
+        </div>
+      )}
     </div>
   );
 };
