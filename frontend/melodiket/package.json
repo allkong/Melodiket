@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "all": "concurrently \"yarn dev\" \"yarn storybook\"",
-    "build-storybook": "storybook build"
+    "mock": "npx tsx watch ./src/mocks/http.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.55.4",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "1.9.0",
+    "@mswjs/http-middleware": "^0.10.1",
     "@storybook/addon-essentials": "^8.2.9",
     "@storybook/addon-interactions": "^8.2.9",
     "@storybook/addon-links": "^8.2.9",
@@ -37,18 +39,22 @@
     "@storybook/react": "^8.2.9",
     "@storybook/test": "^8.2.9",
     "@svgr/webpack": "^8.1.0",
+    "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cors": "^2.8.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.9",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-storybook": "^0.8.0",
+    "msw": "^2.4.9",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "storybook": "^8.2.9",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@4.5.0"
 }
