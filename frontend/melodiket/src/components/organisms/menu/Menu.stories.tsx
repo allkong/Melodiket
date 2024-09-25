@@ -23,7 +23,7 @@ export const Default: Story = {
       <div id="menu-portal">
         <Menu>
           <Menu.Header />
-          <Menu.Profile />
+          <Menu.Profile nickname="박유빈님" imageURL="" role="공연장 관리자" />
           <Menu.Divider />
           <Menu.Item />
           <Menu.Item />
