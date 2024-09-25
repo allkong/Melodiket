@@ -1,19 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
+import type { LoginRequest, LoginResponse } from '@/types/login';
+
 import useAuthStore from '@/store/authStore';
 import customFetch from '../customFetch';
-
-interface LoginRequest {
-  loginId: string;
-  password: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  nickname: string;
-  role: string;
-}
 
 const login = async (loginData: LoginRequest) => {
   const response = await customFetch<LoginResponse>('/auth/login', {

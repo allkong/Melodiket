@@ -1,3 +1,4 @@
+import { LoginRequest } from '@/types/login';
 import { http, HttpResponse } from 'msw';
 
 const users = [
@@ -10,13 +11,11 @@ const users = [
 ];
 
 export const auth = [
-  http.post('/auth/login', async ({ request }) => {
-    const user = await request.json();
-
-    const { loginId, password } = user;
+  http.post<never, LoginRequest>('/auth/login', async ({ request }) => {
+    const user: LoginRequest = await request.json();
 
     const loginUser = users.find(
-      (u) => u.loginId === loginId && u.password === password
+      (u) => u.loginId === user?.loginId && u.password === user?.password
     );
 
     if (loginUser) {
