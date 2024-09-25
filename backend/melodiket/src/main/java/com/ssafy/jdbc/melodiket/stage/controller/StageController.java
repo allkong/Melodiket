@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -19,8 +22,9 @@ public class StageController {
     private final StageService stageService;
 
     @PostMapping
-    public ResponseEntity<StageInfoResponse> createStage(@RequestBody @Valid StageRequest createStageRequest) {
-        StageInfoResponse response = stageService.createStage(createStageRequest);
+    public ResponseEntity<StageInfoResponse> createStage(Principal principal, @RequestBody @Valid StageRequest stageRequest) {
+        String loginId = principal.getName();
+        StageInfoResponse response = stageService.createStage(stageRequest, loginId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -33,6 +37,19 @@ public class StageController {
             @RequestParam(value = "orderDirection", defaultValue = "asc") String orderDirection
     ) {
         StageCursorPageResponse response = stageService.getStages(isFirstPage, lastUuid, pageSize, "", orderKey, orderDirection);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Map<String,List<StageInfoResponse>>> getMyStages(Principal principal) {
+        String loginId = principal.getName();
+        List<StageInfoResponse> response = stageService.getMyStages(loginId);
+        return new ResponseEntity<>(Map.of("stages",response), HttpStatus.OK);
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity<StageInfoResponse> getStageDetails(@PathVariable("uuid") UUID stageUuid) {
+        StageInfoResponse response = stageService.getStageDetails(stageUuid);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

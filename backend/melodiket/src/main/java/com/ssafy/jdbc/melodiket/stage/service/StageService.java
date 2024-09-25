@@ -6,9 +6,13 @@ import com.ssafy.jdbc.melodiket.common.page.PageInfoCursor;
 import com.ssafy.jdbc.melodiket.stage.dto.StageRequest;
 import com.ssafy.jdbc.melodiket.stage.dto.StageCursorPageResponse;
 import com.ssafy.jdbc.melodiket.stage.dto.StageInfoResponse;
+import com.ssafy.jdbc.melodiket.stage.entity.StageAssignmentEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
+import com.ssafy.jdbc.melodiket.stage.repository.StageAssignmentRepository;
 import com.ssafy.jdbc.melodiket.stage.repository.StageCursorRepository;
 import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
+import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
+import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -22,7 +26,9 @@ import java.util.UUID;
 @Transactional
 public class StageService {
     private final StageRepository stageRepository;
+    private final StageAssignmentRepository stageAssignmentRepository;
     private final StageCursorRepository stageCursorRepository;
+    private final StageManagerRepository stageManagerRepository;
 
     /**
      * 주어진 요청 데이터를 기반으로 새로운 스테이지를 생성합니다.
@@ -32,28 +38,38 @@ public class StageService {
      * @param stageRequest 생성할 스테이지의 세부 정보가 담긴 요청 객체.
      * @return StageInfoResponse 생성된 스테이지의 정보를 담은 응답 DTO.
      */
-    public StageInfoResponse createStage(StageRequest stageRequest) {
-        UUID uuid = UUID.randomUUID();
+    public StageInfoResponse createStage(StageRequest stageRequest, String loginId) {
+        // StageManagerEntity 조회 (해당 유저가 스테이지 매니저인지 확인)
+        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
 
-        StageEntity s = stageRepository.save(StageEntity.builder()
-                .uuid(uuid)
-                .name(stageRequest.getName())
-                .isStanding(stageRequest.getIsStanding())
-                .address(stageRequest.getAddress())
-                .numOfRow(stageRequest.getNumOfRow())
-                .numOfCol(stageRequest.getNumOfCol())
-                .capacity(stageRequest.getCapacity())
-                .build()
+        // 새로운 StageEntity 생성
+        UUID stageUuid = UUID.randomUUID();
+        StageEntity stageEntity = stageRepository.save(
+                StageEntity.builder()
+                        .uuid(stageUuid)
+                        .name(stageRequest.getName())
+                        .isStanding(stageRequest.getIsStanding())
+                        .address(stageRequest.getAddress())
+                        .numOfRow(stageRequest.getNumOfRow())
+                        .numOfCol(stageRequest.getNumOfCol())
+                        .capacity(stageRequest.getCapacity())
+                        .build()
         );
 
+        // StageAssignmentEntity 생성하여 관계 설정
+        StageAssignmentEntity assignment = new StageAssignmentEntity(null, stageEntity, stageManager);
+        stageAssignmentRepository.save(assignment);
+
+        // 생성된 스테이지 정보 반환
         return StageInfoResponse.builder()
-                .uuid(uuid)
-                .name(s.getName())
-                .isStanding(s.getIsStanding())
-                .address(s.getAddress())
-                .numOfRow(s.getNumOfRow())
-                .numOfCol(s.getNumOfCol())
-                .capacity(s.getCapacity())
+                .uuid(stageEntity.getUuid())
+                .name(stageEntity.getName())
+                .isStanding(stageEntity.getIsStanding())
+                .address(stageEntity.getAddress())
+                .numOfRow(stageEntity.getNumOfRow())
+                .numOfCol(stageEntity.getNumOfCol())
+                .capacity(stageEntity.getCapacity())
                 .build();
     }
 
@@ -100,6 +116,58 @@ public class StageService {
     }
 
     /**
+     * 주어진 UUID에 해당하는 StageManagerEntity와 연관된 스테이지 목록을 조회합니다.
+     *
+     * @param userUuid 로그인된 유저의 UUID.
+     * @return List<StageInfoResponse> 해당 StageManager가 관리하는 스테이지 목록을 응답 DTO로 반환합니다.
+     */
+    public List<StageInfoResponse> getMyStages(String loginId) {
+        // 유저의 UUID를 통해 StageManagerEntity를 조회
+        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        // StageManagerEntity와 연관된 StageEntity 목록 가져오기
+        List<StageEntity> stages = stageManager.getStageAssignmentEntities().stream()
+                .map(StageAssignmentEntity::getStageEntity)
+                .toList();
+
+        // StageEntity를 StageInfoResponse DTO로 변환하여 반환
+        return stages.stream()
+                .map(stage -> StageInfoResponse.builder()
+                        .uuid(stage.getUuid())
+                        .name(stage.getName())
+                        .address(stage.getAddress())
+                        .isStanding(stage.getIsStanding())
+                        .numOfRow(stage.getNumOfRow())
+                        .numOfCol(stage.getNumOfCol())
+                        .capacity(stage.getCapacity())
+                        .build())
+                .toList();
+    }
+
+    /**
+     * 특정 Stage UUID에 대한 스테이지 상세 정보를 조회합니다.
+     * @param stageUuid 조회할 스테이지의 UUID.
+     * @return StageInfoResponse 조회된 스테이지의 상세 정보가 담긴 응답 DTO.
+     */
+    public StageInfoResponse getStageDetails(UUID stageUuid) {
+        // UUID로 스테이지를 조회하고, 없을 경우 예외 발생
+        StageEntity stageEntity = stageRepository.findByUuid(stageUuid)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
+
+        // 조회된 스테이지 정보를 DTO로 반환
+        return StageInfoResponse.builder()
+                .uuid(stageEntity.getUuid())
+                .name(stageEntity.getName())
+                .address(stageEntity.getAddress())
+                .isStanding(stageEntity.getIsStanding())
+                .numOfRow(stageEntity.getNumOfRow())
+                .numOfCol(stageEntity.getNumOfCol())
+                .capacity(stageEntity.getCapacity())
+                .build();
+    }
+
+    /**
      * 주어진 UUID에 해당하는 스테이지를 업데이트합니다.
      * 요청된 데이터를 기반으로 스테이지의 세부 정보를 수정하고, 수정된 결과를 반환합니다.
      *
@@ -141,11 +209,9 @@ public class StageService {
      * @param stageUuid 삭제할 스테이지의 UUID.
      */
     public void deleteStage(UUID stageUuid) {
-        // 해당 UUID의 스테이지가 존재하는지 확인
         StageEntity stageEntity = stageRepository.findByUuid(stageUuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
 
-        // 스테이지 삭제
         stageRepository.delete(stageEntity);
     }
 }
