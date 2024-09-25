@@ -1,27 +1,25 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 
 import FavoriteButton from '@/components/atoms/button/FavoriteButton';
 import { CalendarFilled, Location } from '@/public/icons';
+import type { ConcertListItem } from '@/types/concert';
 
-interface ConcertCardProps {
-  concertId: string;
+interface ConcertCardProps extends ConcertListItem {
   href?: string;
-  musicians?: string[];
-  ticketingAt?: string;
-  stage?: string;
-  posterURL?: string;
   isFavorite?: boolean;
   onClickFavorite?: (id: string) => void;
 }
 
 const ConcertCard = ({
   concertId,
-  href,
-  musicians,
   ticketingAt,
-  stage,
+  title,
+  location,
   posterURL,
+  href,
   isFavorite,
   onClickFavorite,
 }: ConcertCardProps) => {
@@ -45,16 +43,16 @@ const ConcertCard = ({
         </div>
         {/* 컨텐츠 영역 */}
         <div>
-          <p className="text-xs font-medium truncate mb-1">
-            {musicians && musicians.join(' ')}
-          </p>
+          {title && (
+            <p className="text-xs font-medium truncate mb-1">{title}</p>
+          )}
           <div className="flex items-center gap-1 text-[8px] text-gray-500">
-            <CalendarFilled className="fill-current" />
+            <CalendarFilled width="6" height="8" className="fill-current" />
             {ticketingAt && <p>{ticketingAt}</p>}
           </div>
           <div className="flex items-center gap-1 text-[8px] text-gray-500 truncate">
-            <Location className="fill-current" />
-            {stage && <p>{stage}</p>}
+            <Location width="6" height="8" className="fill-current" />
+            {location && <p>{location}</p>}
           </div>
         </div>
       </div>
