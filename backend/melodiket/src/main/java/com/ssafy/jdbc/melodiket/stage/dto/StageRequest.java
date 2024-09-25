@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateStageRequest {
+public class StageRequest {
 
     @NotBlank(message = "Name is required and cannot be blank.")
     private String name;
