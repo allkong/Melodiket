@@ -106,3 +106,30 @@ export const CONCERT_LIST: ConcertListItem[] = [
     ticketingAt: '2024.09.03',
   },
 ];
+
+export const FAVORITE_MUSICIAN_LIST: {
+  index: number;
+  musicianName: string;
+  src: string;
+}[] = [
+  {
+    index: 0,
+    musicianName: '아이묭',
+    src: 'https://i1.sndcdn.com/artworks-Dq5srslWYpDO1H0j-cTCo1w-t500x500.jpg',
+  },
+  {
+    index: 1,
+    musicianName: 'hitsujibungaku',
+    src: 'https://i.pinimg.com/236x/65/3b/f5/653bf5ae181cab407c7cbd5c616672a6.jpg',
+  },
+  {
+    index: 2,
+    musicianName: '빈지노',
+    src: 'https://img.hankyung.com/photo/202103/01.25846226.3.jpg',
+  },
+  {
+    index: 3,
+    musicianName: '김장훈',
+    src: 'https://newsimg-hams.hankookilbo.com/2022/08/13/601df9d2-7c82-4b2d-bdd1-dc0bcc2e81e4.jpg',
+  },
+];

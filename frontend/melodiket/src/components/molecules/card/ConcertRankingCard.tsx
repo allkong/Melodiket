@@ -20,7 +20,7 @@ const ConcertRankingCard = ({
   return (
     <Link
       href={href || '/'}
-      className="flex flex-col w-[136px] h-[248px] rounded-md bg-white shadow-sm overflow-hidden"
+      className="flex flex-col flex-shrink-0 w-[136px] h-[248px] rounded-md bg-white shadow-[1px_1px_10px_rgba(143,0,255,0.2)] overflow-hidden"
     >
       <div className="relative w-full h-48">
         <Image
@@ -29,7 +29,7 @@ const ConcertRankingCard = ({
           className="object-cover"
           fill
         />
-        <div className="absolute top-0 left-3 flex items-center justify-center w-fit h-fit text-primary">
+        <div className="absolute top-0 left-1 flex items-center justify-center w-fit h-fit text-primary">
           <SubwayMark className="fill-current" />
           <p className="absolute top-0 text-white font-semibold text-tiny">
             {ranking}
