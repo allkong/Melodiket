@@ -5,6 +5,9 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
+import com.ssafy.jdbc.melodiket.auth.repository.AudienceRepository;
+import com.ssafy.jdbc.melodiket.auth.repository.MusicianRepository;
+import com.ssafy.jdbc.melodiket.auth.repository.StageMangerRepository;
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
@@ -18,8 +21,7 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
-import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
-import com.ssafy.jdbc.melodiket.user.entity.Role;
+import com.ssafy.jdbc.melodiket.user.entity.*;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,9 @@ import java.util.UUID;
 public class UserService implements AuthService {
 
     private final AppUserRepository appUserRepository;
+    private final AudienceRepository audienceRepository;
+    private final MusicianRepository musicianRepository;
+    private final StageMangerRepository stageMangerRepository;
     private final JwtService jwtService;
 
     @Override
@@ -52,27 +57,69 @@ public class UserService implements AuthService {
 
         String salt = PasswordUtil.generateSalt();
         String hashedPassword = PasswordUtil.hashPassword(signUpReq.password(), salt);
+        if (role == Role.AUDIENCE) {
+            AudienceEntity audience = AudienceEntity.builder()
+                    .uuid(UUID.randomUUID())
+                    .loginId(signUpReq.loginId())
+                    .password(hashedPassword)
+                    .salt(salt)
+                    .nickname(signUpReq.nickname())
+                    .role(role)
+                    .description(signUpReq.description())
+                    .imageUrl("1234")
+                    .build();
+            audienceRepository.save(audience);
 
-        AppUserEntity appUserEntity = AppUserEntity.builder()
-                .uuid(UUID.randomUUID())
-                .loginId(signUpReq.loginId())
-                .password(hashedPassword)
-                .salt(salt)
-                .nickname(signUpReq.nickname())
-                .role(role)
-                .description(signUpReq.description())
-                .build();
+            return new SignUpResp(
+                    audience.getId(),
+                    audience.getUuid(),
+                    audience.getLoginId(),
+                    audience.getNickname(),
+                    audience.getRole(),
+                    audience.getDescription()
+            );
+        } else if (role == Role.MUSICIAN) {
+            MusicianEntity musician = MusicianEntity.builder()
+                    .uuid(UUID.randomUUID())
+                    .loginId(signUpReq.loginId())
+                    .password(hashedPassword)
+                    .salt(salt)
+                    .nickname(signUpReq.nickname())
+                    .role(role)
+                    .description(signUpReq.description())
+                    .imageUrl("1234")
+                    .build();
+            musicianRepository.save(musician);
 
-        AppUserEntity user = appUserRepository.save(appUserEntity);
-
-        return new SignUpResp(
-                user.getId(),
-                user.getUuid(),
-                user.getLoginId(),
-                user.getNickname(),
-                user.getRole(),
-                user.getDescription()
-        );
+            return new SignUpResp(
+                    musician.getId(),
+                    musician.getUuid(),
+                    musician.getLoginId(),
+                    musician.getNickname(),
+                    musician.getRole(),
+                    musician.getDescription()
+            );
+        } else {
+            StageManagerEntity stageManager = StageManagerEntity.builder()
+                    .uuid(UUID.randomUUID())
+                    .loginId(signUpReq.loginId())
+                    .password(hashedPassword)
+                    .salt(salt)
+                    .nickname(signUpReq.nickname())
+                    .role(role)
+                    .description(signUpReq.description())
+                    .imageUrl("1234")
+                    .build();
+            stageMangerRepository.save(stageManager);
+            return new SignUpResp(
+                    stageManager.getId(),
+                    stageManager.getUuid(),
+                    stageManager.getLoginId(),
+                    stageManager.getNickname(),
+                    stageManager.getRole(),
+                    stageManager.getDescription()
+            );
+        }
     }
 
     @Override
