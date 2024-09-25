@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.service;
 
-import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
+import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageInfo;
