@@ -8,9 +8,14 @@ import type { CarouselConcert } from '@/types/concert';
 interface CarouselImageProps {
   size?: 'md' | 'lg';
   data: CarouselConcert;
+  rounded?: boolean;
 }
 
-const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
+const CarouselImage = ({
+  data,
+  size = 'md',
+  rounded = false,
+}: CarouselImageProps) => {
   return (
     <div
       className={clsx('relative w-full flex-shrink-0', {
@@ -21,7 +26,9 @@ const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
       <Image
         src={data.posterURL}
         alt="carousel 이미지"
-        className="object-cover"
+        className={clsx('object-cover', {
+          'rounded-lg': rounded,
+        })}
         fill
       />
       <div
@@ -30,7 +37,8 @@ const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
           {
             'h-[250px]': size === 'md',
             'h-[360px]': size === 'lg',
-          }
+          },
+          { 'rounded-lg': rounded }
         )}
       ></div>
       <div className="absolute flex flex-col bottom-3 left-3 text-white">
