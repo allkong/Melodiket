@@ -2,20 +2,29 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { CalendarFilled, Location, SubwayMark } from '@/public/icons';
+import type { ConcertListItem } from '@/types/concert';
 
-interface ConcertRankingCardProps {}
+interface ConcertRankingCardProps extends ConcertListItem {
+  ranking: number;
+  href?: string;
+}
 
-const ConcertRankingCard = ({}: ConcertRankingCardProps) => {
+const ConcertRankingCard = ({
+  ranking,
+  href,
+  title,
+  location,
+  posterURL,
+  ticketingAt,
+}: ConcertRankingCardProps) => {
   return (
     <Link
-      href="/"
+      href={href || '/'}
       className="flex flex-col w-[136px] h-[248px] rounded-md bg-white shadow-sm overflow-hidden"
     >
       <div className="relative w-full h-48">
         <Image
-          src={
-            'https://tkfile.yes24.com/upload2/PerfBlog/202211/20221122/20221122-44221.jpg'
-          }
+          src={posterURL}
           alt="공연 랭킹 카드 컴포넌트"
           className="object-cover"
           fill
@@ -23,20 +32,20 @@ const ConcertRankingCard = ({}: ConcertRankingCardProps) => {
         <div className="absolute top-0 left-3 flex items-center justify-center w-fit h-fit text-primary">
           <SubwayMark className="fill-current" />
           <p className="absolute top-0 text-white font-semibold text-tiny">
-            10
+            {ranking}
           </p>
         </div>
       </div>
       <div className="flex-grow h-0 px-3 py-2">
-        <p className="text-xs truncate">The Volunteers 1st Concert</p>
+        <p className="text-xs truncate">{title}</p>
         <div className="text-[8px] text-gray-500">
           <div className="flex items-center gap-1">
             <CalendarFilled width="6" height="8" className="fill-current" />
-            <p>2024.09.03</p>
+            <p>{ticketingAt}</p>
           </div>
           <div className="flex items-center gap-1">
             <Location width="6" height="8" className="fill-current" />
-            <p>고척스카이돔</p>
+            <p>{location}</p>
           </div>
         </div>
       </div>
