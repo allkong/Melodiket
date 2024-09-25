@@ -18,8 +18,8 @@ const FavoriteButton = ({
         className={clsx({
           'text-primary': isOn,
           'text-gray-300': !isOn,
-          'w-7': size == 'md',
-          'w-10': size == 'lg',
+          'w-7 h-auto': size == 'md',
+          'w-10 h-auto': size == 'lg',
         })}
         fill="currentColor"
         onClick={onClick}
