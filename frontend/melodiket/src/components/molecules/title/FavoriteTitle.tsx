@@ -9,7 +9,7 @@ interface FavoriteTitleProps {
 const FavoriteTitle = ({ type, total }: FavoriteTitleProps) => {
   return (
     <div className="flex items-center px-6 py-3 space-x-4 bg-white">
-      <LogoImage width={30} />
+      <LogoImage className="w-8 h-auto" />
       <div className="flex space-x-3 text-xl font-medium">
         <p>좋아하는 {FAVORITE_TYPES[type]}</p>
         <p className="text-gray-400">{total}</p>
