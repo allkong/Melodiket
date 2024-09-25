@@ -12,6 +12,7 @@ import Help from './help.svg';
 import Upload from './upload.svg';
 import CalendarFilled from './calendar-filled.svg';
 import Location from './location-filled.svg';
+import SubwayMark from './subway-mark.svg';
 import RoundQueueMusic from './round-queue-music.svg';
 
 export {
@@ -29,5 +30,6 @@ export {
   Upload,
   CalendarFilled,
   Location,
+  SubwayMark,
   RoundQueueMusic,
 };
