@@ -24,8 +24,6 @@ public class MusicianEntity extends AppUserEntity {
 //    @JoinColumn(name = "id", referencedColumnName = "id")
 //    private AppUserEntity user;
 
-    private String description;
-
     private String imageUrl;
 
     @OneToMany(mappedBy = "musicianEntity", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -35,7 +33,6 @@ public class MusicianEntity extends AppUserEntity {
     private List<FavoriteMusician> favoriteMusicians = new ArrayList<>();
 
     public MusicianEntity(String description, String imageUrl, List<ConcertParticipantMusicianEntity> concertParticipantMusicians, List<FavoriteMusician> favoriteMusicians) {
-        this.description = description;
         this.imageUrl = imageUrl;
         this.concertParticipantMusicians = concertParticipantMusicians != null ? concertParticipantMusicians : new ArrayList<>();
         this.favoriteMusicians = favoriteMusicians != null ? favoriteMusicians : new ArrayList<>();
