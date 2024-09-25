@@ -10,6 +10,9 @@ import Check from './check.svg';
 import Calendar from './calendar.svg';
 import Help from './help.svg';
 import Upload from './upload.svg';
+import CalendarFilled from './calendar-filled.svg';
+import Location from './location-filled.svg';
+import RoundQueueMusic from './round-queue-music.svg';
 
 export {
   LogoText,
@@ -24,4 +27,7 @@ export {
   Calendar,
   Help,
   Upload,
+  CalendarFilled,
+  Location,
+  RoundQueueMusic,
 };

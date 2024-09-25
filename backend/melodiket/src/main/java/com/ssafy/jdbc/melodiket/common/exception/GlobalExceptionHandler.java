@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = Map.of(
                 DETAIL_CODE, errorDetail.getDetailCode(),
                 DETAIL_MESSAGE, errorDetail.getDetailMessage(),
-                ADDITIONAL_INFO, e.getAdditionalInfo()
+                ADDITIONAL_INFO,e.getAdditionalInfo() == null ? "" : e.getAdditionalInfo()
         );
         return ResponseEntity.status(errorDetail.getStatus()).body(body);
     }

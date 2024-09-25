@@ -2,13 +2,12 @@ package com.ssafy.a310.bank.common.service.query;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.ssafy.a310.bank.account.service.query.BankAccountFilteringCondition;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class QueryDslConditionBuilder {
+public class QueryDslConditionBuilder<T extends QueryDslFilteringCondition> {
     private final String AND_SPLITTER = ",";
     private final String OR_SPLITTER = ";";
 
@@ -45,7 +44,7 @@ public class QueryDslConditionBuilder {
             if (index > 0) {
                 String key = segment.substring(0, index);
                 String value = segment.substring(index + splitter.length());
-                return new BankAccountFilteringCondition(key, operator, value);
+                return T.of(key, operator, value);
             }
         }
 
