@@ -15,6 +15,22 @@ export default function Home() {
     <div className="w-full bg-purple-100 overflow-y-auto">
       <Header />
       <div className="w-full px-7">
+        <details>
+          <summary>메뉴 이동하기</summary>
+          <div>
+            <Link href="/auth/sign-up">회원가입</Link>
+            &nbsp;
+            <Link href="/auth/login">로그인</Link>
+            &nbsp;
+            <Link href="/musicians">뮤지션정보</Link>
+            &nbsp;
+            <Link href="/concert/list">공연정보</Link>
+            &nbsp;
+            <Link href="/concert/register">공연생성</Link>
+            &nbsp;
+            <Link href="/favorites">좋아요</Link>
+          </div>
+        </details>
         <Carousel datas={CAROUSEL_DATAS} gap={4} size="lg" rounded />
         <div className="flex flex-col gap-6 my-3">
           <TicketInfoCarousel
@@ -45,22 +61,6 @@ export default function Home() {
             </section>
           </div>
         </div>
-        <details>
-          <summary>메뉴 이동하기</summary>
-          <div>
-            <Link href="/auth/sign-up">회원가입</Link>
-            &nbsp;
-            <Link href="/auth/login">로그인</Link>
-            &nbsp;
-            <Link href="/musicians">뮤지션정보</Link>
-            &nbsp;
-            <Link href="/concert/list">공연정보</Link>
-            &nbsp;
-            <Link href="/concert/register">공연생성</Link>
-            &nbsp;
-            <Link href="/favorites">좋아요</Link>
-          </div>
-        </details>
       </div>
     </div>
   );
