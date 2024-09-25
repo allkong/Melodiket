@@ -12,9 +12,9 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="w-full bg-purple-100 overflow-y-auto">
-      <Header />
-      <div className="w-full px-7">
+    <div className="bg-purple-100 overflow-y-auto">
+      <Header isFixed />
+      <div className="px-7 mt-16">
         <details>
           <summary>메뉴 이동하기</summary>
           <div>
