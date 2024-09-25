@@ -24,3 +24,20 @@ body {
     text-wrap: balance;
   }
 }
+
+input[type='date']::-webkit-datetime-edit-text,
+input[type='date']::-webkit-datetime-edit-year-field,
+input[type='date']::-webkit-datetime-edit-month-field,
+input[type='date']::-webkit-datetime-edit-day-field {
+  color: #17171b;
+}
+
+* {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
