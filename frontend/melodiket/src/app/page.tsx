@@ -8,6 +8,7 @@ import {
 } from '@/constants/concertMocks';
 import ConcertRankingCard from '@/components/molecules/card/ConcertRankingCard';
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -44,6 +45,22 @@ export default function Home() {
             </section>
           </div>
         </div>
+        <details>
+          <summary>메뉴 이동하기</summary>
+          <div>
+            <Link href="/auth/sign-up">회원가입</Link>
+            &nbsp;
+            <Link href="/auth/login">로그인</Link>
+            &nbsp;
+            <Link href="/musicians">뮤지션정보</Link>
+            &nbsp;
+            <Link href="/concert/list">공연정보</Link>
+            &nbsp;
+            <Link href="/concert/register">공연생성</Link>
+            &nbsp;
+            <Link href="/favorites">좋아요</Link>
+          </div>
+        </details>
       </div>
     </div>
   );
