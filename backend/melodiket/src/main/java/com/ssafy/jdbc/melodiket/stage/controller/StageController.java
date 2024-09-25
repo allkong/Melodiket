@@ -55,16 +55,17 @@ public class StageController {
 
     @PutMapping("/{uuid}")
     public ResponseEntity<StageInfoResponse> updateStage(
+            Principal principal,
             @PathVariable("uuid") UUID stageUuid,
             @RequestBody @Valid StageRequest updateStageRequest
     ) {
-        StageInfoResponse response = stageService.updateStage(stageUuid, updateStageRequest);
+        StageInfoResponse response = stageService.updateStage(principal, stageUuid, updateStageRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteStage(@PathVariable("uuid") UUID stageUuid) {
-        stageService.deleteStage(stageUuid);
+    public ResponseEntity<Void> deleteStage(Principal principal, @PathVariable("uuid") UUID stageUuid) {
+        stageService.deleteStage(principal, stageUuid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
