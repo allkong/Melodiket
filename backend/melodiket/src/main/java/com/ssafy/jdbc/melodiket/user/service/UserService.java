@@ -66,7 +66,7 @@ public class UserService implements AuthService {
                     .nickname(signUpReq.nickname())
                     .role(role)
                     .description(signUpReq.description())
-                    .imageUrl("1234")
+                    .imageUrl(signUpReq.imageUrl())
                     .build();
             audienceRepository.save(audience);
 
@@ -87,7 +87,7 @@ public class UserService implements AuthService {
                     .nickname(signUpReq.nickname())
                     .role(role)
                     .description(signUpReq.description())
-                    .imageUrl("1234")
+                    .imageUrl(signUpReq.imageUrl())
                     .build();
             musicianRepository.save(musician);
 
@@ -108,7 +108,7 @@ public class UserService implements AuthService {
                     .nickname(signUpReq.nickname())
                     .role(role)
                     .description(signUpReq.description())
-                    .imageUrl("1234")
+                    .imageUrl(signUpReq.imageUrl())
                     .build();
             stageMangerRepository.save(stageManager);
             return new SignUpResp(

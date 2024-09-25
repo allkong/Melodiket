@@ -1,20 +1,28 @@
 package com.ssafy.jdbc.melodiket.aws.service;
 
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.HttpMethod;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.ssafy.jdbc.melodiket.aws.dto.CreateUploadPathRequest;
+import com.ssafy.jdbc.melodiket.aws.dto.PresignedUrl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.util.concurrent.CompletableFuture;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class S3Service {
-
-    private final AmazonS3Client amazonS3;
+    private final AmazonS3 amazonS3;
+    @Value("${cloud.aws.s3.presigned-url-expired}")
+    private Long EXPIRE_TIME;
 
     @Value("${cloud.aws.s3.bucket}")
     private String BUCKET_NAME;
@@ -22,14 +30,37 @@ public class S3Service {
     @Value("${cloudfront.domain}")
     private String CLOUDFRONT_DOMAIN;
 
-    @Async("imageUploadExecutor")
-    public CompletableFuture<String> uploadFile(File file, String key) {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        amazonS3.putObject(BUCKET_NAME, key, file);
+    public PresignedUrl createPresignedUrl(CreateUploadPathRequest request) {
+        String fileName = request.getFileName();
+        String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+        String path = String.format("upload/%s/%s/%s",
+                    request.getType().name().toLowerCase(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")),
+                    UUID.randomUUID().toString().replace("-","")+"."+ext
+                );
+        return new PresignedUrl(
+                generatePresignedUrl(path),
+                String.format("%s/%s",CLOUDFRONT_DOMAIN,path)
+        );
+    }
 
-        future.complete(String.format("https://%s/%s",CLOUDFRONT_DOMAIN,key));
+    public String generatePresignedUrl(String path) {
+        if(path.startsWith("/")) {
+            path = path.substring(1);
+        }
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(BUCKET_NAME, path)
+                        .withMethod(HttpMethod.PUT)
+                        .withExpiration(makeExpirationTime(EXPIRE_TIME) );
+        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+    }
 
-        return future;
+    private Date makeExpirationTime(long expiredTime){
+        Date expiration = new Date();
+        long expireTimeMillis = expiration.getTime();
+        expireTimeMillis += expiredTime;
+        expiration.setTime(expireTimeMillis);
+        return expiration;
     }
 
 
