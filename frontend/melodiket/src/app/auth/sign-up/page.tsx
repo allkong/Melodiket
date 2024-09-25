@@ -47,7 +47,6 @@ const Page = () => {
         <SignUpDescription
           onNext={(value) => {
             const data: SignUpData = { ...signUpData, description: value };
-            console.log(data); // 서버에 mutate 요청 및 로딩 처리
             setStep('SUCCESS');
           }}
         />

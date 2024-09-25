@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 
-import type { Concert } from '@/types/concert';
+import type { CarouselConcert } from '@/types/concert';
 import CarouselImage from '@/components/molecules/carousel/CarouselImage';
 import CarouselIndicator from '@/components/molecules/carousel/CarouselIndicator';
 import useElementSize from '@/hooks/useElementSize';
 import useAutoIndex from '@/hooks/useAutoIndex';
 
 interface CarouselProps {
-  datas: Concert[];
+  datas: CarouselConcert[];
   size?: 'md' | 'lg';
   delay?: number;
   gap?: number;

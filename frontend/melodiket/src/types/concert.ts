@@ -1,8 +1,23 @@
 export interface Concert {
   index: number;
-  image: string;
+  concertId: string;
+  ticketingAt: string;
+  startedAt: string;
   title: string;
   description: string;
-  startedAt: string;
+  musicians: string[];
   location: string;
+  posterURL: string;
 }
+
+export interface CarouselConcert
+  extends Pick<
+    Concert,
+    'index' | 'description' | 'location' | 'title' | 'ticketingAt' | 'posterURL'
+  > {}
+
+export interface ConcertListItem
+  extends Pick<
+    Concert,
+    'concertId' | 'posterURL' | 'title' | 'location' | 'ticketingAt'
+  > {}
