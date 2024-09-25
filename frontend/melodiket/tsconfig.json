@@ -23,5 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "src/**/*.stories.tsx"]
+  "exclude": ["node_modules", "src/**/*.stories.tsx", "src/app/mocks/*.tsx"]
 }
