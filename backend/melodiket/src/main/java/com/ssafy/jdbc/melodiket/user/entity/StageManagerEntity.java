@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class StageManagerEntity extends AppUserEntity {
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id")
@@ -26,4 +28,9 @@ public class StageManagerEntity extends AppUserEntity {
     @OneToMany(mappedBy = "stageManagerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
 
+    public StageManagerEntity(String description, String imageUrl, List<StageAssignmentEntity> stageAssignmentEntities) {
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.stageAssignmentEntities = stageAssignmentEntities != null ? stageAssignmentEntities : new ArrayList<>();
+    }
 }
