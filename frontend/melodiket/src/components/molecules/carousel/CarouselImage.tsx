@@ -3,11 +3,11 @@ import Image from 'next/image';
 import clsx from 'clsx';
 
 import { Location, CalendarFilled } from '@/public/icons';
-import type { Concert } from '@/types/concert';
+import type { CarouselConcert } from '@/types/concert';
 
 interface CarouselImageProps {
   size?: 'md' | 'lg';
-  data: Concert;
+  data: CarouselConcert;
 }
 
 const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
@@ -19,7 +19,7 @@ const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
       })}
     >
       <Image
-        src={data.image}
+        src={data.posterURL}
         alt="carousel 이미지"
         className="object-cover"
         fill
@@ -39,7 +39,7 @@ const CarouselImage = ({ size = 'md', data }: CarouselImageProps) => {
         </p>
         <div className="flex items-center gap-1">
           <CalendarFilled width="8" height="10" className="fill-current" />
-          <p className="text-sm">{data.startedAt}</p>
+          <p className="text-sm">{data.ticketingAt}</p>
         </div>
         <div className="flex items-center gap-1">
           <Location width="8" height="10" className="fill-current" />
