@@ -2,13 +2,14 @@ import type { Meta, StoryObj } from '@storybook/react';
 import useMenuStore from '@/store/menuStore';
 import Menu from './Menu';
 import React from 'react';
-import MenuItem from './MenuItem';
-import MenuDivider from './MenuDivider';
-import MenuProfile from './MenuProfile';
-import MenuHeader from './MenuHeader';
 
 const meta: Meta<typeof Menu> = {
   component: Menu,
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 };
 
 export default meta;
@@ -21,19 +22,19 @@ export const Default: Story = {
     return (
       <div id="menu-portal">
         <Menu>
-          <MenuHeader />
-          <MenuProfile />
-          <MenuDivider />
-          <MenuItem />
-          <MenuItem />
-          <MenuDivider />
-          <MenuItem />
-          <MenuItem />
-          <MenuItem />
-          <MenuItem />
-          <MenuDivider />
-          <MenuItem />
-          <MenuItem />
+          <Menu.Header />
+          <Menu.Profile />
+          <Menu.Divider />
+          <Menu.Item />
+          <Menu.Item />
+          <Menu.Divider />
+          <Menu.Item />
+          <Menu.Item />
+          <Menu.Item />
+          <Menu.Item />
+          <Menu.Divider />
+          <Menu.Item />
+          <Menu.Item />
         </Menu>
         <button onClick={() => setIsOpen(!isOpen)}>+</button>
       </div>
