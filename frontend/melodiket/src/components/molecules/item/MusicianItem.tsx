@@ -22,7 +22,7 @@ const MusicianItem = ({
         <Profile src={src} size="sm" />
         <div className="space-y-1">
           <p className="font-medium">{musicianName}</p>
-          <div className="flex flex-row space-x-2.5">
+          <div className="flex flex-row space-x-2.5 text-sm">
             <p>
               찜 <span className="text-primary">{favoriteCount}</span>
             </p>
