@@ -8,6 +8,7 @@ import MusicianSelectButton from '@/components/molecules/button/MusicianSelectBu
 import TextBanner from '@/components/molecules/text/TextBanner';
 
 import { ConcertData } from '@/types/concert';
+import LineDivider from '@/components/atoms/divider/LineDivider';
 
 interface MusicianInformationProps {
   concertData: ConcertData;
@@ -51,7 +52,14 @@ const MusicianInformation = ({
     '잔나비',
     '이디어츠',
     '박유빈',
+    '정유빈',
   ];
+
+  const filteredMusicians = musicianName
+    ? allMusicians.filter((musician) =>
+        musician.toLowerCase().includes(musicianName.toLowerCase())
+      )
+    : [];
 
   const selectedMusicians = allMusicians.filter(
     (musician) => !!musicianList[musician]
@@ -75,6 +83,16 @@ const MusicianInformation = ({
           />
         </div>
         <div className="overflow-y-auto">
+          {filteredMusicians.length > 0 &&
+            filteredMusicians.map((musician) => (
+              <MusicianSelectButton
+                key={musician}
+                label={musician}
+                isSelected={!!musicianList[musician]}
+                onClick={() => toggleMusician(musician)}
+              />
+            ))}
+          {filteredMusicians.length > 0 && <LineDivider />}
           {selectedMusicians.map((musician) => (
             <MusicianSelectButton
               key={musician}
