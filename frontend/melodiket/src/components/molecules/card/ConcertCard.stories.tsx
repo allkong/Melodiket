@@ -22,7 +22,6 @@ export const Favorite: Story = {
 
     const handleClickFavorite = (concertId: string) => {
       // 서버로 api 요청
-      console.log(concertId);
 
       // api 요청 결과
       const response = !favorite;
