@@ -13,6 +13,7 @@
     "mock": "npx tsx watch ./src/mocks/http.ts"
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-query": "^5.55.4",
     "@tanstack/react-query-devtools": "^5.55.4",
     "clsx": "^2.1.1",
