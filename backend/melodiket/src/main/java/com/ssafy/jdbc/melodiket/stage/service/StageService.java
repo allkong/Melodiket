@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -175,10 +176,18 @@ public class StageService {
      * @param updateStageRequest 수정할 데이터가 담긴 요청 객체.
      * @return StageInfoResponse 수정된 스테이지 정보를 담은 응답 DTO.
      */
-    public StageInfoResponse updateStage(UUID stageUuid, StageRequest updateStageRequest) {
+    public StageInfoResponse updateStage(Principal principal, UUID stageUuid, StageRequest updateStageRequest) {
         // 해당 UUID의 스테이지를 조회 (존재하지 않으면 예외 발생)
         StageEntity stageEntity = stageRepository.findByUuid(stageUuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
+
+        // Stage_Assignment에 해당 유저가 존재하는지 확인
+        String loginId = principal.getName();
+        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId).orElseThrow(()->new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+
+        if(!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stageEntity, stageManager)){
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
 
         // 요청된 데이터로 스테이지 필드 수정
         stageEntity.update(
@@ -208,9 +217,18 @@ public class StageService {
      *
      * @param stageUuid 삭제할 스테이지의 UUID.
      */
-    public void deleteStage(UUID stageUuid) {
+    public void deleteStage(Principal principal, UUID stageUuid) {
+        // 해당 UUID의 스테이지를 조회 (존재하지 않으면 예외 발생)
         StageEntity stageEntity = stageRepository.findByUuid(stageUuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
+
+        // Stage_Assignment에 해당 유저가 존재하는지 확인
+        String loginId = principal.getName();
+        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId).orElseThrow(()->new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+
+        if(!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stageEntity, stageManager)){
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
 
         stageRepository.delete(stageEntity);
     }
