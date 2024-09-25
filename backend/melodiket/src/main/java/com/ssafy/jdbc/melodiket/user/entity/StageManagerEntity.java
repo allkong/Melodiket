@@ -21,15 +21,12 @@ public class StageManagerEntity extends AppUserEntity {
     @JoinColumn(name = "id", referencedColumnName = "id")
     private AppUserEntity user;
 
-    private String description;
-
     private String imageUrl;
 
     @OneToMany(mappedBy = "stageManagerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
 
     public StageManagerEntity(String description, String imageUrl, List<StageAssignmentEntity> stageAssignmentEntities) {
-        this.description = description;
         this.imageUrl = imageUrl;
         this.stageAssignmentEntities = stageAssignmentEntities != null ? stageAssignmentEntities : new ArrayList<>();
     }
