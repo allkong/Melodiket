@@ -20,7 +20,14 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
   const [favoriteMusicianStake, setFavoriteMusicianStake] = useState('');
 
   const isFormValid =
-    ticketPrice && ownerStake && musicianStake && favoriteMusicianStake;
+    ticketPrice &&
+    ownerStake &&
+    musicianStake &&
+    favoriteMusicianStake &&
+    Number(ticketPrice) ===
+      Number(ownerStake) +
+        Number(musicianStake) +
+        Number(favoriteMusicianStake);
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
