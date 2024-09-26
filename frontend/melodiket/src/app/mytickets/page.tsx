@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 
 import { useReservedTickets } from '@/services/ticket/useReservedTickets';
 import { HISTORY_TYPES, TICKET_STATUS } from '@/constants/tickets';
@@ -9,7 +10,6 @@ import Header from '@/components/organisms/navigation/Header';
 import Tabs from '@/components/organisms/controls/Tabs';
 import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
-import Link from 'next/link';
 
 const Page = () => {
   const { data: tickets } = useReservedTickets();
