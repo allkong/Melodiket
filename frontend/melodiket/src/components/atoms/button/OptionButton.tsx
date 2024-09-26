@@ -4,12 +4,14 @@ interface OptionButtonProps {
   label: string;
   isSelected?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }
 
 const OptionButton = ({
   label,
   isSelected = false,
   onClick,
+  disabled,
 }: OptionButtonProps) => {
   return (
     <button
@@ -20,6 +22,7 @@ const OptionButton = ({
           ? 'text-purple-400 bg-purple-50'
           : 'text-gray-400 bg-gray-100'
       )}
+      disabled={disabled}
     >
       {label}
     </button>
