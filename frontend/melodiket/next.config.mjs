@@ -6,6 +6,11 @@ const nextConfig = {
       use: ['@svgr/webpack'],
     });
 
+    config.module.rules.push({
+      test: /\.stories\.tsx?$/,
+      use: 'ignore-loader',
+    });
+
     return config;
   },
   images: {
