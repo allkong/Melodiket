@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.ticket.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import jakarta.persistence.*;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketEntity {
+public class TicketEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +44,4 @@ public class TicketEntity {
     private Long seatCol;
     private Date usedAt;
     private Date refundedAt;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Date createdAt;
 }
