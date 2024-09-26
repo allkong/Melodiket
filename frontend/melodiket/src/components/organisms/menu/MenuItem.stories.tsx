@@ -4,6 +4,11 @@ import { BackLine } from '@/public/icons';
 
 const meta: Meta<typeof MenuItem> = {
   component: MenuItem,
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 };
 
 export default meta;
@@ -13,5 +18,6 @@ export const Default: Story = {
   args: {
     icon: <BackLine />,
     label: '로그아웃',
+    href: '/',
   },
 };
