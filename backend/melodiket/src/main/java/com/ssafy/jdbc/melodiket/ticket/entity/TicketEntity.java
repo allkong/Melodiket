@@ -41,6 +41,8 @@ public class TicketEntity {
 
     private Long seatRow;
     private Long seatCol;
+    private Date usedAt;
+    private Date refundedAt;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
