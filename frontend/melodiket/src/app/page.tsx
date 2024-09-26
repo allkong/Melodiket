@@ -12,27 +12,9 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="bg-purple-100 overflow-y-auto">
-      <Header isFixed />
-      <div className="px-7 mt-16">
-        <details>
-          <summary>메뉴 이동하기</summary>
-          <div>
-            <Link href="/auth/sign-up">회원가입</Link>
-            &nbsp;
-            <Link href="/auth/login">로그인</Link>
-            &nbsp;
-            <Link href="/musicians">뮤지션정보</Link>
-            &nbsp;
-            <Link href="/concert/list">공연정보</Link>
-            &nbsp;
-            <Link href="/concert/register">공연생성</Link>
-            &nbsp;
-            <Link href="/favorites">좋아요</Link>
-            &nbsp;
-            <Link href="/mytickets">예매내역</Link>
-          </div>
-        </details>
+    <div className="w-full bg-purple-100 overflow-y-auto">
+      <Header />
+      <div className="w-full px-7">
         <Carousel datas={CAROUSEL_DATAS} gap={4} size="lg" rounded />
         <div className="flex flex-col gap-6 my-3">
           <TicketInfoCarousel
