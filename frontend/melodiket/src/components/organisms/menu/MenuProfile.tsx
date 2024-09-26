@@ -13,13 +13,24 @@ const MenuProfile = () => {
   const { user } = useAuthStore();
   const { setIsOpen: setIsMenuOpen } = useMenuStore();
 
-  const handleClick = (href: string) => {
+  const closeMenuAndNavigate = (href: string) => {
     setIsMenuOpen(false);
     router.push(href);
   };
 
+  const handleClickProfile = () => {
+    if (user) {
+      closeMenuAndNavigate('/');
+    } else {
+      closeMenuAndNavigate('/auth/login');
+    }
+  };
+
   return (
-    <div className="flex items-center gap-4 w-full h-[104px] px-5 py-4 text-gray-500 cursor-pointer">
+    <div
+      onClick={handleClickProfile}
+      className="flex items-center gap-4 w-full h-[104px] px-5 py-4 text-gray-500 cursor-pointer"
+    >
       <Profile size="sm" />
       {user ? (
         <div className="flex flex-col gap-3">
@@ -34,7 +45,7 @@ const MenuProfile = () => {
           />
         </div>
       ) : (
-        <div onClick={() => handleClick('/auth/login')}>
+        <div>
           <p>로그인 후 이용해주세요.</p>
         </div>
       )}
