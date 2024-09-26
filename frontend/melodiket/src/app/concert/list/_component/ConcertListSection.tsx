@@ -1,7 +1,7 @@
 'use client';
 
 import ConcertCard from '@/components/molecules/card/ConcertCard';
-import useConcertList from '@/services/concert/useConcertList';
+import useConcertList from '@/services/concert/fetchConcertList';
 
 const ConcertListSection = () => {
   const { data: datas } = useConcertList();

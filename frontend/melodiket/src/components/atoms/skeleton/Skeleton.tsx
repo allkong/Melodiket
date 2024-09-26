@@ -18,7 +18,7 @@ const Skeleton = ({
       {Array.from({ length: count }, (_, idx) => idx).map((idx) => (
         <div
           key={idx}
-          className={clsx('bg-gray-200 rounded animate-pulse', {
+          className={clsx('bg-gray-200 rounded animate-pulse flex-shrink-0', {
             'rounded-full': rounded,
           })}
           style={{ width, height }}
