@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.account.entity.AccountCertificationEntity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,10 @@ import java.util.UUID;
 @Table(name = "app_user")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class AppUserEntity implements UserDetails {
+public class AppUserEntity extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
