@@ -25,6 +25,8 @@ import Guitar from './guitar.svg';
 import Microphone from './microphone.svg';
 import Music from './music.svg';
 import MyPage from './my-page.svg';
+import MLDY from './mldy.svg';
+import Authority from './authority.svg';
 
 export {
   LogoText,
@@ -54,4 +56,6 @@ export {
   Microphone,
   Music,
   MyPage,
+  MLDY,
+  Authority,
 };
