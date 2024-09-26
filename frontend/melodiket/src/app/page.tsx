@@ -29,6 +29,8 @@ export default function Home() {
             <Link href="/concert/register">공연생성</Link>
             &nbsp;
             <Link href="/favorites">좋아요</Link>
+            &nbsp;
+            <Link href="/mytickets">예매내역</Link>
           </div>
         </details>
         <Carousel datas={CAROUSEL_DATAS} gap={4} size="lg" rounded />

@@ -1,21 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useReservedTickets } from '@/services/ticket/useReservedTickets';
-import { HISTORY_TYPES } from '@/constants/tickets';
+import { HISTORY_TYPES, TICKET_STATUS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
 import Tabs from '@/components/organisms/controls/Tabs';
 import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
+import Link from 'next/link';
 
 const Page = () => {
   const { data: tickets } = useReservedTickets();
-  const [activeTab, setActiveTab] = useState(Object.keys(HISTORY_TYPES)[0]);
+  const [activeTab, setActiveTab] =
+    useState<keyof typeof HISTORY_TYPES>('reserved');
+
+  const filteredTickets = useMemo(() => {
+    return (
+      tickets?.filter((ticket) => {
+        if (activeTab === 'reserved') {
+          return (
+            ticket.status === TICKET_STATUS.reserved ||
+            ticket.status === TICKET_STATUS.used
+          );
+        }
+        return ticket.status === TICKET_STATUS.cancelled;
+      }) || []
+    );
+  }, [tickets, activeTab]);
 
   const handleTabClick = (tabValue: string) => {
-    setActiveTab(tabValue);
+    setActiveTab(tabValue as keyof typeof HISTORY_TYPES);
   };
 
   return (
@@ -27,19 +43,31 @@ const Page = () => {
         onClick={handleTabClick}
         labelMap={HISTORY_TYPES}
       />
-      {tickets?.length ? (
-        tickets.map((ticket) => (
-          <TicketItem
-            key={ticket.ticketId}
-            src={ticket.poster}
-            concertTitle={ticket.concertTitle}
-            stageName={ticket.stageName}
-            createdAt={ticket.createdAt || ''}
-            startAt={ticket.startAt}
-          />
+      {filteredTickets.length ? (
+        filteredTickets.map((ticket) => (
+          <Link
+            href={`/mytickets/${ticket.ticketUuid}`}
+            key={ticket.ticketUuid}
+          >
+            <TicketItem
+              src={ticket.posterCid}
+              concertTitle={ticket.concertTitle}
+              stageName={ticket.stageName}
+              createdAt={ticket.createdAt}
+              {...(ticket.refundAt
+                ? { refundAt: ticket.refundAt }
+                : { startAt: ticket.startAt })}
+            />
+          </Link>
         ))
       ) : (
-        <EmptyData text="예매한 공연이 없어요" />
+        <EmptyData
+          text={
+            activeTab === 'reserved'
+              ? '예매한 공연이 없어요'
+              : '취소한 공연이 없어요'
+          }
+        />
       )}
     </div>
   );

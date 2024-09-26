@@ -3,7 +3,7 @@ import customFetch from '../customFetch';
 import { Ticket, TicketsResponse } from '@/types/ticket';
 
 const getReservedTickets = async () => {
-  const response = await customFetch<TicketsResponse>('/concerts/tickets/me');
+  const response = await customFetch<TicketsResponse>('/tickets/me');
   return response;
 };
 
