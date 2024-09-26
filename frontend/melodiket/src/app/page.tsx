@@ -8,7 +8,6 @@ import {
 } from '@/constants/concertMocks';
 import ConcertRankingCard from '@/components/molecules/card/ConcertRankingCard';
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
-import Link from 'next/link';
 
 export default function Home() {
   return (
