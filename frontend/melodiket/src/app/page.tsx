@@ -3,16 +3,18 @@ import Carousel from '@/components/molecules/carousel/Carousel';
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
 import {
   CAROUSEL_DATAS,
-  CONCERT_LIST,
   FAVORITE_MUSICIAN_LIST,
 } from '@/constants/concertMocks';
-import ConcertRankingCard from '@/components/molecules/card/ConcertRankingCard';
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
-import Link from 'next/link';
+import ConcertRankingSection from './_component/ConcertRankingSection';
+import { HydrationBoundary } from '@tanstack/react-query';
+import { useConcertListDehydrateState } from '@/services/concert/useConcertList';
+import { Suspense } from 'react';
+import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 
 export default function Home() {
   return (
-    <div className="w-full bg-purple-100 overflow-y-auto">
+    <div className="w-full min-h-screen bg-purple-100 overflow-y-auto">
       <Header />
       <div className="w-full px-7">
         <Carousel datas={CAROUSEL_DATAS} gap={4} size="lg" rounded />
@@ -24,13 +26,11 @@ export default function Home() {
             <p className="text-xl font-medium">공연 랭킹</p>
             <section className="w-full py-2 overflow-x-auto">
               <div className="flex gap-2">
-                {CONCERT_LIST.map((data, idx) => (
-                  <ConcertRankingCard
-                    key={data.concertId}
-                    {...data}
-                    ranking={idx + 1}
-                  />
-                ))}
+                <HydrationBoundary state={useConcertListDehydrateState()}>
+                  <Suspense fallback={<ConcertRankingCardSkeleton count={5} />}>
+                    <ConcertRankingSection />
+                  </Suspense>
+                </HydrationBoundary>
               </div>
             </section>
           </div>
