@@ -16,10 +16,10 @@ const MenuHeader = () => {
 
   return (
     <div className="flex justify-between items-center w-full h-14 px-4 text-gray-500">
-      <div onClick={() => handleClick('/')}>
+      <div className="cursor-pointer" onClick={() => handleClick('/')}>
         <Home className="fill-current" />
       </div>
-      <div onClick={() => handleClick('/')}>
+      <div className="cursor-pointer" onClick={() => handleClick('/')}>
         <Notification className="fill-current" />
       </div>
     </div>
