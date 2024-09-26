@@ -1,6 +1,9 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 import { Home, Notification } from '@/public/icons';
 import useMenuStore from '@/store/menuStore';
-import { useRouter } from 'next/navigation';
 
 const MenuHeader = () => {
   const { setIsOpen } = useMenuStore();

@@ -18,12 +18,12 @@ const MenuMain = ({ children }: MenuMainProps) => {
   const { width } = useElementSize(containerRef);
 
   return (
-    <div className="relative w-full max-w-xl h-screen">
+    <div className="relative top-0 left-0 w-full">
       <div
         className={clsx(
           'absolute top-0 left-0 h-screen w-full bg-black transition-opacity duration-300',
           {
-            'opacity-40': isOpen,
+            'opacity-60 pointer-events-auto': isOpen,
             'opacity-0 pointer-events-none': !isOpen,
           }
         )}
@@ -32,13 +32,15 @@ const MenuMain = ({ children }: MenuMainProps) => {
       <div
         ref={containerRef}
         className={clsx(
-          'absolute top-0 left-0 h-screen min-w-[300px] w-2/3 bg-white transition-transform duration-300 ease-out'
+          'absolute top-0 left-0 h-screen min-w-[300px] w-2/3 bg-white transition-transform duration-300 ease-out pointer-events-auto'
         )}
         style={{
           transform: isOpen ? 'translate(0)' : `translate(-${width}px)`,
         }}
       >
-        <div className="w-full flex flex-col gap-3">{children}</div>
+        <div className="w-full h-screen space-y-3 pb-10 overflow-y-auto">
+          {children}
+        </div>
       </div>
     </div>
   );
