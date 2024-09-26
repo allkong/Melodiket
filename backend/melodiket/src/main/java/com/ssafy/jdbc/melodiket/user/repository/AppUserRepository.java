@@ -1,4 +1,4 @@
-package com.ssafy.jdbc.melodiket.auth.repository;
+package com.ssafy.jdbc.melodiket.user.repository;
 
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
