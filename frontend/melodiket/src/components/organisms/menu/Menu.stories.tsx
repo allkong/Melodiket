@@ -34,7 +34,7 @@ export const Default: Story = {
       <div id="menu-portal">
         <Menu>
           <Menu.Header />
-          <Menu.Profile nickname="박유빈님" imageURL="" role="공연장 관리자" />
+          <Menu.Profile />
           <Menu.Divider />
           <Menu.Item href="/" icon={<Music />} label="공연" />
           <Menu.Item href="/" icon={<Guitar />} label="뮤지션" />
