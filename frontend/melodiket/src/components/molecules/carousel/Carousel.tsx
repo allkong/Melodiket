@@ -42,7 +42,7 @@ const Carousel = ({
 
   useEffect(() => {
     setTranslate(datas.map((_, index) => getTranslateValue(index, width, gap)));
-  }, [width, gap]);
+  }, [datas, width, gap]);
 
   return (
     <div
