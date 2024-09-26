@@ -1,9 +1,13 @@
+import { TICKET_STATUS } from '@/constants/tickets';
+
 export interface Ticket {
-  ticketId: number;
-  poster: string;
+  ticketUuid: string;
   concertTitle: string;
+  posterCid: string;
   stageName: string;
-  startAt: string;
+  stageAddress: string;
+  status: TicketStatus;
+  startAt?: string;
   createdAt?: string;
   refundAt?: string;
 }
@@ -11,3 +15,5 @@ export interface Ticket {
 export interface TicketsResponse {
   result: Ticket[];
 }
+
+export type TicketStatus = (typeof TICKET_STATUS)[keyof typeof TICKET_STATUS];
