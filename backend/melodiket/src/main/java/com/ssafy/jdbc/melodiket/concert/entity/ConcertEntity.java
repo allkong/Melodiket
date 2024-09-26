@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConcertEntity {
+public class ConcertEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +38,6 @@ public class ConcertEntity {
 
     @Column(nullable = false)
     private Date ticketingAt;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Date createdAt;
 
     @Column(nullable = false)
     private Long availableTickets;
