@@ -6,12 +6,15 @@ import clsx from 'clsx';
 import MenuButton from '@/components/atoms/button/MenuButton';
 import SearchButton from '@/components/atoms/button/SearchButton';
 import { LogoText } from '@/public/icons';
+import useMenuStore from '@/store/menuStore';
 
 interface HeaderProps {
   isFixed?: boolean;
 }
 
 const Header = ({ isFixed = false }: HeaderProps) => {
+  const { isOpen: isMenuOpen, setIsOpen: setIsMenuOpen } = useMenuStore();
+
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -35,7 +38,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
       )}
     >
       <div className="flex items-center justify-between max-w-xl px-6 py-4 mx-auto">
-        <MenuButton />
+        <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)} />
         <LogoText />
         <SearchButton />
       </div>
