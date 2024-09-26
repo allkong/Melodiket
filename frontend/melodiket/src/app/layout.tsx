@@ -26,6 +26,10 @@ export default function RootLayout({
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
           </div>
+          <div
+            id="menu-portal"
+            className="fixed overflow-x-hidden top-0 left-1/2 -translate-x-1/2 max-w-xl w-full min-h-screen mx-auto z-10 pointer-events-none"
+          ></div>
         </Providers>
       </body>
     </html>

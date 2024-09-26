@@ -3,7 +3,7 @@ import Image from 'next/image';
 import defaultUserImage from '@/public/images/default-user-image.jpg';
 
 interface ProfileProps {
-  src: string;
+  src?: string;
   size: 'sm' | 'md' | 'lg';
 }
 
