@@ -11,7 +11,6 @@ import {
   Basket,
   Card,
   Favorite,
-  ForwardLine,
   Guitar,
   Microphone,
   Music,
@@ -45,9 +44,9 @@ const Header = ({ isFixed = false }: HeaderProps) => {
     <>
       <header
         className={clsx(
-          isFixed ? 'fixed top-0 left-0 right-0 w-full' : 'relative',
-          'transition-colors duration-300 z-10',
-          isFixed && isScrolled ? 'bg-white' : 'bg-transparent'
+          isFixed &&
+            'fixed top-0 w-full z-10 transition-colors duration-300 max-w-xl mx-auto',
+          isFixed && (isScrolled ? 'bg-white' : 'bg-transparent')
         )}
       >
         <div className="flex items-center justify-between max-w-xl px-6 py-4 mx-auto">

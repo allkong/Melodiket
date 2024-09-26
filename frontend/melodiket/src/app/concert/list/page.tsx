@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic';
 
-import Carousel from '@/components/molecules/carousel/Carousel';
-import Header from '@/components/organisms/navigation/Header';
-import ConcertCard from '@/components/molecules/card/ConcertCard';
 import { CAROUSEL_DATAS, CONCERT_LIST } from '@/constants/concertMocks';
+import Header from '@/components/organisms/navigation/Header';
+import Carousel from '@/components/molecules/carousel/Carousel';
+import ConcertCard from '@/components/molecules/card/ConcertCard';
 
 const ControlsBar = dynamic(
   () => import('@/components/organisms/controls/ControlsBar'),
