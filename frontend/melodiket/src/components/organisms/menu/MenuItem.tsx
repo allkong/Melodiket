@@ -1,4 +1,7 @@
-import Link from 'next/link';
+'use client';
+
+import useMenuStore from '@/store/menuStore';
+import { useRouter } from 'next/navigation';
 import { ReactElement } from 'react';
 
 interface MenuItemProps {
@@ -8,14 +11,22 @@ interface MenuItemProps {
 }
 
 const MenuItem = ({ icon, label, href }: MenuItemProps) => {
+  const router = useRouter();
+  const { setIsOpen } = useMenuStore();
+
+  const handleClick = (href: string) => {
+    setIsOpen(false);
+    router.push(href);
+  };
+
   return (
-    <Link
-      href={href}
+    <div
+      onClick={() => handleClick(href)}
       className="flex items-center gap-[10px] w-full h-[41px] px-6"
     >
       <div>{icon}</div>
       <p className="text-sm">{label}</p>
-    </Link>
+    </div>
   );
 };
 
