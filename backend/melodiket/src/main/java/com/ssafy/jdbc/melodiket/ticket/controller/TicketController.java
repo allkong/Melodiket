@@ -16,7 +16,6 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<String> purchaseEntity(@RequestBody @Valid TicketPurchaseRequest ticketPurchaseRequest){
-        log.info("asdasdasd");
         return ResponseEntity.ok("");
     }
 
