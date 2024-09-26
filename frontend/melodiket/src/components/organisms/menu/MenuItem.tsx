@@ -22,7 +22,7 @@ const MenuItem = ({ icon, label, href }: MenuItemProps) => {
   return (
     <div
       onClick={() => handleClick(href)}
-      className="flex items-center gap-[10px] w-full h-[41px] px-6"
+      className="flex items-center gap-[10px] w-full h-[41px] px-6 cursor-pointer"
     >
       <div>{icon}</div>
       <p className="text-sm">{label}</p>
