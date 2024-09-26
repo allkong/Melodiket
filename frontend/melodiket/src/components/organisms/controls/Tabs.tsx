@@ -9,7 +9,7 @@ interface TabsProps {
 
 const Tabs = ({ tabs, activeTab, onClick, labelMap }: TabsProps) => {
   return (
-    <div className="flex w-full border-b border-gray-200">
+    <div className="flex w-full">
       {tabs.map((tab) => (
         <TabButton
           key={tab}

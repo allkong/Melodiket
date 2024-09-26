@@ -1,14 +1,19 @@
 package com.ssafy.jdbc.melodiket.user.controller.dto.musician;
 
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfile;
-import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 
-public record MusicianDetailResp(String loginId,
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record MusicianDetailResp(UUID uuid,
+                                 String loginId,
                                  String role,
                                  String nickname,
                                  String description,
+                                 LocalDateTime registeredAt,
                                  String imageUrl,
-                                 StageManagerDetailResp.Wallet wallet
+                                 long likeCount,
+                                 Wallet wallet
 ) implements UserProfile {
     public record Wallet(String address, long tokenBalance) {
     }

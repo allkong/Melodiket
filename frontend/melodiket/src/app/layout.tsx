@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
+import { MSWComponent } from './_component/MSWComponent';
 
 export const metadata: Metadata = {
   title: 'melodiket',
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="kor">
       <body>
         <Providers>
+          <MSWComponent />
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
           </div>

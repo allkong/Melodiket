@@ -50,7 +50,7 @@ public interface AuthService {
     StageManagerDetailResp getStageManagerDetail(UUID id);
 
     // PageNation 기법 활용 뮤지션들 조회
-    MusicianResp getMusicians(int pageNo, int pageSize);
+    MusicianResp getMusicians(int pageNo, int pageSize, String sortType);
 
     // Musician 상세조회
     MusicianDetailResp getMusicianDetail(UUID id);

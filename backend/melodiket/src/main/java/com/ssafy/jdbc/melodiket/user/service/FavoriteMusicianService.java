@@ -1,15 +1,17 @@
 package com.ssafy.jdbc.melodiket.user.service;
 
-import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageInfo;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
+import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.user.repository.FavoriteMusicianRepository;
+import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ public class FavoriteMusicianService implements FavoriteService {
 
     private final FavoriteMusicianRepository favoriteMusicianRepository;
     private final AppUserRepository appUserRepository;
+    private final MusicianRepository musicianRepository;
 
     @Transactional
     public boolean toggleLikeMusician(UUID audienceId, UUID musicianId) {
@@ -39,16 +42,20 @@ public class FavoriteMusicianService implements FavoriteService {
             throw new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE);
         }
 
-        AppUserEntity musician = appUserRepository.findByUuid(musicianId)
+        MusicianEntity musician = musicianRepository.findByUuid(musicianId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         // 찜 여부 따라 처리
         if (favoriteMusicianRepository.existsByAudienceEntityAndMusicianEntity(audience, musician)) {
             favoriteMusicianRepository.deleteByAudienceEntityAndMusicianEntity(audience, musician);
+
+            musician.decrementLikeCount();
             return false;
         } else {
             FavoriteMusician favoriteMusician = new FavoriteMusician(null, audience, musician);
             favoriteMusicianRepository.save(favoriteMusician);
+
+            musician.incrementLikeCount();
             return true;
         }
     }
@@ -81,6 +88,7 @@ public class FavoriteMusicianService implements FavoriteService {
                             "MUSICIAN",
                             musician.getNickname(),
                             musician.getDescription(),
+                            musician.getRegisteredAt(),
                             null,
                             null
                     );
