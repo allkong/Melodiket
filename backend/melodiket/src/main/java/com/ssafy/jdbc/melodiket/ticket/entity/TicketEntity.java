@@ -42,4 +42,6 @@ public class TicketEntity extends BaseEntity {
 
     private Long seatRow;
     private Long seatCol;
+    private Date usedAt;
+    private Date refundedAt;
 }
