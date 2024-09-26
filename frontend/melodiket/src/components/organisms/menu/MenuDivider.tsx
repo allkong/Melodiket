@@ -1,5 +1,5 @@
 const MenuDivider = () => {
-  return <div className="w-full border border-gray-200"></div>;
+  return <div className="w-full border-b border-gray-200"></div>;
 };
 
 export default MenuDivider;

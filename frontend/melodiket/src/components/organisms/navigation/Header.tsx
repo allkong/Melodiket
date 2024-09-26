@@ -75,7 +75,6 @@ const Header = ({ isFixed = false }: HeaderProps) => {
         <Menu.Divider />
         <Menu.Item href="/" icon={<MyPage />} label="마이페이지" />
         <Menu.Item href="/" icon={<BackLine />} label="로그아웃" />
-        <Menu.Item href="/auth/login" icon={<ForwardLine />} label="로그인" />
       </Menu>
     </>
   );
