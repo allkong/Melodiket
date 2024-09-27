@@ -8,31 +8,22 @@ import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
 import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
-import com.ssafy.jdbc.melodiket.common.page.PageInfo;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.*;
-import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
-import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
-import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
-import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
+import com.ssafy.jdbc.melodiket.user.repository.*;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -48,7 +39,9 @@ public class UserService implements AuthService {
     private final AppUserRepository appUserRepository;
     private final AudienceRepository audienceRepository;
     private final MusicianRepository musicianRepository;
+    private final MusicianCursorRepository musicianCursorRepository;
     private final StageManagerRepository stageMangerRepository;
+    private final StageManagerCursorRepository stageManagerCursorRepository;
     private final JwtService jwtService;
 
     @Override
@@ -239,40 +232,16 @@ public class UserService implements AuthService {
     }
 
     // StageManager 들 조회
-    public StageManagerResp getStageManagers(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<AppUserEntity> stageManagerPage = appUserRepository.findByRole(Role.STAGE_MANAGER, pageable);
-
-        List<UserProfileResp> stageManagers = stageManagerPage.getContent().stream()
-                .map(user -> new UserProfileResp(
-                        user.getLoginId(),
-                        user.getRole().name(),
-                        user.getNickname(),
-                        user.getDescription(),
-                        user.getRegisteredAt(),
-                        null,  // TODO : imageUrl 선개발시 null 처리
-                        null   // TODO :walletInfo 선개발시 null 처리
-                ))
-                .toList();
-
-        return new StageManagerResp(
-                new PageInfo(
-                        stageManagerPage.hasNext(),
-                        stageManagerPage.hasPrevious(),
-                        pageNo,
-                        pageSize,
-                        stageManagerPage.getNumberOfElements()
-                ),
-                stageManagers
-        );
+    public PageResponse<StageManagerResp> getStageManagers(CursorPagingReq pagingReq) {
+        return stageManagerCursorRepository.findAll(pagingReq);
     }
 
     @Override
-    public StageManagerDetailResp getStageManagerDetail(UUID id) {
-        AppUserEntity user = appUserRepository.findByUuid(id)
+    public StageManagerResp getStageManagerDetail(UUID uuid) {
+        AppUserEntity user = appUserRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
-        return new StageManagerDetailResp(
+        return new StageManagerResp(
                 user.getLoginId(),
                 user.getRole().name(),
                 user.getNickname(),
@@ -283,59 +252,15 @@ public class UserService implements AuthService {
     }
 
     @Override
-    public MusicianResp getMusicians(int pageNo, int pageSize, String sortType) {
-
-        Sort sort;
-
-        // 정렬 기준 설정
-        switch (sortType.toLowerCase()) {
-            case "likes":
-                sort = Sort.by(Sort.Direction.DESC, LIKE_COUNT); // 찜 많은 순
-                break;
-            case "registered":
-                sort = Sort.by(Sort.Direction.ASC, REGISTERED_AT); // 등록 순
-                break;
-            case "latest":
-                sort = Sort.by(Sort.Direction.DESC, REGISTERED_AT); // 최신순
-                break;
-            default:
-                throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
-        }
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<MusicianEntity> musiciansPage = musicianRepository.findAll(pageable);
-
-        List<MusicianDetailResp> musicianDetails = musiciansPage.getContent().stream()
-                .map(musician -> new MusicianDetailResp(
-                        musician.getUuid(),
-                        musician.getLoginId(),
-                        musician.getRole().name(),
-                        musician.getDescription(),
-                        musician.getNickname(),
-                        musician.getRegisteredAt(),
-                        null,  // TODO : imageUrl 선개발시 null 처리
-                        musician.getLikeCount(),
-                        null   // TODO :walletInfo 선개발시 null 처리
-                ))
-                .toList();
-
-        return new MusicianResp(
-                new PageInfo(
-                        musiciansPage.hasNext(),
-                        musiciansPage.hasPrevious(),
-                        pageNo,
-                        pageSize,
-                        musiciansPage.getNumberOfElements()
-                ),
-                musicianDetails
-        );
+    public PageResponse<MusicianResp> getMusicians(CursorPagingReq pagingReq) {
+        return musicianCursorRepository.findAll(pagingReq);
     }
 
     @Override
-    public MusicianDetailResp getMusicianDetail(UUID id) {
-        MusicianEntity musician = musicianRepository.findByUuid(id)
+    public MusicianResp getMusicianDetail(UUID uuid) {
+        MusicianEntity musician = musicianRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
-        return new MusicianDetailResp(
+        return new MusicianResp(
                 musician.getUuid(),
                 musician.getLoginId(),
                 musician.getRole().name(),

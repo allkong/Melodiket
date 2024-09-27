@@ -13,10 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WalletInfoEntity extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private AppUserEntity user;
@@ -29,5 +25,4 @@ public class WalletInfoEntity extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String publicKey;
-
 }

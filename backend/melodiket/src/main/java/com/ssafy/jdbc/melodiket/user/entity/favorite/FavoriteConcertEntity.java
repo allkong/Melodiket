@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.entity.favorite;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import jakarta.persistence.*;
@@ -12,11 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FavoriteConcert {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class FavoriteConcertEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id", nullable = false)
     private AudienceEntity audienceEntity;

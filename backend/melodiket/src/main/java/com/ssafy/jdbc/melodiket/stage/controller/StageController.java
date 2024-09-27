@@ -1,8 +1,9 @@
 package com.ssafy.jdbc.melodiket.stage.controller;
 
-import com.ssafy.jdbc.melodiket.stage.dto.StageRequest;
-import com.ssafy.jdbc.melodiket.stage.dto.StageCursorPageResponse;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.stage.dto.StageInfoResponse;
+import com.ssafy.jdbc.melodiket.stage.dto.StageRequest;
 import com.ssafy.jdbc.melodiket.stage.service.StageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,22 +30,16 @@ public class StageController {
     }
 
     @GetMapping
-    public ResponseEntity<StageCursorPageResponse> getCursorStages(
-            @RequestParam(value = "isFirstPage", required = true) Boolean isFirstPage,
-            @RequestParam(value = "lastUuid", required = false) UUID lastUuid,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "orderKey", defaultValue = "id") String orderKey,
-            @RequestParam(value = "orderDirection", defaultValue = "asc") String orderDirection
-    ) {
-        StageCursorPageResponse response = stageService.getStages(isFirstPage, lastUuid, pageSize, "", orderKey, orderDirection);
+    public ResponseEntity<PageResponse<StageInfoResponse>> getCursorStages(CursorPagingReq pagingReq) {
+        PageResponse<StageInfoResponse> response = stageService.getStages(pagingReq);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Map<String,List<StageInfoResponse>>> getMyStages(Principal principal) {
+    public ResponseEntity<Map<String, List<StageInfoResponse>>> getMyStages(Principal principal) {
         String loginId = principal.getName();
         List<StageInfoResponse> response = stageService.getMyStages(loginId);
-        return new ResponseEntity<>(Map.of("stages",response), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("stages", response), HttpStatus.OK);
     }
 
     @GetMapping("/{uuid}")

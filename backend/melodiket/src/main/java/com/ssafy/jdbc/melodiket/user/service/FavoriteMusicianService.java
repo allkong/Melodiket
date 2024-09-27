@@ -8,7 +8,7 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.user.repository.FavoriteMusicianRepository;
 import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
@@ -52,7 +52,10 @@ public class FavoriteMusicianService implements FavoriteService {
             musician.decrementLikeCount();
             return false;
         } else {
-            FavoriteMusician favoriteMusician = new FavoriteMusician(null, audience, musician);
+            FavoriteMusicianEntity favoriteMusician = FavoriteMusicianEntity.builder()
+                    .audienceEntity(audience)
+                    .musicianEntity(musician)
+                    .build();
             favoriteMusicianRepository.save(favoriteMusician);
 
             musician.incrementLikeCount();
@@ -74,7 +77,6 @@ public class FavoriteMusicianService implements FavoriteService {
 
         PageInfo pageInfo = new PageInfo(
                 favoriteMusicians.hasNext(),
-                favoriteMusicians.hasPrevious(),
                 favoriteMusicians.getNumber(),
                 pageable.getPageSize(),
                 favoriteMusicians.getNumberOfElements()
