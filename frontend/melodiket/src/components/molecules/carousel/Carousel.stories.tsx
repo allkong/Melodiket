@@ -10,7 +10,7 @@ type Story = StoryObj<typeof Carousel>;
 
 export const Default: Story = {
   args: {
-    datas: [
+    data: [
       {
         description: '누구일까?\n비밀의 콘서트',
         index: 0,

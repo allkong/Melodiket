@@ -1,21 +1,24 @@
 'use client';
 
 import ConcertRankingCard from '@/components/molecules/card/ConcertRankingCard';
-import useConcertList from '@/services/concert/fetchConcertList';
+import { useFetchConcertList } from '@/services/concert/fetchConcert';
 
 const ConcertRankingSection = () => {
-  const { data: datas } = useConcertList();
+  const { data } = useFetchConcertList();
 
   return (
     <>
-      {datas &&
-        datas.map((data, idx) => (
-          <ConcertRankingCard
-            key={data.concertId}
-            {...data}
-            ranking={idx + 1}
-          />
-        ))}
+      {data?.map((concert, idx) => (
+        <ConcertRankingCard
+          key={concert.concertId}
+          concertId={concert.concertId}
+          location={concert.location}
+          posterURL={concert.posterURL}
+          ticketingAt={concert.ticketingAt}
+          title={concert.title}
+          ranking={idx + 1}
+        />
+      ))}
     </>
   );
 };

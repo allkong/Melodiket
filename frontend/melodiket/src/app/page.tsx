@@ -1,22 +1,27 @@
 import { HydrationBoundary } from '@tanstack/react-query';
-import { useConcertListDehydrateState } from '@/services/concert/fetchConcertList';
+import {
+  useFetchCarouselListDehydrateState,
+  useFetchConcertListDehydrateState,
+} from '@/services/concert/fetchConcert';
 import { Suspense } from 'react';
 
 import Header from '@/components/organisms/navigation/Header';
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
 import ConcertRankingSection from './_component/ConcertRankingSection';
-import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 import FavoriteMusicianSection from './_component/FavoriteMusicianSection';
 
 import Skeleton from '@/components/atoms/skeleton/Skeleton';
 import CarouselSection from './_component/CarouselSection';
+import { useFetchFavoriteMusiciansListDehydrateState } from '@/services/favorite/fetchFavoriteMusiciansList';
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="w-full min-h-screen bg-purple-100 overflow-y-auto">
       <Header />
       <div className="w-full px-7">
-        <CarouselSection />
+        <HydrationBoundary state={await useFetchCarouselListDehydrateState()}>
+          <CarouselSection />
+        </HydrationBoundary>
         <div className="flex flex-col gap-6 my-3">
           <TicketInfoCarousel
             datas={['예매한 티켓이 없어요 T_T', '사실 잇지롱', 'A310 화이팅~']}
@@ -25,10 +30,10 @@ export default function Home() {
             <p className="text-xl font-medium">공연 랭킹</p>
             <section className="w-full py-2 overflow-x-auto">
               <div className="flex gap-2">
-                <HydrationBoundary state={useConcertListDehydrateState()}>
-                  <Suspense fallback={<ConcertRankingCardSkeleton count={5} />}>
-                    <ConcertRankingSection />
-                  </Suspense>
+                <HydrationBoundary
+                  state={await useFetchConcertListDehydrateState()}
+                >
+                  <ConcertRankingSection />
                 </HydrationBoundary>
               </div>
             </section>
@@ -37,11 +42,15 @@ export default function Home() {
             <p className="text-xl font-medium">나의 뮤지션</p>
             <section className="w-full py-2 overflow-x-auto">
               <div className="flex gap-2">
-                <Suspense
-                  fallback={<Skeleton width={112} height={147} count={5} />}
+                <HydrationBoundary
+                  state={useFetchFavoriteMusiciansListDehydrateState()}
                 >
-                  <FavoriteMusicianSection />
-                </Suspense>
+                  <Suspense
+                    fallback={<Skeleton width={112} height={147} count={5} />}
+                  >
+                    <FavoriteMusicianSection />
+                  </Suspense>
+                </HydrationBoundary>
               </div>
             </section>
           </div>

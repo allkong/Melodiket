@@ -1,13 +1,16 @@
-import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
-import fetchFavoriteMusiciansList from '@/services/favorite/fetchFavoriteMusiciansList';
+'use client';
 
-const FavoriteMusicianSection = async () => {
-  const datas = await fetchFavoriteMusiciansList();
+import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
+import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavoriteMusiciansList';
+
+const FavoriteMusicianSection = () => {
+  const { data } = useFetchFavoriteMusiciansList();
 
   return (
     <>
-      {datas &&
-        datas.map((data) => <MusicianProfileCard key={data.id} {...data} />)}
+      {data.map((musician) => (
+        <MusicianProfileCard key={musician.id} {...musician} />
+      ))}
     </>
   );
 };
