@@ -3,7 +3,7 @@ import ArrowButton from '@/components/atoms/button/ArrowButton';
 interface MyPageItemProps {
   label: string;
   content?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const MyPageItem = ({ label, content, onClick }: MyPageItemProps) => {
