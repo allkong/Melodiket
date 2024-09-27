@@ -1,4 +1,4 @@
-import BackgroundImage from '@/components/atoms/background/BackgroundImage';
+import BackgroundImage from '@/components/atoms/image-frame/BackgroundImage';
 import FavoriteProfile from '@/components/molecules/profile/FavoriteProfile';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import Header from '@/components/organisms/navigation/Header';
