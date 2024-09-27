@@ -12,8 +12,28 @@ export interface Ticket {
   refundAt?: string;
 }
 
-export interface TicketsResponse {
+export interface TicketListResponse {
   result: Ticket[];
+}
+
+export interface TicketDetailResponse {
+  ticketUuid: string;
+  concertTitle: string;
+  posterCid: string;
+  stageName: string;
+  stageAddress: string;
+  ticketPrice: number;
+  status: TicketStatus;
+  seatRow: number;
+  seatCol: number;
+  refundAt: string;
+  usedAt: string;
+  createdAt: string;
+  startAt: string;
+  myFavoriteMusician: {
+    musicianName: string;
+    musicianImageUrl: string;
+  };
 }
 
 export type TicketStatus = (typeof TICKET_STATUS)[keyof typeof TICKET_STATUS];
