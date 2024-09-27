@@ -1,10 +1,10 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.service.FavoriteMusicianService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +37,9 @@ public class MusicianController {
     @GetMapping("/liked/me")
     public ResponseEntity<PageResponse<UserProfileResp>> getLikedMusicians(
             @RequestParam UUID audienceId,
-            Pageable pageable
+            CursorPagingReq pagingReq
     ) {
-        PageResponse<UserProfileResp> response = favoriteMusicianService.findLikedMusiciansByAudience(audienceId, pageable);
+        PageResponse<UserProfileResp> response = favoriteMusicianService.findLikedMusiciansByAudience(audienceId, pagingReq);
         return ResponseEntity.ok(response);
     }
 }

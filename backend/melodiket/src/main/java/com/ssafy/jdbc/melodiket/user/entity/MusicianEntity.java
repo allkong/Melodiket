@@ -1,7 +1,7 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusicianEntity;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +30,9 @@ public class MusicianEntity extends AppUserEntity {
     private List<ConcertParticipantMusicianEntity> concertParticipantMusicians = new ArrayList<>();
 
     @OneToMany(mappedBy = "musicianEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteMusician> favoriteMusicians = new ArrayList<>();
+    private List<FavoriteMusicianEntity> favoriteMusicians = new ArrayList<>();
 
-    public MusicianEntity(String description, String imageUrl, List<ConcertParticipantMusicianEntity> concertParticipantMusicians, List<FavoriteMusician> favoriteMusicians, int likeCount) {
+    public MusicianEntity(String description, String imageUrl, List<ConcertParticipantMusicianEntity> concertParticipantMusicians, List<FavoriteMusicianEntity> favoriteMusicians, int likeCount) {
         this.likeCount = likeCount;
         this.imageUrl = imageUrl;
         this.concertParticipantMusicians = concertParticipantMusicians != null ? concertParticipantMusicians : new ArrayList<>();

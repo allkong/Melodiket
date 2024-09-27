@@ -1,11 +1,11 @@
 package com.ssafy.jdbc.melodiket.user.controller;
 
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import lombok.RequiredArgsConstructor;
@@ -39,29 +39,26 @@ public class UserController {
     }
 
     @GetMapping("/stage-managers")
-    public ResponseEntity<StageManagerResp> getStageManagers(@RequestParam(defaultValue = "1") int pageNo,
-                                                             @RequestParam(defaultValue = "10") int pageSize) {
-        StageManagerResp stageManagerResp = authService.getStageManagers(pageNo, pageSize);
+    public ResponseEntity<PageResponse<StageManagerResp>> getStageManagers(CursorPagingReq pagingReq) {
+        PageResponse<StageManagerResp> stageManagerResp = authService.getStageManagers(pagingReq);
         return ResponseEntity.ok(stageManagerResp);
     }
 
     @GetMapping("/stage-managers/{id}")
-    public ResponseEntity<StageManagerDetailResp> getStageManagerDetail(@PathVariable UUID id) {
-        StageManagerDetailResp stageManagerDetail = authService.getStageManagerDetail(id);
+    public ResponseEntity<StageManagerResp> getStageManagerDetail(@PathVariable UUID id) {
+        StageManagerResp stageManagerDetail = authService.getStageManagerDetail(id);
         return ResponseEntity.ok(stageManagerDetail);
     }
 
     @GetMapping("/musicians")
-    public ResponseEntity<MusicianResp> getMusicians(@RequestParam(defaultValue = "1") int pageNo,
-                                                     @RequestParam(defaultValue = "10") int pageSize,
-                                                     @RequestParam(defaultValue = "latest") String sortType) {
-        MusicianResp musicianResp = authService.getMusicians(pageNo, pageSize, sortType);
+    public ResponseEntity<PageResponse<MusicianResp>> getMusicians(CursorPagingReq pagingReq) {
+        PageResponse<MusicianResp> musicianResp = authService.getMusicians(pagingReq);
         return ResponseEntity.ok(musicianResp);
     }
 
     @GetMapping("/musicians/{id}")
-    public ResponseEntity<MusicianDetailResp> getMusicianDetail(@PathVariable UUID id) {
-        MusicianDetailResp musicianDetailResp = authService.getMusicianDetail(id);
-        return ResponseEntity.ok(musicianDetailResp);
+    public ResponseEntity<MusicianResp> getMusicianDetail(@PathVariable UUID id) {
+        MusicianResp musicianResp = authService.getMusicianDetail(id);
+        return ResponseEntity.ok(musicianResp);
     }
 }

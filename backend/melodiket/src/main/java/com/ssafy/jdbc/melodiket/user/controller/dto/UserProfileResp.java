@@ -10,7 +10,6 @@ public record UserProfileResp(
         String description,
         LocalDateTime dateTime,
         String imageUrl,
-        Wallet wallet
+        WalletResp wallet
 ) implements UserProfile {
-    public record Wallet(String address, long tokenBalance) {}
 }

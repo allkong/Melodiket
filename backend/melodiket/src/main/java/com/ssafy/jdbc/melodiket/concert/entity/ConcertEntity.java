@@ -1,34 +1,24 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
-import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "concert")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConcertEntity extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
-
+public class ConcertEntity extends ExposableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
     private StageEntity stageEntity;
@@ -66,5 +56,5 @@ public class ConcertEntity extends BaseEntity {
     private List<ConcertParticipantMusicianEntity> concertParticipantMusicians = new ArrayList<>();
 
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
+    private List<FavoriteConcertEntity> favoriteConcerts = new ArrayList<>();
 }

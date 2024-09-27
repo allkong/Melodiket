@@ -47,3 +47,9 @@ cloudfront:
 
 redis:
   url: ${REDIS_URL}
+
+bank:
+  api-endpoint: ${BANK_SERVER_URL}
+  owner:
+    name: 멜로디켓
+    yymmdd: "000000"
