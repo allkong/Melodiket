@@ -1,15 +1,18 @@
+import clsx from 'clsx';
 import Image from 'next/image';
 
 interface PosterImageProps {
   src: string;
-  width: string;
-  height: string;
+  size: 'sm' | 'md';
 }
 
-const PosterImage = ({ src, width, height }: PosterImageProps) => {
+const PosterImage = ({ src, size }: PosterImageProps) => {
   return (
     <div
-      className={`relative flex-shrink-0 w-[${width}] h-[${height}] overflow-hidden rounded-[0.2rem]`}
+      className={clsx('relative flex-shrink-0 overflow-hidden', {
+        'w-[4.5rem] h-[6.2rem] rounded-[0.2rem]': size === 'sm',
+        'w-24 h-[8.5rem] rounded-[0.3rem]': size === 'md',
+      })}
     >
       <Image src={src} alt="poster" className="object-cover" fill />
     </div>
