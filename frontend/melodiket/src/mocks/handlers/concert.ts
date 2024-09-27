@@ -110,15 +110,15 @@ export const CAROUSEL_DATAS: CarouselConcert[] = [
 ];
 
 export const concertList = [
-  http.get<never, null, ConcertListItem[], '/api/v1/concerts'>(
-    '/api/v1/concerts',
+  http.get<never, null, ConcertListItem[], '/concerts'>(
+    '/concerts',
     async () => {
       await delay(1500);
       return HttpResponse.json(CONCERT_LIST);
     }
   ),
-  http.get<never, null, CarouselConcert[], '/api/v1/concerts/carousel'>(
-    '/api/v1/concerts/carousel',
+  http.get<never, null, CarouselConcert[], '/concerts/carousel'>(
+    '/concerts/carousel',
     async () => {
       await delay(1500);
       return HttpResponse.json(CAROUSEL_DATAS);

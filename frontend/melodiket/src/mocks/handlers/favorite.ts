@@ -26,8 +26,8 @@ const FAVORITE_MUSICIAN_LIST: FavoriteMusician[] = [
 ];
 
 export const favorite = [
-  http.get<never, null, FavoriteMusician[], '/api/v1/musicians/liked/me'>(
-    '/api/v1/musicians/liked/me',
+  http.get<never, null, FavoriteMusician[], '/musicians/liked/me'>(
+    '/musicians/liked/me',
     async () => {
       await delay(1500);
       return HttpResponse.json(FAVORITE_MUSICIAN_LIST);

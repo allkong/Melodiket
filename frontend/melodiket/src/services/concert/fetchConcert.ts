@@ -5,9 +5,7 @@ import concertKey from './concertKey';
 import getQueryClient from '@/utils/getQueryClient';
 
 export const fetchCarouselList = async () => {
-  const response = await customFetch<CarouselConcert[]>(
-    '/api/v1/concerts/carousel'
-  );
+  const response = await customFetch<CarouselConcert[]>('/concerts/carousel');
   return response;
 };
 
@@ -30,7 +28,7 @@ export const useFetchCarouselListDehydrateState = async () => {
 };
 
 export const fetchConcertList = async () => {
-  const response = await customFetch<ConcertListItem[]>('/api/v1/concerts');
+  const response = await customFetch<ConcertListItem[]>('/concerts');
   return response;
 };
 

@@ -5,9 +5,7 @@ import getQueryClient from '@/utils/getQueryClient';
 import favoriteKey from './favoriteKey';
 
 export const fetchFavoriteMusiciansList = async () => {
-  const response = await customFetch<FavoriteMusician[]>(
-    '/api/v1/musicians/liked/me'
-  );
+  const response = await customFetch<FavoriteMusician[]>('/musicians/liked/me');
   return response;
 };
 
