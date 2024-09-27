@@ -8,12 +8,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "concert")
@@ -67,4 +63,7 @@ public class ConcertEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ConcertSeatEntity> concertSeats = new HashSet<>();
 }
