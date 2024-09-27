@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,10 +46,10 @@ public class RefundUUIDValidator implements ConstraintValidator<ValidRefundUUID,
             return false;
         }
 
-        Date now = new Date();
+        LocalDateTime now = LocalDateTime.now();
         ConcertEntity concert = ticket.getConcertEntity();
 
-        if(now.after(concert.getStartAt())){
+        if(now.isAfter(concert.getStartAt())){
             context.buildConstraintViolationWithTemplate("이미 종료된 콘서트입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();

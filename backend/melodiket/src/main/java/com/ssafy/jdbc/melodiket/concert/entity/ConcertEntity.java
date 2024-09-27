@@ -1,14 +1,17 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
-import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -16,7 +19,8 @@ import java.util.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConcertEntity extends BaseEntity {
+@SuperBuilder
+public class ConcertEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +29,22 @@ public class ConcertEntity extends BaseEntity {
     @Column(unique = true, nullable = false)
     private UUID uuid;
 
+    @Column(nullable = false)
+    private String title;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
     private StageEntity stageEntity;
 
     @Column(nullable = false)
-    private Date startAt;
+    private LocalDateTime startAt;
 
     @Column(nullable = false)
-    private Date ticketingAt;
+    private LocalDateTime ticketingAt;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private Long availableTickets;
@@ -55,15 +66,19 @@ public class ConcertEntity extends BaseEntity {
     @Column(nullable = false)
     private Long favoriteMusicianStake;
 
+    @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketEntity> tickets = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertParticipantMusicianEntity> concertParticipantMusicians = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ConcertSeatEntity> concertSeats = new HashSet<>();
 }

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -42,17 +43,17 @@ public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchas
             return false;
         }
 
-        Date now = new Date();
+        LocalDateTime now = LocalDateTime.now();
         ConcertEntity concert = optionalConcert.get();
 
-        if(now.after(concert.getStartAt())){
+        if(now.isAfter(concert.getStartAt())){
             context.buildConstraintViolationWithTemplate("이미 종료된 콘서트입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
             return false;
         }
 
-        if(now.before(concert.getTicketingAt())){
+        if(now.isBefore(concert.getTicketingAt())){
             context.buildConstraintViolationWithTemplate("티케팅 시작 전입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
