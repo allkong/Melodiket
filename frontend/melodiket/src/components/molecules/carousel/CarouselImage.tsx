@@ -33,11 +33,7 @@ const CarouselImage = ({
       />
       <div
         className={clsx(
-          'absolute w-full top-0 bottom-0 left-0 right-0 bg-[radial-gradient(circle_at_50%_75%,rgba(0,0,0,0.2),black)] opacity-90',
-          {
-            'h-[250px]': size === 'md',
-            'h-[360px]': size === 'lg',
-          },
+          'absolute w-full h-full top-0 bottom-0 left-0 right-0 bg-[radial-gradient(circle_at_50%_75%,rgba(0,0,0,0.2),black)] opacity-90',
           { 'rounded-lg': rounded }
         )}
       ></div>

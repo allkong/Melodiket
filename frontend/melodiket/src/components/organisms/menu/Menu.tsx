@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import MenuPortal from './MenuPortal';
 import MenuMain from './MenuMain';
-import MenuDivider from './MenuDivider';
+import ThinDivider from '@/components/atoms/divider/ThinDivider';
 import MenuHeader from './MenuHeader';
 import MenuItem from './MenuItem';
 import MenuProfile from './MenuProfile';
@@ -20,7 +20,7 @@ const MenuWithPortal = ({ children }: MenuWithPortalProps) => {
 };
 
 const Menu = Object.assign(MenuWithPortal, {
-  Divider: MenuDivider,
+  Divider: ThinDivider,
   Header: MenuHeader,
   Item: MenuItem,
   Profile: MenuProfile,
