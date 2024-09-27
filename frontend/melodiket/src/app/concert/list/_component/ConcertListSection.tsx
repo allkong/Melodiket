@@ -1,14 +1,14 @@
 'use client';
 
 import ConcertCard from '@/components/molecules/card/ConcertCard';
-import useConcertList from '@/services/concert/fetchConcertList';
+import { useFetchConcertList } from '@/services/concert/fetchConcert';
 
 const ConcertListSection = () => {
-  const { data: datas } = useConcertList();
+  const { data } = useFetchConcertList();
 
   return (
     <>
-      {datas.map((concert) => (
+      {data?.map((concert) => (
         <ConcertCard key={concert.concertId} {...concert} />
       ))}
     </>

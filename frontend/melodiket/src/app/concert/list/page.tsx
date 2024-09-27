@@ -2,10 +2,11 @@ import dynamic from 'next/dynamic';
 
 import Header from '@/components/organisms/navigation/Header';
 import ConcertListSection from './_component/ConcertListSection';
-import { Suspense } from 'react';
 import { HydrationBoundary } from '@tanstack/react-query';
-import { useConcertListDehydrateState } from '@/services/concert/fetchConcertList';
-import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
+import {
+  useFetchCarouselListDehydrateState,
+  useFetchConcertListDehydrateState,
+} from '@/services/concert/fetchConcert';
 import CarouselSection from './_component/CarouselSection';
 
 const ControlsBar = dynamic(
@@ -13,17 +14,17 @@ const ControlsBar = dynamic(
   { ssr: false }
 );
 
-const Page = () => {
+const Page = async () => {
   return (
     <div className="w-full">
       <Header isFixed />
-      <CarouselSection />
+      <HydrationBoundary state={await useFetchCarouselListDehydrateState()}>
+        <CarouselSection />
+      </HydrationBoundary>
       <ControlsBar />
       <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">
-        <HydrationBoundary state={useConcertListDehydrateState()}>
-          <Suspense fallback={<ConcertCardSkeleton count={10} />}>
-            <ConcertListSection />
-          </Suspense>
+        <HydrationBoundary state={await useFetchConcertListDehydrateState()}>
+          <ConcertListSection />
         </HydrationBoundary>
       </div>
     </div>
