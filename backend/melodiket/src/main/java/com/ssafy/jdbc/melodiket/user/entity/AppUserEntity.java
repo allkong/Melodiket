@@ -3,10 +3,12 @@ package com.ssafy.jdbc.melodiket.user.entity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountCertificationEntity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
 import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.wallet.entity.WalletInfoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,6 +63,9 @@ public class AppUserEntity extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL) // 양방향 매핑 설정
+    private WalletInfoEntity walletInfo;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
