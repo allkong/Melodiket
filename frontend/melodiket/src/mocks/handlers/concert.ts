@@ -1,6 +1,10 @@
 import { http, HttpResponse } from 'msw';
 import { delay } from './index';
-import type { CarouselConcert, ConcertListItem } from '@/types/concert';
+import type {
+  CarouselConcert,
+  Concert,
+  ConcertListItem,
+} from '@/types/concert';
 
 const CONCERT_LIST: ConcertListItem[] = [
   {
@@ -61,7 +65,7 @@ const CONCERT_LIST: ConcertListItem[] = [
   },
 ];
 
-export const CAROUSEL_DATAS: CarouselConcert[] = [
+const CAROUSEL_DATAS: CarouselConcert[] = [
   {
     description: '누구일까?\n비밀의 콘서트',
     index: 0,
@@ -109,6 +113,43 @@ export const CAROUSEL_DATAS: CarouselConcert[] = [
   },
 ];
 
+const CONCERT_DETAIL: Concert = {
+  index: 0,
+  concertId: 'test',
+  title: 'SIRUP Live in Seoul',
+  description:
+    '무신사 게러지에서 열리는 콘서트는 음악 팬들에게 잊지 못할 경험을 선사합니다. 이 특별한 공연은 다양한 아티스트들의 열정적인 무대와 함께 음악의 매력을 만끽할 수 있는 기회를 제공합니다. 무신사 게러지는 독창적인 분위기와 함께 모던한 인테리어가 어우러져 있어, 관객들이 음악에 깊이 몰입할 수 있는 최적의 장소입니다. 공연에는 신진 아티스트부터 유명 밴드까지 다양한 장르의 음악이 포함되어 있어, 모든 관객들이 자신이 좋아하는 스타일의 음악을 찾을 수 있습니다. 관객들은 아티스트와의 소통을 통해 더욱 가까운 거리에서 그들의 열정과 감정을 느낄 수 있습니다. 특히, 이번 콘서트에서는 팬들과의 교감을 더욱 중요시하여, 관객 참여를 유도하는 특별한 프로그램도 마련되어 있습니다. 공연이 끝난 후에는 아티스트와의 만남이나 사인회도 진행될 예정으로, 팬들에게 소중한 추억을 선사할 것입니다. 무신사 게러지에서 열리는 이 콘서트는 단순한 음악 공연을 넘어, 아티스트와 팬이 함께하는 특별한 경험이 될 것입니다. 음악을 사랑하는 모든 이들에게 이 자리를 강력히 추천합니다. 놓치지 마세요!',
+  location: '무신사 게러지',
+  musicians: [
+    {
+      musicianId: '0',
+      imageURL:
+        'https://image.genie.co.kr/Y/IMAGE/IMG_ARTIST/080/644/831/80644831_1_600x600.JPG',
+      musicianName: '퍼지퍼그',
+    },
+    {
+      musicianId: '1',
+      imageURL:
+        'https://pbs.twimg.com/media/GCv3Qg3bMAAjaz_?format=jpg&name=large',
+      musicianName: '주나주나',
+    },
+    {
+      musicianId: '2',
+      imageURL:
+        'https://admin.idiots.band/uploads/large_2023_10_02_302325_1_80a5de9943.jpg',
+      musicianName: '이디어츠',
+    },
+  ],
+  posterURL:
+    'https://sirup.online/wp/wp-content/uploads/2024/09/%E2%98%85%E2%98%85-360x480px%EC%82%AC%EC%9D%B4%EC%A6%88-RGB.jpg',
+  startedAt: '2024.10.20',
+  ticketingAt: '2024.10.1',
+  favorite: 712,
+  capability: 30,
+  price: 35000,
+  isSeat: true,
+};
+
 export const concertList = [
   http.get<never, null, ConcertListItem[], '/concerts'>(
     '/concerts',
@@ -122,6 +163,12 @@ export const concertList = [
     async () => {
       await delay(1500);
       return HttpResponse.json(CAROUSEL_DATAS);
+    }
+  ),
+  http.get<{ uuid: string }, null, Concert, '/concerts/:uuid'>(
+    '/concerts/:uuid',
+    async () => {
+      return HttpResponse.json(CONCERT_DETAIL);
     }
   ),
 ];
