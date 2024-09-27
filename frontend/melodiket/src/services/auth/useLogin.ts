@@ -26,7 +26,7 @@ export const useLogin = () => {
       setUserInfo(data.nickname, data.role);
       router.push('/');
     },
-    onError: (error: Error) => {
+    onError: () => {
       alert('로그인 실패😥');
     },
   });

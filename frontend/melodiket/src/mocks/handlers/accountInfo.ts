@@ -7,12 +7,12 @@ export const accountInfo = [
     return HttpResponse.json({
       result: [
         {
-          id: 1,
+          id: 0,
           nickname: '아이브',
           imageUrl: '',
         },
         {
-          id: 2,
+          id: 1,
           nickname: '뉴진스',
           imageUrl: '',
         },
