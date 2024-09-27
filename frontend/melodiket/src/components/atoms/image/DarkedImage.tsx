@@ -1,12 +1,14 @@
 import Image from 'next/image';
 
-const DarkedImage = () => {
+interface DarkedImageProps {
+  src: string;
+}
+
+const DarkedImage = ({ src }: DarkedImageProps) => {
   return (
     <div className="relative w-full h-full">
       <Image
-        src={
-          'https://sirup.online/wp/wp-content/uploads/2024/09/%E2%98%85%E2%98%85-360x480px%EC%82%AC%EC%9D%B4%EC%A6%88-RGB.jpg'
-        }
+        src={src}
         alt="콘서트 상세 페이지 배경 이미지"
         fill
         className="object-cover"

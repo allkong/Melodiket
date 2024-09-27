@@ -21,9 +21,17 @@ export interface Concert {
   startedAt: string;
   title: string;
   description: string;
-  musicians: string[];
+  musicians: {
+    musicianId: string;
+    imageURL: string;
+    musicianName: string;
+  }[];
   location: string;
   posterURL: string;
+  favorite: number;
+  capability: number;
+  price: number;
+  isSeat?: boolean;
 }
 
 export interface CarouselConcert
