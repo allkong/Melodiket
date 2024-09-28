@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { cloneElement, ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 interface LargeButtonProps {
   label: string;
@@ -27,10 +27,10 @@ const LargeButton = ({ label, onClick, disabled, icon }: LargeButtonProps) => {
       onClick={handleClickButton}
       disabled={disabled}
     >
-      <div className="flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-2">
         {icon && (
-          <div className="w-6 h-6 flex items-center justify-center overflow-hidden">
-            {cloneElement(icon, { className: 'fill-current' })}
+          <div className="flex items-center justify-center w-6 h-6 overflow-hidden">
+            {icon}
           </div>
         )}
         <p>{label}</p>

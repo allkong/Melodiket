@@ -5,7 +5,7 @@ import SearchLine from './search-line.svg';
 import Arrow from './arrow-filled.svg';
 import Heart from './heart.svg';
 import QrCode from './qr-code.svg';
-import Ticket from './ticket.svg';
+import Ticket from './ticket-outline.svg';
 import Check from './check.svg';
 import Calendar from './calendar.svg';
 import Help from './help.svg';
