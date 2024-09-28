@@ -58,13 +58,14 @@ export const ticket = [
       status: 'NOT_USED',
       seatRow: 1,
       seatCol: 1,
-      refundAt: '2024-09-26T10:44:48.330372',
+      refundAt: '',
       usedAt: '',
       createdAt: '2024-09-26T10:44:48.330372',
       startAt: '2024-09-26T10:44:48.330372',
       myFavoriteMusician: {
-        musicianName: '',
-        musicianImageUrl: '',
+        musicianName: '아이유',
+        musicianImageUrl:
+          'https://i.namu.wiki/i/LfH7oUFrOa_2P4QIgyGlGX0UREjOLpOoeYy-EXbEn2ZCrZ3b4z_Rd34MbCZlkLvGIFtFmA2G9DERjw_SY8kgqWKSTnJE6HRLQS2of4PYI2d14CxUGmpXWpCuelUKgN5BKNEZcLtsmXm186oSMI6mcg.webp',
       },
     } as TicketDetailResponse);
   }),
