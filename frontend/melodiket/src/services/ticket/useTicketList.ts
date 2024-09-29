@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import customFetch from '../customFetch';
-import { Ticket, TicketListResponse } from '@/types/ticket';
+import { Ticket, TicketList } from '@/types/ticket';
 
 const getTicketList = async () => {
-  const response = await customFetch<TicketListResponse>('/tickets/me');
+  const response = await customFetch<TicketList>('/tickets/me');
   return response;
 };
 

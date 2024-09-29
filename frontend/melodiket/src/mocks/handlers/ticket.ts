@@ -1,4 +1,4 @@
-import { TicketDetailResponse, TicketListResponse } from '@/types/ticket';
+import { TicketDetail, TicketList } from '@/types/ticket';
 import { http, HttpResponse } from 'msw';
 
 export const ticket = [
@@ -44,7 +44,7 @@ export const ticket = [
           refundAt: '2024-09-26T10:44:48.330372',
         },
       ],
-    } as TicketListResponse);
+    } as TicketList);
   }),
   http.get('tickets/:uuid', async () => {
     return HttpResponse.json({
@@ -67,6 +67,6 @@ export const ticket = [
         musicianImageUrl:
           'https://i.namu.wiki/i/LfH7oUFrOa_2P4QIgyGlGX0UREjOLpOoeYy-EXbEn2ZCrZ3b4z_Rd34MbCZlkLvGIFtFmA2G9DERjw_SY8kgqWKSTnJE6HRLQS2of4PYI2d14CxUGmpXWpCuelUKgN5BKNEZcLtsmXm186oSMI6mcg.webp',
       },
-    } as TicketDetailResponse);
+    } as TicketDetail);
   }),
 ];

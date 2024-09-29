@@ -12,11 +12,11 @@ export interface Ticket {
   refundAt?: string;
 }
 
-export interface TicketListResponse {
+export interface TicketList {
   result: Ticket[];
 }
 
-export interface TicketDetailResponse {
+export interface TicketDetail {
   ticketUuid: string;
   concertTitle: string;
   posterCid: string;
