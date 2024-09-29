@@ -11,7 +11,7 @@ const CloseButton = ({ onClick, hasBorder = false }: ClosebuttonProps) => {
     <button onClick={onClick}>
       <div
         className={clsx({
-          'p-2.5 border-2 border-gray-200 rounded-full': hasBorder,
+          'p-2.5 border border-gray-200 rounded-full': hasBorder,
         })}
       >
         <Cross />
