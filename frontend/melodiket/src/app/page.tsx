@@ -11,9 +11,9 @@ import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileC
 
 export default function Home() {
   return (
-    <div className="w-full bg-purple-100 overflow-y-auto">
-      <Header />
-      <div className="w-full px-7">
+    <div className="w-full overflow-y-auto bg-purple-100">
+      <Header isFixed />
+      <div className="w-full mt-16 px-7">
         <Carousel datas={CAROUSEL_DATAS} gap={4} size="lg" rounded />
         <div className="flex flex-col gap-6 my-3">
           <TicketInfoCarousel
