@@ -4,13 +4,18 @@ import SubHeader from '@/components/organisms/navigation/SubHeader';
 import TicketFrame from '@/components/atoms/image-frame/TicketFrame';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { QrCode } from '@/public/icons';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Page = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleClose = () => {
     router.back();
+  };
+
+  const handleQRButtonClick = () => {
+    router.push(`${pathname}/qr`);
   };
 
   return (
@@ -27,7 +32,11 @@ const Page = () => {
         </div>
       </div>
 
-      <FixedButton label="QR코드 확인" icon={<QrCode />} />
+      <FixedButton
+        label="QR코드 확인"
+        icon={<QrCode />}
+        onClick={handleQRButtonClick}
+      />
     </div>
   );
 };

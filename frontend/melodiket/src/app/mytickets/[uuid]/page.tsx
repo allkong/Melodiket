@@ -13,10 +13,12 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Page = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
   const { data: ticket } = useTicketDetail();
 
   const ticketInfo = [
@@ -54,7 +56,7 @@ const Page = () => {
   ].filter(Boolean) as { label: string; value: string }[];
 
   const handleMobileTicketClick = () => {
-    router.push(`/mytickets/${ticket?.ticketUuid}/mobile-ticket`);
+    router.push(`${pathname}/mobile-ticket`);
   };
 
   return (
