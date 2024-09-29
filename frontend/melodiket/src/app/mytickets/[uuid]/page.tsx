@@ -13,8 +13,10 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+  const router = useRouter();
   const { data: ticket } = useTicketDetail();
 
   const ticketInfo = [
@@ -50,6 +52,10 @@ const Page = () => {
         : '정보 없음',
     },
   ].filter(Boolean) as { label: string; value: string }[];
+
+  const handleMobileTicketClick = () => {
+    router.push(`/mytickets/${ticket?.ticketUuid}/mobile-ticket`);
+  };
 
   return (
     <div>
@@ -99,7 +105,7 @@ const Page = () => {
 
       <FixedButton
         label="모바일 티켓"
-        onClick={() => alert('티켓')}
+        onClick={handleMobileTicketClick}
         icon={<Ticket />}
       />
     </div>
