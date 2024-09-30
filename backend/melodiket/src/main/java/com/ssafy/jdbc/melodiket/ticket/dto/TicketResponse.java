@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.ticket.dto;
 
+import com.ssafy.jdbc.melodiket.ticket.entity.Status;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class TicketResponse {
 
     private Long ticketPrice; // 티켓 가격 (토큰)
 
-    private TicketStatus status; // 티켓 상태 (ENUM)
+    private Status status; // 티켓 상태 (ENUM)
 
     private Long seatRow; // 좌석 행 번호
 
@@ -39,11 +40,6 @@ public class TicketResponse {
     private LocalDateTime startAt; // 공연 날짜
 
     private FavoriteMusicianDto myFavoriteMusician; // 뮤지션 정보
-
-    // ENUM 타입 정의
-    public enum TicketStatus {
-        NOT_USED, REFUNDED, USED
-    }
 
     @Getter
     @Builder

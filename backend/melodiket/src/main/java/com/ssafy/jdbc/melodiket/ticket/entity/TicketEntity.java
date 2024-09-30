@@ -45,4 +45,16 @@ public class TicketEntity extends BaseEntity {
     private Long seatCol;
     private LocalDateTime usedAt;
     private LocalDateTime refundedAt;
+
+    private Long favoriteMusician;
+
+    public void updateStatusUsed(Status status){
+        this.status = status;
+        this.usedAt = LocalDateTime.now();
+    }
+
+    public void updateStatusRefunded(Status status){
+        this.status = status;
+        this.refundedAt = LocalDateTime.now();
+    }
 }
