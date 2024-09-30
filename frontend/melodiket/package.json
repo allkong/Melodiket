@@ -23,6 +23,7 @@
     "immer": "^10.1.1",
     "js-confetti": "^0.12.0",
     "next": "14.2.9",
+    "qrcode.react": "^4.0.1",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-scrollbar-hide": "^1.1.7",
