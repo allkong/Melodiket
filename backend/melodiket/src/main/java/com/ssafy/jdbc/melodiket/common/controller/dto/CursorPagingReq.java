@@ -11,8 +11,9 @@ public class CursorPagingReq {
     @NotNull(message = "`isFirstPage` must not be null")
     boolean isFirstPage;
     UUID lastUuid;
+    @NotNull(message = "`pageSize` must not be null")
     @Min(value = 1, message = "`pageSize` must be greater than 0")
-    Integer pageSize;
+    Integer pageSize = 10;
     String orderKey = "uuid";
     String orderDirection = "ASC";
 }
