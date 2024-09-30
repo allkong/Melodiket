@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.wallet.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalletInfoEntity {
+public class WalletInfoEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
