@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 
+import defaultImage from '@/public/images/default-image.png';
+
 interface PosterImageProps {
   src: string;
   size: 'sm' | 'md';
@@ -14,7 +16,12 @@ const PosterImage = ({ src, size }: PosterImageProps) => {
         'w-24 h-[8.5rem] rounded-[0.3rem]': size === 'md',
       })}
     >
-      <Image src={src} alt="poster" className="object-cover" fill />
+      <Image
+        src={src || defaultImage}
+        alt="poster"
+        className="object-cover"
+        fill
+      />
     </div>
   );
 };
