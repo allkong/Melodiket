@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 
-import { useReservedTickets } from '@/services/ticket/useReservedTickets';
+import { useTicketList } from '@/services/ticket/useTicketList';
 import { HISTORY_TYPES, TICKET_STATUS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
@@ -12,7 +12,7 @@ import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
 
 const Page = () => {
-  const { data: tickets } = useReservedTickets();
+  const { data: tickets } = useTicketList();
   const [activeTab, setActiveTab] =
     useState<keyof typeof HISTORY_TYPES>('reserved');
 

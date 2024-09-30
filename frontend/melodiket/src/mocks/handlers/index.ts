@@ -1,5 +1,7 @@
 import { auth } from './auth';
 import { accountInfo } from './accountInfo';
+import { concertList } from './concert';
+import { favorite } from './favorite';
 import { ticket } from './ticket';
 
 export const delay = (ms: number) =>
@@ -7,4 +9,10 @@ export const delay = (ms: number) =>
     setTimeout(res, ms);
   });
 
-export const handlers = [...auth, ...accountInfo, ...ticket];
+export const handlers = [
+  ...auth,
+  ...accountInfo,
+  ...ticket,
+  ...concertList,
+  ...favorite,
+];
