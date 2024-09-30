@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PosterImage from './PosterImage';
+import PosterFrame from './PosterFrame';
 
-const meta: Meta<typeof PosterImage> = {
-  component: PosterImage,
+const meta: Meta<typeof PosterFrame> = {
+  component: PosterFrame,
 };
 
 export default meta;
-type Story = StoryObj<typeof PosterImage>;
+type Story = StoryObj<typeof PosterFrame>;
 
 export const Default: Story = {
   args: {

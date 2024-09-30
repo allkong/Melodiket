@@ -8,7 +8,7 @@ import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
 import { TICKET_STATUS_LABELS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
-import PosterImage from '@/components/atoms/image-frame/PosterImage';
+import PosterFrame from '@/components/atoms/image-frame/PosterFrame';
 import SmallButton from '@/components/atoms/button/SmallButton';
 import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatusProfile';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
@@ -66,7 +66,7 @@ const Page = () => {
       <div className="px-6 pb-24 overflow-y-auto">
         {/* 포스터 및 제목 */}
         <div className="flex py-4 space-x-4 border-b">
-          <PosterImage src={ticket?.posterCid || ''} size="md" />
+          <PosterFrame src={ticket?.posterCid || ''} size="md" />
           <div className="flex flex-col justify-between">
             <h1 className="font-medium">
               {ticket?.concertTitle || '콘서트 정보 없음'}
