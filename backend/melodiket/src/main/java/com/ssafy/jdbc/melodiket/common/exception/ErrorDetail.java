@@ -29,6 +29,7 @@ public enum ErrorDetail {
     NOT_FOUND(HttpStatus.NOT_FOUND, "E404000", "Not Found"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "E404001", "존재하지 않는 유저정보 입니다."),
     STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404003", "존재하지 않는 공연장 정보 입니다."),
+    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "존재하지 않는 티켓 입니다."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
