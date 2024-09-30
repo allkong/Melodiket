@@ -3,17 +3,17 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 interface TicketState {
-  ticket: TicketDetail | null;
+  ticketDetail: TicketDetail | null;
   setTicketDetail: (ticket: TicketDetail) => void;
   clearTicketDetail: () => void;
 }
 
 export const useTicketStore = create<TicketState>()(
   devtools((set) => ({
-    ticket: null,
+    ticketDetail: null,
 
-    setTicketDetail: (ticket) => set({ ticket }),
-    clearTicketDetail: () => set({ ticket: null }),
+    setTicketDetail: (ticketDetail) => set({ ticketDetail }),
+    clearTicketDetail: () => set({ ticketDetail: null }),
   }))
 );
 

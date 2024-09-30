@@ -21,6 +21,7 @@ const PosterImage = ({ src, size }: PosterImageProps) => {
         alt="poster"
         className="object-cover"
         fill
+        priority
       />
     </div>
   );
