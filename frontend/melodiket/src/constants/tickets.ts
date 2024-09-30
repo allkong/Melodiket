@@ -11,7 +11,7 @@ export const TICKET_STATUS = {
   cancelled: 'REFUNDED',
 } as const;
 
-export const TicketStatusLabels: Record<TicketStatus, string> = {
+export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
   [TICKET_STATUS.reserved]: '예매 완료',
   [TICKET_STATUS.used]: '사용 완료',
   [TICKET_STATUS.cancelled]: '예매 취소',

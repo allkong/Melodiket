@@ -7,7 +7,10 @@ type JsonRequestInit = Omit<NonNullable<RequestInit>, 'body'> & {
   body?: object;
 };
 
-const customFetch = async <T>(url: string, options?: JsonRequestInit) => {
+const customFetch = async <T>(
+  url: string,
+  options?: JsonRequestInit
+): Promise<T> => {
   const defaultHeaders = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`,

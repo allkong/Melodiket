@@ -15,12 +15,19 @@ dayjs.locale('ko');
 // 날짜 형식 커스텀
 export const formatDateToYMD = (dateString: string): string => {
   if (!dateString) {
-    return '';
+    return 'no data';
   }
   return dayjs(dateString).format('YYYY.MM.DD');
 };
 
-export const formatCustom = (
+export const formatDateToYMDHM = (dateString: string): string => {
+  if (!dateString) {
+    return 'no data';
+  }
+  return dayjs(dateString).format('YYYY.MM.DD HH:MM');
+};
+
+export const formatDateCustom = (
   dateString: string,
   customFormat: string
 ): string => {
