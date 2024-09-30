@@ -1,7 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.controller.dto.musician;
 
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfile;
-import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 
 import java.time.LocalDateTime;
@@ -14,8 +13,7 @@ public record MusicianResp(UUID uuid,
                            String description,
                            LocalDateTime registeredAt,
                            String imageUrl,
-                           long likeCount,
-                           WalletResp wallet
+                           long likeCount
 ) implements UserProfile {
     public static MusicianResp from(MusicianEntity entity) {
         return new MusicianResp(
@@ -26,8 +24,7 @@ public record MusicianResp(UUID uuid,
                 entity.getDescription(),
                 entity.getRegisteredAt(),
                 entity.getImageUrl(),
-                entity.getLikeCount(),
-                null
+                entity.getLikeCount()
         );
     }
 }

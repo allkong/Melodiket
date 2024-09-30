@@ -18,6 +18,8 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.*;
 import com.ssafy.jdbc.melodiket.user.repository.*;
+import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +45,11 @@ public class UserService implements AuthService {
     private final StageManagerRepository stageMangerRepository;
     private final StageManagerCursorRepository stageManagerCursorRepository;
     private final JwtService jwtService;
+    private final WalletService walletService;
 
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public SignUpResp signUp(SignUpReq signUpReq, Role role) {
-
         if (appUserRepository.existsByLoginId(signUpReq.loginId()))
             throw new HttpResponseException(ErrorDetail.DUPLICATED_LOGIN_ID);
 
@@ -68,6 +71,7 @@ public class UserService implements AuthService {
                     .registeredAt(LocalDateTime.now())
                     .build();
             audienceRepository.save(audience);
+            walletService.createNewWallet(audience);
 
             return new SignUpResp(
                     audience.getId(),
@@ -90,6 +94,7 @@ public class UserService implements AuthService {
                     .registeredAt(LocalDateTime.now())
                     .build();
             musicianRepository.save(musician);
+            walletService.createNewWallet(musician);
 
             return new SignUpResp(
                     musician.getId(),
@@ -112,6 +117,8 @@ public class UserService implements AuthService {
                     .registeredAt(LocalDateTime.now())
                     .build();
             stageMangerRepository.save(stageManager);
+            walletService.createNewWallet(stageManager);
+
             return new SignUpResp(
                     stageManager.getId(),
                     stageManager.getUuid(),
@@ -154,8 +161,8 @@ public class UserService implements AuthService {
     }
 
     @Override
-    public AppUserEntity findUserByUuid(String uuid) throws HttpResponseException {
-        return appUserRepository.findByUuid(UUID.fromString(uuid))
+    public AppUserEntity findUserByUuid(UUID uuid) throws HttpResponseException {
+        return appUserRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
     }
 
@@ -187,13 +194,13 @@ public class UserService implements AuthService {
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         return new UserProfileResp(
+                appUserEntity.getUuid(),
                 appUserEntity.getLoginId(),
                 appUserEntity.getRole().name(),
                 appUserEntity.getNickname(),
                 appUserEntity.getDescription(),
                 appUserEntity.getRegisteredAt(),
-                null, // imageUrl 선개발시 처리
-                null  // walletInfo 선개발시 처리
+                null // imageUrl 선개발시 처리
         );
     }
 
@@ -221,13 +228,13 @@ public class UserService implements AuthService {
         appUserRepository.save(updateUser);
 
         return new UserProfileResp(
+                updateUser.getUuid(),
                 updateUser.getLoginId(),
                 updateUser.getRole().name(),
                 updateUser.getNickname(),
                 updateUser.getDescription(),
                 updateUser.getRegisteredAt(),
-                null, // imageUrl 선개발시 처리
-                null  // walletInfo 선개발시 처리
+                null // imageUrl 선개발시 처리
         );
     }
 
@@ -246,8 +253,7 @@ public class UserService implements AuthService {
                 user.getRole().name(),
                 user.getNickname(),
                 user.getDescription(),
-                null,  // TODO : imageUrl 선개발시 null 처리
-                null   // TODO :walletInfo 선개발시 null 처리
+                null  // TODO : imageUrl 선개발시 null 처리
         );
     }
 
@@ -268,8 +274,7 @@ public class UserService implements AuthService {
                 musician.getDescription(),
                 musician.getRegisteredAt(),
                 null,// TODO : imageUrl 선개발시 null 처리
-                musician.getFavoriteMusicians().size(),
-                null   // TODO :walletInfo 선개발시 null 처리
+                musician.getFavoriteMusicians().size()
         );
     }
 }
