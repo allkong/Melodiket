@@ -1,4 +1,4 @@
-import BackgroundImage from '@/components/atoms/background/BackgroundImage';
+import BackgroundFrame from '@/components/atoms/image-frame/BackgroundFrame';
 import FavoriteProfile from '@/components/molecules/profile/FavoriteProfile';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import Header from '@/components/organisms/navigation/Header';
@@ -8,7 +8,7 @@ const Page = () => {
     <div>
       <Header isFixed />
       <div className="relative mb-20">
-        <BackgroundImage src="" />
+        <BackgroundFrame src="" />
         <div className="absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2">
           <FavoriteProfile src="" size="lg" />
           <div className="absolute bottom-0 right-0 transform translate-x-8">

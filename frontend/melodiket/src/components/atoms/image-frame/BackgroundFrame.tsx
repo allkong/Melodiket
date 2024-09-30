@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
-interface BackgroundImageProps {
+interface BackgroundFrameProps {
   src: string;
 }
 
-const BackgroundImage = ({ src }: BackgroundImageProps) => {
+const BackgroundFrame = ({ src }: BackgroundFrameProps) => {
   return (
     <div className="relative flex items-center justify-center w-full h-64 overflow-hidden bg-gray-400">
       <div className="absolute inset-0" />
@@ -14,4 +14,4 @@ const BackgroundImage = ({ src }: BackgroundImageProps) => {
   );
 };
 
-export default BackgroundImage;
+export default BackgroundFrame;
