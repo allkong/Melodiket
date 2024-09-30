@@ -1,16 +1,12 @@
 package com.ssafy.jdbc.melodiket.user.repository;
 
-import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
+import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FavoriteMusicianRepository extends JpaRepository<FavoriteMusician, Long> {
+public interface FavoriteMusicianRepository extends JpaRepository<FavoriteMusicianEntity, Long> {
+    boolean existsByAudienceEntityAndMusicianEntity(AudienceEntity audience, MusicianEntity musician);
 
-    boolean existsByAudienceEntityAndMusicianEntity(AppUserEntity audience, AppUserEntity musician);
-
-    void deleteByAudienceEntityAndMusicianEntity(AppUserEntity audience, AppUserEntity musician);
-
-    Page<FavoriteMusician> findByAudienceEntity(AppUserEntity audience, Pageable pageable);
+    void deleteByAudienceEntityAndMusicianEntity(AudienceEntity audience, MusicianEntity musician);
 }

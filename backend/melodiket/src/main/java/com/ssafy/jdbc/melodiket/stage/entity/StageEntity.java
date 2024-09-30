@@ -1,31 +1,23 @@
 package com.ssafy.jdbc.melodiket.stage.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "stage")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class StageEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
-
+@SuperBuilder
+public class StageEntity extends ExposableEntity {
     @Column(nullable = false)
     private String name;
 
@@ -46,5 +38,14 @@ public class StageEntity {
 
     @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertEntity> concerts = new ArrayList<>();
+
+    public void update(String name, String address, Boolean isStanding, Long numOfRow, Long numOfCol, Long capacity) {
+        this.name = name;
+        this.address = address;
+        this.isStanding = isStanding;
+        this.numOfRow = numOfRow;
+        this.numOfCol = numOfCol;
+        this.capacity = capacity;
+    }
 
 }

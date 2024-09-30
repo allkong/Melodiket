@@ -4,12 +4,12 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.Role;
@@ -44,15 +44,15 @@ public interface AuthService {
     UserProfileResp updateUser(UUID uuid, UpdateUserReq updateUserReq);
 
     // PageNation 기법 활용 공연관리자들 조회
-    StageManagerResp getStageManagers(int pageNo, int pageSize);
+    PageResponse<StageManagerResp> getStageManagers(CursorPagingReq pagingReq);
 
     // StageManager 상세조회
-    StageManagerDetailResp getStageManagerDetail(UUID id);
+    StageManagerResp getStageManagerDetail(UUID uuid);
 
     // PageNation 기법 활용 뮤지션들 조회
-    MusicianResp getMusicians(int pageNo, int pageSize);
+    PageResponse<MusicianResp> getMusicians(CursorPagingReq pagingReq);
 
     // Musician 상세조회
-    MusicianDetailResp getMusicianDetail(UUID id);
+    MusicianResp getMusicianDetail(UUID uuid);
 }
 
