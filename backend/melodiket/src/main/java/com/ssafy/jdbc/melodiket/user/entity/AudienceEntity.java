@@ -3,10 +3,7 @@ package com.ssafy.jdbc.melodiket.user.entity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -21,9 +18,9 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class AudienceEntity extends AppUserEntity {
 
-//    @OneToOne
-//    @JoinColumn(name = "id", referencedColumnName = "id")
-//    private AppUserEntity user;
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private AppUserEntity user;
 
     private String imageUrl;
 

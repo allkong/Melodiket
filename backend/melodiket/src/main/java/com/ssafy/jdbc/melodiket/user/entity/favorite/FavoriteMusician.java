@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.user.entity.favorite;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FavoriteMusician {
 
     @Id

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -42,6 +43,18 @@ public class TicketEntity extends BaseEntity {
 
     private Long seatRow;
     private Long seatCol;
-    private Date usedAt;
-    private Date refundedAt;
+    private LocalDateTime usedAt;
+    private LocalDateTime refundedAt;
+
+    private Long favoriteMusician;
+
+    public void updateStatusUsed(Status status){
+        this.status = status;
+        this.usedAt = LocalDateTime.now();
+    }
+
+    public void updateStatusRefunded(Status status){
+        this.status = status;
+        this.refundedAt = LocalDateTime.now();
+    }
 }
