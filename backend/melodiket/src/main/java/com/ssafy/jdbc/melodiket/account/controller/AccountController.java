@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.account.controller;
 import com.ssafy.jdbc.melodiket.account.controller.dto.AccountCertificationReq;
 import com.ssafy.jdbc.melodiket.account.controller.dto.AccountResp;
 import com.ssafy.jdbc.melodiket.account.controller.dto.AccountVerificationReq;
+import com.ssafy.jdbc.melodiket.account.controller.dto.TokenChargeReq;
 import com.ssafy.jdbc.melodiket.account.service.AccountService;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
@@ -42,5 +43,12 @@ public class AccountController {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         accountService.verifyAccountCertification(user, req.targetNumber(), req.verificationCode());
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/charge")
+    public ResponseEntity<Void> chargeToken(Authentication authentication, @Valid @RequestBody TokenChargeReq req) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        accountService.chargeToken(user, req.amount());
+        return ResponseEntity.accepted().build();
     }
 }
