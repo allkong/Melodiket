@@ -1,11 +1,15 @@
 'use client';
 
-import CloseButton from '@/components/atoms/button/CloseButton';
-import { LogoImage, LogoText } from '@/public/icons';
 import { useRouter } from 'next/navigation';
+
+import useTicketStore from '@/store/ticketStore';
+
+import { LogoImage, LogoText } from '@/public/icons';
+import CloseButton from '@/components/atoms/button/CloseButton';
 
 const Page = () => {
   const router = useRouter();
+  const { ticketDetail } = useTicketStore();
 
   const handleClose = () => {
     router.back();

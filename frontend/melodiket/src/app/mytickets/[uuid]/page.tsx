@@ -1,5 +1,7 @@
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
+
 import { useTicketDetail } from '@/services/ticket/useTicketdetail';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
@@ -13,7 +15,6 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
-import { usePathname, useRouter } from 'next/navigation';
 
 const Page = () => {
   const router = useRouter();
@@ -60,9 +61,9 @@ const Page = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <Header />
-      <div className="px-6">
+      <div className="px-6 pb-24 overflow-y-auto">
         {/* 포스터 및 제목 */}
         <div className="flex py-4 space-x-4 border-b">
           <PosterImage src={ticket?.posterCid || ''} size="md" />
