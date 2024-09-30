@@ -5,13 +5,19 @@ import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
 import com.ssafy.jdbc.melodiket.account.repository.AccountCertificationRepository;
 import com.ssafy.jdbc.melodiket.account.repository.AccountCursorRepository;
 import com.ssafy.jdbc.melodiket.account.repository.AccountRepository;
+import com.ssafy.jdbc.melodiket.blockchain.config.BlockchainConfig;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
+import com.ssafy.jdbc.melodiket.token.service.contract.MelodyTokenContract;
+import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
+import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.web3j.crypto.Credentials;
 
 import java.util.Date;
 
@@ -22,6 +28,9 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final AccountCertificationRepository accountCertificationRepository;
     private final AccountCursorRepository accountCursorRepository;
+    private final BlockchainConfig blockchainConfig;
+    private final WalletService walletService;
+    private final Credentials systemCredential;
 
     // TODO : 은행 API와 연동 필요
     @Transactional(rollbackOn = Exception.class)
@@ -105,5 +114,12 @@ public class AccountService {
 
     private boolean isValidCertification(String secret, String targetNumber, AccountCertificationEntity certification, AppUserEntity user) {
         return certification.getSecret().equals(secret) && certification.getNumber().equals(targetNumber) && certification.getAppUserEntity().equals(user);
+    }
+
+    @Async
+    public void chargeToken(AppUserEntity user, int amount) {
+        MelodyTokenContract contract = new MelodyTokenContract(blockchainConfig, systemCredential);
+        WalletResp wallet = walletService.getWalletOf(user);
+        contract.sendToken(wallet.address(), amount);
     }
 }
