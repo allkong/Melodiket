@@ -8,6 +8,7 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/stage-managers")
-    public ResponseEntity<PageResponse<StageManagerResp>> getStageManagers(CursorPagingReq pagingReq) {
+    public ResponseEntity<PageResponse<StageManagerResp>> getStageManagers(@Valid CursorPagingReq pagingReq) {
         PageResponse<StageManagerResp> stageManagerResp = authService.getStageManagers(pagingReq);
         return ResponseEntity.ok(stageManagerResp);
     }
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping("/musicians")
-    public ResponseEntity<PageResponse<MusicianResp>> getMusicians(CursorPagingReq pagingReq) {
+    public ResponseEntity<PageResponse<MusicianResp>> getMusicians(@Valid CursorPagingReq pagingReq) {
         PageResponse<MusicianResp> musicianResp = authService.getMusicians(pagingReq);
         return ResponseEntity.ok(musicianResp);
     }
