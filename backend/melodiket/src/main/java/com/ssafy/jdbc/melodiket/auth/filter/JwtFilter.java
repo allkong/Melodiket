@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -48,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // JWT 토큰이 존재
         if (uuid != null) {
             try {
-                AppUserEntity user = userService.findUserByUuid(uuid);
+                AppUserEntity user = userService.findUserByUuid(UUID.fromString(uuid));
                 // 식별자를 저장 (role 저장)
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         user,
