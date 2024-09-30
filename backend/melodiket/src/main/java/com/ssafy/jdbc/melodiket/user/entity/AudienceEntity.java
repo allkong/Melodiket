@@ -7,9 +7,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,12 @@ import java.util.List;
 @Table(name = "audience")
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 public class AudienceEntity extends AppUserEntity {
 
 //    @OneToOne
 //    @JoinColumn(name = "id", referencedColumnName = "id")
 //    private AppUserEntity user;
-
-    private String description;
 
     private String imageUrl;
 
@@ -38,4 +36,10 @@ public class AudienceEntity extends AppUserEntity {
     @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FavoriteMusician> favoriteMusicians = new ArrayList<>();
 
+    public AudienceEntity(String description, String imageUrl, List<TicketEntity> tickets, List<FavoriteConcert> favoriteConcerts, List<FavoriteMusician> favoriteMusicians) {
+        this.imageUrl = imageUrl;
+        this.tickets = tickets;
+        this.favoriteConcerts = favoriteConcerts;
+        this.favoriteMusicians = favoriteMusicians;
+    }
 }

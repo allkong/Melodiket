@@ -4,7 +4,6 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
-import com.ssafy.jdbc.melodiket.auth.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
@@ -18,16 +17,21 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
-import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
-import com.ssafy.jdbc.melodiket.user.entity.Role;
+import com.ssafy.jdbc.melodiket.user.entity.*;
+import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
+import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
+import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
+import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,7 +42,13 @@ import java.util.UUID;
 @Slf4j
 public class UserService implements AuthService {
 
+    public static final String LIKE_COUNT = "likeCount"; // 좋아요 개수
+    public static final String REGISTERED_AT = "registeredAt"; // 등록 날짜
+
     private final AppUserRepository appUserRepository;
+    private final AudienceRepository audienceRepository;
+    private final MusicianRepository musicianRepository;
+    private final StageManagerRepository stageMangerRepository;
     private final JwtService jwtService;
 
     @Override
@@ -52,27 +62,72 @@ public class UserService implements AuthService {
 
         String salt = PasswordUtil.generateSalt();
         String hashedPassword = PasswordUtil.hashPassword(signUpReq.password(), salt);
+        if (role == Role.AUDIENCE) {
+            AudienceEntity audience = AudienceEntity.builder()
+                    .uuid(UUID.randomUUID())
+                    .loginId(signUpReq.loginId())
+                    .password(hashedPassword)
+                    .salt(salt)
+                    .nickname(signUpReq.nickname())
+                    .role(role)
+                    .description(signUpReq.description())
+                    .imageUrl(signUpReq.imageUrl())
+                    .registeredAt(LocalDateTime.now())
+                    .build();
+            audienceRepository.save(audience);
 
-        AppUserEntity appUserEntity = AppUserEntity.builder()
-                .uuid(UUID.randomUUID())
-                .loginId(signUpReq.loginId())
-                .password(hashedPassword)
-                .salt(salt)
-                .nickname(signUpReq.nickname())
-                .role(role)
-                .description(signUpReq.description())
-                .build();
+            return new SignUpResp(
+                    audience.getId(),
+                    audience.getUuid(),
+                    audience.getLoginId(),
+                    audience.getNickname(),
+                    audience.getRole(),
+                    audience.getDescription()
+            );
+        } else if (role == Role.MUSICIAN) {
+            MusicianEntity musician = MusicianEntity.builder()
+                    .uuid(UUID.randomUUID())
+                    .loginId(signUpReq.loginId())
+                    .password(hashedPassword)
+                    .salt(salt)
+                    .nickname(signUpReq.nickname())
+                    .role(role)
+                    .description(signUpReq.description())
+                    .imageUrl(signUpReq.imageUrl())
+                    .registeredAt(LocalDateTime.now())
+                    .build();
+            musicianRepository.save(musician);
 
-        AppUserEntity user = appUserRepository.save(appUserEntity);
-
-        return new SignUpResp(
-                user.getId(),
-                user.getUuid(),
-                user.getLoginId(),
-                user.getNickname(),
-                user.getRole(),
-                user.getDescription()
-        );
+            return new SignUpResp(
+                    musician.getId(),
+                    musician.getUuid(),
+                    musician.getLoginId(),
+                    musician.getNickname(),
+                    musician.getRole(),
+                    musician.getDescription()
+            );
+        } else {
+            StageManagerEntity stageManager = StageManagerEntity.builder()
+                    .uuid(UUID.randomUUID())
+                    .loginId(signUpReq.loginId())
+                    .password(hashedPassword)
+                    .salt(salt)
+                    .nickname(signUpReq.nickname())
+                    .role(role)
+                    .description(signUpReq.description())
+                    .imageUrl(signUpReq.imageUrl())
+                    .registeredAt(LocalDateTime.now())
+                    .build();
+            stageMangerRepository.save(stageManager);
+            return new SignUpResp(
+                    stageManager.getId(),
+                    stageManager.getUuid(),
+                    stageManager.getLoginId(),
+                    stageManager.getNickname(),
+                    stageManager.getRole(),
+                    stageManager.getDescription()
+            );
+        }
     }
 
     @Override
@@ -143,6 +198,7 @@ public class UserService implements AuthService {
                 appUserEntity.getRole().name(),
                 appUserEntity.getNickname(),
                 appUserEntity.getDescription(),
+                appUserEntity.getRegisteredAt(),
                 null, // imageUrl 선개발시 처리
                 null  // walletInfo 선개발시 처리
         );
@@ -176,6 +232,7 @@ public class UserService implements AuthService {
                 updateUser.getRole().name(),
                 updateUser.getNickname(),
                 updateUser.getDescription(),
+                updateUser.getRegisteredAt(),
                 null, // imageUrl 선개발시 처리
                 null  // walletInfo 선개발시 처리
         );
@@ -192,6 +249,7 @@ public class UserService implements AuthService {
                         user.getRole().name(),
                         user.getNickname(),
                         user.getDescription(),
+                        user.getRegisteredAt(),
                         null,  // TODO : imageUrl 선개발시 null 처리
                         null   // TODO :walletInfo 선개발시 null 처리
                 ))
@@ -225,44 +283,68 @@ public class UserService implements AuthService {
     }
 
     @Override
-    public MusicianResp getMusicians(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<AppUserEntity> musicianPage = appUserRepository.findByRole(Role.MUSICIAN, pageable);
-        List<UserProfileResp> musicians = musicianPage.getContent().stream()
-                .map(user -> new UserProfileResp(
-                        user.getLoginId(),
-                        user.getRole().name(),
-                        user.getNickname(),
-                        user.getDescription(),
+    public MusicianResp getMusicians(int pageNo, int pageSize, String sortType) {
+
+        Sort sort;
+
+        // 정렬 기준 설정
+        switch (sortType.toLowerCase()) {
+            case "likes":
+                sort = Sort.by(Sort.Direction.DESC, LIKE_COUNT); // 찜 많은 순
+                break;
+            case "registered":
+                sort = Sort.by(Sort.Direction.ASC, REGISTERED_AT); // 등록 순
+                break;
+            case "latest":
+                sort = Sort.by(Sort.Direction.DESC, REGISTERED_AT); // 최신순
+                break;
+            default:
+                throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
+        }
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Page<MusicianEntity> musiciansPage = musicianRepository.findAll(pageable);
+
+        List<MusicianDetailResp> musicianDetails = musiciansPage.getContent().stream()
+                .map(musician -> new MusicianDetailResp(
+                        musician.getUuid(),
+                        musician.getLoginId(),
+                        musician.getRole().name(),
+                        musician.getDescription(),
+                        musician.getNickname(),
+                        musician.getRegisteredAt(),
                         null,  // TODO : imageUrl 선개발시 null 처리
+                        musician.getLikeCount(),
                         null   // TODO :walletInfo 선개발시 null 처리
                 ))
                 .toList();
 
         return new MusicianResp(
                 new PageInfo(
-                        musicianPage.hasNext(),
-                        musicianPage.hasPrevious(),
+                        musiciansPage.hasNext(),
+                        musiciansPage.hasPrevious(),
                         pageNo,
                         pageSize,
-                        musicianPage.getNumberOfElements()
+                        musiciansPage.getNumberOfElements()
                 ),
-                musicians
+                musicianDetails
         );
     }
 
     @Override
     public MusicianDetailResp getMusicianDetail(UUID id) {
-        AppUserEntity user = appUserRepository.findByUuid(id)
+        MusicianEntity musician = musicianRepository.findByUuid(id)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
         return new MusicianDetailResp(
-                user.getLoginId(),
-                user.getRole().name(),
-                user.getNickname(),
-                user.getDescription(),
+                musician.getUuid(),
+                musician.getLoginId(),
+                musician.getRole().name(),
+                musician.getNickname(),
+                musician.getDescription(),
+                musician.getRegisteredAt(),
                 null,// TODO : imageUrl 선개발시 null 처리
+                musician.getFavoriteMusicians().size(),
                 null   // TODO :walletInfo 선개발시 null 처리
         );
     }
-
 }

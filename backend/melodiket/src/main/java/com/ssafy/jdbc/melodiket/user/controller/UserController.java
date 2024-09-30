@@ -53,8 +53,9 @@ public class UserController {
 
     @GetMapping("/musicians")
     public ResponseEntity<MusicianResp> getMusicians(@RequestParam(defaultValue = "1") int pageNo,
-                                                     @RequestParam(defaultValue = "10") int pageSize) {
-        MusicianResp musicianResp = authService.getMusicians(pageNo, pageSize);
+                                                     @RequestParam(defaultValue = "10") int pageSize,
+                                                     @RequestParam(defaultValue = "latest") String sortType) {
+        MusicianResp musicianResp = authService.getMusicians(pageNo, pageSize, sortType);
         return ResponseEntity.ok(musicianResp);
     }
 

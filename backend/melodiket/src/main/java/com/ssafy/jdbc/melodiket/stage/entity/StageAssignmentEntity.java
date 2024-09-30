@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.stage.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StageAssignment {
+public class StageAssignmentEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +20,7 @@ public class StageAssignment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
-    private Stage stage;
+    private StageEntity stageEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_manager_id", nullable = false)

@@ -1,8 +1,10 @@
 package com.ssafy.jdbc.melodiket.stage.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +17,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stage {
+@Builder
+public class StageEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +42,19 @@ public class Stage {
     @Column(nullable = false)
     private Long capacity;
 
-    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StageAssignment> stageAssignments = new ArrayList<>();
+    @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertEntity> concerts = new ArrayList<>();
+
+    public void update(String name, String address, Boolean isStanding, Long numOfRow, Long numOfCol, Long capacity) {
+        this.name = name;
+        this.address = address;
+        this.isStanding = isStanding;
+        this.numOfRow = numOfRow;
+        this.numOfCol = numOfCol;
+        this.capacity = capacity;
+    }
 
 }
