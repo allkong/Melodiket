@@ -35,14 +35,13 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/auth/sign-up$"),
             Pattern.compile("^/api/v1/auth/sign-up/[^/]+$"),
             Pattern.compile("^/api/v1/auth/login$"),
-            Pattern.compile("^/api/v1/users/[^/]+/field-duplication-check$"),
+            Pattern.compile("^/api/v1/auth/[^/]+/field-duplication-check$"),
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
             Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
-            Pattern.compile("^/api/v1/musicians/like/me$"),
-            Pattern.compile("^/api/v1/musicians/[0-9a-fA-F-]{36}/like$"),
-            Pattern.compile("^/$")
+            Pattern.compile("^/api/v1/upload-image/presiged-url$"),
+            Pattern.compile("^/$"),
     };
 
     private final JwtService jwtService;

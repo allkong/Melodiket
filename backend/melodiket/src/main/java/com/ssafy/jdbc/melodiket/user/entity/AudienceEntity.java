@@ -1,8 +1,8 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcert;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -25,21 +25,18 @@ public class AudienceEntity extends AppUserEntity {
 //    @JoinColumn(name = "id", referencedColumnName = "id")
 //    private AppUserEntity user;
 
-    private String description;
-
     private String imageUrl;
 
     @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketEntity> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteConcert> favoriteConcerts = new ArrayList<>();
+    private List<FavoriteConcertEntity> favoriteConcerts = new ArrayList<>();
 
     @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FavoriteMusician> favoriteMusicians = new ArrayList<>();
+    private List<FavoriteMusicianEntity> favoriteMusicians = new ArrayList<>();
 
-    public AudienceEntity(String description, String imageUrl, List<TicketEntity> tickets, List<FavoriteConcert> favoriteConcerts, List<FavoriteMusician> favoriteMusicians) {
-        this.description = description;
+    public AudienceEntity(String description, String imageUrl, List<TicketEntity> tickets, List<FavoriteConcertEntity> favoriteConcerts, List<FavoriteMusicianEntity> favoriteMusicians) {
         this.imageUrl = imageUrl;
         this.tickets = tickets;
         this.favoriteConcerts = favoriteConcerts;

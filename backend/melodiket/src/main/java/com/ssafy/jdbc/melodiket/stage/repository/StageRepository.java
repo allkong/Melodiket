@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface StageRepository extends JpaRepository<StageEntity, Long> {
     Optional<Long> findIdByUuid(UUID uuid);
+    Optional<StageEntity> findByUuid(UUID uuid);
 }

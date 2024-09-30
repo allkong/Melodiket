@@ -13,7 +13,7 @@ const TextBanner = ({
 }: TextBannerProps) => {
   return (
     <div>
-      {hasLogo && <LogoImage width="44" height="44" />}
+      {hasLogo && <LogoImage className="w-11 h-11" />}
       <p className="whitespace-pre-line font-semibold text-2xl mt-3">{title}</p>
       <p className="mt-1 text-sm text-gray-500">{description}</p>
     </div>
