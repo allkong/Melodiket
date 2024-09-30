@@ -3,12 +3,12 @@ import Image from 'next/image';
 
 import defaultImage from '@/public/images/default-image.png';
 
-interface PosterImageProps {
+interface PosterFrameProps {
   src: string;
   size: 'sm' | 'md';
 }
 
-const PosterImage = ({ src, size }: PosterImageProps) => {
+const PosterFrame = ({ src, size }: PosterFrameProps) => {
   return (
     <div
       className={clsx('relative flex-shrink-0 overflow-hidden', {
@@ -27,4 +27,4 @@ const PosterImage = ({ src, size }: PosterImageProps) => {
   );
 };
 
-export default PosterImage;
+export default PosterFrame;
