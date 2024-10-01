@@ -25,6 +25,7 @@ import Guitar from './guitar.svg';
 import Microphone from './microphone.svg';
 import Music from './music.svg';
 import MyPage from './my-page.svg';
+import Cross from './cross.svg';
 
 export {
   LogoText,
@@ -54,4 +55,5 @@ export {
   Microphone,
   Music,
   MyPage,
+  Cross,
 };
