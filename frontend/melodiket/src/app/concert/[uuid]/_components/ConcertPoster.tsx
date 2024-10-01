@@ -4,15 +4,14 @@ import Image from 'next/image';
 
 import DarkedImage from '@/components/atoms/image/DarkedImage';
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import type { Concert } from '@/types/concert';
 import FavoriteButton from '@/components/atoms/button/FavoriteButton';
 
-interface ConcertPosterSection {
-  data: Concert;
+interface ConcertPosterProps {
+  uuid: string;
 }
 
-const ConcertPosterSection = () => {
-  const { data } = useFetchConcertDetail('test');
+const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
+  const { data } = useFetchConcertDetail(uuid);
   const { posterURL, title, location, favorite } = data!;
 
   return (
@@ -44,4 +43,4 @@ const ConcertPosterSection = () => {
   );
 };
 
-export default ConcertPosterSection;
+export default ConcertPoster;

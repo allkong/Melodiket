@@ -6,9 +6,17 @@ import ConcertTitle from './ConcertTitle';
 import ConcertDetail from './ConcertDetail';
 import MusiciansInformation from './MusiciansInformation';
 import ConcertDescription from './ConcertDescription';
+import LargeButton from '@/components/atoms/button/LargeButton';
+import { useRouter } from 'next/navigation';
 
-const ConcertInformationSection = () => {
-  const { data } = useFetchConcertDetail('test');
+interface ConcertInformationProps {
+  uuid: string;
+}
+
+const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
+  const router = useRouter();
+
+  const { data } = useFetchConcertDetail(uuid);
   const {
     title,
     location,
@@ -37,8 +45,14 @@ const ConcertInformationSection = () => {
       <MusiciansInformation musicians={musicians} />
       <ThinDivider />
       <ConcertDescription description={description} />
+      <div className="fixed w-full max-w-xl bottom-0 left-1/2 -translate-x-1/2 px-6 py-3 bg-white">
+        <LargeButton
+          label="예매하기"
+          onClick={() => router.push(`/concert/book/${uuid}`)}
+        />
+      </div>
     </div>
   );
 };
 
-export default ConcertInformationSection;
+export default ConcertInformation;

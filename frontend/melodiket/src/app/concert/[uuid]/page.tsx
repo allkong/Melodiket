@@ -1,23 +1,23 @@
-import LargeButton from '@/components/atoms/button/LargeButton';
 import Header from '@/components/organisms/navigation/Header';
-import ConcertPosterSection from './_components/ConcertPosterSection';
+import ConcertPoster from './_components/ConcertPoster';
 import { HydrationBoundary } from '@tanstack/react-query';
 import { useFetchConcertDetailDehydrateState } from '@/services/concert/fetchConcert';
-import ConcertInformationSection from './_components/ConcertInformationSection';
+import ConcertInformation from './_components/ConcertInformation';
 
-const Page = async () => {
+interface PageProps {
+  params: { uuid: string };
+}
+
+const Page = async ({ params }: PageProps) => {
   return (
     <div className="flex flex-col w-full min-h-screen h-fit pb-10 bg-white">
       <Header isFixed />
       <HydrationBoundary
-        state={await useFetchConcertDetailDehydrateState('test')}
+        state={await useFetchConcertDetailDehydrateState(params.uuid)}
       >
-        <ConcertPosterSection />
-        <ConcertInformationSection />
+        <ConcertPoster uuid={params.uuid} />
+        <ConcertInformation uuid={params.uuid} />
       </HydrationBoundary>
-      <div className="fixed w-full max-w-xl mx-auto bottom-0 px-6 py-3 bg-white">
-        <LargeButton label="예매하기" />
-      </div>
     </div>
   );
 };
