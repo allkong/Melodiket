@@ -21,7 +21,6 @@ const SeatRadio = ({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const { row, col } = JSON.parse(value);
-    console.log(row, col);
 
     onChange?.(row, col);
   };
