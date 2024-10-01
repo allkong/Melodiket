@@ -148,6 +148,25 @@ const CONCERT_DETAIL: Concert = {
   capability: 30,
   price: 35000,
   isSeat: true,
+  // prettier-ignore
+  isAvailableSeat: [
+    [true, false, true, false, true, false, true, true, false, true, false, true, true, false, true, true, false, true, false],
+    [false, true, false, true, true, false, true, false, false, true, true, false, true, true, false, true, false, false, true],
+    [true, false, true, true, false, true, false, false, true, true, false, true, false, true, true, false, true, true, false],
+    [false, true, false, false, true, true, false, true, true, false, true, false, true, false, true, false, false, true, true],
+    [true, true, false, true, false, true, false, true, false, true, false, true, true, false, true, true, false, false, true],
+    [false, false, true, false, true, false, true, false, true, true, false, true, false, true, false, true, true, true, false],
+    [true, true, false, true, false, true, false, false, true, true, false, false, true, false, true, false, true, true, false],
+    [false, false, true, false, true, false, true, true, false, true, true, false, true, false, true, true, false, false, true],
+    [true, false, true, false, true, true, false, true, false, true, true, false, true, true, false, true, true, false, false],
+    [false, true, false, true, true, false, true, true, false, true, false, true, true, false, false, true, false, true, true],
+    [true, false, true, false, false, true, false, true, false, true, true, false, true, false, true, false, true, false, true],
+    [false, true, false, true, true, false, true, false, true, false, true, true, false, true, true, false, true, false, false],
+    [true, false, true, false, true, true, false, false, true, true, false, true, false, true, false, true, true, false, true],
+    [false, true, false, true, false, true, true, false, true, false, true, false, true, true, false, true, false, true, true],
+    [true, false, true, true, false, true, false, true, true, false, true, true, false, true, false, true, false, false, true],
+    [false, true, false, true, true, false, true, true, false, true, false, true, true, false, true, false, true, true, false]
+  ],
 };
 
 export const concertList = [

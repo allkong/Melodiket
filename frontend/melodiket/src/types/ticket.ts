@@ -17,3 +17,11 @@ export interface TicketsResponse {
 }
 
 export type TicketStatus = (typeof TICKET_STATUS)[keyof typeof TICKET_STATUS];
+
+export interface TicketBook {
+  concertId: string;
+  seatRow: number;
+  seatCol: number;
+  tokenAmount: number;
+  favoriteMusician: string;
+}

@@ -32,6 +32,7 @@ export interface Concert {
   capability: number;
   price: number;
   isSeat?: boolean;
+  isAvailableSeat: boolean[][];
 }
 
 export interface CarouselConcert
