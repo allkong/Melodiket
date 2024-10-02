@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import BackgroundImage from './BackgroundImage';
+import BackgroundFrame from './BackgroundFrame';
 
-const meta: Meta<typeof BackgroundImage> = {
-  component: BackgroundImage,
+const meta: Meta<typeof BackgroundFrame> = {
+  component: BackgroundFrame,
 };
 
 export default meta;
-type Story = StoryObj<typeof BackgroundImage>;
+type Story = StoryObj<typeof BackgroundFrame>;
 
 export const Default: Story = {
   args: {
