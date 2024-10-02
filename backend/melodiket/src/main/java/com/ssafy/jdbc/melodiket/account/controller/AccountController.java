@@ -1,9 +1,6 @@
 package com.ssafy.jdbc.melodiket.account.controller;
 
-import com.ssafy.jdbc.melodiket.account.controller.dto.AccountCertificationReq;
-import com.ssafy.jdbc.melodiket.account.controller.dto.AccountResp;
-import com.ssafy.jdbc.melodiket.account.controller.dto.AccountVerificationReq;
-import com.ssafy.jdbc.melodiket.account.controller.dto.TokenChargeReq;
+import com.ssafy.jdbc.melodiket.account.controller.dto.*;
 import com.ssafy.jdbc.melodiket.account.service.AccountService;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
@@ -48,7 +45,16 @@ public class AccountController {
     @PostMapping("/charge")
     public ResponseEntity<Void> chargeToken(Authentication authentication, @Valid @RequestBody TokenChargeReq req) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        accountService.chargeToken(user, req.amount());
+//        accountService.checkChargeTokenAvailable(user, req.accountNumber());
+        accountService.chargeToken(user, req.accountNumber(), req.amount());
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<Void> withdrawToken(Authentication authentication, @Valid @RequestBody TokenWithdrawReq req) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+//        accountService.checkWithdrawAvailable(user, req.accountNumber(), req.amount());
+        accountService.withdrawToken(user, req.accountNumber(), req.amount());
         return ResponseEntity.accepted().build();
     }
 }

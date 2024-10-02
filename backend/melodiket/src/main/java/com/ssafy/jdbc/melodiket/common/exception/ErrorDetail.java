@@ -40,6 +40,7 @@ public enum ErrorDetail {
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "E409002", "중복된 닉네임 입니다."),
     ALREADY_REGISTERED_ACCOUNT(HttpStatus.CONFLICT, "E409003", "Already registered account."),
+    NOT_ENOUGH_TOKEN_BALANCE(HttpStatus.CONFLICT, "E409004", "Not enough token balance."),
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500000", "Internal Server Error");
 
