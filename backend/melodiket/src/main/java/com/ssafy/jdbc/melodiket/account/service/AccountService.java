@@ -6,10 +6,14 @@ import com.ssafy.jdbc.melodiket.account.repository.AccountCertificationRepositor
 import com.ssafy.jdbc.melodiket.account.repository.AccountCursorRepository;
 import com.ssafy.jdbc.melodiket.account.repository.AccountRepository;
 import com.ssafy.jdbc.melodiket.blockchain.config.BlockchainConfig;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
+import com.ssafy.jdbc.melodiket.token.service.MelodyTokenService;
 import com.ssafy.jdbc.melodiket.token.service.contract.MelodyTokenContract;
+import com.ssafy.jdbc.melodiket.token.service.dto.TokenTransactionLogResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
@@ -34,6 +38,7 @@ public class AccountService {
     private final BlockchainConfig blockchainConfig;
     private final WalletService walletService;
     private final Credentials systemCredential;
+    private final MelodyTokenService melodyTokenService;
 
     // TODO : 은행 API와 연동 필요
     @Transactional(rollbackOn = Exception.class)
@@ -127,6 +132,7 @@ public class AccountService {
 
         // TODO : 계좌 차감
         contract.sendToken(wallet.address(), amount);
+        melodyTokenService.createChargeLog(user, amount);
     }
 
     public void checkChargeTokenAvailable(AppUserEntity user, String accountNumber) {
@@ -142,6 +148,7 @@ public class AccountService {
         Credentials userCredential = Credentials.create(privateKey);
         MelodyTokenContract userContract = new MelodyTokenContract(blockchainConfig, userCredential);
         userContract.sendToken(systemCredential.getAddress(), amount);
+        melodyTokenService.createWithdrawLog(user, amount);
 
         // TODO : 계좌로 환급
     }
@@ -153,5 +160,32 @@ public class AccountService {
         if (wallet.tokenBalance() < amount) {
             throw new HttpResponseException(ErrorDetail.NOT_ENOUGH_TOKEN_BALANCE);
         }
+    }
+
+    public PageResponse<TokenTransactionLogResp> getLogsOf(AppUserEntity user, TransactionLogFetchMode mode,
+                                                           LogType logType, CursorPagingReq pagingReq) {
+        switch (mode) {
+            case FROM:
+                return melodyTokenService.getAsFrom(user, logType, pagingReq);
+            case TO:
+                return melodyTokenService.getAsTo(user, logType, pagingReq);
+            case FROM_OR_TO:
+                return melodyTokenService.getAsFromOrTo(user, logType, pagingReq);
+            default:
+                throw new IllegalArgumentException("Invalid LogFetchMode");
+        }
+    }
+
+    public enum TransactionLogFetchMode {
+        FROM, TO, FROM_OR_TO
+    }
+
+    public enum LogType {
+        CHARGE, // 계좌 -> 토큰 충전 (SYSTEM -> 사용자)
+        WITHDRAW, // 토큰 -> 계좌 출금 (사용자 -> SYSTEM)
+        TICKET_PURCHASE, // 티켓 구매 (사용자 -> SYSTEM)
+        CONCERT_CANCELED, // 콘서트 취소로 인한 티켓 요금 환불 (StageManager -> Audience)
+        TICKET_REFUND, // 티켓 환불 (SYSTEM -> 사용자)
+        CONCERT_SETTLEMENT // 콘서트 정산 (SYSTEM -> StageManager)
     }
 }
