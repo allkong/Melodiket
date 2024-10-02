@@ -4,6 +4,7 @@ import com.ssafy.jdbc.melodiket.account.controller.dto.*;
 import com.ssafy.jdbc.melodiket.account.service.AccountService;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.token.service.dto.TokenTransactionLogResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,14 @@ public class AccountController {
 //        accountService.checkWithdrawAvailable(user, req.accountNumber(), req.amount());
         accountService.withdrawToken(user, req.accountNumber(), req.amount());
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/transactions/me")
+    public ResponseEntity<PageResponse<TokenTransactionLogResp>> getMyTransactions(Authentication authentication, CursorPagingReq pagingReq,
+                                                                                   @RequestParam(required = false) AccountService.TransactionLogFetchMode mode,
+                                                                                   @RequestParam(required = false) AccountService.LogType logType) {
+        mode = mode == null ? AccountService.TransactionLogFetchMode.FROM_OR_TO : mode;
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(accountService.getLogsOf(user, mode, logType, pagingReq));
     }
 }

@@ -35,6 +35,7 @@ public enum ErrorDetail {
     ACCOUNT_CERTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "E404004", "Certification not found."),
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404005", "Account not found."),
     TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "Ticket not found."),
+    TRANSACTION_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "E404007", "Transaction log not found."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
