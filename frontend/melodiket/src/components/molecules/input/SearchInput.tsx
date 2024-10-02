@@ -45,6 +45,7 @@ const SearchInput = forwardRef(
       if (!isControlled) {
         setValue('');
       }
+      onChange?.('');
       onSubmit?.('');
     };
 
