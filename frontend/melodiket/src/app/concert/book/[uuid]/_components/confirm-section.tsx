@@ -11,6 +11,7 @@ import ConfirmCheckbox from './confirm-checkbox';
 import { useState } from 'react';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
 import useAuthStore from '@/store/authStore';
+import { formatPrice } from '@/utils/concertFormatter';
 
 interface ConfirmSectionProps {
   onNext: (favoriteMusician: string) => void;
@@ -72,7 +73,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
             )}
             <LabelValueText
               label="가격"
-              value={`${data?.price.toLocaleString()}원`}
+              value={formatPrice(data?.price ?? 0)}
             />
           </div>
         </Accordion>
@@ -107,7 +108,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
       </div>
       <div className="w-full px-6 py-3 bg-white">
         <LargeButton
-          label={`${data?.price.toLocaleString() ?? 0}원 결제`}
+          label={`${formatPrice(data?.price ?? 0)} 결제`}
           onClick={() => onNext(selectedMusician!)}
           disabled={!isButtonValid || selectedMusician === null}
         />

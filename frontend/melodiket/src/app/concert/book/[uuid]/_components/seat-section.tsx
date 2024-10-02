@@ -4,6 +4,7 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 import type { TicketBook } from '@/types/ticket';
 import { Suspense, useState } from 'react';
 import SeatSelector from './seat-selector';
+import { formatPrice } from '@/utils/concertFormatter';
 
 interface SeatSectionProps {
   onNext: (
@@ -40,7 +41,9 @@ const SeatSection = ({ onNext }: SeatSectionProps) => {
               : '좌석을 선택해주세요'}
           </p>
         </div>
-        <p className="text-base font-semibold">가격 {seatInfo.tokenAmount}원</p>
+        <p className="text-base font-semibold">
+          가격 {formatPrice(seatInfo.tokenAmount)}
+        </p>
       </div>
       <div className="fixed w-full max-w-xl bottom-0 left-1/2 -translate-x-1/2 px-6 py-3 bg-white">
         <LargeButton
