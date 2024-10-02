@@ -30,7 +30,7 @@ public class StageController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<StageInfoResponse>> getCursorStages(CursorPagingReq pagingReq) {
+    public ResponseEntity<PageResponse<StageInfoResponse>> getCursorStages(@Valid CursorPagingReq pagingReq) {
         PageResponse<StageInfoResponse> response = stageService.getStages(pagingReq);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

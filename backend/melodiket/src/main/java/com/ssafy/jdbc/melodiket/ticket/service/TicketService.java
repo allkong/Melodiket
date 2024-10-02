@@ -5,6 +5,7 @@ import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
+import com.ssafy.jdbc.melodiket.stage.repository.StageAssignmentRepository;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketPurchaseRequest;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketResponse;
 import com.ssafy.jdbc.melodiket.ticket.entity.Status;
@@ -13,13 +14,17 @@ import com.ssafy.jdbc.melodiket.ticket.repository.TicketRepository;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
+import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
 import com.ssafy.jdbc.melodiket.user.repository.FavoriteMusicianRepository;
 import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
+import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +40,8 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final ConcertRepository concertRepository;
     private final FavoriteMusicianRepository favoriteMusicianRepository;
+    private final StageManagerRepository stageManagerRepository;
+    private final StageAssignmentRepository stageAssignmentRepository;
 
     public TicketResponse createTicket(String loginId, TicketPurchaseRequest ticketPurchaseRequest) {
         AudienceEntity audienceEntity = audienceRepository.findByUser_LoginId(loginId)
@@ -59,6 +66,7 @@ public class TicketService {
 
         TicketEntity ticket = ticketRepository.save(TicketEntity.builder()
                 .uuid(ticketUUID)
+                .userName(audienceEntity.getName())
                 .audienceEntity(audienceEntity)
                 .concertEntity(concert)
                 .status(Status.NOT_USED)
@@ -69,6 +77,7 @@ public class TicketService {
         );
 
         return TicketResponse.builder()
+                .userName(audienceEntity.getName())
                 .ticketUuid(ticketUUID)
                 .concertTitle(concert.getTitle())
                 .posterCid(concert.getPosterCid())
@@ -102,6 +111,7 @@ public class TicketService {
                     ConcertEntity concert = ticket.getConcertEntity();
                     StageEntity stage = concert.getStageEntity();
                     return TicketResponse.builder()
+                            .userName(ticket.getUserName())
                             .ticketUuid(ticket.getUuid())
                             .concertTitle(concert.getTitle())
                             .posterCid(concert.getPosterCid())
@@ -127,6 +137,7 @@ public class TicketService {
         StageEntity stage = concert.getStageEntity();
 
         return TicketResponse.builder()
+                .userName(ticket.getUserName())
                 .ticketUuid(ticket.getUuid())
                 .concertTitle(concert.getTitle())
                 .posterCid(concert.getPosterCid())
@@ -148,16 +159,24 @@ public class TicketService {
                 .build();
     }
 
-    public TicketResponse useTicket(UUID ticketUUID) {
+    public TicketResponse useTicket(Principal principal, UUID ticketUUID){
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         Optional<MusicianEntity> _favoriteMusician = musicianRepository.findById(ticket.getFavoriteMusician());
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
 
+        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(principal.getName())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
+
+        if(!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stage, stageManager)) {
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
+
         ticket.updateStatusUsed(Status.USED);
 
         return TicketResponse.builder()
+                .userName(ticket.getUserName())
                 .ticketUuid(ticket.getUuid())
                 .concertTitle(concert.getTitle())
                 .posterCid(concert.getPosterCid())
@@ -191,6 +210,7 @@ public class TicketService {
         //TODO:: 토큰 반환해주기
 
         return TicketResponse.builder()
+                .userName(ticket.getUserName())
                 .ticketUuid(ticket.getUuid())
                 .concertTitle(concert.getTitle())
                 .posterCid(concert.getPosterCid())

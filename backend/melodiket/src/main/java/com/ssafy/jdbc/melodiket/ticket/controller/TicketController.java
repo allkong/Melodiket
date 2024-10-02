@@ -50,8 +50,8 @@ public class TicketController {
     }
 
     @PostMapping("/{ticketUuid}/use")
-    public ResponseEntity<TicketResponse> useTicket(@PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
-        TicketResponse response = ticketService.useTicket(ticketUuid);
+    public ResponseEntity<TicketResponse> useTicket(Principal principal, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
+        TicketResponse response = ticketService.useTicket(principal, ticketUuid);
         return ResponseEntity.ok(response);
     }
 }

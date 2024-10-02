@@ -26,6 +26,9 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class AppUserEntity extends ExposableEntity implements UserDetails {
+    @Column(nullable = false)
+    private String name;
+
     @Column(unique = true, nullable = false)
     private String loginId;
 
