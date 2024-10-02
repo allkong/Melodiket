@@ -12,6 +12,8 @@ spring:
       dev: dev
       release: release
     active: ${CURRENT_ENV}
+  elasticsearch:
+    uris: http://localhost:9200
 
 server:
   port: ${SERVER_PORT}

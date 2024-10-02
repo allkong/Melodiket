@@ -51,6 +51,11 @@ dependencies {
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
     implementation "org.redisson:redisson:3.16.0"
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    // Elasticsearch Rest High Level Client
+    implementation "co.elastic.clients:elasticsearch-java:8.9.0"
 }
 
 tasks.named('test') {
