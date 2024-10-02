@@ -34,12 +34,14 @@ public enum ErrorDetail {
     STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404003", "존재하지 않는 공연장 정보 입니다."),
     ACCOUNT_CERTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "E404004", "Certification not found."),
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404005", "Account not found."),
-    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "존재하지 않는 티켓 입니다."),
+    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "Ticket not found."),
+    TRANSACTION_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "E404007", "Transaction log not found."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "E409002", "중복된 닉네임 입니다."),
     ALREADY_REGISTERED_ACCOUNT(HttpStatus.CONFLICT, "E409003", "Already registered account."),
+    NOT_ENOUGH_TOKEN_BALANCE(HttpStatus.CONFLICT, "E409004", "Not enough token balance."),
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500000", "Internal Server Error");
 

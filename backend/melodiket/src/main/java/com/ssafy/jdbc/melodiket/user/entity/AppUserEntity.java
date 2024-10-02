@@ -57,7 +57,8 @@ public class AppUserEntity extends ExposableEntity implements UserDetails {
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL) // 양방향 매핑 설정
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
     private WalletInfoEntity walletInfo;
 
     @Override
