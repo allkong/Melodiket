@@ -42,7 +42,7 @@ import Help from './help.svg';
 import Upload from './upload.svg';
 export { Heart, Check, Calendar, Help, Upload };
 
-import MLDY from './MLDY.svg';
+import MLDY from './mldy.svg';
 import Authority from './authority.svg';
 export { MLDY, Authority };
 
