@@ -105,7 +105,7 @@ const Page = () => {
         </DetailSection>
       </div>
 
-      <FixedButton label="공연 취소" onClick={handleMobileTicketClick} />
+      <FixedButton label="공연 취소" />
     </div>
   );
 };
