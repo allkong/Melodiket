@@ -39,7 +39,7 @@ const Page = () => {
   };
 
   const handleRegisterClick = () => {
-    router.push('/concert/register');
+    router.push('/concert-management/register');
   };
 
   return (
