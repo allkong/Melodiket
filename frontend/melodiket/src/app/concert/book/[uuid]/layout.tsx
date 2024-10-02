@@ -3,8 +3,6 @@
 import { ReactNode } from 'react';
 
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import ArrowButton from '@/components/atoms/button/ArrowButton';
-import CrossButton from '@/components/atoms/button/CrossButton';
 import { useParams, useRouter } from 'next/navigation';
 import SubHeader from '@/components/organisms/navigation/SubHeader';
 
