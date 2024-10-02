@@ -55,3 +55,6 @@ export { QrCode, Ticket, CalendarFilled, Location, SubwayMark };
 
 import TicketShape from './ticket-shape.svg';
 export { TicketShape };
+
+import Clock from './clock.svg';
+export { Clock };
