@@ -16,9 +16,9 @@ import { useFetchFavoriteMusiciansListDehydrateState } from '@/services/favorite
 
 export default async function Home() {
   return (
-    <div className="w-full min-h-screen bg-purple-100 overflow-y-auto">
-      <Header />
-      <div className="w-full px-7">
+    <div className="w-full min-h-screen overflow-y-auto bg-purple-100">
+      <Header isFixed />
+      <div className="w-full mt-16 px-7">
         <HydrationBoundary state={await useFetchCarouselListDehydrateState()}>
           <CarouselSection />
         </HydrationBoundary>

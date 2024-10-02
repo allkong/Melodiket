@@ -68,7 +68,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
           icon={<Favorite />}
           label="찜한 공연/뮤지션"
         />
-        <Menu.Item href="/" icon={<Basket />} label="예매내역" />
+        <Menu.Item href="/mytickets" icon={<Basket />} label="예매내역" />
         <Menu.Item href="/" icon={<Card />} label="포토카드" />
         <Menu.Item href="/" icon={<Microphone />} label="내 공연" />
         <Menu.Divider />

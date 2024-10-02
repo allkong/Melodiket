@@ -13,7 +13,7 @@ const ArrowButton = ({
   onClick,
 }: ArrowButtonProps) => {
   return (
-    <div>
+    <div className="w-3 h-auto">
       <Arrow
         className={clsx(color, {
           'transform rotate-0': direction === 'right',
