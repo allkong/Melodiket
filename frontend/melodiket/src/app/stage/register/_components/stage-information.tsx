@@ -8,6 +8,7 @@ import Input from '@/components/atoms/input/Input';
 import OptionButton from '@/components/atoms/button/OptionButton';
 
 import { StageData } from '@/types/stage';
+import { useRegisterStage } from '@/services/stage/fetchStage';
 
 interface StageInformationProps {
   stageData: StageData;
@@ -22,6 +23,8 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
   const [numOfRow, setNumOfRow] = useState('');
   const [numOfCol, setNumOfCol] = useState('');
 
+  const { mutate: registerStage } = useRegisterStage();
+
   const isFormValid =
     stageName && stageAddress && (isStanding ? capacity : numOfRow && numOfCol);
 
@@ -30,10 +33,13 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
       stageName,
       stageAddress,
       isStanding,
-      capacity: isStanding ? Number(capacity) : undefined,
-      numOfRow: !isStanding ? Number(numOfRow) : undefined,
-      numOfCol: !isStanding ? Number(numOfCol) : undefined,
+      capacity: isStanding ? Number(capacity) : 0,
+      numOfRow: !isStanding ? Number(numOfRow) : 0,
+      numOfCol: !isStanding ? Number(numOfCol) : 0,
     };
+
+    registerStage(updatedStageData);
+
     onNext(updatedStageData);
   };
 
