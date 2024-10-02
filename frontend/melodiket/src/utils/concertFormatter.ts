@@ -1,8 +1,4 @@
 export const formatPrice = (value: number): string => {
-  if (!value) {
-    return 'no data';
-  }
-
   return `${value.toLocaleString()} MLDY`;
 };
 
