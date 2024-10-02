@@ -13,6 +13,7 @@ import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.ticket.repository.TicketRepository;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
@@ -197,7 +198,7 @@ public class TicketService {
                 .build();
     }
 
-    public TicketResponse refundTicket(UUID ticketUUID){
+    public TicketResponse refundTicket(UUID ticketUUID) {
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         Optional<MusicianEntity> _favoriteMusician = musicianRepository.findById(ticket.getFavoriteMusician());
