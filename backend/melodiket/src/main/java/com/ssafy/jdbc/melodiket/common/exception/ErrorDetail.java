@@ -36,6 +36,7 @@ public enum ErrorDetail {
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404005", "Account not found."),
     TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "Ticket not found."),
     TRANSACTION_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "E404007", "Transaction log not found."),
+    CONCERT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404008", "Concert not found."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
