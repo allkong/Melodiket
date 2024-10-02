@@ -51,35 +51,36 @@ const Page = () => {
         onClick={handleTabClick}
         labelMap={CONCERT_TYPES}
       />
+      <div className="flex-grow h-0 overflow-y-auto">
+        {filteredTickets.length ? (
+          filteredTickets.map((ticket) => (
+            <Link
+              href={`/concert-management/${ticket.ticketUuid}`}
+              key={ticket.ticketUuid}
+            >
+              <TicketItem
+                src={ticket.posterCid}
+                concertTitle={ticket.concertTitle}
+                stageName={ticket.stageName}
+                createdAt={ticket.createdAt}
+                {...(ticket.refundAt
+                  ? { refundAt: ticket.refundAt }
+                  : { startAt: ticket.startAt })}
+              />
+            </Link>
+          ))
+        ) : (
+          <EmptyData
+            text={
+              activeTab === 'reserved'
+                ? '등록된 공연이 없어요'
+                : '취소된 공연이 없어요'
+            }
+          />
+        )}
+      </div>
 
-      {filteredTickets.length ? (
-        filteredTickets.map((ticket) => (
-          <Link
-            href={`/concert-management/${ticket.ticketUuid}`}
-            key={ticket.ticketUuid}
-          >
-            <TicketItem
-              src={ticket.posterCid}
-              concertTitle={ticket.concertTitle}
-              stageName={ticket.stageName}
-              createdAt={ticket.createdAt}
-              {...(ticket.refundAt
-                ? { refundAt: ticket.refundAt }
-                : { startAt: ticket.startAt })}
-            />
-          </Link>
-        ))
-      ) : (
-        <EmptyData
-          text={
-            activeTab === 'reserved'
-              ? '등록된 공연이 없어요'
-              : '취소된 공연이 없어요'
-          }
-        />
-      )}
-
-      <div className="w-full p-4">
+      <div className="my-4 h-fit px-4">
         <LargeButton label="공연 등록" onClick={handleRegisterClick} />
       </div>
     </div>
