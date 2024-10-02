@@ -36,6 +36,8 @@ public class TicketEntity extends ExposableEntity {
 
     private Long favoriteMusician;
 
+    private String userName;
+
     public void updateStatusUsed(Status status){
         this.status = status;
         this.usedAt = LocalDateTime.now();
