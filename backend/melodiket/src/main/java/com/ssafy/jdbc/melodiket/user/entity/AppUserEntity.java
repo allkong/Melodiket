@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.user.entity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountCertificationEntity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
 import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
+import com.ssafy.jdbc.melodiket.wallet.entity.WalletInfoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,6 +53,9 @@ public class AppUserEntity extends ExposableEntity implements UserDetails {
 
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL) // 양방향 매핑 설정
+    private WalletInfoEntity walletInfo;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

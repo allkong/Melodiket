@@ -34,7 +34,7 @@ public enum ErrorDetail {
     STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404003", "존재하지 않는 공연장 정보 입니다."),
     ACCOUNT_CERTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "E404004", "Certification not found."),
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404005", "Account not found."),
-    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "Ticket not found."),
+    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "E404006", "존재하지 않는 티켓 입니다."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
