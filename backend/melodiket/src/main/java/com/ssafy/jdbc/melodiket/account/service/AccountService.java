@@ -8,6 +8,7 @@ import com.ssafy.jdbc.melodiket.account.repository.AccountRepository;
 import com.ssafy.jdbc.melodiket.blockchain.config.BlockchainConfig;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
+import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.token.service.contract.MelodyTokenContract;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
@@ -15,12 +16,14 @@ import com.ssafy.jdbc.melodiket.user.service.UserService;
 import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 
 import java.util.Date;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AccountService {
@@ -117,9 +120,38 @@ public class AccountService {
     }
 
     @Async
-    public void chargeToken(AppUserEntity user, int amount) {
+    @DistributedLock(key = "#user.loginId.concat('-').concat('chargeToken')")
+    public void chargeToken(AppUserEntity user, String accountNumber, int amount) {
         MelodyTokenContract contract = new MelodyTokenContract(blockchainConfig, systemCredential);
         WalletResp wallet = walletService.getWalletOf(user);
+
+        // TODO : 계좌 차감
         contract.sendToken(wallet.address(), amount);
+    }
+
+    public void checkChargeTokenAvailable(AppUserEntity user, String accountNumber) {
+        accountRepository.findByAppUserEntityAndNumber(user, accountNumber).orElseThrow(() -> new HttpResponseException(ErrorDetail.ACCOUNT_NOT_FOUND));
+    }
+
+    @Async
+    @DistributedLock(key = "#user.loginId.concat('-').concat('withdrawToken')")
+    public void withdrawToken(AppUserEntity user, String accountNumber, int amount) {
+        WalletResp wallet = walletService.getWalletOf(user);
+
+        String privateKey = walletService.getPrivateKeyOf(wallet.address());
+        Credentials userCredential = Credentials.create(privateKey);
+        MelodyTokenContract userContract = new MelodyTokenContract(blockchainConfig, userCredential);
+        userContract.sendToken(systemCredential.getAddress(), amount);
+
+        // TODO : 계좌로 환급
+    }
+
+    public void checkWithdrawAvailable(AppUserEntity user, String accountNumber, int amount) {
+        accountRepository.findByAppUserEntityAndNumber(user, accountNumber).orElseThrow(() -> new HttpResponseException(ErrorDetail.ACCOUNT_NOT_FOUND));
+
+        WalletResp wallet = walletService.getWalletOf(user);
+        if (wallet.tokenBalance() < amount) {
+            throw new HttpResponseException(ErrorDetail.NOT_ENOUGH_TOKEN_BALANCE);
+        }
     }
 }

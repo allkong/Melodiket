@@ -50,6 +50,12 @@ public class WalletService {
         return new WalletResp(wallet.getWalletAddress(), balance);
     }
 
+    public String getPrivateKeyOf(String address) {
+        WalletInfoEntity wallet = walletRepository.findByWalletAddress(address)
+                .orElseThrow(() -> new RuntimeException("Wallet not found"));
+        return wallet.getPrivateKey();
+    }
+
     public WalletInfoEntity createNewWallet(AppUserEntity user) {
         // Randomly create private key
         try {
