@@ -3,7 +3,7 @@
 import LargeButton from '@/components/atoms/button/LargeButton';
 import type { TicketBook } from '@/types/ticket';
 import { Suspense, useState } from 'react';
-import SeatSelector from './SeatSelector';
+import SeatSelector from './seat-selector';
 
 interface SeatSectionProps {
   onNext: (
