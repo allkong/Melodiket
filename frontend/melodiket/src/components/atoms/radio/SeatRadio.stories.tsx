@@ -39,7 +39,7 @@ export const Select: Story = {
       <>
         <div className="flex flex-col gap-1 w-96 flex-wrap">
           {data.map((line, row) => (
-            <div className="flex flex-row gap-1">
+            <div key={row} className="flex flex-row gap-1">
               {line.map((available, col) => (
                 <SeatRadio
                   key={row * data.length + col}
