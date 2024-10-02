@@ -32,7 +32,7 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
       <div className="flex flex-col gap-1">
         {data &&
           data?.isAvailableSeat.map((line, row) => (
-            <div className="flex flex-row gap-1">
+            <div key={row} className="flex flex-row gap-1">
               {line?.map((available, col) => (
                 <SeatRadio
                   key={`${row}-${col}`}

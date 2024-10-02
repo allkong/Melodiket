@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import type { TicketBook } from '@/types/ticket';
 import SeatSection from './_components/SeatSection';
 import ConfirmSection from './_components/ConfirmSection';
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
+import SuccessSection from './_components/SuccessSection';
 
 const Page = () => {
-  const router = useRouter();
   const params = useParams<{ uuid: string }>();
   const { data } = useFetchConcertDetail(params.uuid);
 
@@ -36,12 +36,22 @@ const Page = () => {
       )}
       {step === 'CONFIRM' && (
         <ConfirmSection
+          seatRow={ticketBookInformation.seatRow}
+          seatCol={ticketBookInformation.seatCol}
           onNext={(favoriteMusician) => {
+            /* eslint-disable @typescript-eslint/no-unused-vars */
             const data: TicketBook = {
               ...ticketBookInformation,
               favoriteMusician,
             };
+            setStep('SUCCESS');
           }}
+        />
+      )}
+      {step === 'SUCCESS' && (
+        <SuccessSection
+          seatRow={ticketBookInformation.seatRow}
+          seatCol={ticketBookInformation.seatCol}
         />
       )}
     </div>

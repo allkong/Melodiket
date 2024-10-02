@@ -9,10 +9,11 @@ import useElementSize from '@/hooks/useElementSize';
 interface AccordionProps {
   label?: string;
   children?: ReactNode;
+  isOpened?: boolean;
 }
 
-const Accordion = ({ label, children }: AccordionProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Accordion = ({ label, children, isOpened = false }: AccordionProps) => {
+  const [isOpen, setIsOpen] = useState(isOpened);
 
   const childrenRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,10 +21,13 @@ const Accordion = ({ label, children }: AccordionProps) => {
 
   return (
     <div className={clsx('w-full px-5 bg-white h-fit')}>
-      <div className="flex justify-between items-center w-full h-12 bg-white">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex justify-between items-center w-full h-12 bg-white cursor-pointer"
+      >
         <p className="text-base font-medium">{label}</p>
         <ArrowButton
-          onClick={() => setIsOpen(!isOpen)}
+          // onClick={() => setIsOpen(!isOpen)}
           direction={isOpen ? 'up' : 'down'}
         />
       </div>

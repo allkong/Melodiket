@@ -25,3 +25,9 @@ export interface TicketBook {
   tokenAmount: number;
   favoriteMusician: string;
 }
+
+export interface TicketBookPolicy {
+  key: number;
+  label: string;
+  isEssential: boolean;
+}
