@@ -13,9 +13,9 @@ export interface RegisterStageRequest {
   stageName: string;
   stageAddress: string;
   isStanding: boolean;
-  capacity: number;
-  numOfRow: number;
-  numOfCol: number;
+  capacity?: number;
+  numOfRow?: number;
+  numOfCol?: number;
 }
 
 export interface RegisterStageResponse {
