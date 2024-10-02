@@ -41,6 +41,7 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
+            Pattern.compile("^/api/v1/logs$"),
             Pattern.compile("^/$"),
     };
 

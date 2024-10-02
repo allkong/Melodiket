@@ -12,7 +12,7 @@ import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.ticket.repository.TicketRepository;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusician;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
 import com.ssafy.jdbc.melodiket.user.repository.FavoriteMusicianRepository;
 import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
@@ -50,7 +50,7 @@ public class TicketService {
         if (_favoriteMusician.isPresent()) {
             favoriteMusician = _favoriteMusician.get();
             favoriteMusicianRepository.save(
-                    FavoriteMusician.builder()
+                    FavoriteMusicianEntity.builder()
                             .musicianEntity(_favoriteMusician.get())
                             .audienceEntity(audienceEntity)
                             .build()
