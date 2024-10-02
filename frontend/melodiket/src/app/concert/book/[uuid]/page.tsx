@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 
 import type { TicketBook } from '@/types/ticket';
-import SeatSection from './_components/SeatSection';
-import ConfirmSection from './_components/ConfirmSection';
+import SeatSection from './_components/seat-section';
+import ConfirmSection from './_components/confirm-section';
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import SuccessSection from './_components/SuccessSection';
+import SuccessSection from './_components/success-section';
 
 const Page = () => {
   const params = useParams<{ uuid: string }>();

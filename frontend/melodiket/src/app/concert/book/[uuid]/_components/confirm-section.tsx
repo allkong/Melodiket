@@ -7,7 +7,7 @@ import Accordion from '@/components/molecules/accordion/Accordion';
 import ThinDivider from '@/components/atoms/divider/ThinDivider';
 import LabelValueText from '@/components/molecules/text/LabelValutText';
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import ConfirmCheckbox from './ConfirmCheckbox';
+import ConfirmCheckbox from './confirm-checkbox';
 import { useState } from 'react';
 import LabelCheckbox from '@/components/molecules/checkbox/LabelCheckbox';
 import useAuthStore from '@/store/authStore';
