@@ -1,9 +1,8 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
 
 module.exports = buildModule("TicketNFT", (m) => {
-
   // TicketNFT 배포
-  const ticketNFT = m.contract("TicketNFT", ["0x6009560432b36eFC5E0F649B62a7783e4ecD0B03"]);
+  const ticketNFT = m.contract("TicketNFT", ["0x066b74Fc73bfaf0C266b0269F91dDeeB5aAB6998"]);
 
-  return { ticketNFT };// , ticketNFT, concertManager };
+  return { ticketNFT }; // , ticketNFT, concertManager };
 });

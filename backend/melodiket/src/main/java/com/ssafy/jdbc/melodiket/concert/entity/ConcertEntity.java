@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -24,6 +24,14 @@ import java.util.*;
 @AllArgsConstructor
 @SuperBuilder
 public class ConcertEntity extends ExposableEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
+
     @Column(nullable = false)
     private String title;
 
@@ -61,6 +69,13 @@ public class ConcertEntity extends ExposableEntity {
     @Column(nullable = false)
     private Long favoriteMusicianStake;
 
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ConcertStatus concertStatus;
+
     @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketEntity> tickets = new ArrayList<>();
@@ -76,4 +91,8 @@ public class ConcertEntity extends ExposableEntity {
     @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ConcertSeatEntity> concertSeats = new HashSet<>();
+
+    public void delete(){
+        this.isDeleted = true;
+    }
 }

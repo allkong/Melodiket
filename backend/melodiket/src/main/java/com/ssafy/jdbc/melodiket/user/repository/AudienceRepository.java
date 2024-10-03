@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface AudienceRepository extends JpaRepository<AudienceEntity, Long> {
     Optional<AudienceEntity> findByUuid(UUID uuid);
-    Optional<AudienceEntity> findByUser_LoginId(String loginId);
+    Optional<AudienceEntity> findByLoginId(String loginId);
 }

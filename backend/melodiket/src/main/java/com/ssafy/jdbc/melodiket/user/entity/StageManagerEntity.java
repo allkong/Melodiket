@@ -17,9 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class StageManagerEntity extends AppUserEntity {
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private AppUserEntity user;
+
 
     private String imageUrl;
 
