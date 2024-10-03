@@ -22,10 +22,6 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class AudienceEntity extends AppUserEntity {
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private AppUserEntity user;
-
     private String imageUrl;
 
     @OneToMany(mappedBy = "audienceEntity", cascade = CascadeType.ALL, orphanRemoval = true)
