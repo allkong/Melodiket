@@ -16,6 +16,6 @@ public record CreateConcertReq(
         Long ownerStake,           // 관리자 정산 금액
         Long musicianStake,        // 뮤지션 정산 금액
         Long favoriteMusicianStake, // 최애 뮤지션 정산 금액
-        List<UUID> musicianUuids
+        List<UUID> musicians
 ) {
 }
