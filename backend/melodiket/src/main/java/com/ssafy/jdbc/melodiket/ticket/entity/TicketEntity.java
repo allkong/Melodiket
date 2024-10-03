@@ -4,19 +4,31 @@ import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Table(name = "ticket")
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class TicketEntity extends ExposableEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id", nullable = false)
     private AudienceEntity audienceEntity;
@@ -28,6 +40,10 @@ public class TicketEntity extends ExposableEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     private Long seatRow;
     private Long seatCol;

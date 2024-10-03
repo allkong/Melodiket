@@ -40,7 +40,7 @@ public class StageService {
      */
     public StageInfoResponse createStage(StageRequest stageRequest, String loginId) {
         // StageManagerEntity 조회 (해당 유저가 스테이지 매니저인지 확인)
-        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId)
+        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
 
         // 새로운 StageEntity 생성
@@ -88,7 +88,7 @@ public class StageService {
      */
     public List<StageInfoResponse> getMyStages(String loginId) {
         // 유저의 UUID를 통해 StageManagerEntity를 조회
-        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId)
+        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
 
         // StageManagerEntity와 연관된 StageEntity 목록 가져오기
@@ -132,7 +132,7 @@ public class StageService {
 
         // Stage_Assignment에 해당 유저가 존재하는지 확인
         String loginId = principal.getName();
-        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId).orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(loginId).orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         if (!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stageEntity, stageManager)) {
             throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
@@ -165,7 +165,7 @@ public class StageService {
 
         // Stage_Assignment에 해당 유저가 존재하는지 확인
         String loginId = principal.getName();
-        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(loginId).orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(loginId).orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         if (!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stageEntity, stageManager)) {
             throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);

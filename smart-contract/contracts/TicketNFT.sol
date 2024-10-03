@@ -57,9 +57,8 @@ contract TicketNFT is ERC721, Ownable {
         ticket.status = "REFUNDED";
     }
 
-    function getTicketWithId(string calldata _uuid) public view returns (Ticket memory) {
-        uint256 ticketId = ticketIdByUuid[_uuid];
-        return tickets[ticketId];
+    function getTicketWithId(uint256 _ticketId) public view returns (Ticket memory) {
+        return tickets[_ticketId];
     }
 
     function getTicketWithUuid(string memory uuid) public view returns (Ticket memory) {

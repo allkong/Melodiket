@@ -49,7 +49,7 @@ public class TicketService {
     @DistributedLock(key = "#loginId.concat('-').'purchaseTicket'.concat('-').concat(#ticketPurchaseRequest.concertId)")
     @Transactional(rollbackFor = Exception.class)
     public void createTicket(String loginId, TicketPurchaseRequest ticketPurchaseRequest) {
-        AudienceEntity audienceEntity = audienceRepository.findByUser_LoginId(loginId)
+        AudienceEntity audienceEntity = audienceRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
         ConcertEntity concert = concertRepository.findByUuid(ticketPurchaseRequest.getConcertId())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
@@ -106,7 +106,7 @@ public class TicketService {
     }
 
     public Map<String, List<TicketResponse>> readMyTickets(String loginId) {
-        AudienceEntity audienceEntity = audienceRepository.findByUser_LoginId(loginId)
+        AudienceEntity audienceEntity = audienceRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
         List<TicketEntity> ticketEntities = audienceEntity.getTickets();
 
@@ -171,7 +171,7 @@ public class TicketService {
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
 
-        StageManagerEntity stageManager = stageManagerRepository.findByUser_LoginId(principal.getName())
+        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(principal.getName())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
 
         if (!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stage, stageManager)) {

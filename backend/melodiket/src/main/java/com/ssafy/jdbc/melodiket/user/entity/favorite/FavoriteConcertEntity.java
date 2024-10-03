@@ -7,13 +7,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "favorite_concert")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class FavoriteConcertEntity extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id", nullable = false)
     private AudienceEntity audienceEntity;
