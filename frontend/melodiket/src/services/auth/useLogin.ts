@@ -31,3 +31,24 @@ export const useLogin = () => {
     },
   });
 };
+
+const isLoginIdDuplicated = async (loginId: string) => {
+  const response = await customFetch<{ loginId: boolean }>(
+    '/auth/login-id/field-duplication-check',
+    {
+      method: 'post',
+      body: {
+        loginId,
+      },
+    }
+  );
+  return response;
+};
+
+export const useIsLoginIdDuplicated = () => {
+  const mutate = useMutation({
+    mutationFn: ({ loginId }: { loginId: string }) =>
+      isLoginIdDuplicated(loginId),
+  });
+  return mutate;
+};
