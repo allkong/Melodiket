@@ -15,5 +15,7 @@ public interface MusicianRepository extends JpaRepository<MusicianEntity, Long> 
 
     @Query("SELECT m FROM MusicianEntity m WHERE m.uuid IN :uuids")
     List<MusicianEntity> findAllByUuidIn(@Param("uuids") List<UUID> uuids);
+
+    Optional<MusicianEntity> findByLoginId(String loginId);
 }
 
