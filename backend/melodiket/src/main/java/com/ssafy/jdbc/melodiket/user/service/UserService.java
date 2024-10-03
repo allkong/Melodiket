@@ -61,6 +61,7 @@ public class UserService implements AuthService {
         if (role == Role.AUDIENCE) {
             AudienceEntity audience = AudienceEntity.builder()
                     .uuid(UUID.randomUUID())
+                    .name(signUpReq.name())
                     .loginId(signUpReq.loginId())
                     .password(hashedPassword)
                     .salt(salt)
@@ -76,6 +77,7 @@ public class UserService implements AuthService {
             return new SignUpResp(
                     audience.getId(),
                     audience.getUuid(),
+                    signUpReq.name(),
                     audience.getLoginId(),
                     audience.getNickname(),
                     audience.getRole(),
@@ -84,6 +86,7 @@ public class UserService implements AuthService {
         } else if (role == Role.MUSICIAN) {
             MusicianEntity musician = MusicianEntity.builder()
                     .uuid(UUID.randomUUID())
+                    .name(signUpReq.name())
                     .loginId(signUpReq.loginId())
                     .password(hashedPassword)
                     .salt(salt)
@@ -99,6 +102,7 @@ public class UserService implements AuthService {
             return new SignUpResp(
                     musician.getId(),
                     musician.getUuid(),
+                    signUpReq.name(),
                     musician.getLoginId(),
                     musician.getNickname(),
                     musician.getRole(),
@@ -107,6 +111,7 @@ public class UserService implements AuthService {
         } else {
             StageManagerEntity stageManager = StageManagerEntity.builder()
                     .uuid(UUID.randomUUID())
+                    .name(signUpReq.name())
                     .loginId(signUpReq.loginId())
                     .password(hashedPassword)
                     .salt(salt)
@@ -122,6 +127,7 @@ public class UserService implements AuthService {
             return new SignUpResp(
                     stageManager.getId(),
                     stageManager.getUuid(),
+                    signUpReq.name(),
                     stageManager.getLoginId(),
                     stageManager.getNickname(),
                     stageManager.getRole(),
