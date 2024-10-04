@@ -14,28 +14,31 @@ interface ModalProps {
 
 const Modal = ({ type, title, children, onCancel, onOk }: ModalProps) => {
   return (
-    <div className="px-5 py-5 space-y-5 bg-white rounded-xl w-fit">
-      <div className="space-y-4">
-        <div className="flex items-center space-x-3">
-          {type && (
-            <WarningCircle
-              className={clsx({
-                'text-[#3347FF]': type === 'info',
-                'text-[#FFD233]': type === 'warning',
-                'text-[#FF3333]': type === 'error',
-              })}
-            />
-          )}
-          <h1 className="text-lg font-semibold">{title}</h1>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="z-20 px-5 py-5 space-y-5 bg-white rounded-xl w-fit">
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3">
+            {type && (
+              <WarningCircle
+                className={clsx({
+                  'text-[#3347FF]': type === 'info',
+                  'text-[#FFD233]': type === 'warning',
+                  'text-[#FF3333]': type === 'error',
+                })}
+              />
+            )}
+            <h1 className="text-lg font-semibold">{title}</h1>
+          </div>
+
+          {children && <>{children}</>}
         </div>
 
-        {children && <>{children}</>}
+        <div className="space-x-3">
+          <MediumButton label="취소" color="gray" onClick={onCancel} />
+          <MediumButton label="확인" color="primary" onClick={onOk} />
+        </div>
       </div>
-
-      <div className="space-x-3">
-        <MediumButton label="취소" color="gray" onClick={onCancel} />
-        <MediumButton label="확인" color="primary" onClick={onOk} />
-      </div>
+      <div className="absolute inset-0 bg-black opacity-20"></div>
     </div>
   );
 };
