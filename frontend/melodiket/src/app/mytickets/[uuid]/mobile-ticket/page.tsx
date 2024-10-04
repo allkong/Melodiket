@@ -21,17 +21,13 @@ const Page = () => {
     setIsHydrated(true);
   }, []);
 
-  const handleClose = () => {
-    router.back();
-  };
-
   const handleQRButtonClick = () => {
     router.push(`${pathname}/qr`);
   };
 
   return (
     <div className="flex flex-col h-screen">
-      <SubHeader title="모바일 티켓" onClose={handleClose} />
+      <SubHeader title="모바일 티켓" />
 
       <div className="flex flex-col items-center flex-grow px-10 pb-24 mb-2 justify-evenly overscroll-y-auto">
         {isHydrated ? (
