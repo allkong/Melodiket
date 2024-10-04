@@ -2,10 +2,9 @@
 
 import { MouseEventHandler, ReactNode, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import clsx from 'clsx';
 
-import { WarningCircle } from '@/public/icons';
 import MediumButton from '@/components/atoms/button/MediumButton';
+import Warning from '@/components/atoms/feedback/Warning';
 
 interface ConfirmModalProps {
   type?: 'info' | 'warning' | 'error';
@@ -37,15 +36,7 @@ const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
       <div className="z-20 px-5 py-5 space-y-5 bg-white rounded-xl w-fit max-w-[90%]">
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
-            {type && (
-              <WarningCircle
-                className={clsx('flex-shrink-0', {
-                  'text-[#3347FF]': type === 'info',
-                  'text-[#FFD233]': type === 'warning',
-                  'text-[#FF3333]': type === 'error',
-                })}
-              />
-            )}
+            {type && <Warning type={type} />}
             {title && (
               <h1 className="text-lg font-semibold line-clamp-1">{title}</h1>
             )}

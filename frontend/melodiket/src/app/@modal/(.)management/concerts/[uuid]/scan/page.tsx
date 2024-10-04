@@ -3,12 +3,12 @@
 import { useParams, useSearchParams } from 'next/navigation';
 
 import { useTicketDetail } from '@/services/ticket/useTicketdetail';
+import { useTicketUse } from '@/services/ticket/useTicketUse';
 import { formatSeatPosition } from '@/utils/concertFormatter';
 
 import ConfirmModal from '@/components/organisms/modal/ConfirmModal';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 import AlertModal from '@/components/organisms/modal/AlertModal';
-import { useTicketUse } from '@/services/ticket/useTicketUse';
 
 const Modal = () => {
   const params = useParams();
