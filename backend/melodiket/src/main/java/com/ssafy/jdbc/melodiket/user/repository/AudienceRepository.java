@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface AudienceRepository extends JpaRepository<AudienceEntity, Long> {
-    Optional<AudienceEntity> findByUser_LoginId(String loginId);
+    Optional<AudienceEntity> findByUuid(UUID uuid);
+    Optional<AudienceEntity> findByLoginId(String loginId);
 }

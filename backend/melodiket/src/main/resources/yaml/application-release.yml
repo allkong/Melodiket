@@ -4,3 +4,16 @@ spring:
       on-profile: release
     import:
       - file:release.env[.properties]
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+
+  sql:
+    init:
+      platform: mysql
+
+jwt:
+  issuer: ${JWT_ISSUER}

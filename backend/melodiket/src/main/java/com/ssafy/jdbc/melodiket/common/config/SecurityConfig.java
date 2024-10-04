@@ -40,9 +40,10 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
             Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
-            Pattern.compile("^/api/v1/musicians/like/me$"),
-            Pattern.compile("^/api/v1/musicians/[0-9a-fA-F-]{36}/like$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
+            Pattern.compile("^/api/v1/concerts$"),
+            Pattern.compile("^/api/v1/concerts/[^/]+$"),
+            Pattern.compile("^/api/v1/logs$"),
             Pattern.compile("^/$"),
     };
 

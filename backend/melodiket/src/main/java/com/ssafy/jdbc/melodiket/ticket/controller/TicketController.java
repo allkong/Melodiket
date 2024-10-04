@@ -8,7 +8,6 @@ import com.ssafy.jdbc.melodiket.ticket.validation.ValidUseUUID;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +26,9 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<TicketResponse> purchaseTicket(Principal principal, @RequestBody @Valid TicketPurchaseRequest ticketPurchaseRequest) {
-        TicketResponse response = ticketService.createTicket(principal.getName(), ticketPurchaseRequest);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        ticketService.createTicket(principal.getName(), ticketPurchaseRequest);
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return null;
     }
 
     @GetMapping
@@ -50,8 +50,8 @@ public class TicketController {
     }
 
     @PostMapping("/{ticketUuid}/use")
-    public ResponseEntity<TicketResponse> useTicket(@PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
-        TicketResponse response = ticketService.useTicket(ticketUuid);
+    public ResponseEntity<TicketResponse> useTicket(Principal principal, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
+        TicketResponse response = ticketService.useTicket(principal, ticketUuid);
         return ResponseEntity.ok(response);
     }
 }

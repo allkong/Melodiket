@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "concert_seat", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"row", "col", "concert_id"})
+        @UniqueConstraint(columnNames = {"seatRow", "seatCol", "concert_id"})
 })
 public class ConcertSeatEntity extends BaseEntity {
 

@@ -1,8 +1,6 @@
 package com.ssafy.jdbc.melodiket.common.base;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,11 +16,15 @@ import java.time.LocalDateTime;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public abstract class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 }

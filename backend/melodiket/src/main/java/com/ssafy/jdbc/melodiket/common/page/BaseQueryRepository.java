@@ -5,6 +5,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import org.springframework.data.domain.Sort;
@@ -13,18 +15,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
-public abstract class BaseQueryRepository<T> {
+public abstract class BaseQueryRepository<T extends ExposableEntity, R> {
 
+    protected final PathBuilder<T> entityPath;
     private final JPAQueryFactory jpaQueryFactory;
     private final Class<T> entityClass;
-    private final PathBuilder<T> entityPath;
     private final ErrorDetail errorDetail;
 
     protected BaseQueryRepository(JPAQueryFactory jpaQueryFactory, Class<T> entityClass, ErrorDetail errorDetail) {
         this.jpaQueryFactory = jpaQueryFactory;
         this.entityClass = entityClass;
-        this.entityPath = new PathBuilder<>(entityClass,convertFirstCharToLowercase(entityClass));
+        this.entityPath = new PathBuilder<>(entityClass, convertFirstCharToLowercase(entityClass));
         this.errorDetail = errorDetail;
     }
 
@@ -38,23 +41,35 @@ public abstract class BaseQueryRepository<T> {
         return Optional.ofNullable(id);  // Optional로 반환
     }
 
+    public PageResponse<R> findWithPagination(CursorPagingReq req, Function<T, R> entityConverter, BooleanExpression... conditions) {
+        return findWithPagination(Sort.by(Sort.Order.by(req.getOrderKey()).with(Sort.Direction.fromString(req.getOrderDirection()))),
+                req.getLastUuid(), req.isFirstPage(), req.getPageSize(), entityConverter, conditions);
+    }
 
     // 공통적인 페이지네이션 메소드
-    public List<T> findWithPagination(Sort sort, UUID lastCursor, Boolean isFirstPage, int pageSize, BooleanExpression... conditions) {
+    public PageResponse<R> findWithPagination(Sort sort, UUID lastCursor, Boolean isFirstPage, int pageSize, Function<T, R> entityConverter, BooleanExpression... conditions) {
         // lastCursor가 있으면 이를 ID로 변환해서 커서 조건 처리
         Long lastCursorId = (lastCursor == null || isFirstPage) ?
                 null :
                 findIdByUuid(lastCursor)
-                        .orElseThrow(()->new HttpResponseException(errorDetail));
+                        .orElseThrow(() -> new HttpResponseException(errorDetail));
 
         // 동적 where 조건 추가 및 커서 처리
         BooleanExpression cursorCondition = cursorCondition(lastCursorId);
-        return jpaQueryFactory
+        List<T> entities = jpaQueryFactory
                 .selectFrom(entityPath)
                 .where(cursorCondition, mergeConditions(conditions))  // 동적 필터 적용
                 .orderBy(getOrderSpecifier(sort).toArray(OrderSpecifier[]::new))  // 동적 정렬 적용
-                .limit(pageSize+1)
+                .limit(pageSize + 1L)
                 .fetch();
+
+        boolean hasNext = entities.size() > pageSize;
+        List<T> result = hasNext ? entities.subList(0, pageSize) : entities;
+        UUID nextCursor = hasNext ? result.get(result.size() - 1).getUuid() : null;
+        List<R> responses = entities.stream().map(entityConverter).toList();
+
+        PageInfoCursor pageInfo = new PageInfoCursor(hasNext, pageSize, responses.size(), nextCursor);
+        return new PageResponse<R>(pageInfo, responses);
     }
 
     protected List<OrderSpecifier<?>> getOrderSpecifier(Sort sort) {

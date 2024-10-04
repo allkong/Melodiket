@@ -1,13 +1,13 @@
 package com.ssafy.jdbc.melodiket.ticket.entity;
 
-import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -17,10 +17,10 @@ import java.util.UUID;
 @Entity
 @Getter
 @Table(name = "ticket")
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketEntity extends BaseEntity {
+public class TicketEntity extends ExposableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,12 +41,18 @@ public class TicketEntity extends BaseEntity {
     @Column(nullable = false)
     private Status status;
 
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     private Long seatRow;
     private Long seatCol;
     private LocalDateTime usedAt;
     private LocalDateTime refundedAt;
 
     private Long favoriteMusician;
+
+    private String userName;
 
     public void updateStatusUsed(Status status){
         this.status = status;
