@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 import type { LoginRequest, LoginResponse } from '@/types/login';
+import type { SignUpData } from '@/types/signUp';
 
 import useAuthStore from '@/store/authStore';
 import customFetch from '../customFetch';
@@ -70,6 +71,23 @@ export const useIsLoginIdDuplicated = () => {
   const mutate = useMutation({
     mutationFn: ({ loginId }: { loginId: string }) =>
       isLoginIdDuplicated(loginId),
+  });
+  return mutate;
+};
+
+const signUp = async (body: SignUpData) => {
+  const { role, ...requestBody } = body;
+  const url = `/auth/sign-up/${role}`;
+  const response = await customFetch(url, {
+    body: requestBody,
+    method: 'post',
+  });
+  return response;
+};
+
+export const useSignUp = () => {
+  const mutate = useMutation({
+    mutationFn: ({ body }: { body: SignUpData }) => signUp(body),
   });
   return mutate;
 };
