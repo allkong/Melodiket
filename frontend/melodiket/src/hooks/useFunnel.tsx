@@ -73,7 +73,7 @@ const useFunnel = <T extends string>(
         router.replace(`?${params.toString()}`);
       }
     },
-    [searchParams, addToHistory]
+    [addToHistory]
   );
 
   const setStep = (step: T) => {
