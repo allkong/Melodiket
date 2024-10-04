@@ -23,6 +23,7 @@ const SignUpNicknameInput = ({
 }: SignUpNicknameInputProps) => {
   const [isLengthValid, setIsLengthValid] = useState(true);
   const [isDuplicateValid, setIsDuplicateValid] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const mutate = useIsNicknameDuplicated();
 
   const validateNicknameLength = (value: string) => {
@@ -39,10 +40,15 @@ const SignUpNicknameInput = ({
   const handleNicknameChange = (value: string) => {
     setNickname(value);
     setIsLengthValid(validateNicknameLength(value));
+
+    setIsTyping(true);
+    setIsDuplicateValid(true);
   };
 
   const handleNicknameDuplicate = async () => {
-    setIsDuplicateValid(await validateNicknameDuplicate(nickname));
+    const response = await validateNicknameDuplicate(nickname);
+    setIsDuplicateValid(response);
+    setIsTyping(false);
   };
 
   const getAlertLabel = () => {
@@ -59,8 +65,8 @@ const SignUpNicknameInput = ({
   };
 
   useEffect(() => {
-    setIsNicknameValid(isLengthValid && isDuplicateValid);
-  }, [isLengthValid, isDuplicateValid, setIsNicknameValid]);
+    setIsNicknameValid(isLengthValid && isDuplicateValid && !isTyping);
+  }, [isLengthValid, isDuplicateValid, isTyping, setIsNicknameValid]);
 
   return (
     <div>
