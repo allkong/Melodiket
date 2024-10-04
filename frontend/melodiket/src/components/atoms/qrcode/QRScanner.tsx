@@ -18,7 +18,7 @@ const QRScan = () => {
     (result: QrScanner.ScanResult | null) => {
       if (result) {
         console.log(result.data);
-        router.push('/concert/scan?modal=true');
+        router.push('/concerts/scan?modal=true');
       }
     },
     [router]
