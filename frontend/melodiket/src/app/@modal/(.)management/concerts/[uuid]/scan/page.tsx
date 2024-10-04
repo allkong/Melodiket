@@ -8,6 +8,7 @@ import { formatSeatPosition } from '@/utils/concertFormatter';
 import ConfirmModal from '@/components/organisms/modal/ConfirmModal';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 import AlertModal from '@/components/organisms/modal/AlertModal';
+import { useTicketUse } from '@/services/ticket/useTicketUse';
 
 const Modal = () => {
   const params = useParams();
@@ -16,6 +17,7 @@ const Modal = () => {
   const ticketUuid = searchParams.get('ticket');
 
   const { data: ticket } = useTicketDetail();
+  const { mutate: ticketUse } = useTicketUse();
 
   if (concertUuid !== ticket?.concertUuid) {
     return (
@@ -37,14 +39,18 @@ const Modal = () => {
     },
   ];
 
+  const handleTicketUse = () => {
+    if (ticketUuid) {
+      ticketUse(ticketUuid);
+    } else {
+      console.error('티켓 정보가 없어요😥');
+    }
+  };
+
   return (
     <div>
       {ticketUuid && (
-        <ConfirmModal
-          type="info"
-          title="티켓 사용 처리"
-          onOk={() => alert('확인')}
-        >
+        <ConfirmModal type="info" title="티켓 사용 처리" onOk={handleTicketUse}>
           <TicketInfo fields={ticketInfo} size="sm" />
         </ConfirmModal>
       )}
