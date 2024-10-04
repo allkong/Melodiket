@@ -49,6 +49,7 @@ export const ticket = [
   http.get('tickets/:uuid', async () => {
     return HttpResponse.json({
       ticketUuid: '123e4567-e89b-12d3-a456-426614174000',
+      concertUuid: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
       concertTitle: 'The Golden Hour : 오렌지 태양 아래',
       posterCid:
         'https://i.namu.wiki/i/6954AWgOwNRZw-HzI4AhrWvXzGeHvHiQzUIS4clHj2C0-EW5joO7ojEOHF0W1_ub9SeZajsIj2tBD0m5VFehVRjwFse59QjWyXwjfNi_5IRD2H-9xjgzAf8_bzJbwrJHg21lSvuLqD9Gdq4HMj628w.webp',
