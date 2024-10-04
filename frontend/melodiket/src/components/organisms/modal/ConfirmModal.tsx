@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { WarningCircle } from '@/public/icons';
 import MediumButton from '@/components/atoms/button/MediumButton';
 
-interface ModalProps {
+interface ConfirmModalProps {
   type?: 'info' | 'warning' | 'error';
   title: string;
   children?: ReactNode;
@@ -12,7 +12,13 @@ interface ModalProps {
   onOk: MouseEventHandler<HTMLButtonElement>;
 }
 
-const Modal = ({ type, title, children, onCancel, onOk }: ModalProps) => {
+const ConfirmModal = ({
+  type,
+  title,
+  children,
+  onCancel,
+  onOk,
+}: ConfirmModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="z-20 px-5 py-5 space-y-5 bg-white rounded-xl w-fit">
@@ -43,4 +49,4 @@ const Modal = ({ type, title, children, onCancel, onOk }: ModalProps) => {
   );
 };
 
-export default Modal;
+export default ConfirmModal;
