@@ -17,9 +17,6 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class MusicianEntity extends AppUserEntity {
 
-//    @OneToOne
-//    @JoinColumn(name = "id", referencedColumnName = "id")
-//    private AppUserEntity user;
 
     private String imageUrl;
 

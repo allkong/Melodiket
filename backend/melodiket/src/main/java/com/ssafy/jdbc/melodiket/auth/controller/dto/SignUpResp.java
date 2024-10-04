@@ -7,6 +7,7 @@ import java.util.UUID;
 public record SignUpResp(
         Long id,
         UUID uuid,
+        String name,
         String loginId,
         String nickname,
         Role role,

@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TicketResponse {
+    private String userName;
 
     private UUID ticketUuid; // 티켓 주소
 

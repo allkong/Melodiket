@@ -1,17 +1,17 @@
 package com.ssafy.jdbc.melodiket.stage.controller;
 
-import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
-import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.stage.dto.SeatingStageCreateReq;
 import com.ssafy.jdbc.melodiket.stage.dto.StageInfoResponse;
-import com.ssafy.jdbc.melodiket.stage.dto.StageRequest;
+import com.ssafy.jdbc.melodiket.stage.dto.StandingStageCreateReq;
 import com.ssafy.jdbc.melodiket.stage.service.StageService;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -22,23 +22,32 @@ import java.util.UUID;
 public class StageController {
     private final StageService stageService;
 
-    @PostMapping
-    public ResponseEntity<StageInfoResponse> createStage(Principal principal, @RequestBody @Valid StageRequest stageRequest) {
-        String loginId = principal.getName();
-        StageInfoResponse response = stageService.createStage(stageRequest, loginId);
+    @PostMapping("/standing")
+    public ResponseEntity<StageInfoResponse> createStage(Authentication authentication,
+                                                         @RequestBody @Valid StandingStageCreateReq stageCreateReq) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        StageInfoResponse response = stageService.createStandingStage(stageCreateReq, user);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/seating")
+    public ResponseEntity<StageInfoResponse> createSeatingStage(Authentication authentication,
+                                                                @RequestBody @Valid SeatingStageCreateReq stageCreateReq) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        StageInfoResponse response = stageService.createSeatingStage(stageCreateReq, user);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<StageInfoResponse>> getCursorStages(CursorPagingReq pagingReq) {
-        PageResponse<StageInfoResponse> response = stageService.getStages(pagingReq);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Map<String, List<StageInfoResponse>>> getAllStages() {
+        List<StageInfoResponse> response = stageService.getAllStages();
+        return new ResponseEntity<>(Map.of("stages", response), HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Map<String, List<StageInfoResponse>>> getMyStages(Principal principal) {
-        String loginId = principal.getName();
-        List<StageInfoResponse> response = stageService.getMyStages(loginId);
+    public ResponseEntity<Map<String, List<StageInfoResponse>>> getMyStages(Authentication authentication) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        List<StageInfoResponse> response = stageService.getMyStages(user);
         return new ResponseEntity<>(Map.of("stages", response), HttpStatus.OK);
     }
 
@@ -48,19 +57,10 @@ public class StageController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/{uuid}")
-    public ResponseEntity<StageInfoResponse> updateStage(
-            Principal principal,
-            @PathVariable("uuid") UUID stageUuid,
-            @RequestBody @Valid StageRequest updateStageRequest
-    ) {
-        StageInfoResponse response = stageService.updateStage(principal, stageUuid, updateStageRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteStage(Principal principal, @PathVariable("uuid") UUID stageUuid) {
-        stageService.deleteStage(principal, stageUuid);
+    public ResponseEntity<Void> deleteStage(Authentication authentication, @PathVariable("uuid") UUID stageUuid) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        stageService.deleteStage(user, stageUuid);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
