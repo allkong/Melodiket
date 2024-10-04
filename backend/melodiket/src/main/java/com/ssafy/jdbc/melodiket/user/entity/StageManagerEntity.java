@@ -1,7 +1,10 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
-import com.ssafy.jdbc.melodiket.stage.entity.StageAssignmentEntity;
-import jakarta.persistence.*;
+import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,15 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class StageManagerEntity extends AppUserEntity {
-
-
     private String imageUrl;
 
-    @OneToMany(mappedBy = "stageManagerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
-
-    public StageManagerEntity(String description, String imageUrl, List<StageAssignmentEntity> stageAssignmentEntities) {
-        this.imageUrl = imageUrl;
-        this.stageAssignmentEntities = stageAssignmentEntities != null ? stageAssignmentEntities : new ArrayList<>();
-    }
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StageEntity> stageEntities = new ArrayList<>();
 }

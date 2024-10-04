@@ -3,12 +3,13 @@ package com.ssafy.jdbc.melodiket.concert.controller;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateStandingConcertReq;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -34,10 +35,18 @@ public class ConcertController {
         return ResponseEntity.ok(concertDetail);
     }
 
-    @PostMapping
-    public ResponseEntity<ConcertResp> createConcert(@RequestBody CreateConcertReq createConcertReq) {
-        ConcertResp concertResp = concertService.createConcert(createConcertReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(concertResp);
+    @PostMapping("/standing")
+    public ResponseEntity<Void> createStandingConcert(Authentication authentication, @RequestBody CreateStandingConcertReq createConcertReq) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        concertService.createStandingConcert(user, createConcertReq);
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/seating")
+    public ResponseEntity<Void> createSeatingConcert(Authentication authentication, @RequestBody CreateStandingConcertReq createConcertReq) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+//        concertService.createSeatingConcert(user, createConcertReq);
+        return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{id}")

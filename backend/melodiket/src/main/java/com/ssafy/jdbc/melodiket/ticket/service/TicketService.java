@@ -7,7 +7,6 @@ import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
-import com.ssafy.jdbc.melodiket.stage.repository.StageAssignmentRepository;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketPurchaseRequest;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketResponse;
 import com.ssafy.jdbc.melodiket.ticket.entity.Status;
@@ -41,7 +40,6 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final ConcertRepository concertRepository;
     private final StageManagerRepository stageManagerRepository;
-    private final StageAssignmentRepository stageAssignmentRepository;
     private final WalletService walletService;
     private final BlockchainConfig blockchainConfig;
 
@@ -174,7 +172,7 @@ public class TicketService {
         StageManagerEntity stageManager = stageManagerRepository.findByLoginId(principal.getName())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
 
-        if (!stageAssignmentRepository.existsByStageEntityAndStageManagerEntity(stage, stageManager)) {
+        if (stage.getOwner() != stageManager) {
             throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
         }
 
