@@ -2,6 +2,8 @@ package com.ssafy.jdbc.melodiket.event.service;
 
 import co.elastic.clients.elasticsearch._types.SortOptions;
 import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import com.ssafy.jdbc.melodiket.event.controller.dto.EventPageInfoCursor;
@@ -17,6 +19,7 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,8 +36,20 @@ public class EventLogService {
             sortValues = new Object[]{request.getLastId()};
         }
 
-        // Build the query
-        Query matchAllQuery = QueryBuilders.matchAll().build()._toQuery();
+        // Build the filter queries
+        List<Query> filterQueries = new ArrayList<>();
+
+        if (request.getEventName() != null) {
+            MatchQuery eventNameQuery = MatchQuery.of(m -> m
+                    .field("eventName")
+                    .query(request.getEventName())
+            );
+            filterQueries.add(eventNameQuery._toQuery());
+        }
+
+        // Combine the filters using a bool query
+        BoolQuery boolQuery = BoolQuery.of(b -> b.filter(filterQueries));
+        Query finalQuery = boolQuery._toQuery();
 
         // Sort options based on request
         SortOrder sortOrder = request.getOrderDirection().equalsIgnoreCase("ASC") ? SortOrder.Asc : SortOrder.Desc;
@@ -42,7 +57,7 @@ public class EventLogService {
 
         // Create the NativeQuery
         NativeQueryBuilder searchQueryBuilder = NativeQuery.builder()
-                .withQuery(matchAllQuery)
+                .withQuery(finalQuery)
                 .withSort(sortOption)  // Apply the sorting
                 .withPageable(PageRequest.of(0, request.getPageSize()));  // Set the page size
 
