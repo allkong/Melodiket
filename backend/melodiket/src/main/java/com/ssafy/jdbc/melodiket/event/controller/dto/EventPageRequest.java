@@ -3,6 +3,8 @@ package com.ssafy.jdbc.melodiket.event.controller.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class EventPageRequest {
     @NotNull(message = "`isFirstPage` must not be null")
@@ -12,5 +14,6 @@ public class EventPageRequest {
     private String orderKey = "_id";
     private String orderDirection = "ASC";
 
-    // Getters and setters...
+    // Filter fields
+    private String eventName;
 }
