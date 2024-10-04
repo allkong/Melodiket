@@ -23,6 +23,7 @@ const SignUpLoginIdInput = ({
 }: SignUpLoginIdInputProps) => {
   const [isLengthValid, setIsLengthValid] = useState(true);
   const [isDuplicateValid, setIsDuplicateValid] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
   const mutate = useIsLoginIdDuplicated();
 
   const validateLoginIdLength = (value: string) => {
@@ -40,10 +41,15 @@ const SignUpLoginIdInput = ({
   const handleLoginIdChange = (value: string) => {
     setLoginId(value);
     setIsLengthValid(validateLoginIdLength(value));
+
+    setIsTyping(true);
+    setIsDuplicateValid(true);
   };
 
   const handleLoginIdDuplicate = async () => {
-    setIsDuplicateValid(await validateLoginIdDuplicate(loginId));
+    const result = await validateLoginIdDuplicate(loginId);
+    setIsDuplicateValid(result);
+    setIsTyping(false);
   };
 
   const getAlertLabel = () => {
@@ -60,8 +66,8 @@ const SignUpLoginIdInput = ({
   };
 
   useEffect(() => {
-    setIsLoginIdValid(isLengthValid && isDuplicateValid);
-  }, [isLengthValid, isDuplicateValid, setIsLoginIdValid]);
+    setIsLoginIdValid(isLengthValid && isDuplicateValid && !isTyping);
+  }, [isLengthValid, isDuplicateValid, isTyping, setIsLoginIdValid]);
 
   return (
     <div>
