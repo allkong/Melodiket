@@ -27,7 +27,7 @@ public interface AuthService {
 
     void logout();
 
-    AppUserEntity findUserByUuid(String uuid) throws HttpResponseException;
+    AppUserEntity findUserByUuid(UUID uuid) throws HttpResponseException;
 
     AppUserEntity findUserByLoginId(String loginId) throws HttpResponseException;
 

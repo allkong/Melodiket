@@ -1,11 +1,10 @@
 package com.ssafy.jdbc.melodiket.account.controller;
 
-import com.ssafy.jdbc.melodiket.account.controller.dto.AccountCertificationReq;
-import com.ssafy.jdbc.melodiket.account.controller.dto.AccountResp;
-import com.ssafy.jdbc.melodiket.account.controller.dto.AccountVerificationReq;
+import com.ssafy.jdbc.melodiket.account.controller.dto.*;
 import com.ssafy.jdbc.melodiket.account.service.AccountService;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.token.service.dto.TokenTransactionLogResp;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +41,30 @@ public class AccountController {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         accountService.verifyAccountCertification(user, req.targetNumber(), req.verificationCode());
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/charge")
+    public ResponseEntity<Void> chargeToken(Authentication authentication, @Valid @RequestBody TokenChargeReq req) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+//        accountService.checkChargeTokenAvailable(user, req.accountNumber());
+        accountService.chargeToken(user, req.accountNumber(), req.amount());
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<Void> withdrawToken(Authentication authentication, @Valid @RequestBody TokenWithdrawReq req) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+//        accountService.checkWithdrawAvailable(user, req.accountNumber(), req.amount());
+        accountService.withdrawToken(user, req.accountNumber(), req.amount());
+        return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/transactions/me")
+    public ResponseEntity<PageResponse<TokenTransactionLogResp>> getMyTransactions(Authentication authentication, CursorPagingReq pagingReq,
+                                                                                   @RequestParam(required = false) AccountService.TransactionLogFetchMode mode,
+                                                                                   @RequestParam(required = false) AccountService.LogType logType) {
+        mode = mode == null ? AccountService.TransactionLogFetchMode.FROM_OR_TO : mode;
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(accountService.getLogsOf(user, mode, logType, pagingReq));
     }
 }
