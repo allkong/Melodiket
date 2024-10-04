@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Modal from './Modal';
+import ConfirmModal from './ConfirmModal';
 
-const meta: Meta<typeof Modal> = {
-  component: Modal,
+const meta: Meta<typeof ConfirmModal> = {
+  component: ConfirmModal,
 };
 
 export default meta;
-type Story = StoryObj<typeof Modal>;
+type Story = StoryObj<typeof ConfirmModal>;
 
 export const Default: Story = {
   args: {
