@@ -56,6 +56,7 @@ interface UseFunnelReturn<T> {
  */
 const useFunnel = <T extends string>(
   addToHistory: boolean = false,
+  preventForwardNavigate: boolean = false,
   initialStep?: T
 ): UseFunnelReturn<T> => {
   'use client';
@@ -85,6 +86,17 @@ const useFunnel = <T extends string>(
       addQueryString(initialStep, false);
     }
   }, [initialStep, addQueryString]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+
+    if (preventForwardNavigate) {
+      window.addEventListener('popstate', handlePopState);
+    }
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   return { Funnel: FunnelMain<T>(), setStep };
 };
