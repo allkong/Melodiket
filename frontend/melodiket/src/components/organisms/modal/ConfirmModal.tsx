@@ -1,4 +1,7 @@
-import { MouseEventHandler, ReactNode } from 'react';
+'use client';
+
+import { MouseEventHandler, ReactNode, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
 import { WarningCircle } from '@/public/icons';
@@ -8,17 +11,16 @@ interface ConfirmModalProps {
   type?: 'info' | 'warning' | 'error';
   title: string;
   children?: ReactNode;
-  onCancel: MouseEventHandler<HTMLButtonElement>;
   onOk: MouseEventHandler<HTMLButtonElement>;
 }
 
-const ConfirmModal = ({
-  type,
-  title,
-  children,
-  onCancel,
-  onOk,
-}: ConfirmModalProps) => {
+const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
+  const router = useRouter();
+
+  const onCancel = useCallback(() => {
+    router.back();
+  }, [router]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="z-20 px-5 py-5 space-y-5 bg-white rounded-xl w-fit">
