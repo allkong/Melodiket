@@ -1,6 +1,7 @@
 package com.ssafy.jdbc.melodiket.concert.controller.dto;
 
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertStatus;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public record ConcertResp(
         Long favoriteMusicianStake, // 최애 뮤지션 정산 금액
         String stageName,          // 공연장 이름
         List<UUID> musicians,       // 공연에 참여한 뮤지션 UUID 리스트
-        boolean status
+        ConcertStatus status
 ) {
     public static ConcertResp from(ConcertEntity entity) {
         List<UUID> musicians = entity.getConcertParticipantMusicians().stream()
@@ -46,7 +47,7 @@ public record ConcertResp(
                 .favoriteMusicianStake(entity.getMusicianStake())
                 .stageName(entity.getStageEntity().getName())
                 .musicians(musicians)
-                .status(entity.isDeleted())
+                .status(entity.getConcertStatus())
                 .build();
     }
 }

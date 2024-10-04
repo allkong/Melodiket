@@ -1,7 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
-import jakarta.persistence.*;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteMusicianEntity;
 import jakarta.persistence.CascadeType;

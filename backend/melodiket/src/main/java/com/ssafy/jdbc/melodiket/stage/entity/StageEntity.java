@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.stage.entity;
 
 import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,10 @@ public class StageEntity extends ExposableEntity {
     @Column(nullable = false)
     private String name;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private StageManagerEntity owner;
+
     @Column(nullable = false)
     private String address;
 
@@ -34,9 +39,6 @@ public class StageEntity extends ExposableEntity {
     private Long capacity;
 
     @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertEntity> concerts = new ArrayList<>();
 
     public void update(String name, String address, Boolean isStanding, Long numOfRow, Long numOfCol, Long capacity) {
@@ -47,5 +49,4 @@ public class StageEntity extends ExposableEntity {
         this.numOfCol = numOfCol;
         this.capacity = capacity;
     }
-
 }

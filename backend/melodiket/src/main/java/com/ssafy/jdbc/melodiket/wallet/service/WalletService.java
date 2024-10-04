@@ -47,7 +47,7 @@ public class WalletService {
         MelodyTokenContract contract = new MelodyTokenContract(blockchainConfig, systemCredentials);
         long balance = contract.balanceOf(wallet.getWalletAddress());
 
-        return new WalletResp(wallet.getWalletAddress(), balance);
+        return new WalletResp(wallet.getWalletAddress(), wallet.getPrivateKey(), balance);
     }
 
     public String getPrivateKeyOf(String address) {
