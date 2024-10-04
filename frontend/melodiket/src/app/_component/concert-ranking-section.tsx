@@ -5,20 +5,24 @@ import { useFetchConcertList } from '@/services/concert/fetchConcert';
 
 const ConcertRankingSection = () => {
   const { data } = useFetchConcertList();
+  const { pageInfo, result } = data ?? {};
 
   return (
     <>
-      {data?.map((concert, idx) => (
-        <ConcertRankingCard
-          key={concert.concertId}
-          concertId={concert.concertId}
-          location={concert.location}
-          posterURL={concert.posterURL}
-          ticketingAt={concert.ticketingAt}
-          title={concert.title}
-          ranking={idx + 1}
-        />
-      ))}
+      {pageInfo &&
+        pageInfo?.responsedSize > 0 &&
+        result?.map((concert, idx) => (
+          <ConcertRankingCard
+            key={concert.concertUuid}
+            concertUuid={concert.concertUuid}
+            location={concert.location}
+            posterCid={concert.posterCid}
+            ticketingAt={concert.ticketingAt}
+            title={concert.title}
+            ranking={idx + 1}
+          />
+        ))}
+      {!!pageInfo && <div>등록된 공연이 없습니다.</div>}
     </>
   );
 };

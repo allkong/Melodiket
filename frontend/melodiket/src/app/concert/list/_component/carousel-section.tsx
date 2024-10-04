@@ -1,12 +1,8 @@
-'use client';
-
 import Carousel from '@/components/molecules/carousel/Carousel';
-import { useFetchCarouselList } from '@/services/concert/fetchConcert';
+import CAROUSEL_DATAS from '@/constants/carousel';
 
 const CarouselSection = () => {
-  const { data } = useFetchCarouselList();
-
-  return <>{data && <Carousel data={data} />}</>;
+  return <Carousel data={CAROUSEL_DATAS} />;
 };
 
 export default CarouselSection;

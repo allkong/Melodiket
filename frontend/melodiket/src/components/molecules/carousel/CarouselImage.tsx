@@ -24,7 +24,7 @@ const CarouselImage = ({
       })}
     >
       <Image
-        src={data.posterURL}
+        src={data.posterCid}
         alt="carousel 이미지"
         className={clsx('object-cover', {
           'rounded-lg': rounded,

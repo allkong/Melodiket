@@ -5,12 +5,14 @@ import { useFetchConcertList } from '@/services/concert/fetchConcert';
 
 const ConcertListSection = () => {
   const { data } = useFetchConcertList();
+  const { result } = data ?? {};
 
   return (
     <>
-      {data?.map((concert) => (
-        <ConcertCard key={concert.concertId} {...concert} />
-      ))}
+      {result &&
+        result?.map((concert) => (
+          <ConcertCard key={concert.concertUuid} {...concert} />
+        ))}
     </>
   );
 };

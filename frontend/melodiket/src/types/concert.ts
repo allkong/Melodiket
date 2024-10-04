@@ -15,34 +15,53 @@ export interface ConcertData {
 }
 
 export interface Concert {
-  index: number;
-  concertId: string;
-  ticketingAt: string;
-  startedAt: string;
+  concertUuid: string;
+  stageUuid: string;
   title: string;
-  description: string;
-  musicians: {
-    musicianId: string;
-    imageURL: string;
-    musicianName: string;
-  }[];
-  location: string;
-  posterURL: string;
-  favorite: number;
-  capability: number;
-  price: number;
-  isSeat?: boolean;
+  startAt: string;
+  ticketingAt: string;
+  availableTickets: number;
   isAvailableSeat: boolean[][];
+  description: string;
+  posterCid: string;
+  ticketPrice: number;
+  owner: string;
+  ownerStake: string;
+  favoriteMusicianStake: string;
+  musicians: {
+    uuid: string;
+  }[];
+  isDeleted: boolean;
+  location?: string;
 }
 
 export interface CarouselConcert
   extends Pick<
     Concert,
-    'index' | 'description' | 'location' | 'title' | 'ticketingAt' | 'posterURL'
+    'description' | 'location' | 'title' | 'ticketingAt' | 'posterCid'
   > {}
 
-export interface ConcertListItem
-  extends Pick<
+export interface FetchConcertList {
+  pageInfo: {
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+    pageNo: number;
+    requestedSize: number;
+    responsedSize: number;
+  };
+  result: Pick<
     Concert,
-    'concertId' | 'posterURL' | 'title' | 'location' | 'ticketingAt'
-  > {}
+    'concertUuid' | 'posterCid' | 'title' | 'location' | 'ticketingAt'
+  >[];
+}
+
+export interface FetchConcertDetail {
+  pageInfo: {
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+    pageNo: number;
+    requestedSize: number;
+    responsedSize: number;
+  };
+  result: Concert;
+}

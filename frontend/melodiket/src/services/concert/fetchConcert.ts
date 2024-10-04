@@ -1,39 +1,16 @@
-import { CarouselConcert, Concert, ConcertListItem } from '@/types/concert';
+import { Concert, FetchConcertList } from '@/types/concert';
 import customFetch from '../customFetch';
 import { dehydrate, useQuery } from '@tanstack/react-query';
 import concertKey from './concertKey';
 import getQueryClient from '@/utils/getQueryClient';
 
-export const fetchCarouselList = async () => {
-  const response = await customFetch<CarouselConcert[]>('/concerts/carousel');
-  return response;
-};
-
-export const useFetchCarouselList = () => {
-  const result = useQuery({
-    queryKey: concertKey.carousel(),
-    queryFn: fetchCarouselList,
-  });
-  return result;
-};
-
-export const useFetchCarouselListDehydrateState = async () => {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: concertKey.carousel(),
-    queryFn: fetchCarouselList,
-  });
-
-  return dehydrate(queryClient);
-};
-
 export const fetchConcertList = async () => {
-  const response = await customFetch<ConcertListItem[]>('/concerts');
+  const response = await customFetch<FetchConcertList>('/concerts');
   return response;
 };
 
 export const useFetchConcertList = () => {
-  const result = useQuery<ConcertListItem[]>({
+  const result = useQuery<FetchConcertList>({
     queryKey: concertKey.list(),
     queryFn: fetchConcertList,
   });
