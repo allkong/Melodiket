@@ -1,8 +1,8 @@
 import { UUID } from 'crypto';
 
 export interface StageData {
-  stageName: string;
-  stageAddress: string;
+  name: string;
+  address: string;
   isStanding: boolean;
   capacity?: number;
   numOfRow?: number;
@@ -10,8 +10,8 @@ export interface StageData {
 }
 
 export interface RegisterStageRequest {
-  stageName: string;
-  stageAddress: string;
+  name: string;
+  address: string;
   isStanding: boolean;
   capacity?: number;
   numOfRow?: number;
@@ -20,8 +20,8 @@ export interface RegisterStageRequest {
 
 export interface RegisterStageResponse {
   uuid: UUID;
-  stageName: string;
-  stageAddress: string;
+  name: string;
+  address: string;
   isStanding: boolean;
   capacity: number;
   numOfRow: number;
