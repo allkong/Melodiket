@@ -55,7 +55,7 @@ const Page = () => {
         {filteredTickets.length ? (
           filteredTickets.map((ticket) => (
             <Link
-              href={`/concert-management/${ticket.ticketUuid}`}
+              href={`/management/concerts/${ticket.ticketUuid}`}
               key={ticket.ticketUuid}
             >
               <TicketItem
