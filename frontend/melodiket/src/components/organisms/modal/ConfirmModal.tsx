@@ -16,10 +16,21 @@ interface ConfirmModalProps {
 
 const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
   const router = useRouter();
+  const clickedRef = useRef<EventTarget>();
 
   const onCancel = useCallback(() => {
     router.back();
   }, [router]);
+
+  const handleClickClose = (e: React.MouseEvent<HTMLElement>) => {
+    if (clickedRef.current) {
+      clickedRef.current = undefined;
+      return;
+    }
+
+    e.stopPropagation();
+    onCancel();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -46,7 +57,10 @@ const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
           <MediumButton label="확인" color="primary" onClick={onOk} />
         </div>
       </div>
-      <div className="absolute inset-0 bg-black opacity-20"></div>
+      <div
+        onMouseUp={handleClickClose}
+        className="absolute inset-0 bg-black opacity-20"
+      ></div>
     </div>
   );
 };
