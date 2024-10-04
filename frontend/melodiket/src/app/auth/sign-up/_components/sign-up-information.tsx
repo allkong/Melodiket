@@ -7,6 +7,7 @@ import TextBanner from '@/components/molecules/text/TextBanner';
 import SignUpNicknameInput from '@/components/organisms/input/SignUpNicknameInput';
 import SignUpLoginIdInput from '@/components/organisms/input/SignUpLoginIdInput';
 import SignUpPasswordInput from '@/components/organisms/input/SignUpPasswordInput';
+import SignUpNameInput from '@/components/organisms/input/SignUpNameInput';
 import type { SignUpData } from '@/types/signUp';
 
 interface SignUpInformationProps {
@@ -20,6 +21,9 @@ const SignUpInformation = ({ onNext }: SignUpInformationProps) => {
   const [nickname, setNickname] = useState('');
   const [isNicknameValid, setIsNicknameValid] = useState(true);
 
+  const [name, setName] = useState('');
+  const [isNameValid, setIsNameValid] = useState(true);
+
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(true);
@@ -29,6 +33,8 @@ const SignUpInformation = ({ onNext }: SignUpInformationProps) => {
     isLoginIdValid &&
     !!nickname &&
     isNicknameValid &&
+    !!name &&
+    isNameValid &&
     !!password &&
     !!passwordConfirm &&
     isPasswordValid;
@@ -42,6 +48,11 @@ const SignUpInformation = ({ onNext }: SignUpInformationProps) => {
           description="멜로디켓 서비스는 블록체인을 사용한 서비스에요"
         />
         <div className="flex flex-col mt-9 gap-3">
+          <SignUpNameInput
+            name={name}
+            setName={setName}
+            setIsNameValid={setIsNameValid}
+          />
           <SignUpNicknameInput
             nickname={nickname}
             setNickname={setNickname}
@@ -65,7 +76,7 @@ const SignUpInformation = ({ onNext }: SignUpInformationProps) => {
         <LargeButton
           label="다음"
           disabled={!isFormValid}
-          onClick={() => onNext({ loginId, nickname, password })}
+          onClick={() => onNext({ loginId, nickname, name, password })}
         />
       </div>
     </div>

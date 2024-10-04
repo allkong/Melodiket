@@ -2,6 +2,7 @@ export interface SignUpData {
   loginId: string;
   password: string;
   nickname: string;
+  name: string;
   description?: string;
   imageUrl?: string;
   role: SignUpRole['value'];

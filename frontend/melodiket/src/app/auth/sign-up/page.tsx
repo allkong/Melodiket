@@ -19,6 +19,7 @@ const Page = () => {
 
   const [signUpData, setSignUpData] = useState<SignUpData>({
     nickname: '',
+    name: '',
     loginId: '',
     password: '',
     role: 'audience',
