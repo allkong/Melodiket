@@ -50,7 +50,8 @@ interface UseFunnelReturn<T> {
 
 /**
  *
- * @param addToHistory setStep으로 페이지 이동 시 브라우저 히스토리 추가 여부, default는 false
+ * @param addToHistory setStep으로 페이지 이동 시 브라우저 히스토리 추가 여부. default = false
+ * @param preventForwardNavigate 뒤로 가기를 눌렀을 때 다시 앞으로 가는 것을 방지. default = false
  * @param initialStep 초기 페이지
  * @returns 현재 query string의 step에 해당하는 컴포넌트를 보여주는 Funnel 컴포넌트와 query string을 교체하는 setStep 함수
  */
