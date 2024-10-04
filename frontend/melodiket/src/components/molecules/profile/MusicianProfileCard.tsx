@@ -1,18 +1,18 @@
 import FavoriteProfile from './FavoriteProfile';
 
 interface MusicianProfileCardProps {
-  src: string;
-  musicianName: string;
+  imageUrl: string;
+  nickname: string;
 }
 
 const MusicianProfileCard = ({
-  src,
-  musicianName,
+  imageUrl,
+  nickname,
 }: MusicianProfileCardProps) => {
   return (
     <div className="flex flex-col items-center px-4 py-4 space-y-3.5 bg-white w-fit rounded-md shadow-[1px_1px_10px_rgba(143,0,255,0.2)]">
-      <FavoriteProfile src={src} size="md" />
-      <p className="text-sm">{musicianName}</p>
+      <FavoriteProfile src={imageUrl} size="md" />
+      <p className="text-sm">{nickname}</p>
     </div>
   );
 };

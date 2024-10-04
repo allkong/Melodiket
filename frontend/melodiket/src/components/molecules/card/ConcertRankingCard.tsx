@@ -2,9 +2,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { CalendarFilled, Location, SubwayMark } from '@/public/icons';
-import type { ConcertListItem } from '@/types/concert';
+import type { Concert } from '@/types/concert';
 
-interface ConcertRankingCardProps extends ConcertListItem {
+interface ConcertRankingCardProps
+  extends Pick<
+    Concert,
+    'concertUuid' | 'posterCid' | 'title' | 'location' | 'ticketingAt'
+  > {
   ranking: number;
   href?: string;
 }
@@ -14,7 +18,7 @@ const ConcertRankingCard = ({
   href,
   title,
   location,
-  posterURL,
+  posterCid,
   ticketingAt,
 }: ConcertRankingCardProps) => {
   return (
@@ -24,7 +28,7 @@ const ConcertRankingCard = ({
     >
       <div className="relative w-full h-48">
         <Image
-          src={posterURL}
+          src={posterCid}
           alt="공연 랭킹 카드 컴포넌트"
           className="object-cover"
           fill

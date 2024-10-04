@@ -5,12 +5,16 @@ import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavorite
 
 const FavoriteMusicianSection = () => {
   const { data } = useFetchFavoriteMusiciansList();
+  const { pageInfo, result } = data ?? {};
 
   return (
     <>
-      {data.map((musician) => (
-        <MusicianProfileCard key={musician.id} {...musician} />
-      ))}
+      {pageInfo &&
+        pageInfo?.responsedSize > 0 &&
+        result?.map((musician) => (
+          <MusicianProfileCard key={musician.loginId} {...musician} />
+        ))}
+      {pageInfo?.responsedSize === 0 && <div>등록 된 뮤지션이 없어요.</div>}
     </>
   );
 };
