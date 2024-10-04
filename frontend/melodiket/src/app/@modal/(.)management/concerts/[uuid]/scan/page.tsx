@@ -6,11 +6,11 @@ import ConfirmModal from '@/components/organisms/modal/ConfirmModal';
 
 const Modal = () => {
   const searchParams = useSearchParams();
-  const isModalVisible = searchParams.get('modal') === 'true';
+  const ticketUuid = searchParams.get('ticket');
 
   return (
     <div>
-      {isModalVisible && (
+      {ticketUuid && (
         <ConfirmModal title="제목" onOk={() => alert('확인')}>
           <p>내용</p>
         </ConfirmModal>
