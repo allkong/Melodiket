@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
 import { SIGN_UP_DATA_LENGTH_LIMITS } from '@/constants/signUp';
+import { useIsNicknameDuplicated } from '@/services/auth/useLogin';
 
 interface SignUpNicknameInputProps {
   nickname: string;
@@ -22,14 +23,17 @@ const SignUpNicknameInput = ({
 }: SignUpNicknameInputProps) => {
   const [isLengthValid, setIsLengthValid] = useState(true);
   const [isDuplicateValid, setIsDuplicateValid] = useState(true);
+  const mutate = useIsNicknameDuplicated();
 
   const validateNicknameLength = (value: string) => {
     return MIN_LENGTH <= value.length && value.length <= MAX_LENGTH;
   };
 
-  const validateNicknameDuplicate = (value: string) => {
-    // value를 서버로 보내 중복 검증
-    return true;
+  const validateNicknameDuplicate = async (value: string) => {
+    const { nickname: isNicknameDuplicated } = await mutate.mutateAsync({
+      nickname: value,
+    });
+    return !isNicknameDuplicated;
   };
 
   const handleNicknameChange = (value: string) => {
@@ -37,8 +41,8 @@ const SignUpNicknameInput = ({
     setIsLengthValid(validateNicknameLength(value));
   };
 
-  const handleNicknameDuplicate = () => {
-    setIsDuplicateValid(validateNicknameDuplicate(nickname));
+  const handleNicknameDuplicate = async () => {
+    setIsDuplicateValid(await validateNicknameDuplicate(nickname));
   };
 
   const getAlertLabel = () => {
