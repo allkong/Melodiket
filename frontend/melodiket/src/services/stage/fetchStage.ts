@@ -8,10 +8,10 @@ import type {
 
 import customFetch from '../customFetch';
 
-const registerStage = async (StageData: RegisterStageRequest) => {
+const registerStage = async (stageData: RegisterStageRequest) => {
   const response = await customFetch<RegisterStageResponse>('/stages', {
     method: 'POST',
-    body: StageData,
+    body: stageData,
   });
   return response;
 };
