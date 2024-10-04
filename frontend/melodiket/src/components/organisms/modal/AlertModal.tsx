@@ -42,7 +42,7 @@ const AlertModal = ({ type, title, children, duration }: AlertModalProps) => {
   }, [handleCancel, duration]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center max-w-xl mx-auto">
+    <div className="fixed inset-0 z-50 flex items-start justify-center max-w-xl mx-auto pt-20">
       <div className="z-20 px-5 py-5 space-y-5 bg-white rounded-xl w-fit max-w-[90%]">
         <div className="space-y-4">
           <div className="flex space-x-8">
