@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback, useRef } from 'react';
+import { ReactNode, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import CloseButton from '@/components/atoms/button/CloseButton';
@@ -10,9 +10,10 @@ interface AlertModalProps {
   type?: 'info' | 'warning' | 'error';
   title?: string;
   children?: ReactNode;
+  duration?: number;
 }
 
-const AlertModal = ({ type, title, children }: AlertModalProps) => {
+const AlertModal = ({ type, title, children, duration }: AlertModalProps) => {
   const router = useRouter();
   const clickedRef = useRef<EventTarget>();
 
@@ -29,6 +30,16 @@ const AlertModal = ({ type, title, children }: AlertModalProps) => {
     e.stopPropagation();
     handleCancel();
   };
+
+  useEffect(() => {
+    if (duration) {
+      const timer = setTimeout(() => {
+        handleCancel();
+      }, duration);
+
+      return () => clearTimeout(timer);
+    }
+  }, [handleCancel, duration]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center max-w-xl mx-auto">
