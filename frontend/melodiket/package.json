@@ -9,7 +9,9 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "all": "concurrently \"yarn dev\" \"yarn storybook\"",
+    "dev-storybook": "concurrently \"yarn dev\" \"yarn storybook\"",
+    "dev-mock": "concurrently \"yarn dev\" \"yarn mock\"",
+    "dev-all": "concurrently \"yarn dev\" \"yarn storybook\" \"yarn mock\"",
     "mock": "npx tsx watch ./src/mocks/http.ts"
   },
   "dependencies": {
