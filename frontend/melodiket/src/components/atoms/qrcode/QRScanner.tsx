@@ -2,12 +2,9 @@ import { useEffect, useRef } from 'react';
 import QrScanner from 'qr-scanner';
 
 const QrOptions = {
-  // 후면 카메라인지 셀프 카메라인지
-  preferredCamera: 'environment',
-  // 1초당 몇번의 스캔을 할 건지
-  maxScansPerSecond: 10,
-  // QR 스캔이 일어나는 부분 표시 여부 (노란색 네모 테두리)
-  highlightScanRegion: false,
+  preferredCamera: 'environment', // 후면 카메라인지 셀프 카메라인지
+  maxScansPerSecond: 10, // 1초당 몇번의 스캔을 할 건지
+  highlightScanRegion: false, // QR 스캔이 일어나는 부분 표시 여부 (노란색 네모 테두리)
 };
 
 const QRScan = () => {
