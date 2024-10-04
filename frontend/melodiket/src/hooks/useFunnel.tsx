@@ -1,5 +1,12 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Children, FC, isValidElement, ReactNode } from 'react';
+import {
+  Children,
+  FC,
+  isValidElement,
+  ReactNode,
+  useCallback,
+  useEffect,
+} from 'react';
 
 // Funnel UI를 보여주는 컴포넌트
 interface FunnelProps {
@@ -42,28 +49,44 @@ interface UseFunnelReturn<T> {
 }
 
 /**
+ *
  * @param addToHistory setStep으로 페이지 이동 시 브라우저 히스토리 추가 여부, default는 false
+ * @param initialStep 초기 페이지
  * @returns 현재 query string의 step에 해당하는 컴포넌트를 보여주는 Funnel 컴포넌트와 query string을 교체하는 setStep 함수
  */
 const useFunnel = <T extends string>(
-  addToHistory: boolean = false
+  addToHistory: boolean = false,
+  initialStep?: T
 ): UseFunnelReturn<T> => {
   'use client';
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const addQueryString = (step: T) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('step', step);
+  const addQueryString = useCallback(
+    (step: T, addToHistory: boolean) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('step', step);
 
-    if (addToHistory) {
-      router.push(`?${params.toString()}`);
-    } else {
-      router.replace(`?${params.toString()}`);
-    }
+      if (addToHistory) {
+        router.push(`?${params.toString()}`);
+      } else {
+        router.replace(`?${params.toString()}`);
+      }
+    },
+    [searchParams, addToHistory]
+  );
+
+  const setStep = (step: T) => {
+    addQueryString(step, addToHistory);
   };
 
-  return { Funnel: FunnelMain<T>(), setStep: addQueryString };
+  useEffect(() => {
+    if (initialStep) {
+      addQueryString(initialStep, false);
+    }
+  }, [initialStep, addQueryString]);
+
+  return { Funnel: FunnelMain<T>(), setStep };
 };
 
 export default useFunnel;
