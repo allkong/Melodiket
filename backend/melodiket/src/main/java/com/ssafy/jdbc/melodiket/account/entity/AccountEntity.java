@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.account.entity;
 
-import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,12 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountEntity extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class AccountEntity extends ExposableEntity {
     @Column(nullable = false)
     private String ownerName;
 

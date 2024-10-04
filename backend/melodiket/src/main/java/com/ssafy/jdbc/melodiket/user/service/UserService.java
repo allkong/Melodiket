@@ -8,31 +8,24 @@ import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
 import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
+import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
-import com.ssafy.jdbc.melodiket.common.page.PageInfo;
+import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerDetailResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.*;
-import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
-import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
-import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
-import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
+import com.ssafy.jdbc.melodiket.user.repository.*;
+import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -48,12 +41,15 @@ public class UserService implements AuthService {
     private final AppUserRepository appUserRepository;
     private final AudienceRepository audienceRepository;
     private final MusicianRepository musicianRepository;
+    private final MusicianCursorRepository musicianCursorRepository;
     private final StageManagerRepository stageMangerRepository;
+    private final StageManagerCursorRepository stageManagerCursorRepository;
     private final JwtService jwtService;
+    private final WalletService walletService;
 
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public SignUpResp signUp(SignUpReq signUpReq, Role role) {
-
         if (appUserRepository.existsByLoginId(signUpReq.loginId()))
             throw new HttpResponseException(ErrorDetail.DUPLICATED_LOGIN_ID);
 
@@ -65,6 +61,7 @@ public class UserService implements AuthService {
         if (role == Role.AUDIENCE) {
             AudienceEntity audience = AudienceEntity.builder()
                     .uuid(UUID.randomUUID())
+                    .name(signUpReq.name())
                     .loginId(signUpReq.loginId())
                     .password(hashedPassword)
                     .salt(salt)
@@ -75,10 +72,12 @@ public class UserService implements AuthService {
                     .registeredAt(LocalDateTime.now())
                     .build();
             audienceRepository.save(audience);
+            walletService.createNewWallet(audience);
 
             return new SignUpResp(
                     audience.getId(),
                     audience.getUuid(),
+                    signUpReq.name(),
                     audience.getLoginId(),
                     audience.getNickname(),
                     audience.getRole(),
@@ -87,6 +86,7 @@ public class UserService implements AuthService {
         } else if (role == Role.MUSICIAN) {
             MusicianEntity musician = MusicianEntity.builder()
                     .uuid(UUID.randomUUID())
+                    .name(signUpReq.name())
                     .loginId(signUpReq.loginId())
                     .password(hashedPassword)
                     .salt(salt)
@@ -97,10 +97,12 @@ public class UserService implements AuthService {
                     .registeredAt(LocalDateTime.now())
                     .build();
             musicianRepository.save(musician);
+            walletService.createNewWallet(musician);
 
             return new SignUpResp(
                     musician.getId(),
                     musician.getUuid(),
+                    signUpReq.name(),
                     musician.getLoginId(),
                     musician.getNickname(),
                     musician.getRole(),
@@ -109,6 +111,7 @@ public class UserService implements AuthService {
         } else {
             StageManagerEntity stageManager = StageManagerEntity.builder()
                     .uuid(UUID.randomUUID())
+                    .name(signUpReq.name())
                     .loginId(signUpReq.loginId())
                     .password(hashedPassword)
                     .salt(salt)
@@ -119,9 +122,12 @@ public class UserService implements AuthService {
                     .registeredAt(LocalDateTime.now())
                     .build();
             stageMangerRepository.save(stageManager);
+            walletService.createNewWallet(stageManager);
+
             return new SignUpResp(
                     stageManager.getId(),
                     stageManager.getUuid(),
+                    signUpReq.name(),
                     stageManager.getLoginId(),
                     stageManager.getNickname(),
                     stageManager.getRole(),
@@ -161,8 +167,8 @@ public class UserService implements AuthService {
     }
 
     @Override
-    public AppUserEntity findUserByUuid(String uuid) throws HttpResponseException {
-        return appUserRepository.findByUuid(UUID.fromString(uuid))
+    public AppUserEntity findUserByUuid(UUID uuid) throws HttpResponseException {
+        return appUserRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
     }
 
@@ -194,13 +200,13 @@ public class UserService implements AuthService {
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         return new UserProfileResp(
+                appUserEntity.getUuid(),
                 appUserEntity.getLoginId(),
                 appUserEntity.getRole().name(),
                 appUserEntity.getNickname(),
                 appUserEntity.getDescription(),
                 appUserEntity.getRegisteredAt(),
-                null, // imageUrl 선개발시 처리
-                null  // walletInfo 선개발시 처리
+                null // imageUrl 선개발시 처리
         );
     }
 
@@ -228,114 +234,45 @@ public class UserService implements AuthService {
         appUserRepository.save(updateUser);
 
         return new UserProfileResp(
+                updateUser.getUuid(),
                 updateUser.getLoginId(),
                 updateUser.getRole().name(),
                 updateUser.getNickname(),
                 updateUser.getDescription(),
                 updateUser.getRegisteredAt(),
-                null, // imageUrl 선개발시 처리
-                null  // walletInfo 선개발시 처리
+                null // imageUrl 선개발시 처리
         );
     }
 
     // StageManager 들 조회
-    public StageManagerResp getStageManagers(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<AppUserEntity> stageManagerPage = appUserRepository.findByRole(Role.STAGE_MANAGER, pageable);
-
-        List<UserProfileResp> stageManagers = stageManagerPage.getContent().stream()
-                .map(user -> new UserProfileResp(
-                        user.getLoginId(),
-                        user.getRole().name(),
-                        user.getNickname(),
-                        user.getDescription(),
-                        user.getRegisteredAt(),
-                        null,  // TODO : imageUrl 선개발시 null 처리
-                        null   // TODO :walletInfo 선개발시 null 처리
-                ))
-                .toList();
-
-        return new StageManagerResp(
-                new PageInfo(
-                        stageManagerPage.hasNext(),
-                        stageManagerPage.hasPrevious(),
-                        pageNo,
-                        pageSize,
-                        stageManagerPage.getNumberOfElements()
-                ),
-                stageManagers
-        );
+    public PageResponse<StageManagerResp> getStageManagers(CursorPagingReq pagingReq) {
+        return stageManagerCursorRepository.findAll(pagingReq);
     }
 
     @Override
-    public StageManagerDetailResp getStageManagerDetail(UUID id) {
-        AppUserEntity user = appUserRepository.findByUuid(id)
+    public StageManagerResp getStageManagerDetail(UUID uuid) {
+        AppUserEntity user = appUserRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
-        return new StageManagerDetailResp(
+        return new StageManagerResp(
                 user.getLoginId(),
                 user.getRole().name(),
                 user.getNickname(),
                 user.getDescription(),
-                null,  // TODO : imageUrl 선개발시 null 처리
-                null   // TODO :walletInfo 선개발시 null 처리
+                null  // TODO : imageUrl 선개발시 null 처리
         );
     }
 
     @Override
-    public MusicianResp getMusicians(int pageNo, int pageSize, String sortType) {
-
-        Sort sort;
-
-        // 정렬 기준 설정
-        switch (sortType.toLowerCase()) {
-            case "likes":
-                sort = Sort.by(Sort.Direction.DESC, LIKE_COUNT); // 찜 많은 순
-                break;
-            case "registered":
-                sort = Sort.by(Sort.Direction.ASC, REGISTERED_AT); // 등록 순
-                break;
-            case "latest":
-                sort = Sort.by(Sort.Direction.DESC, REGISTERED_AT); // 최신순
-                break;
-            default:
-                throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE);
-        }
-
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        Page<MusicianEntity> musiciansPage = musicianRepository.findAll(pageable);
-
-        List<MusicianDetailResp> musicianDetails = musiciansPage.getContent().stream()
-                .map(musician -> new MusicianDetailResp(
-                        musician.getUuid(),
-                        musician.getLoginId(),
-                        musician.getRole().name(),
-                        musician.getDescription(),
-                        musician.getNickname(),
-                        musician.getRegisteredAt(),
-                        null,  // TODO : imageUrl 선개발시 null 처리
-                        musician.getLikeCount(),
-                        null   // TODO :walletInfo 선개발시 null 처리
-                ))
-                .toList();
-
-        return new MusicianResp(
-                new PageInfo(
-                        musiciansPage.hasNext(),
-                        musiciansPage.hasPrevious(),
-                        pageNo,
-                        pageSize,
-                        musiciansPage.getNumberOfElements()
-                ),
-                musicianDetails
-        );
+    public PageResponse<MusicianResp> getMusicians(CursorPagingReq pagingReq) {
+        return musicianCursorRepository.findAll(pagingReq);
     }
 
     @Override
-    public MusicianDetailResp getMusicianDetail(UUID id) {
-        MusicianEntity musician = musicianRepository.findByUuid(id)
+    public MusicianResp getMusicianDetail(UUID uuid) {
+        MusicianEntity musician = musicianRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
-        return new MusicianDetailResp(
+        return new MusicianResp(
                 musician.getUuid(),
                 musician.getLoginId(),
                 musician.getRole().name(),
@@ -343,8 +280,7 @@ public class UserService implements AuthService {
                 musician.getDescription(),
                 musician.getRegisteredAt(),
                 null,// TODO : imageUrl 선개발시 null 처리
-                musician.getFavoriteMusicians().size(),
-                null   // TODO :walletInfo 선개발시 null 처리
+                musician.getFavoriteMusicians().size()
         );
     }
 }

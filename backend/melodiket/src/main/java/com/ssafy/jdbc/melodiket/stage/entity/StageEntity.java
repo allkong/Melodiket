@@ -1,34 +1,30 @@
 package com.ssafy.jdbc.melodiket.stage.entity;
 
-import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "stage")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class StageEntity extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
-
+@SuperBuilder
+public class StageEntity extends ExposableEntity {
     @Column(nullable = false)
     private String name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private StageManagerEntity owner;
 
     @Column(nullable = false)
     private String address;
@@ -43,9 +39,6 @@ public class StageEntity extends BaseEntity {
     private Long capacity;
 
     @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StageAssignmentEntity> stageAssignmentEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "stageEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConcertEntity> concerts = new ArrayList<>();
 
     public void update(String name, String address, Boolean isStanding, Long numOfRow, Long numOfCol, Long capacity) {
@@ -56,5 +49,4 @@ public class StageEntity extends BaseEntity {
         this.numOfCol = numOfCol;
         this.capacity = capacity;
     }
-
 }

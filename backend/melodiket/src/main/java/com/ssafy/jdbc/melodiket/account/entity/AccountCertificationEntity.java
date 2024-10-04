@@ -17,11 +17,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class AccountCertificationEntity extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false)
     private String ownerName;
 

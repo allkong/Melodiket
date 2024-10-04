@@ -2,13 +2,12 @@ package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.account.entity.AccountCertificationEntity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
-import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.wallet.entity.WalletInfoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "app_user")
@@ -27,14 +25,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class AppUserEntity extends BaseEntity implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
+public class AppUserEntity extends ExposableEntity implements UserDetails {
+    @Column(nullable = false)
+    private String name;
 
     @Column(unique = true, nullable = false)
     private String loginId;
@@ -64,7 +57,8 @@ public class AppUserEntity extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL) // 양방향 매핑 설정
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
     private WalletInfoEntity walletInfo;
 
     @Override
