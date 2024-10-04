@@ -62,7 +62,7 @@ public class QStageManagerEntity extends EntityPathBase<StageManagerEntity> {
     //inherited
     public final StringPath salt;
 
-    public final ListPath<com.ssafy.jdbc.melodiket.stage.entity.StageAssignmentEntity, com.ssafy.jdbc.melodiket.stage.entity.QStageAssignmentEntity> stageAssignmentEntities = this.<com.ssafy.jdbc.melodiket.stage.entity.StageAssignmentEntity, com.ssafy.jdbc.melodiket.stage.entity.QStageAssignmentEntity>createList("stageAssignmentEntities", com.ssafy.jdbc.melodiket.stage.entity.StageAssignmentEntity.class, com.ssafy.jdbc.melodiket.stage.entity.QStageAssignmentEntity.class, PathInits.DIRECT2);
+    public final ListPath<com.ssafy.jdbc.melodiket.stage.entity.StageEntity, com.ssafy.jdbc.melodiket.stage.entity.QStageEntity> stageEntities = this.<com.ssafy.jdbc.melodiket.stage.entity.StageEntity, com.ssafy.jdbc.melodiket.stage.entity.QStageEntity>createList("stageEntities", com.ssafy.jdbc.melodiket.stage.entity.StageEntity.class, com.ssafy.jdbc.melodiket.stage.entity.QStageEntity.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt;

@@ -32,7 +32,8 @@ public class QConcertEntity extends EntityPathBase<ConcertEntity> {
 
     public final EnumPath<ConcertStatus> concertStatus = createEnum("concertStatus", ConcertStatus.class);
 
-    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath description = createString("description");
 
@@ -42,9 +43,9 @@ public class QConcertEntity extends EntityPathBase<ConcertEntity> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath isDeleted = createBoolean("isDeleted");
-
     public final NumberPath<Long> musicianStake = createNumber("musicianStake", Long.class);
+
+    public final com.ssafy.jdbc.melodiket.user.entity.QStageManagerEntity owner;
 
     public final NumberPath<Long> ownerStake = createNumber("ownerStake", Long.class);
 
@@ -85,7 +86,8 @@ public class QConcertEntity extends EntityPathBase<ConcertEntity> {
 
     public QConcertEntity(Class<? extends ConcertEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.stageEntity = inits.isInitialized("stageEntity") ? new com.ssafy.jdbc.melodiket.stage.entity.QStageEntity(forProperty("stageEntity")) : null;
+        this.owner = inits.isInitialized("owner") ? new com.ssafy.jdbc.melodiket.user.entity.QStageManagerEntity(forProperty("owner"), inits.get("owner")) : null;
+        this.stageEntity = inits.isInitialized("stageEntity") ? new com.ssafy.jdbc.melodiket.stage.entity.QStageEntity(forProperty("stageEntity"), inits.get("stageEntity")) : null;
     }
 
 }

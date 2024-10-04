@@ -43,7 +43,8 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
             Pattern.compile("^/api/v1/concerts$"),
             Pattern.compile("^/api/v1/concerts/[^/]+$"),
-            Pattern.compile("^/$")
+            Pattern.compile("^/api/v1/logs$"),
+            Pattern.compile("^/$"),
     };
 
     private final JwtService jwtService;
