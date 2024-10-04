@@ -47,7 +47,7 @@ contract ConcertManager {
 
     // 티켓팅 관련 정보
     struct TicketingPlanInfo {
-        uint256[] tickets; // 발급된 티켓 목록
+        string[] tickets; // 발급된 티켓 목록
         uint256 numOfRestTickets; // 남은 티켓 수
         uint256 ticketingStartAt; // 티켓팅 시작 일시
         bool[][] isReserved; // 좌석 예약 여부
@@ -105,7 +105,7 @@ contract ConcertManager {
 
     mapping(uint256 => TicketingPlanInfo) private concertTicketingInfos;
     function getConcertTicketingInfo(uint256 _concertId) public view returns (
-        uint256[] memory tickets,
+        string[] memory tickets,
         uint256 numOfRestTickets,
         uint256 ticketingStartAt,
         bool[][] memory isReserved
@@ -128,7 +128,7 @@ contract ConcertManager {
     event MusicianDenied(uint256 concertId, address musician);
     event AllMusicianAgreed(uint256 concertId);
     event ConcertCanceled(uint256 concertId);
-    event TicketPurchased(uint256 concertId, address buyer, uint256 ticketId);
+    event TicketPurchased(uint256 concertId, address buyer, string ticketUuid);
     event TicketPriceTransferred(uint256 concertId);
 
     constructor(address _melodyTokenAddress, address _ticketNFTAddress) {
@@ -205,7 +205,7 @@ contract ConcertManager {
 
         // 티켓 예매 현황 초기화
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[concertId];
-        ticketingInfo.tickets = new uint256[](0);
+        ticketingInfo.tickets = new string[](0);
         ticketingInfo.ticketingStartAt = _ticketingStartAt;
 
         return newConcert.id;
@@ -366,7 +366,7 @@ contract ConcertManager {
         return true;
     }
 
-    function purchaseTicket(uint256 _concertId, address _favoriteMusicianAddress, uint256 _seatRow, uint256 _seatCol) public {
+    function purchaseTicket(string calldata _ticket_uuid, uint256 _concertId, address _favoriteMusicianAddress, uint256 _seatRow, uint256 _seatCol) public {
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "ACTIVE"), "Concert is not active.");
@@ -403,7 +403,7 @@ contract ConcertManager {
 
         require(isJoinedMusician, "Favorite musician not found.");
 
-        uint256 ticketId = ticketNFT.mintTicket(caller(), _concertId, _favoriteMusicianAddress, seatingInfo.isStanding, _seatRow, _seatCol);
+        uint256 ticketId = ticketNFT.mintTicket(_ticket_uuid, caller(), _concertId, _favoriteMusicianAddress, seatingInfo.isStanding, _seatRow, _seatCol);
         ticketingInfo.numOfRestTickets--;
         if (!seatingInfo.isStanding) {
             ticketingInfo.isReserved[_seatRow][_seatCol] = true;
@@ -411,32 +411,32 @@ contract ConcertManager {
         melodyToken.transferFrom(caller(), address(this), ticketPriceInfo.ticketPrice);
 
         // 발급 티켓 목록에 추가
-        ticketingInfo.tickets.push(ticketId);
+        ticketingInfo.tickets.push(_ticket_uuid);
 
-        emit TicketPurchased(_concertId, caller(), ticketId);
+        emit TicketPurchased(_concertId, caller(), _ticket_uuid);
     }
 
     function caller() public view returns (address) {
         return msg.sender;
     }
 
-    function useTicket(uint256 _concertId, uint256 _ticketId) public {
+    function useTicket(uint256 _concertId, string calldata _ticketId) public {
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
         address concertManager = concert.manager;
         require(concertManager == msg.sender, "Only concert manager can call this function.");
 
-        TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithId(_ticketId);
+        TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithUuid(_ticketId);
         require(ticket.id != 0, "Ticket not found.");
         require(isSameString(ticket.status, "UNUSED"), "Ticket is already used.");
         ticketNFT.useTicket(_ticketId);
     }
 
-    function refundTicket(uint256 _concertId, uint256 _ticketId) public {
+    function refundTicket(uint256 _concertId, string calldata _ticket_uuid) public {
         Concert storage concert = concertBasicInfos[_concertId];
         require(concert.id != 0, "Concert not found.");
 
-        TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithId(_ticketId);
+        TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithUuid(_ticket_uuid);
 
         require(ticket.owner == msg.sender, "Only ticket owner can call this function.");
         require(isSameString(ticket.status, "UNUSED"), "Ticket is already used.");
@@ -466,7 +466,7 @@ contract ConcertManager {
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
         ticketingInfo.numOfRestTickets++;
         for(uint256 i = 0; i < ticketingInfo.tickets.length; i++) {
-            if (ticketingInfo.tickets[i] == _ticketId) {
+            if (isSameString(ticketingInfo.tickets[i], _ticket_uuid)) {
                 ticketingInfo.tickets[i] = ticketingInfo.tickets[ticketingInfo.tickets.length - 1];
                 ticketingInfo.tickets.pop();
                 break;
@@ -487,7 +487,7 @@ contract ConcertManager {
             ticketingInfo.isReserved[ticket.seatRow][ticket.seatColumn] = false;
         }
 
-        ticketNFT.refundTicket(_ticketId);
+        ticketNFT.refundTicket(_ticket_uuid);
     }
 
     function closeConcert(uint256 _concertId) public onlyConcertManager(_concertId) {
@@ -539,9 +539,9 @@ contract ConcertManager {
         TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
         TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
         for (uint256 i = 0; i < ticketingInfo.tickets.length; i++) {
-            TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithId(ticketingInfo.tickets[i]);
+            TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithUuid(ticketingInfo.tickets[i]);
             if (isSameString(ticket.status, "UNUSED")) {
-                ticketNFT.refundTicket(ticket.id);
+                ticketNFT.refundTicket(ticket.uuid);
                 melodyToken.transfer(ticket.owner, ticketPriceInfo.ticketPrice);
             }
         }
@@ -574,7 +574,7 @@ contract ConcertManager {
         uint256 favoriteBonus,
         uint256 refundedTokenAmount,
         uint256 transferAvailableAfter,
-        uint256[] memory tickets,
+        string[] memory tickets,
         uint256 numOfRestTickets,
         uint256 ticketingStartAt,
         bool[][] memory isReserved,

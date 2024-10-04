@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.page.BaseQueryRepository;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.FooConcertResp;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

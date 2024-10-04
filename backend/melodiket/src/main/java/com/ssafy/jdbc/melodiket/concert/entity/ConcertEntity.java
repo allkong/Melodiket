@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.concert.entity;
 import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
+import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,11 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.*;
 
 @Entity
@@ -24,7 +22,6 @@ import java.util.*;
 @AllArgsConstructor
 @SuperBuilder
 public class ConcertEntity extends ExposableEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,15 +36,15 @@ public class ConcertEntity extends ExposableEntity {
     @JoinColumn(name = "stage_id", nullable = false)
     private StageEntity stageEntity;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private StageManagerEntity owner;
+
     @Column(nullable = false)
     private LocalDateTime startAt;
 
     @Column(nullable = false)
     private LocalDateTime ticketingAt;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private Long availableTickets;
@@ -69,9 +66,6 @@ public class ConcertEntity extends ExposableEntity {
     @Column(nullable = false)
     private Long favoriteMusicianStake;
 
-    @Column(nullable = false)
-    private boolean isDeleted = false;
-
     @Column
     @Enumerated(EnumType.STRING)
     private ConcertStatus concertStatus;
@@ -92,7 +86,7 @@ public class ConcertEntity extends ExposableEntity {
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ConcertSeatEntity> concertSeats = new HashSet<>();
 
-    public void delete(){
-        this.isDeleted = true;
+    public void cancel() {
+        this.concertStatus = ConcertStatus.CANCELED;
     }
 }
