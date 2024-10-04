@@ -9,7 +9,7 @@ export const ticket = [
           ticketUuid: '123e4567-e89b-12d3-a456-426614174000',
           concertTitle: 'The Golden Hour : 오렌지 태양 아래',
           posterCid:
-            'https://i.namu.wiki/i/kurz0p1Tm_YMWDDeOzBkBd2P0odt2vWapIJHvcVd1KWEhEoLYP-oDj4ZmZxi2dlVMKsT8NcWsMJOIWtiA5rSaHEm2RqzkfrlhC3HdWg0dNjYwGaom5oOwcHFiSPYexcvRXDtY0dnuJnr9JvWXP0Cng.webp',
+            'https://i.namu.wiki/i/6954AWgOwNRZw-HzI4AhrWvXzGeHvHiQzUIS4clHj2C0-EW5joO7ojEOHF0W1_ub9SeZajsIj2tBD0m5VFehVRjwFse59QjWyXwjfNi_5IRD2H-9xjgzAf8_bzJbwrJHg21lSvuLqD9Gdq4HMj628w.webp',
           stageName: '서울올림픽주경기장',
           stageAddress: '',
           status: 'NOT_USED',
@@ -51,7 +51,7 @@ export const ticket = [
       ticketUuid: '123e4567-e89b-12d3-a456-426614174000',
       concertTitle: 'The Golden Hour : 오렌지 태양 아래',
       posterCid:
-        'https://i.namu.wiki/i/kurz0p1Tm_YMWDDeOzBkBd2P0odt2vWapIJHvcVd1KWEhEoLYP-oDj4ZmZxi2dlVMKsT8NcWsMJOIWtiA5rSaHEm2RqzkfrlhC3HdWg0dNjYwGaom5oOwcHFiSPYexcvRXDtY0dnuJnr9JvWXP0Cng.webp',
+        'https://i.namu.wiki/i/6954AWgOwNRZw-HzI4AhrWvXzGeHvHiQzUIS4clHj2C0-EW5joO7ojEOHF0W1_ub9SeZajsIj2tBD0m5VFehVRjwFse59QjWyXwjfNi_5IRD2H-9xjgzAf8_bzJbwrJHg21lSvuLqD9Gdq4HMj628w.webp',
       stageName: '서울올림픽주경기장',
       stageAddress: '서울올림픽주경기장',
       ticketPrice: 120000,
