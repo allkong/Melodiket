@@ -5,7 +5,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // 환경 변수에서 설정 로드
-const ethereumNodeUrl = process.env.ETHEREUM_NODE_URL;
+const ethereumNodeUrl = process.env.ETHEREUM_NODE_RPC_URL;
 const logstashHost = process.env.LOGSTASH_HOST;
 const logstashPort = parseInt(process.env.LOGSTASH_PORT, 10);
 
