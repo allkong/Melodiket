@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/stages")
+@RequestMapping("/api/v1/stages")
 @RequiredArgsConstructor
 public class StageController {
     private final StageService stageService;
