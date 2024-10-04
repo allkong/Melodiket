@@ -9,8 +9,13 @@ import SignUpRoleSelect from './_components/sign-up-role-select';
 import SignUpInformation from './_components/sign-up-information';
 import SignUpDescription from './_components/sign-up-description';
 import SignUpSuccess from './_components/sign-up-success';
+import useFunnel from '@/hooks/useFunnel';
 
 const Page = () => {
+  const { Funnel, setStep } = useFunnel<
+    'policy' | 'role' | 'information' | 'description' | 'success'
+  >(false, true, 'policy');
+
   const [signUpData, setSignUpData] = useState<SignUpData>({
     nickname: '',
     loginId: '',
@@ -18,47 +23,46 @@ const Page = () => {
     role: 'AUDIENCE',
     description: '',
   });
-  const [step, setStep] = useState<
-    'POLICY' | 'ROLE' | 'INFORMATION' | 'DESCRIPTION' | 'SUCCESS'
-  >('POLICY');
 
   const router = useRouter();
 
   return (
-    <>
-      {step === 'POLICY' && <SignUpPolicy onNext={() => setStep('ROLE')} />}
-      {step === 'ROLE' && (
+    <Funnel>
+      <Funnel.Step step="policy">
+        <SignUpPolicy onNext={() => setStep('role')} />
+      </Funnel.Step>
+      <Funnel.Step step="role">
         <SignUpRoleSelect
           onNext={(value: SignUpRole['value']) => {
             setSignUpData((prev) => ({ ...prev, role: value }));
-            setStep('INFORMATION');
+            setStep('information');
           }}
         />
-      )}
-      {step === 'INFORMATION' && (
+      </Funnel.Step>
+      <Funnel.Step step="information">
         <SignUpInformation
           onNext={(value: Omit<SignUpData, 'role' | 'description'>) => {
             setSignUpData((prev) => ({ ...prev, ...value }));
-            setStep('DESCRIPTION');
+            setStep('description');
           }}
         />
-      )}
-      {step === 'DESCRIPTION' && (
+      </Funnel.Step>
+      <Funnel.Step step="description">
         <SignUpDescription
           onNext={(value) => {
             const data: SignUpData = { ...signUpData, description: value };
-            setStep('SUCCESS');
+            setStep('success');
           }}
         />
-      )}
-      {step === 'SUCCESS' && (
+      </Funnel.Step>
+      <Funnel.Step step="success">
         <SignUpSuccess
           onNext={() => {
             router.push('/auth/login');
           }}
         />
-      )}
-    </>
+      </Funnel.Step>
+    </Funnel>
   );
 };
 
