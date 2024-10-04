@@ -10,6 +10,7 @@ import SignUpInformation from './_components/sign-up-information';
 import SignUpDescription from './_components/sign-up-description';
 import SignUpSuccess from './_components/sign-up-success';
 import useFunnel from '@/hooks/useFunnel';
+import { useSignUp } from '@/services/auth/useLogin';
 
 const Page = () => {
   const { Funnel, setStep } = useFunnel<
@@ -20,11 +21,13 @@ const Page = () => {
     nickname: '',
     loginId: '',
     password: '',
-    role: 'AUDIENCE',
+    role: 'audience',
     description: '',
   });
 
   const router = useRouter();
+
+  const signUpMutate = useSignUp();
 
   return (
     <Funnel>
@@ -49,8 +52,9 @@ const Page = () => {
       </Funnel.Step>
       <Funnel.Step step="description">
         <SignUpDescription
-          onNext={(value) => {
+          onNext={async (value) => {
             const data: SignUpData = { ...signUpData, description: value };
+            await signUpMutate.mutateAsync({ body: data });
             setStep('success');
           }}
         />

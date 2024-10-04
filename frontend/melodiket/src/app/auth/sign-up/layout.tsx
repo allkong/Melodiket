@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { LogoText } from '@/public/icons';
 
 interface LayoutProps {
@@ -11,7 +11,9 @@ const Layout = ({ children }: LayoutProps) => {
       <div className="my-7 min-h-0">
         <LogoText />
       </div>
-      <div className="flex-grow w-full">{children}</div>
+      <div className="flex-grow w-full">
+        <Suspense>{children}</Suspense>
+      </div>
     </div>
   );
 };
