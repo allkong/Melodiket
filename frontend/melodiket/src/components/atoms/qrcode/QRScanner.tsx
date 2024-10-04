@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import QrScanner from 'qr-scanner';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const QrOptions = {
   preferredCamera: 'environment', // 후면 카메라 사용
@@ -12,16 +12,18 @@ const QrOptions = {
 
 const QRScan = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleScan = useCallback(
     (result: QrScanner.ScanResult | null) => {
       if (result) {
         console.log(result.data);
-        router.push('/concerts/scan?modal=true');
+        router.push(`${pathname}?ticket=${result.data}`);
       }
     },
-    [router]
+    [router, pathname]
   );
 
   useEffect(() => {
