@@ -16,8 +16,8 @@ interface StageInformationProps {
 }
 
 const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
-  const [stageName, setStageName] = useState('');
-  const [stageAddress, setStageAddress] = useState('');
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
   const [isStanding, setIsStanding] = useState(true);
   const [capacity, setCapacity] = useState('');
   const [numOfRow, setNumOfRow] = useState('');
@@ -26,12 +26,12 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
   const { mutate: registerStage } = useRegisterStage();
 
   const isFormValid =
-    stageName && stageAddress && (isStanding ? capacity : numOfRow && numOfCol);
+    name && address && (isStanding ? capacity : numOfRow && numOfCol);
 
   const handleNext = () => {
     const updatedStageData: StageData = {
-      stageName,
-      stageAddress,
+      name,
+      address,
       isStanding,
       capacity: isStanding ? Number(capacity) : 0,
       numOfRow: !isStanding ? Number(numOfRow) : 0,
@@ -52,17 +52,13 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
         />
         <div className="mt-10 mb-4 flex-grow">
           <h2 className="font-semibold mb-2">공연장 이름</h2>
-          <Input
-            value={stageName}
-            onChange={setStageName}
-            placeholder="공연장 이름"
-          />
+          <Input value={name} onChange={setName} placeholder="공연장 이름" />
         </div>
         <div className="mb-4">
           <h2 className="font-semibold mb-2">공연장 주소</h2>
           <Input
-            value={stageAddress}
-            onChange={setStageAddress}
+            value={address}
+            onChange={setAddress}
             placeholder="공연장 주소"
           />
         </div>
