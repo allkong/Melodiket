@@ -1,18 +1,29 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 import { useTicketDetail } from '@/services/ticket/useTicketdetail';
 import { formatSeatPosition } from '@/utils/concertFormatter';
 
 import ConfirmModal from '@/components/organisms/modal/ConfirmModal';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
+import AlertModal from '@/components/organisms/modal/AlertModal';
 
 const Modal = () => {
+  const params = useParams();
   const searchParams = useSearchParams();
+  const concertUuid = params.uuid;
   const ticketUuid = searchParams.get('ticket');
 
   const { data: ticket } = useTicketDetail();
+
+  if (concertUuid !== ticket?.concertUuid) {
+    return (
+      <AlertModal type="error" title="티켓 사용 처리">
+        <p>다른 공연의 티켓입니다.</p>
+      </AlertModal>
+    );
+  }
 
   const ticketInfo = [
     { label: '공연명', value: ticket?.concertTitle || '' },
