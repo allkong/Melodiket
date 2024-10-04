@@ -22,21 +22,22 @@ const Funnel = ({ children }: FunnelProps) => {
 };
 
 // 각 Funnel의 Step이 되는 컴포넌트
-interface StepProps {
-  step?: string;
+interface StepProps<T> {
+  step?: T;
   children?: ReactNode;
 }
 
-const Step = ({ children }: StepProps) => {
+const Step = <T,>({ children }: StepProps<T>) => {
   return <>{children}</>;
 };
 
-const FunnelMain = Object.assign(Funnel, {
-  Step,
-});
+const FunnelMain = <T,>() =>
+  Object.assign(Funnel, {
+    Step: Step<T>,
+  });
 
 interface UseFunnelReturn<T> {
-  Funnel: FC<FunnelProps> & { Step: FC<StepProps> };
+  Funnel: FC<FunnelProps> & { Step: FC<StepProps<T>> };
   setStep: (step: T) => void;
 }
 
@@ -62,7 +63,7 @@ const useFunnel = <T extends string>(
     }
   };
 
-  return { Funnel: FunnelMain, setStep: addQueryString };
+  return { Funnel: FunnelMain<T>(), setStep: addQueryString };
 };
 
 export default useFunnel;
