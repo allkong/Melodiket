@@ -8,6 +8,7 @@ import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateStandingConcertReq;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusicianEntity;
@@ -16,7 +17,6 @@ import com.ssafy.jdbc.melodiket.concert.entity.QConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertCursorRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
-import com.ssafy.jdbc.melodiket.concert.service.contract.ManagerContract;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.crypto.Credentials;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,32 +93,25 @@ public class ConcertService {
         );
     }
 
-    @DistributedLock(key = "#user.uuid.concat('-createConcert')")
-    @Async
-    public void createStandingConcert(AppUserEntity user, CreateStandingConcertReq createConcertReq) {
-        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
-                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
-
-        StageEntity stage = stageRepository.findByUuid(createConcertReq.getStageUuid())
+    private ConcertEntity.ConcertEntityBuilder getCommonConcertEntityBuilder(CreateConcertReq req, List<MusicianEntity> musicians) {
+        StageEntity stage = stageRepository.findByUuid(req.getStageUuid())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
 
-        ConcertEntity concert = ConcertEntity.builder()
+        return ConcertEntity.builder()
                 .uuid(UUID.randomUUID())
-                .title(createConcertReq.getTitle())
+                .title(req.getTitle())
                 .stageEntity(stage)
-                .owner(owner)
-                .startAt(createConcertReq.getStartAt())
-                .ticketingAt(createConcertReq.getTicketingAt())
-                .availableTickets(createConcertReq.getAvailableTickets())
-                .description(createConcertReq.getDescription())
-                .posterCid(createConcertReq.getPosterCid())
-                .ticketPrice(createConcertReq.getTicketPrice())
-                .ownerStake(createConcertReq.getOwnerStake())
-                .musicianStake(createConcertReq.getMusicianStake())
-                .favoriteMusicianStake(createConcertReq.getFavoriteMusicianStake())
-                .build();
+                .startAt(req.getStartAt())
+                .ticketingAt(req.getTicketingAt())
+                .description(req.getDescription())
+                .posterCid(req.getPosterCid())
+                .ticketPrice(req.getTicketPrice())
+                .ownerStake(req.getOwnerStake())
+                .musicianStake(req.getMusicianStake())
+                .favoriteMusicianStake(req.getFavoriteMusicianStake());
+    }
 
-        List<MusicianEntity> musicians = musicianRepository.findAllByUuidIn(createConcertReq.getMusicians());
+    private List<String> assignAndGetMusicianWalletAddresses(ConcertEntity concert, List<MusicianEntity> musicians) {
         List<String> musicianWalletAddresses = new ArrayList<>();
         for (MusicianEntity musician : musicians) {
             ConcertParticipantMusicianEntity participant = ConcertParticipantMusicianEntity.builder()
@@ -131,10 +123,27 @@ public class ConcertService {
             musicianWalletAddresses.add(wallet.address());
             concert.getConcertParticipantMusicians().add(participant);
         }
+        return musicianWalletAddresses;
+    }
 
-        WalletResp ownerWallet = walletService.getWalletOf(owner.getUuid());
-        Credentials ownerCredentials = Credentials.create(ownerWallet.privateKey());
-        ManagerContract managerContract = new ManagerContract(blockchainConfig, ownerCredentials);
+    @DistributedLock(key = "#user.uuid.concat('-createConcert')")
+    @Async
+    public void createStandingConcert(AppUserEntity user, CreateStandingConcertReq createConcertReq) {
+        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        List<MusicianEntity> musicians = musicianRepository.findAllByUuidIn(createConcertReq.getMusicians());
+        ConcertEntity.ConcertEntityBuilder builder = getCommonConcertEntityBuilder(createConcertReq, musicians);
+        builder.owner(owner);
+        builder.availableTickets(createConcertReq.getAvailableTickets());
+        ConcertEntity concert = builder.build();
+
+        assignAndGetMusicianWalletAddresses(concert, musicians);
+
+        // TODO : 블록체인 연동
+//        WalletResp ownerWallet = walletService.getWalletOf(owner.getUuid());
+//        Credentials ownerCredentials = Credentials.create(ownerWallet.privateKey());
+//        ManagerContract managerContract = new ManagerContract(blockchainConfig, ownerCredentials);
 
         concertRepository.save(concert);
     }
