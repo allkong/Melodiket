@@ -17,7 +17,7 @@ const AlertModal = ({ type, title, children }: AlertModalProps) => {
   const router = useRouter();
   const clickedRef = useRef<EventTarget>();
 
-  const onCancel = useCallback(() => {
+  const handleCancel = useCallback(() => {
     router.back();
   }, [router]);
 
@@ -28,7 +28,7 @@ const AlertModal = ({ type, title, children }: AlertModalProps) => {
     }
 
     e.stopPropagation();
-    onCancel();
+    handleCancel();
   };
 
   return (
@@ -50,7 +50,7 @@ const AlertModal = ({ type, title, children }: AlertModalProps) => {
                 <h1 className="text-lg font-semibold line-clamp-1">{title}</h1>
               )}
             </div>
-            <CloseButton onClick={onCancel} />
+            <CloseButton onClick={handleCancel} />
           </div>
 
           {children && <>{children}</>}

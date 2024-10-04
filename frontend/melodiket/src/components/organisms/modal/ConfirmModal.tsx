@@ -18,7 +18,7 @@ const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
   const router = useRouter();
   const clickedRef = useRef<EventTarget>();
 
-  const onCancel = useCallback(() => {
+  const handleCancel = useCallback(() => {
     router.back();
   }, [router]);
 
@@ -29,7 +29,7 @@ const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
     }
 
     e.stopPropagation();
-    onCancel();
+    handleCancel();
   };
 
   return (
@@ -55,7 +55,7 @@ const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
         </div>
 
         <div className="space-x-3 flex justify-center">
-          <MediumButton label="취소" color="gray" onClick={onCancel} />
+          <MediumButton label="취소" color="gray" onClick={handleCancel} />
           <MediumButton label="확인" color="primary" onClick={onOk} />
         </div>
       </div>
