@@ -14,19 +14,19 @@ export const SIGN_UP_ROLE_DATAS: SignUpRole[] = [
     key: 0,
     title: '관객',
     description: '뮤지션이 진행하는 공연을 즐기고 싶어요.',
-    value: 'AUDIENCE',
+    value: 'audience',
   },
   {
     key: 1,
     title: '뮤지션',
     description: '제 공연을 관객들에게 선보이고 싶어요.',
-    value: 'MUSICIAN',
+    value: 'musician',
   },
   {
     key: 2,
     title: '매니저',
     description: '제 공연장을 제공하고 싶어요.',
-    value: 'MANAGER',
+    value: 'stage-manager',
   },
 ] as const;
 

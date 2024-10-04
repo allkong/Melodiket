@@ -8,6 +8,7 @@ import Header from '@/components/organisms/navigation/Header';
 import FavoriteTitle from '@/components/molecules/title/FavoriteTitle';
 import Tabs from '@/components/organisms/controls/Tabs';
 import MusicianItem from '@/components/molecules/item/MusicianItem';
+import FavoriteConcert from './_components/favorite-concert';
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState(Object.keys(FAVORITE_TYPES)[0]);
@@ -41,8 +42,7 @@ const Page = () => {
             />
           </div>
         )}
-        <div className="h-96 bg-pink-50">dd</div>
-        <div className="h-96 bg-pink-50">dd</div>
+        {activeTab === 'concert' && <FavoriteConcert />}
       </div>
     </div>
   );
