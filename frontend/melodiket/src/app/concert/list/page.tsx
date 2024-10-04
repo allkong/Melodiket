@@ -1,13 +1,13 @@
 import dynamic from 'next/dynamic';
 
 import Header from '@/components/organisms/navigation/Header';
-import ConcertListSection from './_component/ConcertListSection';
+import ConcertListSection from './_component/concert-list-section';
 import { HydrationBoundary } from '@tanstack/react-query';
 import {
   useFetchCarouselListDehydrateState,
   useFetchConcertListDehydrateState,
 } from '@/services/concert/fetchConcert';
-import CarouselSection from './_component/CarouselSection';
+import CarouselSection from './_component/carousel-section';
 
 const ControlsBar = dynamic(
   () => import('@/components/organisms/controls/ControlsBar'),

@@ -42,6 +42,10 @@ import Help from './help.svg';
 import Upload from './upload.svg';
 export { Heart, Check, Calendar, Help, Upload };
 
+import MLDY from './mldy.svg';
+import Authority from './authority.svg';
+export { MLDY, Authority };
+
 import QrCode from './qr-code.svg';
 import Ticket from './ticket-outline.svg';
 import CalendarFilled from './calendar-filled.svg';
@@ -52,3 +56,6 @@ export { QrCode, Ticket, CalendarFilled, Location, SubwayMark, WarningCircle };
 
 import TicketShape from './ticket-shape.svg';
 export { TicketShape };
+
+import Clock from './clock.svg';
+export { Clock };
