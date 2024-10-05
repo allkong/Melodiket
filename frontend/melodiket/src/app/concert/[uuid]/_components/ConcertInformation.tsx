@@ -25,7 +25,6 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
     description,
     musicians,
     ticketingAt,
-    availableTickets,
     isAvailableSeat,
     ticketPrice,
     startAt,
@@ -37,10 +36,11 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
       <ConcertTitle title={title} location={location} />
       <ThinDivider />
       <ConcertDetail
-        capability={availableTickets}
-        isSeat={isAvailableSeat}
-        price={ticketPrice}
-        startedAt={startAt}
+        // capability={isAvailableSeat.length * isAvailableSeat[0].length}
+        // isSeat={isAvailableSeat}
+        isAvailableSeat={isAvailableSeat}
+        ticketPrice={ticketPrice}
+        startAt={startAt}
         ticketingAt={ticketingAt}
       />
       <ThinDivider />

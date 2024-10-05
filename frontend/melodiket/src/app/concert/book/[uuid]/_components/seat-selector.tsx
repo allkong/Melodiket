@@ -16,13 +16,14 @@ interface SeatSelectorProps {
 const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
   const params = useParams<{ uuid: string }>();
   const { data } = useFetchConcertDetail(params.uuid);
+  const { result } = data ?? {};
 
   const handleChange = (row: number, col: number) => {
     onChange({
       ...seatInfo,
       seatRow: row,
       seatCol: col,
-      tokenAmount: data?.price ?? -1,
+      tokenAmount: result?.ticketPrice ?? -1,
     });
   };
 
@@ -30,8 +31,8 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
     <div className="flex flex-col items-center justify-center w-full h-full">
       <p className="mb-2 text-2xl font-medium text-gray-400">STAGE</p>
       <div className="flex flex-col gap-1">
-        {data &&
-          data?.isAvailableSeat.map((line, row) => (
+        {result &&
+          result?.isAvailableSeat.map((line, row) => (
             <div key={row} className="flex flex-row gap-1">
               {line?.map((available, col) => (
                 <SeatRadio

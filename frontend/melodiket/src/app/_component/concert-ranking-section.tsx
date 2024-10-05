@@ -22,7 +22,6 @@ const ConcertRankingSection = () => {
             ranking={idx + 1}
           />
         ))}
-      {!!pageInfo && <div>등록된 공연이 없습니다.</div>}
     </>
   );
 };

@@ -10,8 +10,8 @@ type Story = StoryObj<typeof ConcertCard>;
 
 export const Default: Story = {
   args: {
-    concertId: '1',
-    posterURL:
+    concertUuid: '1',
+    posterCid:
       'https://cdn2.ppomppu.co.kr/zboard/data3/2021/0421/m_20210421121541_cukpzbvs.jpg',
     title: 'あいみょん 2024 SSAFY ソウルキャンパス',
     location: '싸피서울캠퍼스',
