@@ -4,7 +4,7 @@ import { Arrow } from '@/public/icons';
 interface ArrowButtonProps {
   direction?: 'up' | 'down' | 'right' | 'left';
   color?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const ArrowButton = ({
@@ -13,7 +13,7 @@ const ArrowButton = ({
   onClick,
 }: ArrowButtonProps) => {
   return (
-    <div className="w-3 h-auto">
+    <button className="w-3 h-auto">
       <Arrow
         className={clsx(color, {
           'transform rotate-0': direction === 'right',
@@ -24,7 +24,7 @@ const ArrowButton = ({
         fill="currentColor"
         onClick={onClick}
       />
-    </div>
+    </button>
   );
 };
 
