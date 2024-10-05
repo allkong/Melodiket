@@ -12,16 +12,17 @@ interface ConcertPosterProps {
 
 const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const { data } = useFetchConcertDetail(uuid);
-  const { posterURL, title, location, favorite } = data!;
+  const { result } = data!;
+  const { posterCid, title, location } = result;
 
   return (
     <div className="relative w-full h-96">
-      <DarkedImage src={posterURL} />
+      <DarkedImage src={posterCid ?? '/'} />
       <div className="absolute flex items-center justify-center w-full h-96 left-0 top-0 px-6 pt-20 pb-12 text-white">
         <div className="w-full h-full flex justify-between gap-5">
           <div className="relative w-[40vw] max-w-44 h-full flex-shrink-0">
             <Image
-              src={posterURL}
+              src={posterCid ?? '/'}
               alt="콘서트 상세 정보"
               className="object-cover"
               fill
@@ -33,7 +34,7 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
               <p className="text-xs">{location}</p>
             </div>
             <div className="flex gap-2 self-end text-sm">
-              <p className="text-sm">{favorite}</p>
+              <p className="text-sm">{999}</p>
               <FavoriteButton />
             </div>
           </div>
