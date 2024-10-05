@@ -21,8 +21,8 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col w-full min-h-screen">
       <SubHeader
         title={result?.title ?? ''}
-        onClose={() => router.push(`/concert/${params.uuid}`)}
-        canGoBack
+        onPrev={() => router.push(`/concert/${params.uuid}`)}
+        canGoPrev
       />
       <div className="h-0 flex-grow w-full">{children}</div>
     </div>
