@@ -9,7 +9,9 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "all": "concurrently \"yarn dev\" \"yarn storybook\"",
+    "dev-storybook": "concurrently \"yarn dev\" \"yarn storybook\"",
+    "dev-mock": "concurrently \"yarn dev\" \"yarn mock\"",
+    "dev-all": "concurrently \"yarn dev\" \"yarn storybook\" \"yarn mock\"",
     "mock": "npx tsx watch ./src/mocks/http.ts"
   },
   "dependencies": {
@@ -23,8 +25,11 @@
     "immer": "^10.1.1",
     "js-confetti": "^0.12.0",
     "next": "14.2.9",
+    "qr-scanner": "^1.4.2",
+    "qrcode.react": "^4.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-error-boundary": "^4.0.13",
     "tailwind-scrollbar-hide": "^1.1.7",
     "zustand": "^4.5.5"
   },

@@ -51,7 +51,8 @@ import Ticket from './ticket-outline.svg';
 import CalendarFilled from './calendar-filled.svg';
 import Location from './location-filled.svg';
 import SubwayMark from './subway-mark.svg';
-export { QrCode, Ticket, CalendarFilled, Location, SubwayMark };
+import WarningCircle from './warning-circle-fill.svg';
+export { QrCode, Ticket, CalendarFilled, Location, SubwayMark, WarningCircle };
 
 import TicketShape from './ticket-shape.svg';
 export { TicketShape };
