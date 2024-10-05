@@ -125,8 +125,8 @@ public class AccountService {
     }
 
     @Async
-    @DistributedLock(key = "#user.uuid.concat('-').concat('chargeToken')")
-    public void chargeToken(AppUserEntity user, String accountNumber, int amount) {
+    @DistributedLock(key = "#loginId.concat('-').concat('chargeToken')")
+    public void chargeToken(String loginId, AppUserEntity user, String accountNumber, int amount) {
         MelodyTokenContract contract = new MelodyTokenContract(blockchainConfig, systemCredential);
         WalletResp wallet = walletService.getWalletOf(user);
 
@@ -140,8 +140,8 @@ public class AccountService {
     }
 
     @Async
-    @DistributedLock(key = "#user.uuid.concat('-').concat('withdrawToken')")
-    public void withdrawToken(AppUserEntity user, String accountNumber, int amount) {
+    @DistributedLock(key = "#loginId.concat('-').concat('withdrawToken')")
+    public void withdrawToken(String loginId, AppUserEntity user, String accountNumber, int amount) {
         WalletResp wallet = walletService.getWalletOf(user);
 
         String privateKey = walletService.getPrivateKeyOf(wallet.address());

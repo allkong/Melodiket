@@ -9,7 +9,6 @@ import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateStandingConcertReq;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusicianEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertStatus;
@@ -51,7 +50,6 @@ public class ConcertService {
     // 커서 기반 공연 목록 조회 메서드
     public PageResponse<ConcertResp> getConcerts(CursorPagingReq pagingReq) {
         PageResponse<ConcertResp> concerts = concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from);
-
         return concerts;
     }
 
@@ -93,22 +91,32 @@ public class ConcertService {
         );
     }
 
-    private ConcertEntity.ConcertEntityBuilder getCommonConcertEntityBuilder(CreateConcertReq req, List<MusicianEntity> musicians) {
+    private ConcertEntity getConcertEntityFromReq(StageManagerEntity stageManager, CreateConcertReq req) {
         StageEntity stage = stageRepository.findByUuid(req.getStageUuid())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
 
+        if (!stage.getOwner().getUuid().equals(stageManager.getUuid())) {
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
+
+        long availableTickets = stage.getIsStanding() ? stage.getCapacity() : stage.getNumOfRow() * stage.getNumOfCol();
+
         return ConcertEntity.builder()
                 .uuid(UUID.randomUUID())
+                .owner(stageManager)
                 .title(req.getTitle())
                 .stageEntity(stage)
                 .startAt(req.getStartAt())
                 .ticketingAt(req.getTicketingAt())
                 .description(req.getDescription())
                 .posterCid(req.getPosterCid())
+                .availableTickets(availableTickets)
                 .ticketPrice(req.getTicketPrice())
                 .ownerStake(req.getOwnerStake())
                 .musicianStake(req.getMusicianStake())
-                .favoriteMusicianStake(req.getFavoriteMusicianStake());
+                .favoriteMusicianStake(req.getFavoriteMusicianStake())
+                .concertStatus(ConcertStatus.PREPARING)
+                .build();
     }
 
     private List<String> assignAndGetMusicianWalletAddresses(ConcertEntity concert, List<MusicianEntity> musicians) {
@@ -126,18 +134,14 @@ public class ConcertService {
         return musicianWalletAddresses;
     }
 
-    @DistributedLock(key = "#user.uuid.concat('-createConcert')")
+    @DistributedLock(key = "#loginId.concat('-createConcert')")
     @Async
-    public void createStandingConcert(AppUserEntity user, CreateStandingConcertReq createConcertReq) {
+    public void createConcert(String loginId, AppUserEntity user, CreateConcertReq createConcertReq) {
         StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
 
+        ConcertEntity concert = getConcertEntityFromReq(owner, createConcertReq);
         List<MusicianEntity> musicians = musicianRepository.findAllByUuidIn(createConcertReq.getMusicians());
-        ConcertEntity.ConcertEntityBuilder builder = getCommonConcertEntityBuilder(createConcertReq, musicians);
-        builder.owner(owner);
-        builder.availableTickets(createConcertReq.getAvailableTickets());
-        ConcertEntity concert = builder.build();
-
         assignAndGetMusicianWalletAddresses(concert, musicians);
 
         // TODO : 블록체인 연동
