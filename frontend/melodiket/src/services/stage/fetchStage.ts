@@ -5,6 +5,7 @@ import type {
   RegisterSeatingStageRequest,
   RegisterStandingStageRequest,
   RegisterStageResponse,
+  GetStagesResponse,
 } from '@/types/stage';
 
 import customFetch from '../customFetch';
@@ -30,6 +31,13 @@ const registerSeatingStage = async (stageData: RegisterSeatingStageRequest) => {
   return response;
 };
 
+const getMyStages = async () => {
+  const response = await customFetch<GetStagesResponse>('/stages/me', {
+    method: 'GET',
+  });
+  return response;
+};
+
 export const useRegisterStandingStage = () => {
   const router = useRouter();
 
@@ -44,7 +52,7 @@ export const useRegisterStandingStage = () => {
       router.push('/');
     },
     onError: () => {
-      alert('스탠딩 스테이지 등록 실��!');
+      alert('스탠딩 스테이지 등록 실패!');
     },
   });
 };
@@ -64,4 +72,13 @@ export const useRegisterSeatingStage = () => {
       },
     }
   );
+};
+
+export const useGetMyStages = () => {
+  return useMutation<GetStagesResponse, Error>({
+    mutationFn: () => getMyStages(),
+    onError: () => {
+      alert('공연장 목록 가져오기 실패!');
+    },
+  });
 };
