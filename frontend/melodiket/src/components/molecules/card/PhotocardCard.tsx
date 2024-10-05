@@ -10,7 +10,7 @@ const PhotocardCard = ({ src, title }: PhotocardCardProps) => {
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAEUlEQVR42mO8/p8BAzAOZUEAMf0SZ24GauoAAAAASUVORK5CYII=';
   return (
     <div className="w-[10.6rem] space-y-2">
-      <div className="relative w-full h-60 overflow-hidden rounded-md">
+      <div className="relative w-full h-60 overflow-hidden rounded-md border border-gray-200">
         <Image
           src={src}
           alt="photocard"
