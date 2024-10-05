@@ -12,7 +12,7 @@ const Page = () => {
   return (
     <div>
       <Header />
-      <PageTitle title="포토카드" total={4} />
+      <PageTitle title="포토카드" total={2} />
       <div>
         <HydrationBoundary state={usePhotocardListDehydrateState()}>
           <Suspense fallback={<PhotocardListSkeleton count={2} />}>
