@@ -15,8 +15,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="kor">
@@ -25,10 +27,11 @@ export default function RootLayout({
           <MSWComponent />
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
+            {modal}
           </div>
           <div
             id="menu-portal"
-            className="fixed overflow-x-hidden top-0 left-1/2 -translate-x-1/2 max-w-xl w-full min-h-screen mx-auto z-10 pointer-events-none"
+            className="fixed top-0 z-10 w-full max-w-xl min-h-screen mx-auto overflow-x-hidden -translate-x-1/2 pointer-events-none left-1/2"
           ></div>
         </Providers>
       </body>

@@ -18,6 +18,7 @@ export interface TicketList {
 
 export interface TicketDetail {
   ticketUuid: string;
+  concertUuid: string;
   concertTitle: string;
   posterCid: string;
   stageName: string;
