@@ -14,6 +14,7 @@ import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatus
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import DetailSection from '@/components/molecules/section/DetailSection';
+import { Ticket } from '@/public/icons';
 
 const Page = () => {
   const router = useRouter();
@@ -55,8 +56,8 @@ const Page = () => {
     },
   ].filter(Boolean) as { label: string; value: string }[];
 
-  const handleMobileTicketClick = () => {
-    router.push(`${pathname}/mobile-ticket`);
+  const handleScanButtonClick = () => {
+    router.push(`${pathname}/scan`);
   };
 
   return (
@@ -70,10 +71,7 @@ const Page = () => {
             <h1 className="font-medium">
               {ticket?.concertTitle || '콘서트 정보 없음'}
             </h1>
-            <SmallButton
-              label="예매 페이지 미리보기"
-              onClick={() => alert('페이지 이동')}
-            />
+            <SmallButton label="공연 취소" onClick={() => alert('공연 취소')} />
           </div>
         </div>
 
@@ -105,7 +103,11 @@ const Page = () => {
         </DetailSection>
       </div>
 
-      <FixedButton label="공연 취소" />
+      <FixedButton
+        label="모바일 티켓 스캔"
+        icon={<Ticket />}
+        onClick={handleScanButtonClick}
+      />
     </div>
   );
 };
