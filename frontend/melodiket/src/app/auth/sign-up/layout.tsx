@@ -9,10 +9,10 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="w-full max-w-full h-screen max-h-screen flex flex-col items-center px-6 overflow-hidden">
+    <div className="flex flex-col items-center w-full h-screen max-w-full max-h-screen px-6 overflow-hidden">
       <ErrorBoundary fallback={<ErrorComponent />}>
-        <div className="my-7 min-h-0">
-          <LogoText />
+        <div className="min-h-0 my-7">
+          <LogoText className="h-auto w-28" />
         </div>
         <div className="flex-grow w-full">
           <Suspense>{children}</Suspense>

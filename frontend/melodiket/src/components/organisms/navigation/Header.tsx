@@ -51,7 +51,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
       >
         <div className="flex items-center justify-between max-w-xl px-6 py-4 mx-auto">
           <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)} />
-          <LogoText />
+          <LogoText className="h-auto w-28" />
           <SearchButton />
         </div>
       </header>

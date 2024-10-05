@@ -23,7 +23,7 @@ const Page = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="my-7">
-        <LogoText />
+        <LogoText className="h-auto w-28" />
       </div>
       <div className="flex flex-col items-center px-6 space-y-10 mt-[8vh]">
         <div className="w-full">
@@ -33,7 +33,7 @@ const Page = () => {
             hasLogo
           />
         </div>
-        <div className="space-y-3 w-full">
+        <div className="w-full space-y-3">
           <Input value={loginId} onChange={setLoginId} placeholder="아이디" />
           <Input
             value={password}
