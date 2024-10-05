@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEventHandler, ReactNode, useCallback, useRef } from 'react';
+import { MouseEventHandler, ReactNode, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 import MediumButton from '@/components/atoms/button/MediumButton';
@@ -17,10 +17,9 @@ const ConfirmModal = ({ type, title, children, onOk }: ConfirmModalProps) => {
   const router = useRouter();
   const clickedRef = useRef<EventTarget>();
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     router.back();
-  }, [router]);
-
+  };
   const handleClickClose = (e: React.MouseEvent<HTMLElement>) => {
     if (clickedRef.current) {
       clickedRef.current = undefined;
