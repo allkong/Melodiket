@@ -8,14 +8,12 @@ import "./TicketNFT.sol";   // TicketNFT 컨트랙트 가져오기
 import "hardhat/console.sol";
 
 contract ConcertManager {
-    uint256 private _concertIdCounter;
-
     MelodyToken public melodyToken;
     TicketNFT public ticketNFT;
 
     // 공연 기본 정보
     struct Concert {
-        uint256 id; // 콘서트 고유 번호
+        string uuid; // 콘서트 고유 번호
         string status; // 콘서트 상태
         address manager; // 콘서트 매니저 지갑 주소
         string posterCid; // 포스터 CID
@@ -59,39 +57,39 @@ contract ConcertManager {
         uint256[] seatSizes; // 전체 좌석의 행/렬 크기
     }
 
-    mapping(uint256 => Concert) private concertBasicInfos;
-    function getConcertBasicInfo(uint256 _concertId) public view returns (
-        uint256 id,
+    mapping(string => Concert) private concertBasicInfos;
+    function getConcertBasicInfo(string calldata _concertUuid) public view returns (
+        string memory uuid,
         string memory status,
         address manager,
         string memory posterCid,
         uint256 concertStartAt
     ) {
-        Concert storage concert = concertBasicInfos[_concertId];
-        return (concert.id, concert.status, concert.manager, concert.posterCid, concert.concertStartAt);
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        return (_concertUuid, concert.status, concert.manager, concert.posterCid, concert.concertStartAt);
     }
 
-    mapping(uint256 => MusicianInvitationInfo) private concertMusicianInfos;
-    function getConcertMusicianInfo(uint256 _concertId) public view returns (
+    mapping(string => MusicianInvitationInfo) private concertMusicianInfos;
+    function getConcertMusicianInfo(string calldata _concertUuid) public view returns (
         address[] memory pendingMusicianAddresses,
         address[] memory agreedMusicianAddresses,
         address[] memory deniedMusicianAddresses
     ) {
-        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[_concertId];
+        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[_concertUuid];
         return (musicianInfo.pendingMusicianAddresses, musicianInfo.agreedMusicianAddresses, musicianInfo.deniedMusicianAddresses);
     }
 
-    mapping(uint256 => FavoriteVoteInfo) private concertFavoriteVoteInfos;
-    function getConcertFavoriteVoteInfo(uint256 _concertId) public view returns (
+    mapping(string => FavoriteVoteInfo) private concertFavoriteVoteInfos;
+    function getConcertFavoriteVoteInfo(string calldata _concertUuid) public view returns (
         address[] memory favoriteMusicianAddresses,
         uint256[] memory favoriteVotes
     ) {
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
         return (favoriteVoteInfo.favoriteMusicianAddresses, favoriteVoteInfo.favoriteVotes);
     }
 
-    mapping(uint256 => TicketPriceInfo) private concertTicketPriceInfos;
-    function getConcertTicketPriceInfo(uint256 _concertId) public view returns (
+    mapping(string => TicketPriceInfo) private concertTicketPriceInfos;
+    function getConcertTicketPriceInfo(string calldata _concertUuid) public view returns (
         uint256 ticketPrice,
         uint256 venueEarningsPerTicket,
         uint256 musicianBaseEarningsPerTicket,
@@ -99,45 +97,45 @@ contract ConcertManager {
         uint256 refundedTokenAmount,
         uint256 transferAvailableAfter
     ) {
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
         return (ticketPriceInfo.ticketPrice, ticketPriceInfo.venueEarningsPerTicket, ticketPriceInfo.musicianBaseEarningsPerTicket, ticketPriceInfo.favoriteBonus, ticketPriceInfo.refundedTokenAmount, ticketPriceInfo.transferAvailableAfter);
     }
 
-    mapping(uint256 => TicketingPlanInfo) private concertTicketingInfos;
-    function getConcertTicketingInfo(uint256 _concertId) public view returns (
+    mapping(string => TicketingPlanInfo) private concertTicketingInfos;
+    function getConcertTicketingInfo(string calldata _concertUuid) public view returns (
         string[] memory tickets,
         uint256 numOfRestTickets,
         uint256 ticketingStartAt,
         bool[][] memory isReserved
     ) {
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         return (ticketingInfo.tickets, ticketingInfo.numOfRestTickets, ticketingInfo.ticketingStartAt, ticketingInfo.isReserved);
     }
 
-    mapping(uint256 => ConcertSeatingInfo) private concertSeatingInfos;
-    function getConcertSeatingInfo(uint256 _concertId) public view returns (
+    mapping(string => ConcertSeatingInfo) private concertSeatingInfos;
+    function getConcertSeatingInfo(string calldata _concertUuid) public view returns (
         bool isStanding,
         uint256[] memory seatSizes
     ) {
-        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertUuid];
         return (seatingInfo.isStanding, seatingInfo.seatSizes);
     }
 
-    event ConcertCreated(uint256 concertId, address manager);
-    event MusicianAgreed(uint256 concertId, address musician);
-    event MusicianDenied(uint256 concertId, address musician);
-    event AllMusicianAgreed(uint256 concertId);
-    event ConcertCanceled(uint256 concertId);
-    event TicketPurchased(uint256 concertId, address buyer, string ticketUuid);
-    event TicketPriceTransferred(uint256 concertId);
+    event ConcertCreated(string concertUuid, address manager);
+    event MusicianAgreed(string concertUuid, address musician);
+    event MusicianDenied(string concertUuid, address musician);
+    event AllMusicianAgreed(string concertUuid);
+    event ConcertCanceled(string concertUuid);
+    event TicketPurchased(string concertUuid, address buyer, string ticketUuid);
+    event TicketPriceTransferred(string concertUuid);
 
     constructor(address _melodyTokenAddress, address _ticketNFTAddress) {
         melodyToken = MelodyToken(_melodyTokenAddress);
         ticketNFT = TicketNFT(_ticketNFTAddress);
     }
 
-    modifier onlyConcertManager(uint256 _concertId) {
-        require(concertBasicInfos[_concertId].manager == msg.sender, "Only concert manager can call this function.");
+    modifier onlyConcertManager(string calldata _concertUuid) {
+        require(concertBasicInfos[_concertUuid].manager == msg.sender, "Only concert manager can call this function.");
         _;
     }
 
@@ -150,6 +148,7 @@ contract ConcertManager {
     }
 
     function createConcert(
+        string memory _concertUuid,
         uint256 _ticketPrice, // 티켓 한 장의 가격
         uint256 _venueEarningsPerTicket, // 공연장 수익
         uint256 _musicianBaseEarningsPerTicket, // 티켓 한 장당 뮤지션에게 공통으로 주는 금액
@@ -157,7 +156,7 @@ contract ConcertManager {
         uint256 _concertStartAt, // 콘서트 시작 일시
         address[] memory _musicians, // 참가하는 뮤지션들의 지갑 주소 배열
         string memory _posterCid // 포스터 CID
-    ) private returns (uint256) {
+    ) private returns (string memory) {
         uint256 numOfInvitations = _musicians.length;
         uint256 sumOfMusicianEarnings = numOfInvitations * _musicianBaseEarningsPerTicket;
 
@@ -171,31 +170,28 @@ contract ConcertManager {
         // uint256 _transferAvailableAfter = _concertStartAt + 1 days;
         uint256 _transferAvailableAfter = _concertStartAt; // For debug
 
-        // 콘서트 ID 생성
-        _concertIdCounter++;
-        uint256 concertId = _concertIdCounter;
-        Concert storage newConcert = concertBasicInfos[concertId];
+        Concert storage newConcert = concertBasicInfos[_concertUuid];
 
         // 기본 정보 초기화
-        newConcert.id = concertId;
+        newConcert.uuid = _concertUuid;
         newConcert.status = "PREPARING";
         newConcert.manager = msg.sender;
         newConcert.posterCid = _posterCid;
         newConcert.concertStartAt = _concertStartAt;
 
         // 공연 참가 뮤지션 정보 초기화
-        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[concertId];
+        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[_concertUuid];
         musicianInfo.pendingMusicianAddresses = _musicians;
         musicianInfo.agreedMusicianAddresses = new address[](0);
         musicianInfo.deniedMusicianAddresses = new address[](0);
 
         // 최애 투표 정보 초기화
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
         favoriteVoteInfo.favoriteMusicianAddresses = new address[](0);
         favoriteVoteInfo.favoriteVotes = new uint256[](0);
 
         // 금액 관련 정보 초가화
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[concertId];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
         ticketPriceInfo.ticketPrice = _ticketPrice;
         ticketPriceInfo.venueEarningsPerTicket = _venueEarningsPerTicket;
         ticketPriceInfo.musicianBaseEarningsPerTicket = _musicianBaseEarningsPerTicket;
@@ -204,14 +200,15 @@ contract ConcertManager {
         ticketPriceInfo.transferAvailableAfter = _transferAvailableAfter;
 
         // 티켓 예매 현황 초기화
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         ticketingInfo.tickets = new string[](0);
         ticketingInfo.ticketingStartAt = _ticketingStartAt;
 
-        return newConcert.id;
+        return _concertUuid;
     }
 
     function createStandingConcert(
+        string calldata _concertUuid,
         uint256 _ticketPrice, // 티켓 한 장의 가격
         uint256 _venueEarningsPerTicket, // 공연장 수익
         uint256 _musicianBaseEarningsPerTicket, // 티켓 한 장당 뮤지션에게 공통으로 주는 금액
@@ -220,8 +217,9 @@ contract ConcertManager {
         address[] memory _musicians, // 참가하는 뮤지션들의 지갑 주소 배열
         uint256 _numOfRestTickets, // 남은 티켓 수
         string memory _posterCid // 포스터 CID
-    ) public returns (uint256) {
-        uint256 concertId = createConcert(
+    ) public returns (string memory) {
+        string memory _concertUuid = createConcert(
+            _concertUuid,
             _ticketPrice,
             _venueEarningsPerTicket,
             _musicianBaseEarningsPerTicket,
@@ -230,22 +228,23 @@ contract ConcertManager {
             _musicians,
             _posterCid
         );
-        Concert storage concert = concertBasicInfos[concertId];
-        require(concert.id != 0, "Concert not found.");
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.uuid, "Concert not found.");
 
         // 좌석 관련 정보 초기화
-        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[concertId];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertUuid];
         seatingInfo.isStanding = true;
 
         // 티켓팅 관련 정보 초기화
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         ticketingInfo.numOfRestTickets = _numOfRestTickets;
 
-        emit ConcertCreated(concert.id, msg.sender);
-        return concert.id;
+        emit ConcertCreated(_concertUuid, msg.sender);
+        return _concertUuid;
     }
 
     function createSeatingConcert(
+        string calldata _concertUuid,
         uint256 _ticketPrice, // 티켓 한 장의 가격
         uint256 _venueEarningsPerTicket, // 공연장 수익
         uint256 _musicianBaseEarningsPerTicket, // 티켓 한 장당 뮤지션에게 공통으로 주는 금액
@@ -255,11 +254,12 @@ contract ConcertManager {
         uint256 _numOfSeatRows, // 좌석 행 수
         uint256 _numOfSeatColumns, // 좌석 열 수
         string memory _posterCid // 포스터 CID
-    ) public returns (uint256) {
+    ) public returns (string memory) {
         require(1 <= _numOfSeatRows, "Invalid number of seat rows");
         require(1 <= _numOfSeatColumns, "Invalid number of seat columns");
 
-        uint256 concertId = createConcert(
+        string memory _concertUuid = createConcert(
+            _concertUuid,
             _ticketPrice,
             _venueEarningsPerTicket,
             _musicianBaseEarningsPerTicket,
@@ -268,11 +268,11 @@ contract ConcertManager {
             _musicians,
             _posterCid
         );
-        Concert storage concert = concertBasicInfos[concertId];
-        require(concert.id != 0, "Concert not found.");
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
 
         // 좌석 관련 정보 초기화
-        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[concertId];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertUuid];
 
         seatingInfo.isStanding = false;
         seatingInfo.seatSizes = new uint256[](2);
@@ -280,21 +280,21 @@ contract ConcertManager {
         seatingInfo.seatSizes[1] = _numOfSeatColumns;
 
         // 티켓팅 관련 정보 초기화
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         ticketingInfo.numOfRestTickets = _numOfSeatRows * _numOfSeatColumns;
         ticketingInfo.isReserved = new bool[][](seatingInfo.seatSizes[0]);
         for (uint256 i = 0; i < _numOfSeatRows; i++) {
             ticketingInfo.isReserved[i] = new bool[](_numOfSeatColumns);
         }
-        emit ConcertCreated(concert.id, msg.sender);
+        emit ConcertCreated(_concertUuid, msg.sender);
 
-        return concert.id;
+        return _concertUuid;
     }
 
-    function agreeToConcert(uint256 _concertId) public returns (bool) {
+    function agreeToConcert(string calldata _concertUuid) public returns (bool) {
         // 준비 중인 콘서트이며, 뮤지션이 아직 응답하지 않은 경우에만 수락 가능
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "PREPARING"), "Concert is not preparing.");
         
         // 공연까지 하루 이상 남은 경우에만 수락 가능
@@ -303,9 +303,9 @@ contract ConcertManager {
         // require(block.timestamp <= concert.concertStartAt, message); // For debug
 
         // 뮤지션 수락 처리
-        MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
+        MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertUuid];
         // 뮤지션 선호 정보 초기화
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
         
         // 수락 대기 중인 뮤지션 목록에 있는 경우에만 거절 가능
         bool isPendingMusician = false;
@@ -323,27 +323,27 @@ contract ConcertManager {
 
         require(isPendingMusician, "Musician not found.");
 
-        emit MusicianAgreed(_concertId, msg.sender);
+        emit MusicianAgreed(_concertUuid, msg.sender);
         // 모든 뮤지션이 수락하면 콘서트 상태를 활성화로 변경
         if (invitationInfo.pendingMusicianAddresses.length == 0 && invitationInfo.deniedMusicianAddresses.length == 0) {
             concert.status = "ACTIVE";
-            emit AllMusicianAgreed(_concertId);
+            emit AllMusicianAgreed(_concertUuid);
         }
 
         return true;
     }
 
-    function denyToConcert(uint256 _concertId) public returns (bool) {
+    function denyToConcert(string calldata _concertUuid) public returns (bool) {
         // 준비 중인 콘서트이며, 뮤지션이 아직 응답하지 않은 경우에만 거절 가능
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "PREPARING"), "Concert is not preparing.");
 
         // 공연까지 하루 이상 남은 경우에만 거절 가능
         // require(block.timestamp + 1 days <= concert.concertStartAt, "Only available before 1 day of concert.");
         // require(block.timestamp <= concert.concertStartAt, "Only available before 1 day of concert."); // For debug
 
-        MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
+        MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertUuid];
         // 수락 대기 중인 뮤지션 목록에 있는 경우에만 거절 가능
         bool isPendingMusician = false;
         for (uint256 i = 0; i < invitationInfo.pendingMusicianAddresses.length; i++) {
@@ -359,19 +359,19 @@ contract ConcertManager {
         require(isPendingMusician, "Musician not found.");
 
         // 한 명의 뮤지션이라도 거절하면 공연 자체가 취소됨
-        emit MusicianDenied(_concertId, msg.sender);
+        emit MusicianDenied(_concertUuid, msg.sender);
         concert.status = "CANCELED";
-        emit ConcertCanceled(_concertId);
+        emit ConcertCanceled(_concertUuid);
 
         return true;
     }
 
-    function purchaseTicket(string calldata _ticket_uuid, uint256 _concertId, address _favoriteMusicianAddress, uint256 _seatRow, uint256 _seatCol) public {
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+    function purchaseTicket(string calldata _ticketUuid, string calldata _concertUuid, address _favoriteMusicianAddress, uint256 _seatRow, uint256 _seatCol) public {
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "ACTIVE"), "Concert is not active.");
 
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         // require(block.timestamp > ticketingInfo.ticketingStartAt, "Ticketing is not started yet."); // For debug
         // require(block.timestamp < concert.concertStartAt, "Concert is already started."); // For debug
 
@@ -379,18 +379,18 @@ contract ConcertManager {
         require(ticketingInfo.numOfRestTickets > 0, "Sold out.");
         
         // 티켓 가격 확인
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
         require(melodyToken.balanceOf(caller()) >= ticketPriceInfo.ticketPrice, "Insufficient Melody Token");
         
         // 좌석 정보 확인
-        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertUuid];
         if (!seatingInfo.isStanding) {
             require(isBetween(0, _seatRow, seatingInfo.seatSizes[0]-1), "Invalid seat row");
             require(isBetween(0, _seatCol, seatingInfo.seatSizes[1]-1), "Invalid seat column");
             require(!ticketingInfo.isReserved[_seatRow][_seatCol], "Seat is already reserved.");
         }
 
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
         bool isJoinedMusician = false;
         for (uint256 i = 0; i < favoriteVoteInfo.favoriteMusicianAddresses.length; i++) {
             address musicianAddress = favoriteVoteInfo.favoriteMusicianAddresses[i];
@@ -403,7 +403,7 @@ contract ConcertManager {
 
         require(isJoinedMusician, "Favorite musician not found.");
 
-        uint256 ticketId = ticketNFT.mintTicket(_ticket_uuid, caller(), _concertId, _favoriteMusicianAddress, seatingInfo.isStanding, _seatRow, _seatCol);
+        uint256 ticketId = ticketNFT.mintTicket(_ticketUuid, caller(), _concertUuid, _favoriteMusicianAddress, seatingInfo.isStanding, _seatRow, _seatCol);
         ticketingInfo.numOfRestTickets--;
         if (!seatingInfo.isStanding) {
             ticketingInfo.isReserved[_seatRow][_seatCol] = true;
@@ -411,18 +411,18 @@ contract ConcertManager {
         melodyToken.transferFrom(caller(), address(this), ticketPriceInfo.ticketPrice);
 
         // 발급 티켓 목록에 추가
-        ticketingInfo.tickets.push(_ticket_uuid);
+        ticketingInfo.tickets.push(_ticketUuid);
 
-        emit TicketPurchased(_concertId, caller(), _ticket_uuid);
+        emit TicketPurchased(_concertUuid, caller(), _ticketUuid);
     }
 
     function caller() public view returns (address) {
         return msg.sender;
     }
 
-    function useTicket(uint256 _concertId, string calldata _ticketId) public {
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+    function useTicket(string calldata _concertUuid, string calldata _ticketId) public {
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
         address concertManager = concert.manager;
         require(concertManager == msg.sender, "Only concert manager can call this function.");
 
@@ -432,11 +432,11 @@ contract ConcertManager {
         ticketNFT.useTicket(_ticketId);
     }
 
-    function refundTicket(uint256 _concertId, string calldata _ticket_uuid) public {
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+    function refundTicket(string calldata _concertUuid, string calldata _ticketUuid) public {
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
 
-        TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithUuid(_ticket_uuid);
+        TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithUuid(_ticketUuid);
 
         require(ticket.owner == msg.sender, "Only ticket owner can call this function.");
         require(isSameString(ticket.status, "UNUSED"), "Ticket is already used.");
@@ -454,7 +454,7 @@ contract ConcertManager {
         }
 
         // 토큰 환불 및 수수료 계산
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
         uint256 refundAmount = ticketPriceInfo.ticketPrice * refundRate / 100;
         uint256 feeAmount = ticketPriceInfo.ticketPrice - refundAmount;
         ticketPriceInfo.refundedTokenAmount += feeAmount;
@@ -463,10 +463,10 @@ contract ConcertManager {
         melodyToken.transfer(ticket.owner, refundAmount);
 
         // 좌석 및 표 수 복구
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         ticketingInfo.numOfRestTickets++;
         for(uint256 i = 0; i < ticketingInfo.tickets.length; i++) {
-            if (isSameString(ticketingInfo.tickets[i], _ticket_uuid)) {
+            if (isSameString(ticketingInfo.tickets[i], _ticketUuid)) {
                 ticketingInfo.tickets[i] = ticketingInfo.tickets[ticketingInfo.tickets.length - 1];
                 ticketingInfo.tickets.pop();
                 break;
@@ -474,7 +474,7 @@ contract ConcertManager {
         }
 
         // 인기 투표 내리기
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
         for (uint256 i = 0; i < favoriteVoteInfo.favoriteMusicianAddresses.length; i++) {
             if (favoriteVoteInfo.favoriteMusicianAddresses[i] == ticket.favoriteMusicianAddress) {
                 favoriteVoteInfo.favoriteVotes[i]--;
@@ -482,35 +482,35 @@ contract ConcertManager {
             }
         }
 
-        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertUuid];
         if (!seatingInfo.isStanding) {
             ticketingInfo.isReserved[ticket.seatRow][ticket.seatColumn] = false;
         }
 
-        ticketNFT.refundTicket(_ticket_uuid);
+        ticketNFT.refundTicket(_ticketUuid);
     }
 
-    function closeConcert(uint256 _concertId) public onlyConcertManager(_concertId) {
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+    function closeConcert(string calldata _concertUuid) public onlyConcertManager(_concertUuid) {
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "ACTIVE"), "Concert is not in status to be closed.");
 
         // 공연 시작 후 1일이 지나야 정산 가능
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
         // require(block.timestamp >= ticketPriceInfo.transferAvailableAfter, "Concert can't be canceled before transfer available after. "); // Debug
 
         // 환불로 인한 토큰이 있다면, 공연장 관리자와 뮤지션이 동등하게 수익을 나눠 받음
-        MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertId];
+        MusicianInvitationInfo storage invitationInfo = concertMusicianInfos[_concertUuid];
         uint256 numOfMusicians = invitationInfo.agreedMusicianAddresses.length;
         uint256 refundedTokenPerMembers = ticketPriceInfo.refundedTokenAmount / (numOfMusicians + 1);
 
         // 공연장 관리자 수익 분배 (깔끔하게 다 분배하기 위해 뮤지션이 가져가고 남은 금액을 모두 전송 = 나눗셈 연산 오차 범위는 공연장 관리자의 몫)
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
         uint256 totalManagerEarnings = ticketingInfo.tickets.length * ticketPriceInfo.ticketPrice + ticketPriceInfo.refundedTokenAmount;
 
         // 뮤지션 수익 분배
         uint256 musicianBaseEarnings = ticketingInfo.tickets.length * ticketPriceInfo.musicianBaseEarningsPerTicket;
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
         for (uint256 i = 0; i < numOfMusicians; i++) {
             address musicianAddress = favoriteVoteInfo.favoriteMusicianAddresses[i];
             uint256 favoriteBonus = ticketPriceInfo.favoriteBonus * favoriteVoteInfo.favoriteVotes[i];
@@ -524,20 +524,20 @@ contract ConcertManager {
         melodyToken.transfer(concert.manager, totalManagerEarnings);
 
         concert.status = "TRANSFERRED";
-        emit TicketPriceTransferred(_concertId);
+        emit TicketPriceTransferred(_concertUuid);
     }
 
-    function cancelConcert(uint256 _concertId) public onlyConcertManager(_concertId) {
-        Concert storage concert = concertBasicInfos[_concertId];
-        require(concert.id != 0, "Concert not found.");
+    function cancelConcert(string calldata _concertUuid) public onlyConcertManager(_concertUuid) {
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        // require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "ACTIVE"), "Concert status must be ACTIVE.");
         require(block.timestamp < concert.concertStartAt, "Concert is already started.");
 
         concert.status = "CANCELED";
 
         // 티켓 구매자들에게 전액 환불
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
         for (uint256 i = 0; i < ticketingInfo.tickets.length; i++) {
             TicketNFT.Ticket memory ticket = ticketNFT.getTicketWithUuid(ticketingInfo.tickets[i]);
             if (isSameString(ticket.status, "UNUSED")) {
@@ -545,7 +545,7 @@ contract ConcertManager {
                 melodyToken.transfer(ticket.owner, ticketPriceInfo.ticketPrice);
             }
         }
-        emit ConcertCanceled(_concertId);
+        emit ConcertCanceled(_concertUuid);
     }
 
     struct TotalConcertInfo {
@@ -557,8 +557,8 @@ contract ConcertManager {
         ConcertSeatingInfo seatingInfo;
     }
 
-    function getTotalConcertInfo(uint256 _concertId) public view returns (
-        uint256 id,
+    function getTotalConcertInfo(string calldata _concertUuid) public view returns (
+        string memory uuid,
         string memory status,
         address manager,
         string memory posterCid,
@@ -581,15 +581,15 @@ contract ConcertManager {
         bool isStanding,
         uint256[] memory seatSizes
     ) {
-        Concert storage concert = concertBasicInfos[_concertId];
-        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[_concertId];
-        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertId];
-        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertId];
-        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertId];
-        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertId];
+        Concert storage concert = concertBasicInfos[_concertUuid];
+        MusicianInvitationInfo storage musicianInfo = concertMusicianInfos[_concertUuid];
+        FavoriteVoteInfo storage favoriteVoteInfo = concertFavoriteVoteInfos[_concertUuid];
+        TicketPriceInfo storage ticketPriceInfo = concertTicketPriceInfos[_concertUuid];
+        TicketingPlanInfo storage ticketingInfo = concertTicketingInfos[_concertUuid];
+        ConcertSeatingInfo storage seatingInfo = concertSeatingInfos[_concertUuid];
 
         return (
-            concert.id,
+            concert.uuid,
             concert.status,
             concert.manager,
             concert.posterCid,

@@ -8,12 +8,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @Getter
 public class ConcertCreateReq {
+    private UUID concertUuid;
     private long ticketPrice;
     private long venueEarningsPerTicket;
     private long musicianBaseEarningsPerTicket;
@@ -23,6 +25,7 @@ public class ConcertCreateReq {
     private String posterCid;
 
     public ConcertCreateReq(ConcertEntity entity, List<String> musicianWalletAddresses) {
+        this.concertUuid = entity.getUuid();
         this.ticketPrice = entity.getTicketPrice();
         this.venueEarningsPerTicket = entity.getOwnerStake();
         this.musicianBaseEarningsPerTicket = entity.getMusicianStake();

@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.concert.controller;
 
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateStandingConcertReq;
@@ -80,5 +81,12 @@ public class ConcertController {
 
         PageResponse<ConcertResp> concerts = concertService.getConcertsByStage(id, cursorPagingReq);
         return ResponseEntity.ok(concerts);
+    }
+
+    @GetMapping("/me/assigned")
+    public ResponseEntity<PageResponse<ConcertAssignmentResp>> getAssignedConcerts(Authentication authentication, @Valid CursorPagingReq cursorPagingReq) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        PageResponse<ConcertAssignmentResp> assignments = concertService.getAssignedConcerts(user, cursorPagingReq);
+        return ResponseEntity.ok(assignments);
     }
 }
