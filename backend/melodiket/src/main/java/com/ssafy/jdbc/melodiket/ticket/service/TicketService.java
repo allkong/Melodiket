@@ -154,6 +154,7 @@ public class TicketService {
                 .usedAt(ticket.getUsedAt())
                 .createdAt(ticket.getCreatedAt())
                 .startAt(concert.getStartAt())
+                .concertUUID(concert.getUuid())
                 .myFavoriteMusician(
                         _favoriteMusician.map(musicianEntity -> TicketResponse.FavoriteMusicianDto.builder()
                                 .musicianName(musicianEntity.getNickname())
