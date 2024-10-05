@@ -8,7 +8,7 @@ import Input from '@/components/atoms/input/Input';
 import OptionButton from '@/components/atoms/button/OptionButton';
 
 import { StageData } from '@/types/stage';
-import { useRegisterStage } from '@/services/stage/fetchStage';
+import { useRegisterSeatingStage, useRegisterStandingStage } from '@/services/stage/fetchStage';
 
 interface StageInformationProps {
   stageData: StageData;
@@ -23,12 +23,29 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
   const [numOfRow, setNumOfRow] = useState('');
   const [numOfCol, setNumOfCol] = useState('');
 
-  const { mutate: registerStage } = useRegisterStage();
+  const { mutate: registerStandingStage } = useRegisterStandingStage();
+  const { mutate: registerSeatingStage } = useRegisterSeatingStage();
 
   const isFormValid =
     name && address && (isStanding ? capacity : numOfRow && numOfCol);
 
   const handleNext = () => {
+    if (isStanding) {
+      // 스탠딩 스테이지 등록
+      registerStandingStage({
+        name,
+        address,
+        capacity: Number(capacity),
+      });
+    } else {
+      // 좌석 스테이지 등록
+      registerSeatingStage({
+        name,
+        address,
+        numOfRow: Number(numOfRow), 
+        numOfCol: Number(numOfCol),
+      });
+    }
     const updatedStageData: StageData = {
       name,
       address,
@@ -37,8 +54,6 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
       numOfRow: !isStanding ? Number(numOfRow) : 0,
       numOfCol: !isStanding ? Number(numOfCol) : 0,
     };
-
-    registerStage(updatedStageData);
 
     onNext(updatedStageData);
   };
