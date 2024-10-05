@@ -1,5 +1,6 @@
-import { TicketDetail, TicketList } from '@/types/ticket';
 import { http, HttpResponse } from 'msw';
+
+import { TicketDetail, TicketList } from '@/types/ticket';
 
 export const ticket = [
   http.get('/tickets/me', async () => {
