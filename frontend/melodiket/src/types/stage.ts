@@ -9,13 +9,17 @@ export interface StageData {
   numOfCol?: number;
 }
 
-export interface RegisterStageRequest {
+export interface RegisterStandingStageRequest {
   name: string;
   address: string;
-  isStanding: boolean;
-  capacity?: number;
-  numOfRow?: number;
-  numOfCol?: number;
+  capacity: number;
+}
+
+export interface RegisterSeatingStageRequest {
+  name: string;
+  address: string;
+  numOfRow: number;
+  numOfCol: number;
 }
 
 export interface RegisterStageResponse {
