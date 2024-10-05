@@ -44,8 +44,9 @@ public class ConcertController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelConcert(@PathVariable UUID id) {
-        concertService.cancelConcert(id);
+    public ResponseEntity<Void> cancelConcert(Authentication authentication, @PathVariable UUID id) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        concertService.cancelConcert(user.getLoginId(), id);
         return ResponseEntity.noContent().build();
     }
 
@@ -53,14 +54,14 @@ public class ConcertController {
     public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal) {
         String loginId = principal.getName();
         concertService.approveConcert(concertId, loginId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{id}/deny")
     public ResponseEntity<Void> denyConcert(@PathVariable("id") UUID concertId, Principal principal) {
         String loginId = principal.getName();
         concertService.denyConcert(concertId, loginId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/by-stage-managers/{id}")

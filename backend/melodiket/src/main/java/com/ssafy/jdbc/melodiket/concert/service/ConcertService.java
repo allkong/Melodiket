@@ -9,10 +9,7 @@ import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
-import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
-import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusicianEntity;
-import com.ssafy.jdbc.melodiket.concert.entity.ConcertStatus;
-import com.ssafy.jdbc.melodiket.concert.entity.QConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.*;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertCursorRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
@@ -53,13 +50,17 @@ public class ConcertService {
         return concerts;
     }
 
-    public void cancelConcert(UUID concertId) {
+    @Async
+    @DistributedLock(key = "#loginId.concat('-cancelConcert')")
+    public void cancelConcert(String loginId, UUID concertId) {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
 
         if (concert.getConcertStatus() == ConcertStatus.CANCELED) {
             throw new HttpResponseException(ErrorDetail.ALREADY_CANCELED);
         } else {
+            // TODO : 블록 체인 연동
+
             concert.cancel();
             concertRepository.save(concert);
         }
@@ -152,6 +153,9 @@ public class ConcertService {
         concertRepository.save(concert);
     }
 
+    @DistributedLock(key = "#loginId.concat('-approveConcert')")
+    @Async
+    @Transactional(rollbackFor = Exception.class)
     public void approveConcert(UUID concertId, String loginId) {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
@@ -163,11 +167,15 @@ public class ConcertService {
                 .findByConcertEntityAndMusicianEntity(concert, musician)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.PARTICIPANT_NOT_FOUND));
 
+        // TODO : 블록 체인 연동
+
         participant.approve();
         concertParticipantMusicianRepository.save(participant);
     }
 
-    @Transactional
+    @DistributedLock(key = "#loginId.concat('-denyConcert')")
+    @Async
+    @Transactional(rollbackFor = Exception.class)
     public void denyConcert(UUID concertId, String loginId) {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
@@ -178,6 +186,8 @@ public class ConcertService {
         ConcertParticipantMusicianEntity participant = concertParticipantMusicianRepository
                 .findByConcertEntityAndMusicianEntity(concert, musician)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.PARTICIPANT_NOT_FOUND));
+
+        // TODO : 블록 체인 연동
 
         participant.deny();
         concertParticipantMusicianRepository.save(participant);
