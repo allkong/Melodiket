@@ -11,9 +11,9 @@ type Story = StoryObj<typeof ConcertRankingCard>;
 export const Default: Story = {
   args: {
     ranking: 1,
-    concertId: '0',
+    concertUuid: '0',
     location: '고척스카이돔',
-    posterURL:
+    posterCid:
       'https://tkfile.yes24.com/upload2/PerfBlog/202211/20221122/20221122-44221.jpg',
     ticketingAt: '2024.09.03',
     title: 'The Volunteers 1st Concert',

@@ -12,7 +12,11 @@ const FavoriteMusicianSection = () => {
       {pageInfo &&
         pageInfo?.responsedSize > 0 &&
         result?.map((musician) => (
-          <MusicianProfileCard key={musician.loginId} {...musician} />
+          <MusicianProfileCard
+            key={musician.loginId}
+            musicianName={musician.nickname}
+            src={musician.imageUrl}
+          />
         ))}
       {pageInfo?.responsedSize === 0 && <div>등록 된 뮤지션이 없어요.</div>}
     </>

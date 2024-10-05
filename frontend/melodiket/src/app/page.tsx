@@ -8,6 +8,8 @@ import FavoriteMusicianSection from './_component/favorite-musician-section';
 import CarouselSection from './_component/carousel-section';
 import useAuthStore from '@/store/authStore';
 import NeedLogin from './_component/need-login';
+import { Suspense } from 'react';
+import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 
 export default function Home() {
   const { user } = useAuthStore();
@@ -25,7 +27,9 @@ export default function Home() {
             <p className="text-xl font-medium">공연 랭킹</p>
             <section className="w-full py-2 overflow-x-auto">
               <div className="flex gap-2">
-                <ConcertRankingSection />
+                <Suspense fallback={<ConcertRankingCardSkeleton count={5} />}>
+                  <ConcertRankingSection />
+                </Suspense>
               </div>
             </section>
           </div>

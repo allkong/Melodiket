@@ -17,6 +17,7 @@ interface SuccessSectionProps {
 const SuccessSection = ({ seatCol, seatRow }: SuccessSectionProps) => {
   const params = useParams<{ uuid: string }>();
   const { data } = useFetchConcertDetail(params.uuid);
+  const { result } = data ?? {};
 
   const router = useRouter();
 
@@ -36,21 +37,21 @@ const SuccessSection = ({ seatCol, seatRow }: SuccessSectionProps) => {
         />
         <div className="mt-14 flex justify-between items-center gap-4">
           <div className="relative w-28 h-36 rounded-md overflow-none">
-            {data?.posterURL && (
+            {result?.posterCid && (
               <Image
                 className="object-cover"
-                src={data.posterURL}
+                src={result.posterCid}
                 alt="공연 완료 이미지"
                 fill
               />
             )}
           </div>
           <div className="w-0 flex-grow">
-            <p className="text-tiny">{data?.title}</p>
+            <p className="text-tiny">{result?.title}</p>
             <div className="text-xs text-gray-500">
-              <p>{data?.location}</p>
+              <p>{result?.location}</p>
               <p className="mb-3">{`${seatRow}행 ${seatCol}열`}</p>
-              <p>{data?.startedAt}</p>
+              <p>{result?.startAt}</p>
             </div>
           </div>
         </div>

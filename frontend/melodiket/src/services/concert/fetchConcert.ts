@@ -1,6 +1,11 @@
 import { FetchConcertDetail, FetchConcertList } from '@/types/concert';
 import customFetch from '../customFetch';
-import { dehydrate, useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+  dehydrate,
+  useInfiniteQuery,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import concertKey from './concertKey';
 import getQueryClient from '@/utils/getQueryClient';
 
@@ -35,7 +40,7 @@ export const useFetchInfiniteConcert = () => {
 };
 
 export const useFetchConcertList = () => {
-  const result = useQuery<FetchConcertList>({
+  const result = useSuspenseQuery<FetchConcertList>({
     queryKey: concertKey.list(),
     queryFn: fetchConcertList,
   });
