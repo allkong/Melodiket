@@ -13,10 +13,11 @@ import useFunnel from '@/hooks/useFunnel';
 const Page = () => {
   const params = useParams<{ uuid: string }>();
   const { data } = useFetchConcertDetail(params.uuid);
+  const { result } = data ?? {};
 
   const [ticketBookInformation, setTicketBookInformation] =
     useState<TicketBook>({
-      concertId: data?.concertId ?? '',
+      concertId: result?.concertUuid ?? '',
       seatRow: -1,
       seatCol: -1,
       tokenAmount: -1,

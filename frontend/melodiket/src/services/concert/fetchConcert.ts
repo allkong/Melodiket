@@ -1,12 +1,37 @@
-import { Concert, FetchConcertList } from '@/types/concert';
+import { FetchConcertDetail, FetchConcertList } from '@/types/concert';
 import customFetch from '../customFetch';
-import { dehydrate, useQuery } from '@tanstack/react-query';
+import { dehydrate, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import concertKey from './concertKey';
 import getQueryClient from '@/utils/getQueryClient';
 
 export const fetchConcertList = async () => {
   const response = await customFetch<FetchConcertList>('/concerts');
   return response;
+};
+
+export const fetchInfiniteConcert = async (cursor: string) => {
+  const response = await customFetch<FetchConcertList>(
+    `/concerts?cursor=${cursor}`
+  );
+  return response;
+};
+
+export const useFetchInfiniteConcert = () => {
+  const result = useInfiniteQuery({
+    queryKey: [],
+    queryFn: ({ pageParam }) => fetchInfiniteConcert(`${pageParam}`),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.pageInfo.hasNextPage) {
+        // return lastPage.result[lastPage.result.length - 1].concertUuid;
+        return 1;
+      } else {
+        return undefined;
+      }
+    },
+  });
+
+  return result;
 };
 
 export const useFetchConcertList = () => {
@@ -29,7 +54,7 @@ export const useFetchConcertListDehydrateState = async () => {
 };
 
 export const fetchConcertDetail = async (uuid: string) => {
-  const response = await customFetch<Concert>(`/concerts/${uuid}`);
+  const response = await customFetch<FetchConcertDetail>(`/concerts/${uuid}`);
   return response;
 };
 

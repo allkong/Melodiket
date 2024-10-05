@@ -17,17 +17,19 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
   const router = useRouter();
 
   const { data } = useFetchConcertDetail(uuid);
+  const { result } = data!;
+
   const {
     title,
     location,
-    capability,
     description,
     musicians,
-    price,
-    startedAt,
     ticketingAt,
-    isSeat,
-  } = data!;
+    availableTickets,
+    isAvailableSeat,
+    ticketPrice,
+    startAt,
+  } = result;
 
   return (
     <div className="relative w-full flex-grow h-fit px-7 pb-14 space-y-6">
@@ -35,10 +37,10 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
       <ConcertTitle title={title} location={location} />
       <ThinDivider />
       <ConcertDetail
-        capability={capability}
-        isSeat={isSeat}
-        price={price}
-        startedAt={startedAt}
+        capability={availableTickets}
+        isSeat={isAvailableSeat}
+        price={ticketPrice}
+        startedAt={startAt}
         ticketingAt={ticketingAt}
       />
       <ThinDivider />
