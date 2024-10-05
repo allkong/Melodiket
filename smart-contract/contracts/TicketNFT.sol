@@ -9,7 +9,7 @@ contract TicketNFT is ERC721, Ownable {
         uint256 id;
         string uuid;
         address owner;
-        uint256 concertId;
+        string concertUuid;
         string status;
         address favoriteMusicianAddress;
         bool isStanding;
@@ -23,7 +23,7 @@ contract TicketNFT is ERC721, Ownable {
 
     constructor(address initialOwner) ERC721("TicketNFT", "TICKET") Ownable(initialOwner) { }
 
-    function mintTicket(string calldata uuid, address to, uint256 _concertId, address _favoriteMusician, bool _isStanding, uint256 _seatRow, uint256 _seatColumn) public returns (uint256) {
+    function mintTicket(string calldata uuid, address to, string calldata _concertUuid, address _favoriteMusician, bool _isStanding, uint256 _seatRow, uint256 _seatColumn) public returns (uint256) {
         _tokenIdCounter++;
         
         uint256 newTicketId = _tokenIdCounter;
@@ -35,7 +35,7 @@ contract TicketNFT is ERC721, Ownable {
         ticket.id = newTicketId;
         ticket.uuid = uuid;
         ticket.owner = to;
-        ticket.concertId = _concertId;
+        ticket.concertUuid = _concertUuid;
         ticket.status = "UNUSED";
         ticket.favoriteMusicianAddress = _favoriteMusician;
         ticket.isStanding = _isStanding;
@@ -69,7 +69,7 @@ contract TicketNFT is ERC721, Ownable {
     function getTicketInfoArrayWithUuid(string memory uuid) public view returns (
         uint256 id,
         address owner,
-        uint256 concertId,
+        string memory concertUuid,
         string memory status,
         address favoriteMusicianAddress,
         bool isStanding,
@@ -82,7 +82,7 @@ contract TicketNFT is ERC721, Ownable {
     function getTicketInfoArrayWithId(uint256 _ticketId) public view returns (
         uint256 id,
         address owner,
-        uint256 concertId,
+        string memory concertUuid,
         string memory status,
         address favoriteMusicianAddress,
         bool isStanding,
@@ -93,7 +93,7 @@ contract TicketNFT is ERC721, Ownable {
         return (
             ticket.id,
             ticket.owner,
-            ticket.concertId,
+            ticket.concertUuid,
             ticket.status,
             ticket.favoriteMusicianAddress,
             ticket.isStanding,

@@ -66,7 +66,7 @@ public class ConcertEntity extends ExposableEntity {
     @Column(nullable = false)
     private Long favoriteMusicianStake;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ConcertStatus concertStatus;
 
