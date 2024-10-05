@@ -13,6 +13,9 @@ import com.ssafy.jdbc.melodiket.concert.entity.*;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertCursorRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
+import com.ssafy.jdbc.melodiket.concert.service.contract.ManagerContract;
+import com.ssafy.jdbc.melodiket.concert.service.dto.SeatingConcertCreateReq;
+import com.ssafy.jdbc.melodiket.concert.service.dto.StandingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
@@ -23,14 +26,17 @@ import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
 import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
 import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.web3j.crypto.Credentials;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ConcertService {
@@ -143,14 +149,24 @@ public class ConcertService {
 
         ConcertEntity concert = getConcertEntityFromReq(owner, createConcertReq);
         List<MusicianEntity> musicians = musicianRepository.findAllByUuidIn(createConcertReq.getMusicians());
-        assignAndGetMusicianWalletAddresses(concert, musicians);
+        List<String> musicianWalletAddresses = assignAndGetMusicianWalletAddresses(concert, musicians);
 
-        // TODO : 블록체인 연동
-//        WalletResp ownerWallet = walletService.getWalletOf(owner.getUuid());
-//        Credentials ownerCredentials = Credentials.create(ownerWallet.privateKey());
-//        ManagerContract managerContract = new ManagerContract(blockchainConfig, ownerCredentials);
-
-        concertRepository.save(concert);
+        WalletResp ownerWallet = walletService.getWalletOf(owner.getUuid());
+        Credentials ownerCredentials = Credentials.create(ownerWallet.privateKey());
+        ManagerContract managerContract = new ManagerContract(blockchainConfig, ownerCredentials);
+        try {
+            if (concert.getStageEntity().getIsStanding()) {
+                StandingConcertCreateReq req = new StandingConcertCreateReq(concert, musicianWalletAddresses);
+                managerContract.createStandingConcert(req);
+            } else {
+                StageEntity stage = concert.getStageEntity();
+                SeatingConcertCreateReq req = new SeatingConcertCreateReq(concert, musicianWalletAddresses, stage);
+            }
+            concertRepository.save(concert);
+        } catch (Exception e) {
+            log.error("Failed to create concert", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @DistributedLock(key = "#loginId.concat('-approveConcert')")

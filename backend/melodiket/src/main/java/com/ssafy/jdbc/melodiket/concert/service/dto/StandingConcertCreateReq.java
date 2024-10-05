@@ -1,10 +1,13 @@
 package com.ssafy.jdbc.melodiket.concert.service.dto;
 
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Setter
@@ -12,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class StandingConcertCreateReq extends ConcertCreateReq {
-    private int numOfRestTickets;
+    private long numOfRestTickets;
 
     public StandingConcertCreateReq(int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid) {
         super(ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
@@ -22,5 +25,10 @@ public class StandingConcertCreateReq extends ConcertCreateReq {
     public StandingConcertCreateReq(int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid, int numOfRestTickets) {
         this(ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
         this.numOfRestTickets = numOfRestTickets;
+    }
+
+    public StandingConcertCreateReq(ConcertEntity entity, List<String> musicianWalletAddresses) {
+        super(entity, musicianWalletAddresses);
+        this.numOfRestTickets = entity.getAvailableTickets();
     }
 }

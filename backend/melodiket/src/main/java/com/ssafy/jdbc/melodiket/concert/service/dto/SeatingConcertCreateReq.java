@@ -1,10 +1,14 @@
 package com.ssafy.jdbc.melodiket.concert.service.dto;
 
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Setter
@@ -12,9 +16,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 public class SeatingConcertCreateReq extends ConcertCreateReq {
-    private int numOfRestTickets;
-    private int rowSize;
-    private int colSize;
+    private long numOfRestTickets;
+    private long rowSize;
+    private long colSize;
 
     public SeatingConcertCreateReq(int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid) {
         super(ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
@@ -25,5 +29,12 @@ public class SeatingConcertCreateReq extends ConcertCreateReq {
         this.numOfRestTickets = numOfRestTickets;
         this.rowSize = rowSize;
         this.colSize = colSize;
+    }
+
+    public SeatingConcertCreateReq(ConcertEntity concertEntity, List<String> musicianWalletAddresses, StageEntity stageEntity) {
+        super(concertEntity, musicianWalletAddresses);
+        this.rowSize = stageEntity.getNumOfRow();
+        this.colSize = stageEntity.getNumOfCol();
+        this.numOfRestTickets = stageEntity.getNumOfRow() * stageEntity.getNumOfCol();
     }
 }
