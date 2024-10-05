@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
-import { MSWComponent } from './_component/MSWComponent';
+import { MSWComponent } from './_components/MSWComponent';
 
 export const metadata: Metadata = {
   title: 'melodiket',
