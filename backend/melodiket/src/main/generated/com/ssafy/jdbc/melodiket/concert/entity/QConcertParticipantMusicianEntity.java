@@ -24,8 +24,6 @@ public class QConcertParticipantMusicianEntity extends EntityPathBase<ConcertPar
 
     public final com.ssafy.jdbc.melodiket.common.base.QBaseEntity _super = new com.ssafy.jdbc.melodiket.common.base.QBaseEntity(this);
 
-    public final BooleanPath approval = createBoolean("approval");
-
     public final EnumPath<ApprovalStatus> approvalStatus = createEnum("approvalStatus", ApprovalStatus.class);
 
     public final QConcertEntity concertEntity;

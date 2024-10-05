@@ -1,19 +1,23 @@
 package com.ssafy.jdbc.melodiket.concert.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.jdbc.melodiket.blockchain.config.BlockchainConfig;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.entity.*;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertCursorRepository;
+import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianCursorRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
 import com.ssafy.jdbc.melodiket.concert.service.contract.ManagerContract;
+import com.ssafy.jdbc.melodiket.concert.service.contract.MusicianContract;
 import com.ssafy.jdbc.melodiket.concert.service.dto.SeatingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.concert.service.dto.StandingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
@@ -47,8 +51,10 @@ public class ConcertService {
     private final MusicianRepository musicianRepository;
     private final ConcertParticipantMusicianRepository concertParticipantMusicianRepository;
     private final StageManagerRepository stageManagerRepository;
+    private final ConcertParticipantMusicianCursorRepository concertParticipantMusicianCursorRepository;
     private final WalletService walletService;
     private final BlockchainConfig blockchainConfig;
+    private final JPAQueryFactory jpaQueryFactory;
 
     // 커서 기반 공연 목록 조회 메서드
     public PageResponse<ConcertResp> getConcerts(CursorPagingReq pagingReq) {
@@ -130,9 +136,10 @@ public class ConcertService {
         List<String> musicianWalletAddresses = new ArrayList<>();
         for (MusicianEntity musician : musicians) {
             ConcertParticipantMusicianEntity participant = ConcertParticipantMusicianEntity.builder()
+                    .uuid(UUID.randomUUID())
                     .concertEntity(concert)
                     .musicianEntity(musician)
-                    .approval(false) // 초기 승인 상태를 false로 설정
+                    .approvalStatus(ApprovalStatus.PENDING)
                     .build();
             WalletResp wallet = walletService.getWalletOf(musician.getUuid());
             musicianWalletAddresses.add(wallet.address());
@@ -157,10 +164,11 @@ public class ConcertService {
         try {
             if (concert.getStageEntity().getIsStanding()) {
                 StandingConcertCreateReq req = new StandingConcertCreateReq(concert, musicianWalletAddresses);
-                managerContract.createStandingConcert(req);
+                log.info("Created standing concert : {}", managerContract.createStandingConcert(req));
             } else {
                 StageEntity stage = concert.getStageEntity();
                 SeatingConcertCreateReq req = new SeatingConcertCreateReq(concert, musicianWalletAddresses, stage);
+                log.info("Created seating concert : {}", managerContract.createSeatingConcert(req));
             }
             concertRepository.save(concert);
         } catch (Exception e) {
@@ -184,9 +192,18 @@ public class ConcertService {
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.PARTICIPANT_NOT_FOUND));
 
         // TODO : 블록 체인 연동
+        WalletResp musicianWallet = walletService.getWalletOf(musician.getUuid());
+        Credentials musicianCredentials = Credentials.create(musicianWallet.privateKey());
+        MusicianContract musicianContract = new MusicianContract(blockchainConfig, musicianCredentials);
+        try {
+            musicianContract.agreeToConcert(concert.getUuid());
+            participant.approve();
+            concertParticipantMusicianRepository.save(participant);
+        } catch (Exception e) {
+            log.error("Failed to approve concert", e);
+            throw new RuntimeException(e);
+        }
 
-        participant.approve();
-        concertParticipantMusicianRepository.save(participant);
     }
 
     @DistributedLock(key = "#loginId.concat('-denyConcert')")
@@ -233,5 +250,11 @@ public class ConcertService {
                 ConcertResp::from,
                 condition
         );
+    }
+
+    public PageResponse<ConcertAssignmentResp> getAssignedConcerts(AppUserEntity user, CursorPagingReq cursorPagingReq) {
+        MusicianEntity musician = musicianRepository.findByLoginId(user.getLoginId())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.MUSICIAN_NOT_FOUND));
+        return concertParticipantMusicianCursorRepository.getConcertAssignmentsOf(musician, cursorPagingReq);
     }
 }

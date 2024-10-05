@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Setter
@@ -20,12 +21,12 @@ public class SeatingConcertCreateReq extends ConcertCreateReq {
     private long rowSize;
     private long colSize;
 
-    public SeatingConcertCreateReq(int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid) {
-        super(ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
+    public SeatingConcertCreateReq(UUID concertUuid, int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid) {
+        super(concertUuid, ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
     }
 
-    public SeatingConcertCreateReq(int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid, int numOfRestTickets, int rowSize, int colSize) {
-        this(ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
+    public SeatingConcertCreateReq(UUID concertUuid, int ticketPrice, int venueEarningsPerTicket, int musicianBaseEarningsPerTicket, long ticketingStartAt, long concertStartAt, String[] musicians, String posterCid, int numOfRestTickets, int rowSize, int colSize) {
+        this(concertUuid, ticketPrice, venueEarningsPerTicket, musicianBaseEarningsPerTicket, ticketingStartAt, concertStartAt, musicians, posterCid);
         this.numOfRestTickets = numOfRestTickets;
         this.rowSize = rowSize;
         this.colSize = colSize;
