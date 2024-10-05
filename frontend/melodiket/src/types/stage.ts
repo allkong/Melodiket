@@ -31,3 +31,18 @@ export interface RegisterStageResponse {
   numOfRow: number;
   numOfCol: number;
 }
+
+export interface Stage {
+  id: number;
+  uuid: UUID;
+  name: string;
+  address: string;
+  isStanding: boolean;
+  capacity: number;
+  numOfRow: number;
+  numOfCol: number;
+}
+
+export interface GetStagesResponse {
+  stages: Stage[];
+}
