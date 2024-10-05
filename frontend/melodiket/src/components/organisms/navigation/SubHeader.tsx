@@ -4,11 +4,11 @@ import { useRouter } from 'next/navigation';
 
 interface SubHeaderProps {
   title: string;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
-  canGoBack?: boolean;
+  onPrev?: React.MouseEventHandler<HTMLButtonElement>;
+  canGoPrev?: boolean;
 }
 
-const SubHeader = ({ title, onClose, canGoBack = false }: SubHeaderProps) => {
+const SubHeader = ({ title, onPrev, canGoPrev = false }: SubHeaderProps) => {
   const router = useRouter();
 
   const handleGoBack = () => {
@@ -18,10 +18,10 @@ const SubHeader = ({ title, onClose, canGoBack = false }: SubHeaderProps) => {
   return (
     <header className="flex items-center justify-between w-full px-6 py-4 bg-white">
       <div className="w-3">
-        {canGoBack && <ArrowButton direction="left" onClick={handleGoBack} />}
+        {canGoPrev && <ArrowButton direction="left" onClick={onPrev} />}
       </div>
       <h1>{title}</h1>
-      <CloseButton onClick={onClose} />
+      <CloseButton onClick={handleGoBack} />
     </header>
   );
 };
