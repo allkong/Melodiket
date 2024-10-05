@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public abstract class CreateConcertReq {
+public class CreateConcertReq {
     private final UUID stageUuid;            // 공연장 UUID
     private final String title;              // 공연 제목
     private final LocalDateTime startAt;     // 공연 시작 시간

@@ -2,7 +2,9 @@ package com.ssafy.jdbc.melodiket.concert.controller;
 
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateStandingConcertReq;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
@@ -35,23 +37,17 @@ public class ConcertController {
         return ResponseEntity.ok(concertDetail);
     }
 
-    @PostMapping("/standing")
-    public ResponseEntity<Void> createStandingConcert(Authentication authentication, @RequestBody CreateStandingConcertReq createConcertReq) {
+    @PostMapping("/create")
+    public ResponseEntity<Void> createConcert(Authentication authentication, @RequestBody CreateConcertReq createConcertReq) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        concertService.createStandingConcert(user, createConcertReq);
-        return ResponseEntity.accepted().build();
-    }
-
-    @PostMapping("/seating")
-    public ResponseEntity<Void> createSeatingConcert(Authentication authentication, @RequestBody CreateStandingConcertReq createConcertReq) {
-        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-//        concertService.createSeatingConcert(user, createConcertReq);
+        concertService.createConcert(user.getLoginId(), user, createConcertReq);
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelConcert(@PathVariable UUID id) {
-        concertService.cancelConcert(id);
+    public ResponseEntity<Void> cancelConcert(Authentication authentication, @PathVariable UUID id) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        concertService.cancelConcert(user.getLoginId(), id);
         return ResponseEntity.noContent().build();
     }
 
@@ -59,14 +55,14 @@ public class ConcertController {
     public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal) {
         String loginId = principal.getName();
         concertService.approveConcert(concertId, loginId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{id}/deny")
     public ResponseEntity<Void> denyConcert(@PathVariable("id") UUID concertId, Principal principal) {
         String loginId = principal.getName();
         concertService.denyConcert(concertId, loginId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/by-stage-managers/{id}")
@@ -85,5 +81,12 @@ public class ConcertController {
 
         PageResponse<ConcertResp> concerts = concertService.getConcertsByStage(id, cursorPagingReq);
         return ResponseEntity.ok(concerts);
+    }
+
+    @GetMapping("/me/assigned")
+    public ResponseEntity<PageResponse<ConcertAssignmentResp>> getAssignedConcerts(Authentication authentication, @Valid CursorPagingReq cursorPagingReq) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        PageResponse<ConcertAssignmentResp> assignments = concertService.getAssignedConcerts(user, cursorPagingReq);
+        return ResponseEntity.ok(assignments);
     }
 }
