@@ -1,6 +1,6 @@
 import { TicketDetail } from '@/types/ticket';
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 interface TicketState {
   ticketDetail: TicketDetail | null;
@@ -9,12 +9,20 @@ interface TicketState {
 }
 
 export const useTicketStore = create<TicketState>()(
-  devtools((set) => ({
-    ticketDetail: null,
+  devtools(
+    persist(
+      (set) => ({
+        ticketDetail: null,
 
-    setTicketDetail: (ticketDetail) => set({ ticketDetail }),
-    clearTicketDetail: () => set({ ticketDetail: null }),
-  }))
+        setTicketDetail: (ticketDetail) => set({ ticketDetail }),
+        clearTicketDetail: () => set({ ticketDetail: null }),
+      }),
+      {
+        name: 'ticket-storage',
+        getStorage: () => localStorage,
+      }
+    )
+  )
 );
 
 export default useTicketStore;
