@@ -8,15 +8,15 @@ declare global {
   }
 }
 function KakaoScript() {
-  const onLoad = () => {
+  const handleLoad = () => {
     window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
   };
 
   return (
     <Script
-      src="https://developers.kakao.com/sdk/js/kakao.min.js"
+      src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
       async
-      onLoad={onLoad}
+      onLoad={handleLoad}
     />
   );
 }
