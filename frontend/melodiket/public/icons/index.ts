@@ -40,7 +40,8 @@ import Check from './check.svg';
 import Calendar from './calendar.svg';
 import Help from './help.svg';
 import Upload from './upload.svg';
-export { Heart, Check, Calendar, Help, Upload };
+import ArrowsRotate from './arrows-rotate.svg';
+export { Heart, Check, Calendar, Help, Upload, ArrowsRotate };
 
 import MLDY from './mldy.svg';
 import Authority from './authority.svg';
