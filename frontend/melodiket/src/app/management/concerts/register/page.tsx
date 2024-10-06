@@ -24,8 +24,8 @@ const RegisterConcert = () => {
     musicianStake: 0,
     favoriteMusicianStake: 0,
     stageInformation: {
-      stageName: '',
-      stageAddress: '',
+      name: '',
+      address: '',
       isStanding: true,
       capacity: undefined,
       numOfRow: undefined,
