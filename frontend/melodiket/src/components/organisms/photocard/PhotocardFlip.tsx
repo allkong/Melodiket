@@ -23,7 +23,7 @@ const PhotocardFlip = ({
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
   return (
-    <div className="relative w-[20.7rem] h-[31rem]">
+    <div className="relative w-[20.7rem] h-[33.3rem]">
       {/* 포토카드 크기 설정 */}
       <div
         className="absolute inset-0 transition-transform duration-700"
@@ -33,7 +33,7 @@ const PhotocardFlip = ({
           backfaceVisibility: 'hidden',
         }}
       >
-        <PhotocardFront src={src} />
+        <PhotocardFront src={src} onClick={() => setIsFlipped(!isFlipped)} />
       </div>
       <div
         className="absolute inset-0 transition-transform duration-700"
@@ -49,11 +49,8 @@ const PhotocardFlip = ({
           stageName={stageName}
           seatRow={seatRow}
           seatCol={seatCol}
+          onClick={() => setIsFlipped(!isFlipped)}
         />
-      </div>
-      {/* 버튼을 오른쪽 아래에 고정 */}
-      <div className="absolute right-0 -bottom-5">
-        <RotateButton onClick={() => setIsFlipped(!isFlipped)} />
       </div>
     </div>
   );

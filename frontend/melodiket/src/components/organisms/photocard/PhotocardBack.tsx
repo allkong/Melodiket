@@ -2,6 +2,7 @@ import { formatDateCustom } from '@/utils/dayjsPlugin';
 import { formatDetailedSeatPosition } from '@/utils/concertFormatter';
 
 import { Heart, LogoImage, LogoText } from '@/public/icons';
+import RotateButton from '@/components/atoms/button/RotateButton';
 
 interface PhotocardBackProps {
   concertName: string;
@@ -9,6 +10,7 @@ interface PhotocardBackProps {
   stageName: string;
   seatRow: number;
   seatCol: number;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const PhotocardBack = ({
@@ -17,9 +19,10 @@ const PhotocardBack = ({
   stageName,
   seatRow,
   seatCol,
+  onClick,
 }: PhotocardBackProps) => {
   return (
-    <div className="w-[20.7rem] h-[31rem] relative rounded-lg overflow-hidden border border-gray-200 bg-white flex flex-col py-10 px-5 justify-between">
+    <div className="w-[20.7rem] h-[33.3rem] relative rounded-lg overflow-hidden border border-gray-200 bg-white flex flex-col py-10 px-5 justify-between">
       <section className="py-6 border-t border-b border-black">
         <h1 className="text-xl font-semibold line-clamp-1">{concertName}</h1>
       </section>
@@ -50,6 +53,10 @@ const PhotocardBack = ({
       <div className="flex flex-col items-center">
         <LogoImage className="mb-3 w-[1.4rem] h-[1.4rem]" />
         <LogoText className="w-[4.5rem] h-auto" />
+      </div>
+
+      <div className="absolute bottom-0 right-0 px-3 py-3">
+        <RotateButton onClick={onClick} />
       </div>
     </div>
   );
