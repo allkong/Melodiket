@@ -1,7 +1,7 @@
 'use client';
 
 import SubHeader from '@/components/organisms/navigation/SubHeader';
-import ReservedTicketListSection from '../_components/reserved-ticket-list-section';
+import ReservedTicketListSection from './_components/reserved-ticket-list-section';
 
 const Page = () => {
   return (
