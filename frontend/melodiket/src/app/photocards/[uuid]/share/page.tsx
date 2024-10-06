@@ -1,18 +1,25 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { usePhotocardDetail } from '@/services/photocard/usePhotocardDetail';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
 
 import Header from '@/components/organisms/navigation/Header';
 import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
-import KakaoShareButton from '@/components/organisms/photocard/KakaoShareButton';
+import LargeButton from '@/components/atoms/button/LargeButton';
 
 const Page = () => {
+  const router = useRouter();
   const { data: photocard } = usePhotocardDetail();
 
   if (!photocard) {
     return null;
   }
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
 
   return (
     <div className="flex flex-col h-screen overflow-y-auto">
@@ -42,11 +49,7 @@ const Page = () => {
         </div>
 
         <div className="w-[20.7rem]">
-          <KakaoShareButton
-            nickname={photocard.nickname}
-            concertName={photocard.concertName}
-            imageUrl={photocard.imageCid}
-          />
+          <LargeButton label="홈으로 이동" onClick={handleGoHome} />
         </div>
       </div>
     </div>
