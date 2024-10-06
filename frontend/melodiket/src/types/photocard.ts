@@ -11,8 +11,6 @@ export interface PhotocardList {
 
 export interface PhotocardDetail {
   photocardUuid: string;
-  ticketUuid?: string;
-  concertUuid?: string;
   concertName: string;
   imageCid: string;
   createdAt: string;

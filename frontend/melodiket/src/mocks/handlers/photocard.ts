@@ -27,8 +27,6 @@ export const photocard = [
   http.get('/photo-cards/:uuid', async () => {
     return HttpResponse.json({
       photocardUuid: '6c43b644-6d22-4ebb-9243-432d507101ec',
-      ticketUuid: '123e4567-e89b-12d3-a456-426614174000',
-      concertUuid: '',
       concertName: 'The Golden Hour : 오렌지 태양 아래',
       imageCid:
         'https://i.namu.wiki/i/YvAZ1b6CTz7pLtifAW_EKOF2tBiGlFAXPVXxxmC7JNlSEhNaFi0wZjg99owuxGFXqZfdneMziIyBC1JIcNwQ_R8RXQP1OfuU-EpswEGFbhSfMKdUAnH0vPoaIaTJYs-vPJnj3gyz5-uvLAGUfpfNTQ.webp',
