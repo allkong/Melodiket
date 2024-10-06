@@ -1,12 +1,20 @@
 'use client';
 
-import MediumButton from '@/components/atoms/button/MediumButton';
-import SubHeader from '@/components/organisms/navigation/SubHeader';
-import { Heart, ImageLine, Ticket } from '@/public/icons';
 import { useRouter } from 'next/navigation';
+
+import useFunnel from '@/hooks/useFunnel';
+
+import SubHeader from '@/components/organisms/navigation/SubHeader';
+import PhotocardImageSelectSection from './_components/photocard-image-select-section';
+import PhotocardDecorateSelection from './_components/photocard-decorate-selection';
 
 const Page = () => {
   const router = useRouter();
+  const { Funnel, setStep } = useFunnel<'select' | 'edit'>(
+    true,
+    true,
+    'select'
+  );
 
   const handlePrev = () => {
     router.back();
@@ -23,26 +31,18 @@ const Page = () => {
         canGoPrev
         onClose={handleClose}
       />
-      <div className="flex flex-col items-center justify-center flex-grow">
-        <div className="w-[20.7rem] h-[33.3rem] relative rounded-lg overflow-hidden border border-gray-200 px-5 pt-5">
-          <div className="w-full bg-gray-100 h-[25.9rem] rounded-lg flex items-center justify-center">
-            사진에 들어갈 이미지를 선택해 주세요
-          </div>
-        </div>
-
-        <div className="flex mt-10 space-x-3">
-          <MediumButton
-            label="공연 포스터"
-            icon={<Ticket />}
-            onClick={() => {}}
+      <Funnel>
+        <Funnel.Step step="select">
+          <PhotocardImageSelectSection onNext={() => setStep('edit')} />
+        </Funnel.Step>
+        <Funnel.Step step="edit">
+          <PhotocardDecorateSelection
+            onNext={() => {
+              router.push('/');
+            }}
           />
-          <MediumButton
-            label="이미지 선택"
-            icon={<ImageLine />}
-            onClick={() => {}}
-          />
-        </div>
-      </div>
+        </Funnel.Step>
+      </Funnel>
     </div>
   );
 };
