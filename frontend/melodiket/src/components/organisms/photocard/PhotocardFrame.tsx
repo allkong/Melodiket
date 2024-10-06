@@ -24,7 +24,9 @@ const PhotocardFrame = ({
       {isCreated ? (
         <>{children}</>
       ) : (
-        <div className="w-full h-[25.9rem] rounded-lg relative">{children}</div>
+        <div className="w-full h-[25.9rem] rounded-lg relative overflow-hidden">
+          {children}
+        </div>
       )}
     </div>
   );
