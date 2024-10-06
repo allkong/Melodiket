@@ -1,10 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { delay } from './index';
-import type {
-  Concert,
-  FetchConcertDetail,
-  FetchConcertList,
-} from '@/types/concert';
+import type { FetchConcertDetail, FetchConcertList } from '@/types/concert';
 
 const CONCERT_LIST: FetchConcertList = {
   pageInfo: {

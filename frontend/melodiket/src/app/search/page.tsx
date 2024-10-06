@@ -2,7 +2,7 @@
 
 import RecentSearch from './_section/recent-search';
 import SearchResult from './_section/search-result';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import SearchInput from '@/components/molecules/input/SearchInput';
 import useRecentSearchStore from '@/store/recentSearchStore';
 

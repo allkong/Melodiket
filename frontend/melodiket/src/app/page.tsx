@@ -1,9 +1,9 @@
 import Header from '@/components/organisms/navigation/Header';
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
-import ConcertRankingSection from './_components/concert-ranking-section';
-import FavoriteMusicianSection from './_components/favorite-musician-section';
+import ConcertRankingSection from './_section/concert-ranking-section';
+import FavoriteMusicianSection from './_section/favorite-musician-section';
 
-import CarouselSection from './_components/carousel-section';
+import CarouselSection from './_section/carousel-section';
 import NeedLogin from './_components/need-login';
 import { Suspense } from 'react';
 import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
