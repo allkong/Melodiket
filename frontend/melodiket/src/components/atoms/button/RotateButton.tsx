@@ -8,7 +8,7 @@ const RotateButton = ({ onClick }: RotateButton) => {
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-center bg-black rounded-full w-11 h-11 opacity-60"
+      className="flex items-center justify-center w-8 h-8 bg-black rounded-full bg-opacity-60"
     >
       <ArrowsRotate />
     </button>
