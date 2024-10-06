@@ -22,7 +22,7 @@ export default function RootLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <html lang="kor">
+    <html lang="ko">
       <body>
         <Providers>
           <MSWComponent />
