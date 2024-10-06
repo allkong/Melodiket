@@ -1,19 +1,14 @@
-'use client';
-
 import Header from '@/components/organisms/navigation/Header';
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
-import ConcertRankingSection from './_component/concert-ranking-section';
-import FavoriteMusicianSection from './_component/favorite-musician-section';
+import ConcertRankingSection from './_components/concert-ranking-section';
+import FavoriteMusicianSection from './_components/favorite-musician-section';
 
-import CarouselSection from './_component/carousel-section';
-import useAuthStore from '@/store/authStore';
-import NeedLogin from './_component/need-login';
+import CarouselSection from './_components/carousel-section';
+import NeedLogin from './_components/need-login';
 import { Suspense } from 'react';
 import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 
 export default function Home() {
-  const { user } = useAuthStore();
-
   return (
     <div className="w-full min-h-screen overflow-y-auto bg-purple-100">
       <Header isFixed />
@@ -37,9 +32,9 @@ export default function Home() {
             <p className="text-xl font-medium">나의 뮤지션</p>
             <section className="w-full h-fit py-2 overflow-x-auto">
               <div className="w-full h-full relative flex gap-2">
-                {user && <FavoriteMusicianSection />}
+                <FavoriteMusicianSection />
               </div>
-              {!user && <NeedLogin />}
+              <NeedLogin />
             </section>
           </div>
         </div>
