@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
+@Table(name = "subscription")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -23,7 +24,7 @@ public class SubscriptionEntity extends BaseEntity {
 
     @Lob
     private String auth;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUserEntity appUserEntity;
 }

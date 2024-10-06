@@ -5,7 +5,6 @@ import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
-import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.photocard.dto.CidResponse;
 import com.ssafy.jdbc.melodiket.photocard.dto.PhotoCardResp;
 import com.ssafy.jdbc.melodiket.photocard.entity.PhotoCardEntity;
@@ -19,17 +18,20 @@ import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
 import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
 import com.ssafy.jdbc.melodiket.webpush.service.WebPushService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
@@ -78,36 +80,52 @@ public class PhotoCardService {
     }
 
     @Async
-    @Transactional
-    public void uploadImageToIPFS(Principal principal, MultipartFile image, String description, UUID ticketUUID) {
-        String url = "https://j11a310.p.ssafy.io/kubo/upload";
-        AppUserEntity user = appUserRepository.findByLoginId(principal.getName()).orElseThrow(()->new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+    public void uploadImageToIPFS(Principal principal, MultipartFile image, UUID ticketUUID) {
+        String url = "https://j11a310.p.ssafy.io/kubo/ipfs";
+        AppUserEntity user = appUserRepository.findByLoginId(principal.getName())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("image", image.getResource());
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         try {
-            // IPFS 서버에 요청 전송
-            ResponseEntity<CidResponse> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, CidResponse.class);
+            // Convert MultipartFile to ByteArrayResource
+            ByteArrayResource byteArrayResource = new ByteArrayResource(image.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return image.getOriginalFilename();
+                }
+            };
+            body.add("file", byteArrayResource);
 
-            // null check
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+            log.info("gogo ipfs");
+            // Sending request to IPFS server
+            ResponseEntity<CidResponse> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, CidResponse.class);
+            log.info("received from ipfs {}" , responseEntity.getBody());
+
+            // Null check
             String cid = Objects.requireNonNull(responseEntity.getBody()).getCid();
 
-            // 작업 완료 후 콜백 메서드 호출
-            onUploadComplete(user,description,cid,ticketUUID);
+            // Callback method upon completion
+            onUploadComplete(user, cid, ticketUUID);
 
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("HTTP Status Code: " + e.getStatusCode());
+            log.error("Response Body: " + e.getResponseBodyAsString());
+        } catch (IOException e) {
+            log.error("I/O Exception: " + e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
         }
     }
 
-    public void onUploadComplete(AppUserEntity user, String description, String cid, UUID ticketUUID){
-        webPushService.sendPushNotification(user, "포토카드 업로드 완료.");
+    public void onUploadComplete(AppUserEntity user, String cid, UUID ticketUUID){
+        webPushService.initiatePushNotification(user, "포토카드 업로드 완료.");
         TicketEntity ticket = ticketRepository.findByUuid(ticketUUID).orElseThrow(()-> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         photoCardRepository.save(
                 PhotoCardEntity.builder()
@@ -115,7 +133,7 @@ public class PhotoCardService {
                         .ticketEntity(ticket)
                         .imageCid(cid)
                         .photocardOwner(user.getNickname())
-//                        .favoriteMusician()
+                        .favoriteMusician(ticket.getFavoriteMusician().getNickname())
                         .build()
         );
     }

@@ -58,7 +58,7 @@ public class AppUserEntity extends ExposableEntity implements UserDetails {
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubscriptionEntity> subscriptionEntities = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

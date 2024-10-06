@@ -13,10 +13,10 @@ import nl.martijndwars.webpush.Subscription;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.GeneralSecurityException;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -58,7 +58,6 @@ public class WebPushService {
     @Async
     public void sendPushNotification(AppUserEntity user, String message) {
         List<SubscriptionEntity> subscriptions = user.getSubscriptionEntities();
-
         for (SubscriptionEntity subscriptionEntity: subscriptions){
             try {
                 Subscription subscription = new Subscription(
@@ -77,5 +76,14 @@ public class WebPushService {
                 log.error(e.getMessage());
             }
         }
+    }
+
+    @Transactional
+    public void initiatePushNotification(AppUserEntity user, String message) {
+        // 컬렉션을 트랜잭션 내에서 초기화
+        user.getSubscriptionEntities().size();
+
+        // 비동기 메서드 호출
+        sendPushNotification(user, message);
     }
 }
