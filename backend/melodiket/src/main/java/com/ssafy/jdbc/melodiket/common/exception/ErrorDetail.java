@@ -42,6 +42,7 @@ public enum ErrorDetail {
     TRANSACTION_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "E404007", "Transaction log not found."),
     CONCERT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404008", "존재하지 않는 공연 정보 입니다."),
     PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404009", "존재하지 않는 승인 정보 입니다."),
+    PHOTOCARD_NOT_FOUND(HttpStatus.NOT_FOUND, "E404010", "존재하지 않는 포토카드 입니다."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
