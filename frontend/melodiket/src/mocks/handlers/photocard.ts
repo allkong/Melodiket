@@ -1,4 +1,4 @@
-import { PhotocardList } from '@/types/photocard';
+import { PhotocardDetail, PhotocardList } from '@/types/photocard';
 import { delay, http, HttpResponse } from 'msw';
 
 export const photocard = [
@@ -23,5 +23,23 @@ export const photocard = [
         },
       ],
     } as PhotocardList);
+  }),
+  http.get('/photo-cards/:uuid', async () => {
+    return HttpResponse.json({
+      photocardUuid: '6c43b644-6d22-4ebb-9243-432d507101ec',
+      ticketUuid: '123e4567-e89b-12d3-a456-426614174000',
+      concertUuid: '',
+      concertName: 'The Golden Hour : 오렌지 태양 아래',
+      imageCid:
+        'https://i.namu.wiki/i/YvAZ1b6CTz7pLtifAW_EKOF2tBiGlFAXPVXxxmC7JNlSEhNaFi0wZjg99owuxGFXqZfdneMziIyBC1JIcNwQ_R8RXQP1OfuU-EpswEGFbhSfMKdUAnH0vPoaIaTJYs-vPJnj3gyz5-uvLAGUfpfNTQ.webp',
+      createdAt: '2024-10-05T10:44:48.330372',
+      startAt: '2024-10-05T10:44:48.330372',
+      stageName: '고척스카이돔',
+      seatRow: 2,
+      seatCol: 12,
+      musicans: ['아이유', '유애나'],
+      favoriteMusician: '아이유',
+      nickname: '요아정',
+    } as PhotocardDetail);
   }),
 ];
