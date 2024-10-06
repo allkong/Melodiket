@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
@@ -16,12 +17,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class ConcertParticipantMusicianEntity extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ConcertParticipantMusicianEntity extends ExposableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id", nullable = false)
     private ConcertEntity concertEntity;
@@ -29,9 +25,6 @@ public class ConcertParticipantMusicianEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "musician_id", nullable = false)
     private MusicianEntity musicianEntity;
-
-    @Column(nullable = false)
-    private Boolean approval;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -45,8 +38,9 @@ public class ConcertParticipantMusicianEntity extends BaseEntity {
         } else if (this.approvalStatus == ApprovalStatus.DENIED) {
             // 이미 거절 된 상태라면
             throw new HttpResponseException(ErrorDetail.ALREADY_DENIED);
-        } else
-            this.approval = true; // 승인 상태로 변경
+        } else {
+            this.approvalStatus = ApprovalStatus.APPROVED; // 승인 상태로 변경
+        }
     }
 
     public void deny() {
@@ -56,7 +50,8 @@ public class ConcertParticipantMusicianEntity extends BaseEntity {
         } else if (this.approvalStatus == ApprovalStatus.DENIED) {
             // 이미 거절 된 상태라면
             throw new HttpResponseException(ErrorDetail.ALREADY_DENIED);
-        } else
-            this.approval = false; // 거절 상태로 변경
+        } else {
+            this.approvalStatus = ApprovalStatus.DENIED; // 거절 상태로 변경
+        }
     }
 }

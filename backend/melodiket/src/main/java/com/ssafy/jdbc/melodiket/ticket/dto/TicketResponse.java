@@ -1,6 +1,7 @@
 package com.ssafy.jdbc.melodiket.ticket.dto;
 
 import com.ssafy.jdbc.melodiket.ticket.entity.Status;
+import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -49,5 +50,10 @@ public class TicketResponse {
     public static class FavoriteMusicianDto {
         private String musicianName; // 뮤지션 이름
         private String musicianImageUrl; // 뮤지션 프로필 사진 URL
+
+        public FavoriteMusicianDto(MusicianEntity entity) {
+            this.musicianName = entity.getNickname();
+            this.musicianImageUrl = entity.getImageUrl();
+        }
     }
 }
