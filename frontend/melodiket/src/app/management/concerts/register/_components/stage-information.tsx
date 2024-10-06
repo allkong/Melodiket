@@ -27,8 +27,8 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
       ...concertData,
       stageInformation: {
         ...concertData.stageInformation,
-        stageName: selectedStage || '',
-        stageAddress: '서울특별시 구로구 경인로 430',
+        name: selectedStage || '',
+        address: '서울특별시 구로구 경인로 430',
       },
     };
     onNext(updatedConcertData);

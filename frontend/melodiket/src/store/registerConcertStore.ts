@@ -54,8 +54,8 @@ const useRegisterConcertStore = create<RegisterConcertState>()(
     setFavoriteMusicianStake: (newValue: number) =>
       set({ favoriteMusicianStake: newValue }),
     stageInformation: {
-      stageName: '',
-      stageAddress: '',
+      name: '',
+      address: '',
       isStanding: true,
       capacity: undefined,
       numOfRow: undefined,
@@ -74,8 +74,8 @@ const useRegisterConcertStore = create<RegisterConcertState>()(
         musicianStake: 0,
         favoriteMusicianStake: 0,
         stageInformation: {
-          stageName: '',
-          stageAddress: '',
+          name: '',
+          address: '',
           isStanding: true,
           capacity: undefined,
           numOfRow: undefined,
