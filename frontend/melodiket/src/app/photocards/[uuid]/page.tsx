@@ -43,6 +43,7 @@ const Page = () => {
 
         <div className="w-[20.7rem]">
           <KakaoShareButton
+            photocardUuid={photocard.photocardUuid}
             nickname={photocard.nickname}
             concertName={photocard.concertName}
             imageUrl={photocard.imageCid}

@@ -1,13 +1,14 @@
-import CloseButton from '@/components/atoms/button/CloseButton';
 import Image from 'next/image';
 
 interface KakaoShareButtonProps {
+  photocardUuid: string;
   nickname: string;
   concertName: string;
   imageUrl: string;
 }
 
 const KakaoShareButton = ({
+  photocardUuid,
   nickname,
   concertName,
   imageUrl,
@@ -22,16 +23,16 @@ const KakaoShareButton = ({
         description: `${nickname}님이 제작한 [${concertName}]의 포토카드를 보러 오세요!`,
         imageUrl: `${imageUrl}`,
         link: {
-          mobileWebUrl: `${siteUrl}/photocards`,
-          webUrl: `${siteUrl}/photocards`,
+          mobileWebUrl: `${siteUrl}/photocards/${photocardUuid}/share`,
+          webUrl: `${siteUrl}/photocards/${photocardUuid}/share`,
         },
       },
       buttons: [
         {
           title: '자세히 보기',
           link: {
-            mobileWebUrl: `${siteUrl}/photocards`,
-            webUrl: `${siteUrl}/photocards`,
+            mobileWebUrl: `${siteUrl}/photocards/${photocardUuid}/share`,
+            webUrl: `${siteUrl}/photocards/${photocardUuid}/share`,
           },
         },
       ],
