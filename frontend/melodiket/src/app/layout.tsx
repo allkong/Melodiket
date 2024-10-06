@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
 import { MSWComponent } from './_components/MSWComponent';
+import KakaoScript from './_lib/KaKaoScript';
 
 export const metadata: Metadata = {
   title: 'melodiket',
@@ -35,6 +36,7 @@ export default function RootLayout({
           ></div>
         </Providers>
       </body>
+      <KakaoScript />
     </html>
   );
 }
