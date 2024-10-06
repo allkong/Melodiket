@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import Link from 'next/link';
 
@@ -6,9 +8,14 @@ import { TICKET_STATUS } from '@/constants/tickets';
 
 import ConcertItem from '@/components/molecules/item/ConcertItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
+import usePosterStore from '@/store/posterStore';
+import { useRouter } from 'next/navigation';
 
 const ReservedTicketListSection = () => {
+  const router = useRouter();
+
   const { data: tickets } = useTicketList();
+  const { setPosterCid } = usePosterStore();
 
   const filteredTickets = useMemo(() => {
     return (
@@ -21,13 +28,20 @@ const ReservedTicketListSection = () => {
     );
   }, [tickets]);
 
+  const handleTicketClick = (ticketUuid: string, posterCid: string) => {
+    setPosterCid(posterCid);
+    router.push(`/photocards/create/${ticketUuid}`);
+  };
+
   return (
     <>
       {filteredTickets.length ? (
         filteredTickets.map((ticket) => (
-          <Link
-            href={`/photocards/create/${ticket.ticketUuid}`}
+          <div
             key={ticket.ticketUuid}
+            onClick={() =>
+              handleTicketClick(ticket.ticketUuid, ticket.posterCid)
+            }
           >
             <ConcertItem
               src={ticket.posterCid}
@@ -38,7 +52,7 @@ const ReservedTicketListSection = () => {
                 ? { refundAt: ticket.refundAt }
                 : { startAt: ticket.startAt })}
             />
-          </Link>
+          </div>
         ))
       ) : (
         <EmptyData text={'예매한 공연이 없어요'} />
