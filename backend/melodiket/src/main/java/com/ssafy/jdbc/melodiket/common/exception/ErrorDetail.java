@@ -49,6 +49,7 @@ public enum ErrorDetail {
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "E409002", "중복된 닉네임 입니다."),
     ALREADY_REGISTERED_ACCOUNT(HttpStatus.CONFLICT, "E409003", "Already registered account."),
     NOT_ENOUGH_TOKEN_BALANCE(HttpStatus.CONFLICT, "E409004", "Not enough token balance."),
+    ALREADY_PURCHASED_SEAT(HttpStatus.CONFLICT, "E409005", "Already purchased seat."),
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500000", "Internal Server Error");
 

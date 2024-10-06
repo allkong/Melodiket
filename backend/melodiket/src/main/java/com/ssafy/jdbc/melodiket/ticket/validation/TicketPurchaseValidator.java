@@ -5,8 +5,6 @@ import com.ssafy.jdbc.melodiket.concert.entity.ConcertSeatEntity;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketPurchaseRequest;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
-import com.ssafy.jdbc.melodiket.wallet.entity.WalletInfoEntity;
-import com.ssafy.jdbc.melodiket.wallet.repository.WalletInfoRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchaseRequest, TicketPurchaseRequest> {
@@ -60,25 +58,17 @@ public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchas
             return false;
         }
 
-        WalletInfoEntity wallet = user.getWalletInfo();
-        if(wallet.getTokenAmount() < concert.getTicketPrice()){
-            context.buildConstraintViolationWithTemplate("토큰 잔액이 부족합니다.")
-                    .addPropertyNode("info")
-                    .addConstraintViolation();
-            return false;
-        }
-
-        if(concert.getAvailableTickets()<1){
+        if(concert.getAvailableTickets() < 1){
             context.buildConstraintViolationWithTemplate("콘서트가 매진되었습니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
             return false;
         }
 
-        if(concert.getConcertSeats().contains(
-                new ConcertSeatEntity(null, ticketPurchaseRequest.getSeatRow(), ticketPurchaseRequest.getSeatRow(), null)
-        ))
-        {
+        Set<ConcertSeatEntity> seats = concert.getConcertSeats();
+        if (!concert.getStageEntity().getIsStanding() && seats.stream().filter(
+                seat -> seat.getSeatRow().equals(ticketPurchaseRequest.getSeatRow()) && seat.getSeatCol().equals(ticketPurchaseRequest.getSeatCol())).findFirst().isEmpty()
+        ) {
             context.buildConstraintViolationWithTemplate("이미 구매된 좌석입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
