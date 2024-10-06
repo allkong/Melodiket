@@ -41,7 +41,7 @@ const KakaoShareButton = ({
   return (
     <div
       onClick={handleKakaoShare}
-      className="flex items-center cursor-pointer bg-[#F9E000] px-5 rounded-lg flex-grow justify-center"
+      className="flex items-center cursor-pointer bg-[#F9E000] px-5 rounded-lg flex-grow py-2 justify-center"
     >
       <div className="relative h-8 w-8 rounded-sm overflow-hidden w-fill">
         <Image

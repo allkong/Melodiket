@@ -55,7 +55,6 @@ const Page = () => {
             concertName={photocard.concertName}
             imageUrl="https://i.namu.wiki/i/YvAZ1b6CTz7pLtifAW_EKOF2tBiGlFAXPVXxxmC7JNlSEhNaFi0wZjg99owuxGFXqZfdneMziIyBC1JIcNwQ_R8RXQP1OfuU-EpswEGFbhSfMKdUAnH0vPoaIaTJYs-vPJnj3gyz5-uvLAGUfpfNTQ.webp"
           />
-          <CloseButton onClick={handleClose} hasBorder />
         </div>
       </div>
     </div>
