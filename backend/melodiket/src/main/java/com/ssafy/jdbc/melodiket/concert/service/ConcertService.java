@@ -199,14 +199,23 @@ public class ConcertService {
                 .findByConcertEntityAndMusicianEntity(concert, musician)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.PARTICIPANT_NOT_FOUND));
 
-        // TODO : 블록 체인 연동
         WalletResp musicianWallet = walletService.getWalletOf(musician.getUuid());
         Credentials musicianCredentials = Credentials.create(musicianWallet.privateKey());
         MusicianContract musicianContract = new MusicianContract(blockchainConfig, musicianCredentials);
         try {
-            musicianContract.agreeToConcert(concert.getUuid());
+            boolean isSucceed = musicianContract.agreeToConcert(concert.getUuid());
             participant.approve();
             concertParticipantMusicianRepository.save(participant);
+
+            // 만약 모든 요청이 수락되면
+            boolean isAllApproved = concertParticipantMusicianRepository.findAllByConcertEntity(concert).stream()
+                    .allMatch(p -> p.getApprovalStatus() == ApprovalStatus.APPROVED);
+            // 콘서트를 활성 상태로 변경
+            if (isAllApproved) {
+                concert.active();
+                concertRepository.save(concert);
+            }
+
         } catch (Exception e) {
             log.error("Failed to approve concert", e);
             throw new RuntimeException(e);
@@ -228,10 +237,22 @@ public class ConcertService {
                 .findByConcertEntityAndMusicianEntity(concert, musician)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.PARTICIPANT_NOT_FOUND));
 
-        // TODO : 블록 체인 연동
+        WalletResp musicianWallet = walletService.getWalletOf(musician.getUuid());
+        Credentials musicianCredentials = Credentials.create(musicianWallet.privateKey());
+        MusicianContract musicianContract = new MusicianContract(blockchainConfig, musicianCredentials);
 
-        participant.deny();
-        concertParticipantMusicianRepository.save(participant);
+        try {
+            boolean isSucceed = musicianContract.denyToConcert(concert.getUuid());
+            participant.deny();
+            concertParticipantMusicianRepository.save(participant);
+
+            // 한 사람이라도 거절했으면 공연 취소
+            concert.cancel();
+            concertRepository.save(concert);
+        } catch (Exception e) {
+            log.error("Failed to deny concert", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public PageResponse<ConcertResp> getConcertsByStageManager(UUID stageManagerUuid, CursorPagingReq cursorPagingReq) {
