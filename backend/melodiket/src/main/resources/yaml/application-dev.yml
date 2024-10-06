@@ -35,3 +35,8 @@ spring:
 #          path: /h2-console
 jwt:
   issuer: localhost
+vapid:
+  public:
+    key: ${VAPID_PUBLIC_KEY}
+  private:
+    key: ${VAPID_PRIVATE_KEY}

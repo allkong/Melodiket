@@ -43,6 +43,8 @@ public class TicketResponse {
 
     private FavoriteMusicianDto myFavoriteMusician; // 뮤지션 정보
 
+    private UUID concertUUID;
+
     @Getter
     @Builder
     @NoArgsConstructor
