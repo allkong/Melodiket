@@ -8,7 +8,7 @@ import { HISTORY_TYPES, TICKET_STATUS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
 import Tabs from '@/components/organisms/controls/Tabs';
-import TicketItem from '@/components/molecules/item/TicketItem';
+import ConcertItem from '@/components/molecules/item/ConcertItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
 
 const Page = () => {
@@ -49,7 +49,7 @@ const Page = () => {
             href={`/mytickets/${ticket.ticketUuid}`}
             key={ticket.ticketUuid}
           >
-            <TicketItem
+            <ConcertItem
               src={ticket.posterCid}
               concertTitle={ticket.concertTitle}
               stageName={ticket.stageName}
