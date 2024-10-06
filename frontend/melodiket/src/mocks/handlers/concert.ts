@@ -1,5 +1,4 @@
-import { http, HttpResponse } from 'msw';
-import { delay } from './index';
+import { delay, http, HttpResponse } from 'msw';
 import type {
   CarouselConcert,
   Concert,

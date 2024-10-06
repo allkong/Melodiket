@@ -3,16 +3,13 @@ import { accountInfo } from './accountInfo';
 import { concertList } from './concert';
 import { favorite } from './favorite';
 import { ticket } from './ticket';
-
-export const delay = (ms: number) =>
-  new Promise((res) => {
-    setTimeout(res, ms);
-  });
+import { photocard } from './photocard';
 
 export const handlers = [
   ...auth,
   ...accountInfo,
-  ...ticket,
   ...concertList,
   ...favorite,
+  ...photocard,
+  ...ticket,
 ];
