@@ -1,13 +1,20 @@
 import Image from 'next/image';
 
+import RotateButton from '@/components/atoms/button/RotateButton';
+
 interface PhotocardFrontProps {
   src: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const PhotocardFront = ({ src }: PhotocardFrontProps) => {
+const PhotocardFront = ({ src, onClick }: PhotocardFrontProps) => {
   return (
-    <div className="w-[20.7rem] h-[31rem] relative rounded-lg overflow-hidden border border-gray-200">
+    <div className="w-[20.7rem] h-[33.3rem] relative rounded-lg overflow-hidden border border-gray-200">
       <Image src={src} alt="photocard" fill className="object-cover" />
+
+      <div className="absolute bottom-0 right-0 px-3 py-3">
+        <RotateButton onClick={onClick} />
+      </div>
     </div>
   );
 };
