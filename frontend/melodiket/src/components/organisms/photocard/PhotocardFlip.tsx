@@ -1,7 +1,7 @@
+import { useState } from 'react';
+
 import PhotocardFront from './PhotocardFront';
 import PhotocardBack from './PhotocardBack';
-import { useState } from 'react';
-import RotateButton from '@/components/atoms/button/RotateButton';
 
 interface PhotocardFlipProps {
   src: string;
