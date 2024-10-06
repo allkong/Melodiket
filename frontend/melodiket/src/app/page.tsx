@@ -7,11 +7,11 @@ import { Suspense } from 'react';
 
 import Header from '@/components/organisms/navigation/Header';
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
-import ConcertRankingSection from './_component/concert-ranking-section';
-import FavoriteMusicianSection from './_component/favorite-musician-section';
+import ConcertRankingSection from './_components/concert-ranking-section';
+import FavoriteMusicianSection from './_components/favorite-musician-section';
 
 import Skeleton from '@/components/atoms/skeleton/Skeleton';
-import CarouselSection from './_component/carousel-section';
+import CarouselSection from './_components/carousel-section';
 import { useFetchFavoriteMusiciansListDehydrateState } from '@/services/favorite/fetchFavoriteMusiciansList';
 
 export default async function Home() {

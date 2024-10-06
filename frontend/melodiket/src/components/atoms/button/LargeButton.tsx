@@ -1,18 +1,31 @@
 'use client';
 
 import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
 import { ReactElement } from 'react';
 
 interface LargeButtonProps {
+  href?: string;
   label: string;
   onClick?: () => void;
   disabled?: boolean;
   icon?: ReactElement;
 }
 
-const LargeButton = ({ label, onClick, disabled, icon }: LargeButtonProps) => {
+const LargeButton = ({
+  href,
+  label,
+  onClick,
+  disabled,
+  icon,
+}: LargeButtonProps) => {
+  const router = useRouter();
+
   const handleClickButton = () => {
     onClick?.();
+    if (href) {
+      router.push(href);
+    }
   };
 
   return (

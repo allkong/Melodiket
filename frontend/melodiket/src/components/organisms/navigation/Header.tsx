@@ -51,7 +51,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
       >
         <div className="flex items-center justify-between max-w-xl px-6 py-4 mx-auto">
           <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)} />
-          <LogoText />
+          <LogoText className="h-auto w-28" />
           <SearchButton />
         </div>
       </header>
@@ -73,7 +73,11 @@ const Header = ({ isFixed = false }: HeaderProps) => {
           label="찜한 공연/뮤지션"
         />
         <Menu.Item href="/mytickets" icon={<Basket />} label="예매내역" />
-        <Menu.Item href="/" icon={<Card />} label="포토카드" />
+        <Menu.Item
+          href="/photocards"
+          icon={<Card width={22} height={22} className="text-purple-200" />}
+          label="포토카드"
+        />
         <Menu.Item
           href="/management/concerts"
           icon={<Microphone />}
