@@ -9,30 +9,61 @@ import {
 import concertKey from './concertKey';
 import getQueryClient from '@/utils/getQueryClient';
 
-export const fetchConcertList = async () => {
-  const response = await customFetch<FetchConcertList>('/concerts');
-  return response;
-};
+interface FetchConcertRequest {
+  isFirstPage?: boolean;
+  lastUuid?: string;
+  pageSize?: number;
+  orderKey?: string;
+  orderDirection?: 'ASC' | 'DESC';
+}
 
-export const fetchInfiniteConcert = async (cursor: string) => {
+export const fetchConcertList = async (
+  {
+    isFirstPage,
+    lastUuid,
+    pageSize,
+    orderKey,
+    orderDirection,
+  }: FetchConcertRequest = {
+    isFirstPage: true,
+    pageSize: 10,
+    orderDirection: 'ASC',
+    orderKey: 'uuid',
+  }
+) => {
   const response = await customFetch<FetchConcertList>(
-    `/concerts?cursor=${cursor}`
+    `/concert?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid}`
   );
   return response;
 };
 
-export const useFetchInfiniteConcert = () => {
+export const useFetchInfiniteConcert = (
+  pageSize: number = 10,
+  orderKey: string = 'uuid',
+  orderDirection: 'ASC' | 'DESC' = 'ASC'
+) => {
   const result = useInfiniteQuery({
-    queryKey: [],
-    queryFn: ({ pageParam }) => fetchInfiniteConcert(`${pageParam}`),
-    initialPageParam: 1,
+    queryKey: concertKey.infinite(),
+    queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
-      if (lastPage.pageInfo.hasNextPage) {
-        // return lastPage.result[lastPage.result.length - 1].concertUuid;
-        return 1;
-      } else {
+      const { pageInfo, result } = lastPage ?? {};
+      if (!pageInfo || !pageInfo.hasNextPage) {
         return undefined;
       }
+
+      return {
+        isFirstPage: false,
+        lastUuid: result[result.length - 1].concertUuid,
+        orderDirection,
+        orderKey,
+        pageSize,
+      };
+    },
+    initialPageParam: {
+      isFirstPage: true,
+      orderDirection,
+      orderKey,
+      pageSize,
     },
   });
 
@@ -42,7 +73,7 @@ export const useFetchInfiniteConcert = () => {
 export const useFetchConcertList = () => {
   const result = useSuspenseQuery<FetchConcertList>({
     queryKey: concertKey.list(),
-    queryFn: fetchConcertList,
+    queryFn: () => fetchConcertList(),
   });
 
   return result;
@@ -52,7 +83,7 @@ export const useFetchConcertListDehydrateState = async () => {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
     queryKey: concertKey.list(),
-    queryFn: fetchConcertList,
+    queryFn: () => fetchConcertList(),
   });
 
   return dehydrate(queryClient);
