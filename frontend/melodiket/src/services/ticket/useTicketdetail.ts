@@ -1,12 +1,12 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
 import customFetch from '../customFetch';
 import { TicketDetail } from '@/types/ticket';
-import { useTicketStore } from '@/store/ticketStore';
-import { useEffect } from 'react';
+import useTicketStore from '@/store/ticketStore';
 
 const getTicketDetail = async (uuid: string) => {
   const response = await customFetch<TicketDetail>(`/tickets/${uuid}`);
