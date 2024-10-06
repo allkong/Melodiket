@@ -47,8 +47,8 @@ public class ConcertController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelConcert(Authentication authentication, @PathVariable UUID id) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        concertService.cancelConcert(user.getLoginId(), id);
-        return ResponseEntity.noContent().build();
+        concertService.cancelConcert(user.getLoginId(), user, id);
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{id}/approve")

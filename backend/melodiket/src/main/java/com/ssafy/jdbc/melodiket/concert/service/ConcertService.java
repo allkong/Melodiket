@@ -65,17 +65,34 @@ public class ConcertService {
 
     @Async
     @DistributedLock(key = "#loginId.concat('-cancelConcert')")
-    public void cancelConcert(String loginId, UUID concertId) {
+    public void cancelConcert(String loginId, AppUserEntity user, UUID concertId) {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        // 소유자 확인
+        if (!concert.getOwner().getUuid().equals(owner.getUuid())) {
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
 
         if (concert.getConcertStatus() == ConcertStatus.CANCELED) {
             throw new HttpResponseException(ErrorDetail.ALREADY_CANCELED);
         } else {
-            // TODO : 블록 체인 연동
+            WalletResp managerWallet = walletService.getWalletOf(owner.getUuid());
+            Credentials managerCredentials = Credentials.create(managerWallet.privateKey());
+            ManagerContract managerContract = new ManagerContract(blockchainConfig, managerCredentials);
+            try {
+                managerContract.cancelConcert(concert.getUuid());
 
-            concert.cancel();
-            concertRepository.save(concert);
+                // TODO : 구매된 티켓이 있으면 모두 환불 처리
+                concert.cancel();
+                concertRepository.save(concert);
+            } catch (Exception e) {
+                log.error("Failed to cancel concert", e);
+                throw new RuntimeException(e);
+            }
+
         }
     }
 
@@ -191,6 +208,11 @@ public class ConcertService {
     public void approveConcert(UUID concertId, String loginId) {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+
+        // 취소된 콘서트에는 불가능
+        if (concert.getConcertStatus() == ConcertStatus.CANCELED) {
+            throw new HttpResponseException(ErrorDetail.CONFLICT);
+        }
 
         MusicianEntity musician = musicianRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.MUSICIAN_NOT_FOUND));
