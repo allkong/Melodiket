@@ -1,13 +1,14 @@
 'use client';
 
-import CloseButton from '@/components/atoms/button/CloseButton';
-import LargeButton from '@/components/atoms/button/LargeButton';
-import Header from '@/components/organisms/navigation/Header';
-import SubHeader from '@/components/organisms/navigation/SubHeader';
-import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
+import { useRouter } from 'next/navigation';
+
 import { usePhotocardDetail } from '@/services/photocard/usePhotocardDetail';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
-import { useRouter } from 'next/navigation';
+
+import CloseButton from '@/components/atoms/button/CloseButton';
+import Header from '@/components/organisms/navigation/Header';
+import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
+import KakaoShareButton from '@/components/organisms/photocard/KakaoShareButton';
 
 const Page = () => {
   const router = useRouter();
@@ -48,7 +49,14 @@ const Page = () => {
           />
         </div>
 
-        <CloseButton onClick={handleClose} hasBorder />
+        <div className="flex space-x-4 w-[20.7rem]">
+          <KakaoShareButton
+            nickname={photocard.nickname}
+            concertName={photocard.concertName}
+            imageUrl="https://i.namu.wiki/i/YvAZ1b6CTz7pLtifAW_EKOF2tBiGlFAXPVXxxmC7JNlSEhNaFi0wZjg99owuxGFXqZfdneMziIyBC1JIcNwQ_R8RXQP1OfuU-EpswEGFbhSfMKdUAnH0vPoaIaTJYs-vPJnj3gyz5-uvLAGUfpfNTQ.webp"
+          />
+          <CloseButton onClick={handleClose} hasBorder />
+        </div>
       </div>
     </div>
   );
