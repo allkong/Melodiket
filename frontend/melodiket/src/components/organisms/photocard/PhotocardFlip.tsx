@@ -1,6 +1,7 @@
 import PhotocardFront from './PhotocardFront';
 import PhotocardBack from './PhotocardBack';
 import { useState } from 'react';
+import RotateButton from '@/components/atoms/button/RotateButton';
 
 interface PhotocardFlipProps {
   src: string;
@@ -22,9 +23,11 @@ const PhotocardFlip = ({
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
   return (
-    <div className="relative">
+    <div className="relative w-[20.7rem] h-[31rem]">
+      {' '}
+      {/* 포토카드 크기 설정 */}
       <div
-        className="absolute inline-block transition-transform duration-700"
+        className="absolute inset-0 transition-transform duration-700"
         style={{
           transform: `perspective(1000px) ${isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'}`,
           transformStyle: 'preserve-3d',
@@ -33,9 +36,8 @@ const PhotocardFlip = ({
       >
         <PhotocardFront src={src} />
       </div>
-
       <div
-        className="absolute inline-block transition-transform duration-700"
+        className="absolute inset-0 transition-transform duration-700"
         style={{
           transform: `perspective(1000px) ${isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)'}`,
           transformStyle: 'preserve-3d',
@@ -50,13 +52,10 @@ const PhotocardFlip = ({
           seatCol={seatCol}
         />
       </div>
-
-      <button
-        className="absolute px-4 py-2 mt-4 bg-gray-200 rounded"
-        onClick={() => setIsFlipped(!isFlipped)}
-      >
-        회전
-      </button>
+      {/* 버튼을 오른쪽 아래에 고정 */}
+      <div className="absolute right-0 -bottom-5">
+        <RotateButton onClick={() => setIsFlipped(!isFlipped)} />
+      </div>
     </div>
   );
 };
