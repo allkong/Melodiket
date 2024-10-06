@@ -9,6 +9,7 @@ import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertCursorPagingReq;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.entity.*;
@@ -35,11 +36,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.web3j.abi.datatypes.Bool;
 import org.web3j.crypto.Credentials;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -58,9 +61,16 @@ public class ConcertService {
     private final JPAQueryFactory jpaQueryFactory;
 
     // 커서 기반 공연 목록 조회 메서드
-    public PageResponse<ConcertResp> getConcerts(CursorPagingReq pagingReq) {
-        PageResponse<ConcertResp> concerts = concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from);
-        return concerts;
+    public PageResponse<ConcertResp> getConcerts(ConcertCursorPagingReq pagingReq) {
+        if (pagingReq.getStatus() != null && pagingReq.getStatus().length > 0) {
+            List<ConcertStatus> statuses = Stream.of(pagingReq.getStatus())
+                    .map(ConcertStatus::valueOf)
+                    .toList();
+            BooleanExpression condition = QConcertEntity.concertEntity.concertStatus.in(statuses);
+            return concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from, condition);
+        } else {
+            return concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from);
+        }
     }
 
     @Async
@@ -277,8 +287,7 @@ public class ConcertService {
         }
     }
 
-    public PageResponse<ConcertResp> getConcertsByStageManager(UUID stageManagerUuid, CursorPagingReq cursorPagingReq) {
-
+    public PageResponse<ConcertResp> getConcertsByStageManager(UUID stageManagerUuid, ConcertCursorPagingReq cursorPagingReq) {
         StageManagerEntity stageManager = stageManagerRepository.findByUuid(stageManagerUuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
@@ -287,14 +296,26 @@ public class ConcertService {
                 .toList();
 
         BooleanExpression condition = QConcertEntity.concertEntity.stageEntity.uuid.in(stageUuids);
+        if (cursorPagingReq.getStatus() != null && cursorPagingReq.getStatus().length > 0) {
+            List<ConcertStatus> statuses = Stream.of(cursorPagingReq.getStatus())
+                    .map(ConcertStatus::valueOf)
+                    .toList();
+            condition = condition.and(QConcertEntity.concertEntity.concertStatus.in(statuses));
+        }
         return concertCursorRepository.findWithPagination(cursorPagingReq, ConcertResp::from, condition);
     }
 
-    public PageResponse<ConcertResp> getConcertsByStage(UUID stageUuid, CursorPagingReq pagingReq) {
+    public PageResponse<ConcertResp> getConcertsByStage(UUID stageUuid, ConcertCursorPagingReq pagingReq) {
         StageEntity stage = stageRepository.findByUuid(stageUuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.STAGE_NOT_FOUND));
 
         BooleanExpression condition = QConcertEntity.concertEntity.stageEntity.uuid.eq(stageUuid);
+        if (pagingReq.getStatus() != null && pagingReq.getStatus().length > 0) {
+            List<ConcertStatus> statuses = Stream.of(pagingReq.getStatus())
+                    .map(ConcertStatus::valueOf)
+                    .toList();
+            condition = condition.and(QConcertEntity.concertEntity.concertStatus.in(statuses));
+        }
 
         return concertCursorRepository.findWithPagination(
                 pagingReq,

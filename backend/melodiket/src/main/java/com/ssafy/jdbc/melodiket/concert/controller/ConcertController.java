@@ -2,10 +2,7 @@ package com.ssafy.jdbc.melodiket.concert.controller;
 
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateStandingConcertReq;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
@@ -26,7 +23,7 @@ public class ConcertController {
 
     @GetMapping
     public ResponseEntity<PageResponse<ConcertResp>> getConcerts(
-            CursorPagingReq cursorPagingReq) {
+            ConcertCursorPagingReq cursorPagingReq) {
         PageResponse<ConcertResp> concerts = concertService.getConcerts(cursorPagingReq);
         return ResponseEntity.ok(concerts);
     }
@@ -68,7 +65,7 @@ public class ConcertController {
     @GetMapping("/by-stage-managers/{id}")
     public ResponseEntity<PageResponse<ConcertResp>> getConcertsByStageManager(
             @PathVariable UUID id,
-            @Valid CursorPagingReq cursorPagingReq) {
+            @Valid ConcertCursorPagingReq cursorPagingReq) {
 
         PageResponse<ConcertResp> concerts = concertService.getConcertsByStageManager(id, cursorPagingReq);
         return ResponseEntity.ok(concerts);
@@ -77,7 +74,7 @@ public class ConcertController {
     @GetMapping("/by-stage/{id}")
     public ResponseEntity<PageResponse<ConcertResp>> getConcertsByStage(
             @PathVariable UUID id,
-            @Valid CursorPagingReq cursorPagingReq) {
+            @Valid ConcertCursorPagingReq cursorPagingReq) {
 
         PageResponse<ConcertResp> concerts = concertService.getConcertsByStage(id, cursorPagingReq);
         return ResponseEntity.ok(concerts);
