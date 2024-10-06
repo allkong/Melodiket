@@ -24,7 +24,6 @@ const PhotocardFlip = ({
 
   return (
     <div className="relative w-[20.7rem] h-[31rem]">
-      {' '}
       {/* 포토카드 크기 설정 */}
       <div
         className="absolute inset-0 transition-transform duration-700"
