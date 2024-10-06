@@ -292,7 +292,7 @@ contract ConcertManager {
     }
 
     function agreeToConcert(string calldata _concertUuid) public returns (bool) {
-        // 준비 중인 콘서트이며, 뮤지션이 아직 응답하지 않은 경우에만 수락 가능
+        // 준비 중인 콘서트이며, 뮤지션이 아직 응답하지 않은 경우에만 수락가능
         Concert storage concert = concertBasicInfos[_concertUuid];
         // require(concert.id != 0, "Concert not found.");
         require(isSameString(concert.status, "PREPARING"), "Concert is not preparing.");
@@ -530,7 +530,7 @@ contract ConcertManager {
     function cancelConcert(string calldata _concertUuid) public onlyConcertManager(_concertUuid) {
         Concert storage concert = concertBasicInfos[_concertUuid];
         // require(concert.id != 0, "Concert not found.");
-        require(isSameString(concert.status, "ACTIVE"), "Concert status must be ACTIVE.");
+        // require(isSameString(concert.status, "ACTIVE"), "Concert status must be ACTIVE.");
         require(block.timestamp < concert.concertStartAt, "Concert is already started.");
 
         concert.status = "CANCELED";
