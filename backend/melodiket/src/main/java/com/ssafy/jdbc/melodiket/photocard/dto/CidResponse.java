@@ -1,5 +1,8 @@
 package com.ssafy.jdbc.melodiket.photocard.dto;
 
+import lombok.ToString;
+
+@ToString
 public class CidResponse {
     private String cid;
 

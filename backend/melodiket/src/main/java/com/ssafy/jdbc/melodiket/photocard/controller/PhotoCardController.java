@@ -23,10 +23,9 @@ public class PhotoCardController {
     public ResponseEntity<String> uploadImage(
             Principal principal,
             @RequestParam("image") MultipartFile image,
-            @RequestParam("description") String description,
             @RequestParam("ticketUUID") UUID uuid
     ) {
-        photoCardService.uploadImageToIPFS(principal, image, description, uuid);
+        photoCardService.uploadImageToIPFS(principal, image, uuid);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("이미지 업로드 요청 완료");
     }
 

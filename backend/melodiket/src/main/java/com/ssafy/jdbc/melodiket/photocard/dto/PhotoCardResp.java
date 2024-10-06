@@ -5,12 +5,14 @@ import com.ssafy.jdbc.melodiket.photocard.entity.PhotoCardEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Builder
+@Getter
 public class PhotoCardResp {
     UUID photocardUuid;
     UUID ticketUuid;
@@ -26,7 +28,7 @@ public class PhotoCardResp {
     String favoriteMusician;
     String nickName;
 
-    public static PhotoCardResp from(PhotoCardEntity entity){
+    public static PhotoCardResp fromForAll(PhotoCardEntity entity){
         TicketEntity ticket = entity.getTicketEntity();
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
@@ -48,7 +50,7 @@ public class PhotoCardResp {
                 .build();
     }
 
-    public static PhotoCardResp fromForAll(PhotoCardEntity entity){
+    public static PhotoCardResp from(PhotoCardEntity entity){
         TicketEntity ticket = entity.getTicketEntity();
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
