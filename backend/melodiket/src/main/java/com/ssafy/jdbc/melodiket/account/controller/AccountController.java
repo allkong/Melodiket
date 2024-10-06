@@ -47,7 +47,7 @@ public class AccountController {
     public ResponseEntity<Void> chargeToken(Authentication authentication, @Valid @RequestBody TokenChargeReq req) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
 //        accountService.checkChargeTokenAvailable(user, req.accountNumber());
-        accountService.chargeToken(user, req.accountNumber(), req.amount());
+        accountService.chargeToken(user.getLoginId(), user, req.accountNumber(), req.amount());
         return ResponseEntity.accepted().build();
     }
 
@@ -55,7 +55,7 @@ public class AccountController {
     public ResponseEntity<Void> withdrawToken(Authentication authentication, @Valid @RequestBody TokenWithdrawReq req) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
 //        accountService.checkWithdrawAvailable(user, req.accountNumber(), req.amount());
-        accountService.withdrawToken(user, req.accountNumber(), req.amount());
+        accountService.withdrawToken(user.getLoginId(), user, req.accountNumber(), req.amount());
         return ResponseEntity.accepted().build();
     }
 
