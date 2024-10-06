@@ -23,6 +23,7 @@ import com.ssafy.jdbc.melodiket.concert.service.dto.StandingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianInfo;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
@@ -82,6 +83,13 @@ public class ConcertService {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
 
+        List<MusicianInfo> musicians = concert.getConcertParticipantMusicians().stream()
+                .map(participant -> new MusicianInfo(
+                        participant.getMusicianEntity().getUuid(),
+                        participant.getMusicianEntity().getName(),
+                        participant.getMusicianEntity().getImageUrl()))
+                .toList();
+
         return new ConcertResp(
                 concert.getUuid(),
                 concert.getStageEntity().getUuid(),
@@ -97,9 +105,9 @@ public class ConcertService {
                 concert.getMusicianStake(),
                 concert.getFavoriteMusicianStake(),
                 concert.getStageEntity().getName(),
-                concert.getConcertParticipantMusicians().stream()
-                        .map(participant -> participant.getMusicianEntity().getUuid())
-                        .toList(),
+                musicians,
+                concert.getStageEntity().getCapacity(),
+                concert.getStageEntity().getIsStanding(),
                 concert.getConcertStatus()
         );
     }
