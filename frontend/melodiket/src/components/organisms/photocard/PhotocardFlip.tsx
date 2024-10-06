@@ -1,5 +1,6 @@
 import PhotocardFront from './PhotocardFront';
 import PhotocardBack from './PhotocardBack';
+import { useState } from 'react';
 
 interface PhotocardFlipProps {
   src: string;
@@ -18,17 +19,44 @@ const PhotocardFlip = ({
   seatRow,
   seatCol,
 }: PhotocardFlipProps) => {
-  return (
-    <div>
-      <PhotocardFront src={src} />
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
-      <PhotocardBack
-        concertName={concertName}
-        startAt={startAt}
-        stageName={stageName}
-        seatRow={seatRow}
-        seatCol={seatCol}
-      />
+  return (
+    <div className="relative">
+      <div
+        className="absolute inline-block transition-transform duration-700"
+        style={{
+          transform: `perspective(1000px) ${isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'}`,
+          transformStyle: 'preserve-3d',
+          backfaceVisibility: 'hidden',
+        }}
+      >
+        <PhotocardFront src={src} />
+      </div>
+
+      <div
+        className="absolute inline-block transition-transform duration-700"
+        style={{
+          transform: `perspective(1000px) ${isFlipped ? 'rotateY(0deg)' : 'rotateY(180deg)'}`,
+          transformStyle: 'preserve-3d',
+          backfaceVisibility: 'hidden',
+        }}
+      >
+        <PhotocardBack
+          concertName={concertName}
+          startAt={startAt}
+          stageName={stageName}
+          seatRow={seatRow}
+          seatCol={seatCol}
+        />
+      </div>
+
+      <button
+        className="absolute px-4 py-2 mt-4 bg-gray-200 rounded"
+        onClick={() => setIsFlipped(!isFlipped)}
+      >
+        회전
+      </button>
     </div>
   );
 };
