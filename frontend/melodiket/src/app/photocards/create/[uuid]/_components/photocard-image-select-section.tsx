@@ -1,14 +1,24 @@
-import MediumButton from '@/components/atoms/button/MediumButton';
+import usePosterStore from '@/store/posterStore';
+
 import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
+import MediumButton from '@/components/atoms/button/MediumButton';
 import { ImageLine, Ticket } from '@/public/icons';
 
 interface PhotocardImageSelectSection {
-  onNext: () => void;
+  onNext: (value: string) => void;
 }
 
 const PhotocardImageSelectSection = ({
   onNext,
 }: PhotocardImageSelectSection) => {
+  const { posterCid } = usePosterStore();
+
+  const handlePosterSelect = () => {
+    if (posterCid) {
+      onNext(posterCid);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center flex-grow">
       <PhotocardFrame>
@@ -18,7 +28,11 @@ const PhotocardImageSelectSection = ({
       </PhotocardFrame>
 
       <div className="flex mt-10 space-x-3">
-        <MediumButton label="공연 포스터" icon={<Ticket />} onClick={onNext} />
+        <MediumButton
+          label="공연 포스터"
+          icon={<Ticket />}
+          onClick={handlePosterSelect}
+        />
         <MediumButton
           label="이미지 선택"
           icon={<ImageLine />}

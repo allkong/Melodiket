@@ -7,6 +7,7 @@ import useFunnel from '@/hooks/useFunnel';
 import SubHeader from '@/components/organisms/navigation/SubHeader';
 import PhotocardImageSelectSection from './_components/photocard-image-select-section';
 import PhotocardDecorateSelection from './_components/photocard-decorate-selection';
+import { useState } from 'react';
 
 const Page = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const Page = () => {
     true,
     'select'
   );
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   const handlePrev = () => {
     router.back();
@@ -23,6 +25,12 @@ const Page = () => {
   const handleClose = () => {
     router.push('/photocards');
   };
+
+  const handleImageSelect = (value: string) => {
+    setImageUrl(value);
+    setStep('edit');
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <SubHeader
@@ -33,10 +41,11 @@ const Page = () => {
       />
       <Funnel>
         <Funnel.Step step="select">
-          <PhotocardImageSelectSection onNext={() => setStep('edit')} />
+          <PhotocardImageSelectSection onNext={handleImageSelect} />
         </Funnel.Step>
         <Funnel.Step step="edit">
           <PhotocardDecorateSelection
+            src={imageUrl}
             onNext={() => {
               router.push('/');
             }}
