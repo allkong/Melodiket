@@ -75,7 +75,7 @@ const useFunnel = <T extends string>(
         router.replace(`?${params.toString()}`);
       }
     },
-    [addToHistory]
+    [addToHistory, router] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const setStep = (step: T) => {
@@ -97,7 +97,7 @@ const useFunnel = <T extends string>(
       window.addEventListener('popstate', handlePopState);
     }
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [preventForwardNavigate]);
 
   return { Funnel: FunnelMain<T>(), setStep };
 };
