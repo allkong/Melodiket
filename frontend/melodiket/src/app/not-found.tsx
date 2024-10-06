@@ -29,7 +29,7 @@ const NotFound = () => {
             페이지를 찾을 수 없어요😥
           </p>
         </div>
-        <div className="mt-8 space-x-3">
+        <div className="flex mt-8 space-x-3">
           <MediumButton label="이전 화면" onClick={handleGoBack} color="gray" />
           <MediumButton label="홈으로 가기" onClick={handleGoHome} />
         </div>
