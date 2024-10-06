@@ -89,4 +89,8 @@ public class ConcertEntity extends ExposableEntity {
     public void cancel() {
         this.concertStatus = ConcertStatus.CANCELED;
     }
+
+    public void active() {
+        this.concertStatus = ConcertStatus.ACTIVE;
+    }
 }

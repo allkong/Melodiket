@@ -13,4 +13,8 @@ public interface ConcertParticipantMusicianRepository extends JpaRepository<Conc
     Optional<ConcertParticipantMusicianEntity> findByConcertEntityAndMusicianEntity(ConcertEntity concertEntity, MusicianEntity musicianEntity);
 
     List<ConcertParticipantMusicianEntity> findAllByConcertEntityAndApprovalStatus(ConcertEntity concertEntity, ApprovalStatus approvalStatus);
+
+    boolean existsByConcertEntityAndApprovalStatus(ConcertEntity concertEntity, ApprovalStatus approvalStatus);
+
+    List<ConcertParticipantMusicianEntity> findAllByConcertEntity(ConcertEntity concertEntity);
 }
