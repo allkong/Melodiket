@@ -27,6 +27,4 @@ public class WalletInfoEntity extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String publicKey;
-
-    private Long tokenAmount = 0L;
 }
