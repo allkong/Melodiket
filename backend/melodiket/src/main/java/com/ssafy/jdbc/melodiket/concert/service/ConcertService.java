@@ -8,10 +8,7 @@ import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertCursorPagingReq;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
 import com.ssafy.jdbc.melodiket.concert.entity.*;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertCursorRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianCursorRepository;
@@ -36,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.abi.datatypes.Bool;
 import org.web3j.crypto.Credentials;
 
 import java.util.ArrayList;
@@ -226,7 +222,7 @@ public class ConcertService {
     @DistributedLock(key = "#loginId.concat('-approveConcert')")
     @Async
     @Transactional(rollbackFor = Exception.class)
-    public void approveConcert(UUID concertId, String loginId) {
+    public void approveConcert(UUID concertId, String loginId, ConcertApproveReq concertApproveReq) {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
 
@@ -247,7 +243,8 @@ public class ConcertService {
         MusicianContract musicianContract = new MusicianContract(blockchainConfig, musicianCredentials);
         try {
             boolean isSucceed = musicianContract.agreeToConcert(concert.getUuid());
-            participant.approve();
+            participant.approve(concertApproveReq.getSignatureImageUrl());
+
             concertParticipantMusicianRepository.save(participant);
 
             // 만약 모든 요청이 수락되면
