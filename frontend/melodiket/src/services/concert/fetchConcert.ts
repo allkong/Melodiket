@@ -135,7 +135,7 @@ export const useBookTicket = () => {
   return mutate;
 };
 
-const getMyConcerts = async () => {
+const getMyAssignedConcerts = async () => {
   const response = await customFetch<FetchMyConcertsResponse>(
     '/concerts/me/assigned',
     {
@@ -146,9 +146,9 @@ const getMyConcerts = async () => {
   return response;
 };
 
-export const useGetMyConcerts = () => {
+export const useGetMyAssignedConcerts = () => {
   return useMutation<FetchMyConcertsResponse, Error>({
-    mutationFn: () => getMyConcerts(),
+    mutationFn: () => getMyAssignedConcerts(),
     onError: () => {
       alert('내 공연 목록 가져오기 실패!');
     },
