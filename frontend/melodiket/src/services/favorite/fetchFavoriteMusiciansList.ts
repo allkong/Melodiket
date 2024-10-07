@@ -3,6 +3,7 @@ import customFetch from '../customFetch';
 import type { FavoriteMusician } from '@/types/favorite';
 import getQueryClient from '@/utils/getQueryClient';
 import favoriteKey from './favoriteKey';
+import useAuthStore from '@/store/authStore';
 
 export const fetchFavoriteMusiciansList = async () => {
   const response = await customFetch<FavoriteMusician>('/musicians/liked/me');
@@ -10,9 +11,12 @@ export const fetchFavoriteMusiciansList = async () => {
 };
 
 export const useFetchFavoriteMusiciansList = () => {
+  const { user } = useAuthStore();
+
   const response = useQuery({
     queryKey: favoriteKey.musicians(),
     queryFn: fetchFavoriteMusiciansList,
+    enabled: !!user,
   });
 
   return response;

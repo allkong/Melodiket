@@ -15,7 +15,7 @@ import { useSignUp } from '@/services/auth/useLogin';
 const Page = () => {
   const { Funnel, setStep } = useFunnel<
     'policy' | 'role' | 'information' | 'description' | 'success'
-  >(false, true, 'policy');
+  >(false, true);
 
   const [signUpData, setSignUpData] = useState<SignUpData>({
     nickname: '',
