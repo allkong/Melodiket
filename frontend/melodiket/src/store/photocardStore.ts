@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 import type { Sticker, Text } from '@/types/photocard';
 
@@ -15,24 +15,32 @@ interface PhotocardState {
 }
 
 const usePhotocardStore = create<PhotocardState>()(
-  devtools((set) => ({
-    stickers: null,
-    texts: null,
+  devtools(
+    persist(
+      (set) => ({
+        stickers: null,
+        texts: null,
 
-    setStickers: (stickers) => set({ stickers }),
-    setTexts: (texts) => set({ texts }),
+        setStickers: (stickers) => set({ stickers }),
+        setTexts: (texts) => set({ texts }),
 
-    removeSticker: (selectedId) =>
-      set((state) => ({
-        stickers: state.stickers?.filter(
-          (sticker) => selectedId !== sticker.id
-        ),
-      })),
-    removeText: (selectedId) =>
-      set((state) => ({
-        texts: state.texts?.filter((text) => selectedId !== text.id),
-      })),
-  }))
+        removeSticker: (selectedId) =>
+          set((state) => ({
+            stickers: state.stickers?.filter(
+              (sticker) => selectedId !== sticker.id
+            ),
+          })),
+        removeText: (selectedId) =>
+          set((state) => ({
+            texts: state.texts?.filter((text) => selectedId !== text.id),
+          })),
+      }),
+      {
+        name: 'photocard-storage',
+        getStorage: () => localStorage,
+      }
+    )
+  )
 );
 
 export default usePhotocardStore;

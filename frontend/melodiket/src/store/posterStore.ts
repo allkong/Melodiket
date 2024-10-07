@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 interface PosterState {
   posterCid: string | null;
@@ -8,12 +8,20 @@ interface PosterState {
 }
 
 const usePosterStore = create<PosterState>()(
-  devtools((set) => ({
-    posterCid: null,
+  devtools(
+    persist(
+      (set) => ({
+        posterCid: null,
 
-    setPosterCid: (posterCid) => set({ posterCid }),
-    clearPosterCid: () => set({ posterCid: null }),
-  }))
+        setPosterCid: (posterCid) => set({ posterCid }),
+        clearPosterCid: () => set({ posterCid: null }),
+      }),
+      {
+        name: 'poster-storage',
+        getStorage: () => localStorage,
+      }
+    )
+  )
 );
 
 export default usePosterStore;
