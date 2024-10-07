@@ -22,9 +22,9 @@ export const useLogin = () => {
 
   return useMutation<LoginResponse, Error, LoginRequest>({
     mutationFn: (loginData: LoginRequest) => login(loginData),
-    onSuccess: (data) => {
+    onSuccess: (data, loginData) => {
       setAccessToken(data.accessToken);
-      setUserInfo(data.nickname, data.role);
+      setUserInfo(data.nickname, data.role, loginData.loginId);
       router.push('/');
     },
     onError: () => {
