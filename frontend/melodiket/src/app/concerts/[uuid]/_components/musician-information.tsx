@@ -12,9 +12,9 @@ const MusiciansInformation = ({ musicians }: MusiciansInformationProps) => {
         {musicians &&
           musicians.map((musician) => (
             <MusicianStatusProfile
-              key={musician.musicianId}
-              musicianName={musician.musicianName}
-              src={musician.imageURL}
+              key={musician.musicianUuid}
+              musicianName={musician.name}
+              src={musician.imageUrl}
             />
           ))}
       </div>

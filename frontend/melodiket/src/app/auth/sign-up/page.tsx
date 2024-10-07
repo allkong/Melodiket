@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import type { SignUpData, SignUpRole } from '@/types/signUp';
-import SignUpPolicy from './_components/sign-up-policy';
-import SignUpRoleSelect from './_components/sign-up-role-select';
-import SignUpInformation from './_components/sign-up-information';
-import SignUpDescription from './_components/sign-up-description';
-import SignUpSuccess from './_components/sign-up-success';
+import SignUpPolicy from './_section/sign-up-policy';
+import SignUpRoleSelect from './_section/sign-up-role-select';
+import SignUpInformation from './_section/sign-up-information';
+import SignUpDescription from './_section/sign-up-description';
+import SignUpSuccess from './_section/sign-up-success';
 import useFunnel from '@/hooks/useFunnel';
 import { useSignUp } from '@/services/auth/useLogin';
 
