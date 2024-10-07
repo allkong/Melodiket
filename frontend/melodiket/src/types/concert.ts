@@ -69,3 +69,25 @@ export interface FetchConcertDetail {
   };
   result: Concert;
 }
+
+export interface FetchMyConcertsResponse {
+  pageInfo: {
+    hasNextPage: boolean;
+    requestedSize: number;
+    responsedSize: number;
+  };
+  result: ConcertApprovalStatus[];
+}
+
+export interface ConcertApprovalStatus {
+  uuid: string;
+  title: string;
+  stageName: string;
+  createdAt: string;
+  startAt: string;
+  ticketingAt: string;
+  description: string;
+  ticketPrice: number;
+  concertStatus: string;
+  approvalStatus: string;
+}
