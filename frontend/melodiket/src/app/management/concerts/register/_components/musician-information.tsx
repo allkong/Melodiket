@@ -30,27 +30,6 @@ const MusicianInformation = ({
 
   console.log(data);
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (loadMoreRef.current) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && hasNextPage) {
-            fetchNextPage();
-          }
-        },
-        { threshold: 1 }
-      );
-
-      observer.observe(loadMoreRef.current);
-
-      return () => {
-        if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
-      };
-    }
-  }, [hasNextPage, fetchNextPage]);
-
   const isFormValid = Object.keys(musicianList).length > 0;
 
   const toggleMusician = (name: string) => {
@@ -77,15 +56,15 @@ const MusicianInformation = ({
 
   const filteredMusicians = musicianName
     ? allMusicians.filter((musician) =>
-        musician.name.toLowerCase().includes(musicianName.toLowerCase())
+        musician.nickname.toLowerCase().includes(musicianName.toLowerCase())
       )
     : allMusicians;
 
   const selectedMusicians = allMusicians.filter(
-    (musician) => !!musicianList[musician.name]
+    (musician) => !!musicianList[musician.nickname]
   );
   const unselectedMusicians = allMusicians.filter(
-    (musician) => !musicianList[musician.name]
+    (musician) => !musicianList[musician.nickname]
   );
 
   return (
@@ -106,30 +85,30 @@ const MusicianInformation = ({
           {filteredMusicians.length > 0 &&
             filteredMusicians.map((musician) => (
               <MusicianSelectButton
-                key={musician.musicianUuid}
-                label={musician.name}
-                isSelected={!!musicianList[musician.name]}
-                onClick={() => toggleMusician(musician.name)}
+                key={musician.uuid}
+                label={musician.nickname}
+                isSelected={!!musicianList[musician.nickname]}
+                onClick={() => toggleMusician(musician.nickname)}
               />
             ))}
           {filteredMusicians.length > 0 && <LineDivider />}
           {selectedMusicians.map((musician) => (
             <MusicianSelectButton
-              key={musician.musicianUuid}
-              label={musician.name}
-              isSelected={!!musicianList[musician.name]}
-              onClick={() => toggleMusician(musician.name)}
+              key={musician.uuid}
+              label={musician.nickname}
+              isSelected={!!musicianList[musician.nickname]}
+              onClick={() => toggleMusician(musician.nickname)}
             />
           ))}
           {unselectedMusicians.map((musician) => (
             <MusicianSelectButton
-              key={musician.musicianUuid}
-              label={musician.name}
-              isSelected={!!musicianList[musician.name]}
-              onClick={() => toggleMusician(musician.name)}
+              key={musician.uuid}
+              label={musician.nickname}
+              isSelected={!!musicianList[musician.nickname]}
+              onClick={() => toggleMusician(musician.nickname)}
             />
           ))}
-          <div ref={loadMoreRef} className="h-10" />
+          <div className="h-10" />
           {isFetchingNextPage && <p>Loading more...</p>}
         </div>
       </div>
