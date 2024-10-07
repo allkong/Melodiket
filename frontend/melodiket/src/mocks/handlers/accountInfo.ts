@@ -1,5 +1,4 @@
-import { http, HttpResponse } from 'msw';
-import { delay } from './index';
+import { delay, http, HttpResponse } from 'msw';
 
 export const accountInfo = [
   http.get('/users/musicians', async () => {
