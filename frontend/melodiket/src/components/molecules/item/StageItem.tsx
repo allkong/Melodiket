@@ -1,5 +1,7 @@
 import OptionButton from '@/components/atoms/button/OptionButton';
 import Checkbox from '@/components/atoms/checkbox/Checkbox';
+import { useDeleteStage } from '@/services/stage/fetchStage';
+import { UUID } from 'crypto';
 
 interface StageItemProps {
   title: string;
@@ -7,6 +9,7 @@ interface StageItemProps {
   isSelected?: boolean;
   onClick?: () => void;
   isModify?: boolean;
+  uuid: UUID;
 }
 
 const StageItem = ({
@@ -15,7 +18,16 @@ const StageItem = ({
   isSelected,
   onClick,
   isModify,
+  uuid,
 }: StageItemProps) => {
+  const deleteStageMutation = useDeleteStage();
+
+  const handleDelete = () => {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+      deleteStageMutation.mutate(uuid);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
@@ -30,9 +42,11 @@ const StageItem = ({
         {isModify && (
           <div className="flex gap-2">
             <OptionButton label="수정" isSelected={true} />
-            <OptionButton label="삭제" isSelected={true} />
           </div>
         )}
+        <div className="flex">
+          <OptionButton label="삭제" isSelected={true} onClick={handleDelete} />
+        </div>
       </div>
     </div>
   );

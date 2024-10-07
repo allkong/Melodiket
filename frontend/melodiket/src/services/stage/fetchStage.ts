@@ -9,6 +9,7 @@ import type {
 } from '@/types/stage';
 
 import customFetch from '../customFetch';
+import { UUID } from 'crypto';
 
 const registerStandingStage = async (
   stageData: RegisterStandingStageRequest
@@ -36,6 +37,28 @@ const getMyStages = async () => {
     method: 'GET',
   });
   return response;
+};
+
+const deleteStage = async (uuid: UUID) => {
+  const response = await customFetch<void>(`/stages/${uuid}`, {
+    method: 'DELETE',
+  });
+
+  return response;
+};
+
+export const useDeleteStage = () => {
+  const router = useRouter();
+
+  return useMutation<void, Error, UUID>({
+    mutationFn: (uuid: UUID) => deleteStage(uuid),
+    onSuccess: () => {
+      router.push('/');
+    },
+    onError: () => {
+      router.push('/');
+    },
+  });
 };
 
 export const useRegisterStandingStage = () => {
