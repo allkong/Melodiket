@@ -14,8 +14,11 @@ import {
   Music,
   MyPage,
 } from '@/public/icons';
+import { useLogout } from '@/services/auth/useLogout';
 
 const MenuWithPortal = () => {
+  const handleLogout = useLogout();
+
   return (
     <MenuPortal>
       <MenuMain>
@@ -48,7 +51,11 @@ const MenuWithPortal = () => {
         />
         <Menu.Divider />
         <Menu.Item href="/mypage" icon={<MyPage />} label="마이페이지" />
-        <Menu.Item href="/" icon={<BackLine />} label="로그아웃" />
+        <Menu.Item
+          onClick={handleLogout}
+          icon={<BackLine />}
+          label="로그아웃"
+        />
       </MenuMain>
     </MenuPortal>
   );
