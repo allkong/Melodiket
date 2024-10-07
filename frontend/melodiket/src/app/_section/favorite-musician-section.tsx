@@ -2,17 +2,14 @@
 
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
 import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavoriteMusiciansList';
-import useAuthStore from '@/store/authStore';
 
 const FavoriteMusicianSection = () => {
-  const { user } = useAuthStore();
   const { data } = useFetchFavoriteMusiciansList();
   const { pageInfo, result } = data ?? {};
 
   return (
     <>
-      {user &&
-        pageInfo &&
+      {pageInfo &&
         pageInfo?.responsedSize > 0 &&
         result?.map((musician) => (
           <MusicianProfileCard
