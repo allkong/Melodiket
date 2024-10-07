@@ -63,7 +63,7 @@ const Carousel = ({
         >
           {data.map((concert) => (
             <CarouselImage
-              key={concert.index}
+              key={concert.posterCid}
               size={size}
               data={concert}
               rounded={rounded}

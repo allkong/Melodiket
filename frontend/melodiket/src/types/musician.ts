@@ -20,3 +20,11 @@ export interface FetchMusiciansResponse {
   pageInfo: PageInfo;
   result: Musician[];
 }
+
+export interface MusicianResponse {
+  loginId: string;
+  role: 'MUSICIAN';
+  nickname: string;
+  description: string;
+  imageUrl: string;
+}

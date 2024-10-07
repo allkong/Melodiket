@@ -11,9 +11,9 @@ type Story = StoryObj<typeof SubHeader>;
 export const Default: Story = {
   args: {
     title: '모바일 티켓',
-    onClose: () => {
+    onPrev: () => {
       alert('이동');
     },
-    canGoBack: true,
+    canGoPrev: true,
   },
 };
