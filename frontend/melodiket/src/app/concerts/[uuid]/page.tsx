@@ -1,8 +1,8 @@
 import Header from '@/components/organisms/navigation/Header';
-import ConcertPoster from './_components/ConcertPoster';
+import ConcertPoster from './_components/concert-poster';
 import { HydrationBoundary } from '@tanstack/react-query';
 import { useFetchConcertDetailDehydrateState } from '@/services/concert/fetchConcert';
-import ConcertInformation from './_components/ConcertInformation';
+import ConcertInformation from './_components/concert-information';
 
 interface PageProps {
   params: { uuid: string };

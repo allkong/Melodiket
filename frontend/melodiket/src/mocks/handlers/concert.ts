@@ -154,4 +154,12 @@ export const concertList = [
       return HttpResponse.json(CONCERT_DETAIL);
     }
   ),
+  http.post<{ concertUuid: string }, null, { isFavorite: boolean }>(
+    '/concerts/:concertUuid/favorite',
+    async () => {
+      return HttpResponse.json({
+        isFavorite: Math.random() < 0.5 ? true : false,
+      });
+    }
+  ),
 ];

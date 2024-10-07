@@ -5,15 +5,46 @@ import Image from 'next/image';
 import DarkedImage from '@/components/atoms/image/DarkedImage';
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
 import FavoriteButton from '@/components/atoms/button/FavoriteButton';
+import { useToggleFavorite } from '@/services/favorite/fetchFavoriteMusiciansList';
+import { useState } from 'react';
 
 interface ConcertPosterProps {
   uuid: string;
 }
 
+const getFavorites = (
+  initialFavorite: boolean,
+  favorite: boolean,
+  number: number
+) => {
+  if (initialFavorite && !favorite) {
+    return number - 1;
+  } else if (!initialFavorite && favorite) {
+    return number + 1;
+  }
+  return number;
+};
+
 const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const { data } = useFetchConcertDetail(uuid);
   const { result } = data!;
-  const { posterCid, title, stageName } = result;
+  const {
+    posterCid,
+    title,
+    stageName,
+    isFavorite: initialIsFavorite,
+    favorites = 0,
+  } = result;
+  const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
+  const mutate = useToggleFavorite();
+
+  const handleToggleFavorite = async () => {
+    const response = await mutate.mutateAsync({ concertUuid: uuid });
+    setIsFavorite(response.isFavorite);
+    window.alert(
+      `좋아요 목록에 ${response.isFavorite ? '추가' : '삭제'}하였습니다.`
+    );
+  };
 
   return (
     <div className="relative w-full h-96">
@@ -34,8 +65,13 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
               <p className="text-xs">{stageName}</p>
             </div>
             <div className="flex gap-2 self-end text-sm">
-              <p className="text-sm">{999}</p>
-              <FavoriteButton />
+              <p className="text-sm">
+                {getFavorites(initialIsFavorite, isFavorite, favorites)}
+              </p>
+              <FavoriteButton
+                isOn={isFavorite}
+                onClick={handleToggleFavorite}
+              />
             </div>
           </div>
         </div>
