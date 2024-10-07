@@ -1,9 +1,11 @@
 package com.ssafy.jdbc.melodiket.concert.repository;
 
-import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteConcertRepository extends JpaRepository<FavoriteConcertEntity, Long> {
@@ -15,4 +17,6 @@ public interface FavoriteConcertRepository extends JpaRepository<FavoriteConcert
 
     // 찜 여부 확인
     boolean existsByAudienceEntityAndConcertEntity(AudienceEntity audienceEntity, ConcertEntity concertEntity);
+
+    List<FavoriteConcertEntity> findAllByAudienceEntity(AudienceEntity audienceEntity);
 }

@@ -38,6 +38,7 @@ import org.web3j.crypto.Credentials;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -348,6 +349,17 @@ public class ConcertService {
             }
         }
         return result;
+    }
+
+    public List<ConcertResp> getCreatedConcertsByStageManager(UUID stageManagerUuid) {
+        StageManagerEntity stageManager = stageManagerRepository.findByUuid(stageManagerUuid)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+
+        List<ConcertEntity> createdConcerts = concertRepository.findAllByOwner(stageManager);
+
+        return createdConcerts.stream()
+                .map(ConcertResp::from)
+                .collect(Collectors.toList());
     }
 }
 

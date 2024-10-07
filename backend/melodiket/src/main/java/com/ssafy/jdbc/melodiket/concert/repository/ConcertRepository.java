@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.concert.repository;
 
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
+import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,6 @@ public interface ConcertRepository extends JpaRepository<ConcertEntity, Long> {
     Optional<ConcertEntity> findByUuid(UUID uuid);
 
     List<ConcertEntity> findAllByStageEntityIn(List<StageEntity> stageEntities);
+
+    List<ConcertEntity> findAllByOwner(StageManagerEntity owner);
 }
