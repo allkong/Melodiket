@@ -47,7 +47,7 @@ const Page = () => {
             ID/PW 찾기
           </p>
           <p>|</p>
-          <Link href={'/auth/sign-up'}>회원가입</Link>
+          <Link href={'/auth/sign-up?step=policy'}>회원가입</Link>
         </div>
       </div>
       <FixedButton
