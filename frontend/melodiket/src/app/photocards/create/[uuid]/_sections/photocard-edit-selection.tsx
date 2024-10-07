@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 
+import { preventContextMenu } from '@/utils/eventUtil';
 import type { Sticker, Text } from '@/types/photocard';
 
 import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
@@ -32,10 +33,6 @@ const PhotocardEditSelection = ({
     setActiveTab(tabValue);
   };
 
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-  };
-
   const sticker: Sticker = {
     id: getDatetime(),
     src: '/stickers/bear.svg',
@@ -46,43 +43,44 @@ const PhotocardEditSelection = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <div ref={photocardRef} className="relative">
-        <PhotocardFrame>
-          <Image
-            src={src}
-            alt="photocard"
-            fill
-            draggable={false}
-            onContextMenu={handleContextMenu}
+    <>
+      <div className="flex flex-col items-center justify-center h-full">
+        <div ref={photocardRef} className="relative">
+          <PhotocardFrame>
+            <Image
+              src={src}
+              alt="photocard"
+              fill
+              draggable={false}
+              onContextMenu={preventContextMenu}
+            />
+          </PhotocardFrame>
+
+          <MoveableSticker
+            sticker={sticker}
+            isSelected={selectedId === sticker.id}
+            onSelect={() => setSelectedId(sticker.id)}
+            containerRef={photocardRef}
           />
-        </PhotocardFrame>
-
-        <MoveableSticker
-          sticker={sticker}
-          isSelected={selectedId === sticker.id}
-          onSelect={() => setSelectedId(sticker.id)}
-          containerRef={photocardRef}
-        />
-      </div>
-
-      <div className="mt-4">
-        <button
+        </div>
+        {/* <button
           onClick={() => {}}
           disabled={selectedId === null}
           className="bg-red-500 text-white px-4 py-2 rounded"
         >
           삭제
-        </button>
+        </button> */}
       </div>
-      <Tabs
-        tabs={Object.keys(PHOTOCARD_EDIT_TYPES)}
-        activeTab={activeTab}
-        onClick={handleTabClick}
-        labelMap={PHOTOCARD_EDIT_TYPES}
-        line={false}
-      />
-    </div>
+      <div className="w-full py-2 bg-white">
+        <Tabs
+          tabs={Object.keys(PHOTOCARD_EDIT_TYPES)}
+          activeTab={activeTab}
+          onClick={handleTabClick}
+          labelMap={PHOTOCARD_EDIT_TYPES}
+          line={false}
+        />
+      </div>
+    </>
   );
 };
 

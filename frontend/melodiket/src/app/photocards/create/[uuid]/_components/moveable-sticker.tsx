@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Moveable from 'react-moveable';
 
+import { preventContextMenu } from '@/utils/eventUtil';
 import { Sticker } from '@/types/photocard';
 
 interface MoveableStickerProps {
@@ -27,7 +28,14 @@ const MoveableSticker = ({
         className="absolute"
         style={{ left: `${sticker.x}px`, top: `${sticker.y}px` }}
       >
-        <Image src={sticker.src} alt="sticker" width={80} height={80} />
+        <Image
+          src={sticker.src}
+          alt="sticker"
+          width={80}
+          height={80}
+          draggable={false}
+          onContextMenu={preventContextMenu}
+        />
       </div>
 
       {isSelected && (
