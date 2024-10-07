@@ -31,7 +31,7 @@ public class TicketController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<Map<String, List<TicketResponse>>> getMyTickets(Principal principal) {
         Map<String, List<TicketResponse>> tickets = ticketService.readMyTickets(principal.getName());
         return ResponseEntity.ok(tickets);
