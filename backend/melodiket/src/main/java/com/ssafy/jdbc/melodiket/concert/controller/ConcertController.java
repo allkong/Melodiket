@@ -2,7 +2,10 @@ package com.ssafy.jdbc.melodiket.concert.controller;
 
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertCursorPagingReq;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
@@ -12,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -85,5 +89,12 @@ public class ConcertController {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         PageResponse<ConcertAssignmentResp> assignments = concertService.getAssignedConcerts(user, cursorPagingReq);
         return ResponseEntity.ok(assignments);
+    }
+
+    @GetMapping("/me/created")
+    public ResponseEntity<List<ConcertResp>> getCreatedConcerts(Authentication authentication) {
+        UUID stageManagerUuid = ((AppUserEntity) authentication.getPrincipal()).getUuid();
+        List<ConcertResp> createdConcerts = concertService.getCreatedConcertsByStageManager(stageManagerUuid);
+        return ResponseEntity.ok(createdConcerts);
     }
 }
