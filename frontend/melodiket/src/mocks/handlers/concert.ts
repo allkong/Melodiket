@@ -1,7 +1,6 @@
-import { http, HttpResponse } from 'msw';
-import { delay } from './index';
 import type { FetchConcertDetail, FetchConcertResponse } from '@/types/concert';
 import { TicketBookRequest, TicketBookResponse } from '@/types/ticket';
+import { delay, http, HttpResponse } from 'msw';
 
 const CONCERT_LIST: FetchConcertResponse = {
   pageInfo: {
