@@ -3,7 +3,7 @@
 import LargeButton from '@/components/atoms/button/LargeButton';
 import type { TicketBook } from '@/types/ticket';
 import { Suspense, useState } from 'react';
-import SeatSelector from './seat-selector';
+import SeatSelector from '../_components/seat-selector';
 import { formatPrice } from '@/utils/concertFormatter';
 
 interface SeatSectionProps {
