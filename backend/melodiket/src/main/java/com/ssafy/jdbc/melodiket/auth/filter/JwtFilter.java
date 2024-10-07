@@ -8,16 +8,16 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.UUID;
 
-@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -36,9 +36,15 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
+        System.out.println(123);
         // 사용자의 요청이 authentication을 필요로 하지 않는다면 그냥 넘기기
         if (securityConfig.isAnonymousAllowedPath(request.getRequestURI())) {
+            Authentication authentication = new AnonymousAuthenticationToken(
+                    "anonymousUser",  // 익명 사용자의 식별자
+                    "anonymousUser",  // 익명 사용자의 프린시플
+                    AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")  // 익명 사용자의 권한
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
             return;
         }
@@ -62,7 +68,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            Authentication authentication = new AnonymousAuthenticationToken(
+                    "anonymousUser",  // 익명 사용자의 식별자
+                    "anonymousUser",  // 익명 사용자의 프린시플
+                    AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS")  // 익명 사용자의 권한
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
         // 다음 필터로 넘기기
