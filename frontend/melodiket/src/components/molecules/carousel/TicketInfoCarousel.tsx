@@ -23,7 +23,7 @@ const TicketInfoCarousel = ({ datas }: TicketInfoCarouselProps) => {
           }}
         >
           {datas.map((data, index) => (
-            <p key={index} className="text-current text-sm">
+            <p key={index} className="text-current text-sm truncate">
               {data}
             </p>
           ))}
