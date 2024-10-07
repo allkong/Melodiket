@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
 import { MSWComponent } from './_components/MSWComponent';
-import KakaoScript from './_lib/KaKaoScript';
+import KakaoScript from './_lib/KakaoScript';
 
 export const metadata: Metadata = {
   title: 'melodiket',

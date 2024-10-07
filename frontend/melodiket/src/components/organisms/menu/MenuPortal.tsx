@@ -15,7 +15,7 @@ const MenuPortal = ({ children }: MenuPortalProps) => {
       setIsMounted(true);
     }
     return () => setIsMounted(false);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return isMounted
     ? createPortal(
