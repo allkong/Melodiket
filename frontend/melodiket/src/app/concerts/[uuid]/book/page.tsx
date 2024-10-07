@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 
 import type { TicketBook } from '@/types/ticket';
-import SeatSection from './_components/seat-section';
-import ConfirmSection from './_components/confirm-section';
+import SeatSection from './_section/seat-section';
+import ConfirmSection from './_section/confirm-section';
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import SuccessSection from './_components/success-section';
+import SuccessSection from './_section/success-section';
 import useFunnel from '@/hooks/useFunnel';
 
 const Page = () => {
