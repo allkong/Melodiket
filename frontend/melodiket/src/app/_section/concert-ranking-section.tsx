@@ -13,7 +13,7 @@ const ConcertRankingSection = () => {
         pageInfo?.responsedSize > 0 &&
         result?.map((concert, idx) => (
           <ConcertRankingCard
-            key={concert.concertUuid}
+            key={`${concert.concertUuid}-${concert.posterCid}`}
             concertUuid={concert.concertUuid}
             stageName={concert.stageName}
             posterCid={concert.posterCid}

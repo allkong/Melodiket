@@ -7,7 +7,7 @@ import CarouselSection from './_section/carousel-section';
 import NeedLogin from './_components/need-login';
 import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 import TicketSection from './_section/ticket-section';
-import WebPush from './auth/sign-up/_components/web-push';
+import WebPush from './_components/web-push';
 
 export default function Home() {
   return (
