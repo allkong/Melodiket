@@ -62,15 +62,26 @@ public class ConcertService {
 
     // 커서 기반 공연 목록 조회 메서드
     public PageResponse<ConcertResp> getConcerts(ConcertCursorPagingReq pagingReq) {
+        // 동적 필터링을 위한 BooleanExpression 리스트
+        List<BooleanExpression> conditions = new ArrayList<>();
+
+        // 상태 필터 적용
         if (pagingReq.getStatus() != null && pagingReq.getStatus().length > 0) {
             List<ConcertStatus> statuses = Stream.of(pagingReq.getStatus())
                     .map(ConcertStatus::valueOf)
                     .toList();
-            BooleanExpression condition = QConcertEntity.concertEntity.concertStatus.in(statuses);
-            return concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from, condition);
-        } else {
-            return concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from);
+            conditions.add(QConcertEntity.concertEntity.concertStatus.in(statuses));
         }
+
+        // 제목 필터 적용
+        if (pagingReq.getTitle() != null && !pagingReq.getTitle().isEmpty()) {
+            conditions.add(QConcertEntity.concertEntity.title.containsIgnoreCase(pagingReq.getTitle()));
+        }
+        // 동적 필터 조건 결합
+        BooleanExpression condition = combineConditions(conditions);
+
+        // 조건을 기반으로 페이징 조회 수행
+        return concertCursorRepository.findWithPagination(pagingReq, ConcertResp::from, condition);
     }
 
     @Async
@@ -329,4 +340,17 @@ public class ConcertService {
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.MUSICIAN_NOT_FOUND));
         return concertParticipantMusicianCursorRepository.getConcertAssignmentsOf(musician, cursorPagingReq);
     }
+
+    private BooleanExpression combineConditions(List<BooleanExpression> conditions) {
+        BooleanExpression result = null;
+        for (BooleanExpression condition : conditions) {
+            if (result == null) {
+                result = condition;
+            } else {
+                result = result.and(condition);
+            }
+        }
+        return result;
+    }
 }
+
