@@ -8,3 +8,9 @@ export interface GetMeResponse {
   description: string;
   imageUrl: string;
 }
+
+export interface UpdateMeRequest {
+  nickname?: string;
+  description?: string;
+  imageUrl?: string;
+}
