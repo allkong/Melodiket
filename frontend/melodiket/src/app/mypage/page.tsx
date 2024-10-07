@@ -87,8 +87,10 @@ const Page = () => {
             )}
             {isAudience && (
               <>
-                <MyPageItem label="찜한 공연" />
-                <MyPageItem label="찜한 뮤지션" />
+                <MyPageItem
+                  label="찜한 공연/뮤지션"
+                  onClick={() => handleNavigation('/favorites')}
+                />
                 <MyPageItem label="예매 내역" />
                 <LineDivider />
               </>
