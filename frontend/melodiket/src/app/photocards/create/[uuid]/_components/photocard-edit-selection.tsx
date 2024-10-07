@@ -1,15 +1,16 @@
-import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
 import Image from 'next/image';
 
-interface PhotocardDecorateSelectionProps {
+import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
+
+interface PhotocardEditSelectionProps {
   src: string;
   onNext: () => void;
 }
 
-const PhotocardDecorateSelection = ({
+const PhotocardEditSelection = ({
   src,
   onNext,
-}: PhotocardDecorateSelectionProps) => {
+}: PhotocardEditSelectionProps) => {
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
   };
@@ -29,4 +30,4 @@ const PhotocardDecorateSelection = ({
   );
 };
 
-export default PhotocardDecorateSelection;
+export default PhotocardEditSelection;
