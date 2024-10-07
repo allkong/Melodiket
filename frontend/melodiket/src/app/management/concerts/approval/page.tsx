@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/organisms/navigation/Header';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import ConcertApproval from '@/components/organisms/approval/ConcertApproval';
-import { useGetMyConcerts } from '@/services/concert/fetchConcert';
+import { useGetMyAssignedConcerts } from '@/services/concert/fetchConcert';
 
 const Page = () => {
   const router = useRouter();
-  const { mutate: fetchMyConcerts, data } = useGetMyConcerts();
+  const { mutate: fetchMyConcerts, data } = useGetMyAssignedConcerts();
 
   useEffect(() => {
     fetchMyConcerts();
