@@ -34,7 +34,7 @@ public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchas
         log.info(SecurityContextHolder.getContext().getAuthentication().toString());
         AppUserEntity user = (AppUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(optionalConcert.isEmpty()) {
+        if (optionalConcert.isEmpty()) {
             context.buildConstraintViolationWithTemplate("존재하지 않은 콘서트입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
@@ -44,35 +44,37 @@ public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchas
         LocalDateTime now = LocalDateTime.now();
         ConcertEntity concert = optionalConcert.get();
 
-        if(now.isAfter(concert.getStartAt())){
+        if (now.isAfter(concert.getStartAt())) {
             context.buildConstraintViolationWithTemplate("이미 종료된 콘서트입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
             return false;
         }
 
-        if(now.isBefore(concert.getTicketingAt())){
+        if (now.isBefore(concert.getTicketingAt())) {
             context.buildConstraintViolationWithTemplate("티케팅 시작 전입니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
             return false;
         }
 
-        if(concert.getAvailableTickets() < 1){
+        if (concert.getAvailableTickets() < 1) {
             context.buildConstraintViolationWithTemplate("콘서트가 매진되었습니다.")
                     .addPropertyNode("info")
                     .addConstraintViolation();
             return false;
         }
 
-        Set<ConcertSeatEntity> seats = concert.getConcertSeats();
-        if (!concert.getStageEntity().getIsStanding() && seats.stream().filter(
-                seat -> seat.getSeatRow().equals(ticketPurchaseRequest.getSeatRow()) && seat.getSeatCol().equals(ticketPurchaseRequest.getSeatCol())).findFirst().isEmpty()
-        ) {
-            context.buildConstraintViolationWithTemplate("이미 구매된 좌석입니다.")
-                    .addPropertyNode("info")
-                    .addConstraintViolation();
-            return false;
+        if (!concert.getStageEntity().getIsStanding()) {
+            Set<ConcertSeatEntity> seats = concert.getConcertSeats();
+            for (ConcertSeatEntity seat : seats) {
+                if (seat.getSeatRow().equals(ticketPurchaseRequest.getSeatRow()) && seat.getSeatCol().equals(ticketPurchaseRequest.getSeatCol())) {
+                    context.buildConstraintViolationWithTemplate("이미 구매된 좌석입니다.")
+                            .addPropertyNode("info")
+                            .addConstraintViolation();
+                    return false;
+                }
+            }
         }
 
         return true;
