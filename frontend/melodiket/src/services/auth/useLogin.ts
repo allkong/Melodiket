@@ -8,12 +8,10 @@ import useAuthStore from '@/store/authStore';
 import customFetch from '../customFetch';
 
 const login = async (loginData: LoginRequest) => {
-  const response = await customFetch<LoginResponse>('/auth/login', {
+  return await customFetch<LoginResponse>('/auth/login', {
     method: 'POST',
     body: loginData,
   });
-
-  return response;
 };
 
 export const useLogin = () => {
