@@ -5,10 +5,9 @@ import type { FetchConcertDetail, FetchConcertList } from '@/types/concert';
 const CONCERT_LIST: FetchConcertList = {
   pageInfo: {
     hasNextPage: false,
-    hasPrevPage: false,
-    pageNo: 0,
     requestedSize: 10,
     responsedSize: 7,
+    lastUuid: 'test',
   },
   result: [
     {

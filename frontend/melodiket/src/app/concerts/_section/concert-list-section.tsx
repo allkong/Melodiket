@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
@@ -10,7 +10,7 @@ import IsError from '../_components/is-error';
 import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
 
 const ConcertListSection = () => {
-  const { data, isLoading, error, hasNextPage, fetchNextPage, refetch } =
+  const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
     useFetchInfiniteConcert();
   const { pages } = data ?? {};
 
@@ -27,18 +27,18 @@ const ConcertListSection = () => {
     <>
       <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">
         {pages &&
-          pages?.map((page) =>
-            page.result.map((concert) => (
-              <ConcertCard key={concert.concertUuid} {...concert} />
-            ))
-          )}
-        {isLoading && <ConcertCardSkeleton count={6} />}
+          pages?.map((page, idx) => (
+            <React.Fragment key={idx}>
+              {page.result.map((concert) => (
+                <ConcertCard key={concert.concertUuid} {...concert} />
+              ))}
+            </React.Fragment>
+          ))}
+        {isFetching && <ConcertCardSkeleton count={6} />}
       </div>
-      <div className="h-96 bg-pink-300"></div>
       {error && <IsError onClick={refetch} />}
-      {<IsError onClick={refetch} />}
       {!hasNextPage && <IsEnd />}
-      <div ref={endRef} className="w-full h-3 bg-red-400 hidden" />
+      <div ref={endRef} className="w-full h-3 bg-white" />
     </>
   );
 };

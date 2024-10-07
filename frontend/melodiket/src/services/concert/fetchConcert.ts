@@ -46,14 +46,14 @@ export const useFetchInfiniteConcert = (
     queryKey: concertKey.infinite(),
     queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
-      const { pageInfo, result } = lastPage ?? {};
+      const { pageInfo } = lastPage ?? {};
       if (!pageInfo || !pageInfo.hasNextPage) {
-        return undefined;
+        return null;
       }
 
       return {
         isFirstPage: false,
-        lastUuid: result[result.length - 1].concertUuid,
+        lastUuid: lastPage.pageInfo.lastUuid,
         orderDirection,
         orderKey,
         pageSize,

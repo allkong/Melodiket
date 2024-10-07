@@ -49,8 +49,7 @@ export interface CarouselConcert
 export interface FetchConcertList {
   pageInfo: {
     hasNextPage: boolean;
-    hasPrevPage: boolean;
-    pageNo: number;
+    lastUuid: string;
     requestedSize: number;
     responsedSize: number;
   };
