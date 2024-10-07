@@ -9,6 +9,7 @@ import com.ssafy.jdbc.melodiket.concert.entity.ConcertSeatEntity;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertSeatEntityRepository;
 import com.ssafy.jdbc.melodiket.concert.service.contract.AudienceContract;
+import com.ssafy.jdbc.melodiket.concert.service.contract.ManagerContract;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketPurchaseRequest;
 import com.ssafy.jdbc.melodiket.ticket.dto.TicketResponse;
@@ -32,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.Credentials;
 
-import java.security.Principal;
 import java.util.*;
 
 @Slf4j
@@ -203,40 +203,36 @@ public class TicketService {
                 .build();
     }
 
-    public TicketResponse useTicket(Principal principal, UUID ticketUUID) {
+    @Async
+    @DistributedLock(key = "#loginId.concat('-useTicket')")
+    public void useTicket(String loginId, AppUserEntity user, UUID ticketUUID) {
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
-        MusicianEntity favoriteMusician = ticket.getFavoriteMusician();
-        TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician);
+        if (ticket.getStatus() != Status.NOT_USED) {
+            throw new HttpResponseException(ErrorDetail.TICKET_ALREADY_USED);
+        }
+
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
 
-        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(principal.getName())
+        StageManagerEntity stageManager = stageManagerRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
 
         if (stage.getOwner() != stageManager) {
             throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
         }
 
-        ticket.updateStatusUsed(Status.USED);
+        WalletResp stageManagerWallet = walletService.getWalletOf(stageManager);
+        Credentials stageManagerCredentials = Credentials.create(stageManagerWallet.privateKey());
+        ManagerContract managerContract = new ManagerContract(blockchainConfig, stageManagerCredentials);
 
-        return TicketResponse.builder()
-                .userName(ticket.getUserName())
-                .ticketUuid(ticket.getUuid())
-                .concertTitle(concert.getTitle())
-                .posterCid(concert.getPosterCid())
-                .stageName(stage.getName())
-                .stageAddress(stage.getAddress())
-                .ticketPrice(ticket.getConcertEntity().getTicketPrice())
-                .status(Status.USED)
-                .seatRow(ticket.getSeatRow())
-                .seatCol(ticket.getSeatCol())
-                .refundAt(ticket.getRefundedAt())
-                .usedAt(ticket.getUsedAt())
-                .createdAt(ticket.getCreatedAt())
-                .startAt(concert.getStartAt())
-                .myFavoriteMusician(favoriteMusicianDto)
-                .build();
+        try {
+            managerContract.useTicket(concert.getUuid(), ticketUUID);
+            ticket.updateStatusUsed();
+            ticketRepository.save(ticket);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public TicketResponse refundTicket(UUID ticketUUID) {

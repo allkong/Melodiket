@@ -54,8 +54,9 @@ public class TicketController {
     }
 
     @PostMapping("/{ticketUuid}/use")
-    public ResponseEntity<TicketResponse> useTicket(Principal principal, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
-        TicketResponse response = ticketService.useTicket(principal, ticketUuid);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> useTicket(Authentication authentication, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        ticketService.useTicket(user.getLoginId(), user, ticketUuid);
+        return ResponseEntity.accepted().build();
     }
 }
