@@ -14,7 +14,7 @@ export const Default: Story = {
     posterCid:
       'https://cdn2.ppomppu.co.kr/zboard/data3/2021/0421/m_20210421121541_cukpzbvs.jpg',
     title: 'あいみょん 2024 SSAFY ソウルキャンパス',
-    location: '싸피서울캠퍼스',
+    stageName: '싸피서울캠퍼스',
     ticketingAt: '2024.09.03',
   },
 };

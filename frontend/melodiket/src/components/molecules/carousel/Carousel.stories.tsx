@@ -13,7 +13,7 @@ export const Default: Story = {
     data: [
       {
         description: '누구일까?\n비밀의 콘서트',
-        location: '고척스카이돔',
+        stageName: '고척스카이돔',
         title: '콘서트 제목',
         ticketingAt: '2024.09.03',
         posterCid:
@@ -21,7 +21,7 @@ export const Default: Story = {
       },
       {
         description: '눈이 반짝',
-        location: '양재',
+        stageName: '양재',
         title: '콘서트 제목',
         ticketingAt: '2024.09.03',
         posterCid:

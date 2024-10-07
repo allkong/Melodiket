@@ -10,7 +10,7 @@ import type { Concert } from '@/types/concert';
 interface ConcertCardProps
   extends Pick<
     Concert,
-    'concertUuid' | 'posterCid' | 'title' | 'location' | 'ticketingAt'
+    'concertUuid' | 'posterCid' | 'title' | 'stageName' | 'ticketingAt'
   > {
   href?: string;
   isFavorite?: boolean;
@@ -22,7 +22,7 @@ const ConcertCard = ({
   posterCid,
   ticketingAt,
   title,
-  location,
+  stageName,
   href,
   isFavorite,
   onClickFavorite,
@@ -56,7 +56,7 @@ const ConcertCard = ({
           </div>
           <div className="flex items-center gap-1 text-[8px] text-gray-500 truncate">
             <Location width="6" height="8" className="fill-current" />
-            {location && <p>{location}</p>}
+            {stageName && <p>{stageName}</p>}
           </div>
         </div>
       </div>

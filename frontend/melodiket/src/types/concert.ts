@@ -34,13 +34,16 @@ export interface Concert {
     imageUrl: string;
   }[];
   isDeleted: boolean;
-  location?: string;
+  stageName: string;
+  isFavorite: boolean;
+  isStanding: boolean;
+  favorites?: number;
 }
 
 export interface CarouselConcert
   extends Pick<
     Concert,
-    'description' | 'location' | 'title' | 'ticketingAt' | 'posterCid'
+    'description' | 'stageName' | 'title' | 'ticketingAt' | 'posterCid'
   > {}
 
 export interface FetchConcertList {
@@ -53,7 +56,7 @@ export interface FetchConcertList {
   };
   result: Pick<
     Concert,
-    'concertUuid' | 'posterCid' | 'title' | 'location' | 'ticketingAt'
+    'concertUuid' | 'posterCid' | 'title' | 'stageName' | 'ticketingAt'
   >[];
 }
 

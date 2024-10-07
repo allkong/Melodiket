@@ -7,7 +7,7 @@ import type { Concert } from '@/types/concert';
 interface ConcertRankingCardProps
   extends Pick<
     Concert,
-    'concertUuid' | 'posterCid' | 'title' | 'location' | 'ticketingAt'
+    'concertUuid' | 'posterCid' | 'title' | 'stageName' | 'ticketingAt'
   > {
   ranking: number;
   href?: string;
@@ -17,7 +17,7 @@ const ConcertRankingCard = ({
   ranking,
   href,
   title,
-  location,
+  stageName,
   posterCid,
   ticketingAt,
 }: ConcertRankingCardProps) => {
@@ -49,7 +49,7 @@ const ConcertRankingCard = ({
           </div>
           <div className="flex items-center gap-1">
             <Location width="6" height="8" className="fill-current" />
-            <p>{location}</p>
+            <p>{stageName}</p>
           </div>
         </div>
       </div>
