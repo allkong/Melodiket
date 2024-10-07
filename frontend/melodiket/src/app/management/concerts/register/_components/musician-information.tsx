@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
@@ -9,6 +9,7 @@ import TextBanner from '@/components/molecules/text/TextBanner';
 
 import { ConcertData } from '@/types/concert';
 import LineDivider from '@/components/atoms/divider/LineDivider';
+import { useMusiciansQuery } from '@/services/musician/fetchMusicians';
 
 interface MusicianInformationProps {
   concertData: ConcertData;
@@ -23,6 +24,32 @@ const MusicianInformation = ({
     {}
   );
   const [musicianName, setMusicianName] = useState('');
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMusiciansQuery();
+
+  console.log(data);
+
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (loadMoreRef.current) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        },
+        { threshold: 1 }
+      );
+
+      observer.observe(loadMoreRef.current);
+
+      return () => {
+        if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
+      };
+    }
+  }, [hasNextPage, fetchNextPage]);
 
   const isFormValid = Object.keys(musicianList).length > 0;
 
@@ -46,26 +73,19 @@ const MusicianInformation = ({
     onNext(updatedConcertData);
   };
 
-  const allMusicians = [
-    '주나주나',
-    '정다빈밴드',
-    '잔나비',
-    '이디어츠',
-    '박유빈',
-    '정유빈',
-  ];
+  const allMusicians = data?.pages.flatMap((page) => page.result) || [];
 
   const filteredMusicians = musicianName
     ? allMusicians.filter((musician) =>
-        musician.toLowerCase().includes(musicianName.toLowerCase())
+        musician.name.toLowerCase().includes(musicianName.toLowerCase())
       )
-    : [];
+    : allMusicians;
 
   const selectedMusicians = allMusicians.filter(
-    (musician) => !!musicianList[musician]
+    (musician) => !!musicianList[musician.name]
   );
   const unselectedMusicians = allMusicians.filter(
-    (musician) => !musicianList[musician]
+    (musician) => !musicianList[musician.name]
   );
 
   return (
@@ -86,29 +106,31 @@ const MusicianInformation = ({
           {filteredMusicians.length > 0 &&
             filteredMusicians.map((musician) => (
               <MusicianSelectButton
-                key={musician}
-                label={musician}
-                isSelected={!!musicianList[musician]}
-                onClick={() => toggleMusician(musician)}
+                key={musician.musicianUuid}
+                label={musician.name}
+                isSelected={!!musicianList[musician.name]}
+                onClick={() => toggleMusician(musician.name)}
               />
             ))}
           {filteredMusicians.length > 0 && <LineDivider />}
           {selectedMusicians.map((musician) => (
             <MusicianSelectButton
-              key={musician}
-              label={musician}
-              isSelected={!!musicianList[musician]}
-              onClick={() => toggleMusician(musician)}
+              key={musician.musicianUuid}
+              label={musician.name}
+              isSelected={!!musicianList[musician.name]}
+              onClick={() => toggleMusician(musician.name)}
             />
           ))}
           {unselectedMusicians.map((musician) => (
             <MusicianSelectButton
-              key={musician}
-              label={musician}
-              isSelected={!!musicianList[musician]}
-              onClick={() => toggleMusician(musician)}
+              key={musician.musicianUuid}
+              label={musician.name}
+              isSelected={!!musicianList[musician.name]}
+              onClick={() => toggleMusician(musician.name)}
             />
           ))}
+          <div ref={loadMoreRef} className="h-10" />
+          {isFetchingNextPage && <p>Loading more...</p>}
         </div>
       </div>
       <div className="my-4 h-fit">
