@@ -286,15 +286,6 @@ public class UserService implements AuthService {
     public MusicianResp getMusicianDetail(UUID uuid) {
         MusicianEntity musician = musicianRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
-        return new MusicianResp(
-                musician.getUuid(),
-                musician.getLoginId(),
-                musician.getRole().name(),
-                musician.getNickname(),
-                musician.getDescription(),
-                musician.getRegisteredAt(),
-                null,// TODO : imageUrl 선개발시 null 처리
-                musician.getFavoriteMusicians().size()
-        );
+        return MusicianResp.from(musician);
     }
 }
