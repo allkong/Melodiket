@@ -13,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +55,20 @@ public class FavoriteConcertService {
         }
 
         return new FavoriteConcertResp(audience.getUuid(), concert.getUuid(), isFavorite);
+    }
+
+    public List<FavoriteConcertResp> getLikedConcerts(UUID audienceUuid) {
+        AudienceEntity audience = audienceRepository.findByUuid(audienceUuid)
+                .orElseThrow(() -> new IllegalArgumentException("Audience not found"));
+
+        List<FavoriteConcertEntity> favoriteConcerts = favoriteConcertRepository.findAllByAudienceEntity(audience);
+
+        return favoriteConcerts.stream()
+                .map(favorite -> new FavoriteConcertResp(
+                        favorite.getAudienceEntity().getUuid(),
+                        favorite.getConcertEntity().getUuid(),
+                        true
+                ))
+                .collect(Collectors.toList());
     }
 }
