@@ -19,6 +19,6 @@ public class MusicianCursorRepository extends BaseQueryRepository<MusicianEntity
     }
 
     public PageResponse<MusicianResp> findAll(CursorPagingReq pagingReq) {
-        return findWithPagination(pagingReq, MusicianResp::from, entityPath.get("role").eq(Role.MUSICIAN.name()));
+        return findWithPagination(pagingReq, MusicianResp::from, entityPath.get("role").eq(Role.MUSICIAN));
     }
 }
