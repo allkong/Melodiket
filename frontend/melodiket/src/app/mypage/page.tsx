@@ -7,19 +7,26 @@ import LineDivider from '@/components/atoms/divider/LineDivider';
 import LargeButton from '@/components/atoms/button/LargeButton';
 
 import { MLDY, Authority } from '@/public/icons';
-import useAuthStore from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import { useGetMe } from '@/services/user/fetchUser';
+import { useEffect } from 'react';
 
 const Page = () => {
-  const { user } = useAuthStore();
   const router = useRouter();
+  const { mutate: getMe, data } = useGetMe();
 
-  const isStageManager = user?.role === 'STAGE_MANAGER';
-  const isAudience = user?.role === 'AUDIENCE';
+  const isStageManager = data?.role === 'STAGE_MANAGER';
+  const isAudience = data?.role === 'AUDIENCE';
 
   const handleNavigation = (path: string) => {
     router.push(path);
   };
+
+  useEffect(() => {
+    getMe();
+  }, []);
+
+  console.log(data);
 
   return (
     <div className="flex flex-col h-screen">
@@ -28,12 +35,12 @@ const Page = () => {
         <div className="h-full flex flex-col">
           <div className="flex-grow h-0 overflow-y-auto">
             <div className="flex items-center space-x-4 mb-4 p-4">
-              <Profile size="md" />
+              <Profile size="md" src={data?.imageUrl} />
               <div>
                 <p className="text-xl font-semibold text-black">
-                  {user?.nickname}
+                  {data?.nickname}
                 </p>
-                <p className="text-sm text-gray-500">@{}</p>
+                <p className="text-sm text-gray-500">@{data?.loginId}</p>
               </div>
             </div>
 
@@ -43,7 +50,7 @@ const Page = () => {
                   <Authority />
                   <p className="text-purple-400 font-medium">권한</p>
                 </div>
-                <p className="text-black ml-auto">{user?.role}</p>
+                <p className="text-black ml-auto">{data?.role}</p>
               </div>
               <div className="flex items-center justify-between space-x-2">
                 <div className="flex items-center space-x-2">
