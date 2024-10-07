@@ -26,6 +26,7 @@ const config: Config = {
         foreground: 'var(--foreground)',
         primary: '#E28EFF',
         secondary: '#A293FF',
+        black: '#17171B',
         purple: {
           100: '#F9F1FF',
           200: '#C090FF',

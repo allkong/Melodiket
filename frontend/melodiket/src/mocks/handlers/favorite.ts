@@ -1,7 +1,6 @@
 import { FavoriteMusician } from '@/types/favorite';
-import { http, HttpResponse } from 'msw';
-import { delay } from '.';
 import { BEFORE_LOGIN_FAVORITE_MUSICIANS } from '@/constants/signUp';
+import { delay, http, HttpResponse } from 'msw';
 
 const FAVORITE_MUSICIAN_LIST: FavoriteMusician = {
   pageInfo: {

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 
 import Header from '@/components/organisms/navigation/Header';
-import FavoriteTitle from '@/components/molecules/title/FavoriteTitle';
+import PageTitle from '@/components/molecules/title/PageTitle';
 import Tabs from '@/components/organisms/controls/Tabs';
 import MusicianItem from '@/components/molecules/item/MusicianItem';
 import FavoriteConcert from './_components/favorite-concert';
@@ -20,8 +20,8 @@ const Page = () => {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <FavoriteTitle
-        type={activeTab as keyof typeof FAVORITE_TYPES}
+      <PageTitle
+        title={`좋아하는 ${FAVORITE_TYPES[activeTab as keyof typeof FAVORITE_TYPES]}`}
         total={3}
       />
       <Tabs

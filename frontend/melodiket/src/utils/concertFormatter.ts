@@ -7,3 +7,11 @@ export const formatSeatPosition = (row: number, col: number): string => {
   const rowLetter = String.fromCharCode(65 + (row - 1));
   return `${rowLetter}${col}`;
 };
+
+export const formatDetailedSeatPosition = (
+  row: number,
+  col: number
+): string => {
+  const rowLetter = String.fromCharCode(65 + (row - 1));
+  return `${rowLetter}열 ${col}번`;
+};
