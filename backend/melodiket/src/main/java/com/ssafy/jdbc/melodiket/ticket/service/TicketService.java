@@ -70,7 +70,7 @@ public class TicketService {
             int row = ticketPurchaseRequest.getSeatRow().intValue();
             int col = ticketPurchaseRequest.getSeatCol().intValue();
             Set<ConcertSeatEntity> seats = concert.getConcertSeats();
-            if (seats.stream().noneMatch(seat -> seat.getSeatRow() == row && seat.getSeatCol() == col)) {
+            if (seats.stream().anyMatch(seat -> seat.getSeatRow() == row && seat.getSeatCol() == col)) {
                 throw new HttpResponseException(ErrorDetail.ALREADY_PURCHASED_SEAT);
             }
         }
