@@ -2,10 +2,10 @@
 
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
 import ThinDivider from '@/components/atoms/divider/ThinDivider';
-import ConcertTitle from './ConcertTitle';
-import ConcertDetail from './ConcertDetail';
-import MusiciansInformation from './MusiciansInformation';
-import ConcertDescription from './ConcertDescription';
+import ConcertTitle from './concert-title';
+import ConcertDetail from './concert-detail';
+import MusiciansInformation from './musician-information';
+import ConcertDescription from './concert-description';
 import LargeButton from '@/components/atoms/button/LargeButton';
 import { useRouter } from 'next/navigation';
 

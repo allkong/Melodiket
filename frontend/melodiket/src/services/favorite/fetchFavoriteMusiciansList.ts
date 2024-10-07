@@ -28,9 +28,10 @@ export const useFetchFavoriteMusiciansListDehydrateState = () => {
   return dehydrate(queryClient);
 };
 
-export const toggleFavorite = async (conterUuid: string) => {
+export const toggleFavorite = async (concertUuid: string) => {
   const response = await customFetch<{ isFavorite: boolean }>(
-    `/concerts/${conterUuid}/favorite`
+    `/concerts/${concertUuid}/favorite`,
+    { method: 'post' }
   );
 
   return response;
