@@ -56,19 +56,14 @@ const WebPush = () => {
         };
 
         // 6. 서버로 구독 정보 전송
-        try {
-          await customFetch('/webpush/subscribe', {
-            method: 'post',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: subscriptionData,
-          });
-          console.log('구독 성공');
-        } catch (error) {
-          console.error('구독 실패', error);
-        }
+        await customFetch('/webpush/subscribe', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: subscriptionData,
+        });
       };
 
       handleServiceWorker();
