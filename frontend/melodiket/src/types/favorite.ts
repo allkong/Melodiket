@@ -1,4 +1,4 @@
-import type { Musician } from './musician';
+import type { MusicianResponse } from './musician';
 
 export interface FavoriteMusician {
   pageInfo: {
@@ -8,5 +8,5 @@ export interface FavoriteMusician {
     requestedSize: number;
     responsedSize: number;
   };
-  result: Musician[];
+  result: MusicianResponse[];
 }
