@@ -47,7 +47,7 @@ const Page = () => {
       <div className="flex flex-col items-center justify-between flex-grow">
         <div className="flex flex-col items-center">
           <LogoImage className="mb-3 w-11 h-11" />
-          <LogoText />
+          <LogoText className="h-auto w-28" />
         </div>
 
         <CloseButton onClick={handleClose} hasBorder />
