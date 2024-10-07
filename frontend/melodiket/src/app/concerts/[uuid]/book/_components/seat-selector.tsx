@@ -3,14 +3,12 @@
 import { useParams } from 'next/navigation';
 
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import type { TicketBook } from '@/types/ticket';
+import type { TicketBookRequest } from '@/types/ticket';
 import SeatRadio from '@/components/atoms/radio/SeatRadio';
 
 interface SeatSelectorProps {
-  seatInfo: Pick<TicketBook, 'seatRow' | 'seatCol' | 'tokenAmount'>;
-  onChange: (
-    seatInfo: Pick<TicketBook, 'seatRow' | 'seatCol' | 'tokenAmount'>
-  ) => void;
+  seatInfo: Pick<TicketBookRequest, 'seatRow' | 'seatCol'>;
+  onChange: (seatInfo: Pick<TicketBookRequest, 'seatRow' | 'seatCol'>) => void;
 }
 
 const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
@@ -23,7 +21,6 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
       ...seatInfo,
       seatRow: row,
       seatCol: col,
-      tokenAmount: result?.ticketPrice ?? -1,
     });
   };
 

@@ -46,7 +46,7 @@ export interface CarouselConcert
     'description' | 'stageName' | 'title' | 'ticketingAt' | 'posterCid'
   > {}
 
-export interface FetchConcertList {
+export interface FetchConcertResponse {
   pageInfo: {
     hasNextPage: boolean;
     lastUuid: string;

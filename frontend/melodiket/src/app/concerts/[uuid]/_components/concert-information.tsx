@@ -50,7 +50,7 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
       <div className="fixed w-full max-w-xl bottom-0 left-1/2 -translate-x-1/2 px-6 py-3 bg-white">
         <LargeButton
           label="예매하기"
-          onClick={() => router.push(`/concert/book/${uuid}`)}
+          onClick={() => router.push(`/concerts/${uuid}/book`)}
         />
       </div>
     </div>
