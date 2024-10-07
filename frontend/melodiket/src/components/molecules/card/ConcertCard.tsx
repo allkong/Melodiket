@@ -33,7 +33,7 @@ const ConcertCard = ({
         {/* 이미지 영역 */}
         <div className="relative w-[10.6rem] h-60">
           <Image
-            src={posterCid ?? ''}
+            src={posterCid ?? '/'}
             alt="concert card image"
             className="object-cover rounded-md"
             fill
