@@ -49,9 +49,9 @@ public class ConcertController {
     }
 
     @PostMapping("/{id}/approve")
-    public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal) {
+    public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal, @RequestBody ConcertApproveReq concertApproveReq) {
         String loginId = principal.getName();
-        concertService.approveConcert(concertId, loginId);
+        concertService.approveConcert(concertId, loginId, concertApproveReq);
         return ResponseEntity.accepted().build();
     }
 
