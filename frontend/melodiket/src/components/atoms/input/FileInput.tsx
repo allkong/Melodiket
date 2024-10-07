@@ -5,6 +5,7 @@ import { ChangeEvent, ForwardedRef, forwardRef, useState } from 'react';
 interface FileInputProps {
   onChange?: (file: File | null) => void;
   onBlur?: () => void;
+  value?: string;
 }
 
 const FileInput = forwardRef(
