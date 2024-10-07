@@ -1,6 +1,7 @@
 package com.ssafy.jdbc.melodiket.photocard.dto;
 
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusicianEntity;
 import com.ssafy.jdbc.melodiket.photocard.entity.PhotoCardEntity;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
@@ -27,11 +28,20 @@ public class PhotoCardResp {
     List<String> musicians;
     String favoriteMusician;
     String nickName;
+    String signatureImageUrl;
 
     public static PhotoCardResp fromForAll(PhotoCardEntity entity){
         TicketEntity ticket = entity.getTicketEntity();
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
+        List<ConcertParticipantMusicianEntity> musicianEntityList = concert.getConcertParticipantMusicians();
+
+        String imageUrl = null;
+        for (ConcertParticipantMusicianEntity c : musicianEntityList) {
+            if((long) c.getMusicianEntity().getId() == ticket.getFavoriteMusician().getId()){
+                imageUrl = c.getSignatureImageUrl();
+            }
+        }
 
         return PhotoCardResp.builder()
                 .photocardUuid(entity.getUuid())
@@ -47,6 +57,7 @@ public class PhotoCardResp {
                 ).toList())
                 .favoriteMusician(entity.getFavoriteMusician())
                 .nickName(entity.getPhotocardOwner())
+                .signatureImageUrl(imageUrl)
                 .build();
     }
 

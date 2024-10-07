@@ -71,19 +71,19 @@ public class ConcertEntity extends ExposableEntity {
     private ConcertStatus concertStatus;
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TicketEntity> tickets = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ConcertParticipantMusicianEntity> concertParticipantMusicians = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<FavoriteConcertEntity> favoriteConcerts = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ConcertSeatEntity> concertSeats = new HashSet<>();
 
     public void cancel() {
