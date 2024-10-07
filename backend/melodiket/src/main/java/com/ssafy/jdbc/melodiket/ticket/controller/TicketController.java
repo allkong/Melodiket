@@ -5,10 +5,12 @@ import com.ssafy.jdbc.melodiket.ticket.dto.TicketResponse;
 import com.ssafy.jdbc.melodiket.ticket.service.TicketService;
 import com.ssafy.jdbc.melodiket.ticket.validation.ValidRefundUUID;
 import com.ssafy.jdbc.melodiket.ticket.validation.ValidUseUUID;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -25,10 +27,12 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketResponse> purchaseTicket(Principal principal, @RequestBody @Valid TicketPurchaseRequest ticketPurchaseRequest) {
-        ticketService.createTicket(principal.getName(), ticketPurchaseRequest);
-//        return new ResponseEntity<>(response, HttpStatus.CREATED);
-        return null;
+    public ResponseEntity<Void> purchaseTicket(Authentication authentication, @RequestBody @Valid TicketPurchaseRequest ticketPurchaseRequest) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        ticketService.checkTicketPurchaseAvailable(user, ticketPurchaseRequest);
+        ticketService.approveTransfer(user, ticketPurchaseRequest.getConcertId());
+        ticketService.createTicket(user.getLoginId(), user, ticketPurchaseRequest);
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/me")
@@ -50,8 +54,9 @@ public class TicketController {
     }
 
     @PostMapping("/{ticketUuid}/use")
-    public ResponseEntity<TicketResponse> useTicket(Principal principal, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
-        TicketResponse response = ticketService.useTicket(principal, ticketUuid);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> useTicket(Authentication authentication, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        ticketService.useTicket(user.getLoginId(), user, ticketUuid);
+        return ResponseEntity.accepted().build();
     }
 }
