@@ -33,7 +33,7 @@ const Page = () => {
                 <p className="text-xl font-semibold text-black">
                   {user?.nickname}
                 </p>
-                <p className="text-sm text-gray-500">@{user?.id}</p>
+                <p className="text-sm text-gray-500">@{}</p>
               </div>
             </div>
 
