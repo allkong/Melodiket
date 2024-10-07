@@ -22,3 +22,21 @@ export interface PhotocardDetail {
   favoriteMusician: string;
   nickname: string;
 }
+
+export interface Sticker {
+  id: string;
+  src: string;
+  x: number;
+  y: number;
+  scale: number;
+  rotate: number;
+}
+
+export interface Text {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  scale: number;
+  rotate: number;
+}
