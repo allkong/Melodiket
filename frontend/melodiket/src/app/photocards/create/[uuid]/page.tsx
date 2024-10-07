@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import useFunnel from '@/hooks/useFunnel';
 
 import SubHeader from '@/components/organisms/navigation/SubHeader';
-import PhotocardImageSelectSection from './_components/photocard-image-select-section';
-import PhotocardEditSelection from './_components/photocard-edit-selection';
+import PhotocardImageSelectSection from './_sections/photocard-image-select-section';
+import PhotocardEditSelection from './_sections/photocard-edit-selection';
 import { useState } from 'react';
 
 const Page = () => {
