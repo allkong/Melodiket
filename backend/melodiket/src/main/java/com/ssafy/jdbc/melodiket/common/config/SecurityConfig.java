@@ -38,7 +38,7 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/auth/[^/]+/field-duplication-check$"),
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
-            Pattern.compile("^/api/v1/users/musicians$"),
+//            Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
             Pattern.compile("^/api/v1/concerts$"),
@@ -67,6 +67,7 @@ public class SecurityConfig {
                         // 혹시 나중에 swagger 테스트 할수도 있어서 미리
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/users/musicians").permitAll()
                         .requestMatchers("/api/v1/users/me").authenticated()
                         .requestMatchers(request -> {
                             String path = request.getServletPath();
@@ -98,14 +99,15 @@ public class SecurityConfig {
         for (Pattern pattern : anonymousAllowedPatterns) {
             Matcher matcher = pattern.matcher(path);
             if (matcher.matches()) {
+                System.out.println(path);
                 return true;
             }
         }
         return false;
     }
 
-    @Bean
-    public JwtFilter jwtFilter() {
-        return new JwtFilter(this, jwtService, userService);
-    }
+//    @Bean
+//    public JwtFilter jwtFilter() {
+//        return new JwtFilter(this, jwtService, userService);
+//    }
 }
