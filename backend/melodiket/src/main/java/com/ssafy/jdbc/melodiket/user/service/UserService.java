@@ -8,12 +8,15 @@ import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
 import com.ssafy.jdbc.melodiket.auth.service.JwtType;
 import com.ssafy.jdbc.melodiket.auth.util.PasswordUtil;
+import com.ssafy.jdbc.melodiket.blockchain.config.BlockchainConfig;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.token.service.contract.MelodyTokenContract;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
+import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerResp;
 import com.ssafy.jdbc.melodiket.user.entity.*;
@@ -24,6 +27,7 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.web3j.crypto.Credentials;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -46,6 +50,8 @@ public class UserService implements AuthService {
     private final StageManagerCursorRepository stageManagerCursorRepository;
     private final JwtService jwtService;
     private final WalletService walletService;
+    private final BlockchainConfig blockchainConfig;
+    private final Credentials systemCredential;
 
     @Transactional(rollbackOn = Exception.class)
     @Override
@@ -73,6 +79,9 @@ public class UserService implements AuthService {
                     .build();
             audienceRepository.save(audience);
             walletService.createNewWallet(audience);
+
+            WalletResp walletResp = walletService.getWalletOf(audience.getUuid());
+            sendTokenToWallet(walletResp);
 
             return new SignUpResp(
                     audience.getId(),
@@ -134,6 +143,11 @@ public class UserService implements AuthService {
                     stageManager.getDescription()
             );
         }
+    }
+
+    private void sendTokenToWallet(WalletResp walletResp) {
+        MelodyTokenContract melodyTokenContract = new MelodyTokenContract(blockchainConfig, systemCredential);
+        melodyTokenContract.sendToken(walletResp.address(), 100000);
     }
 
     @Override

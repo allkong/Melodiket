@@ -10,7 +10,6 @@ import java.util.UUID;
 public class TicketPurchaseRequest {
     UUID concertId;
     Long seatRow;
-    Long searCol;
-    Long tokenAmount;
+    Long seatCol;
     UUID favoriteMusician;
 }
