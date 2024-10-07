@@ -27,13 +27,14 @@ const ConcertListSection = () => {
     <>
       <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">
         {pages &&
-          pages?.map((page, idx) => (
-            <React.Fragment key={idx}>
-              {page.result.map((concert) => (
-                <ConcertCard key={concert.concertUuid} {...concert} />
-              ))}
-            </React.Fragment>
-          ))}
+          pages
+            ?.flatMap((page) => page.result)
+            .map((concert) => (
+              <ConcertCard
+                key={`${concert.concertUuid}-${concert.posterCid}`}
+                {...concert}
+              />
+            ))}
         {isFetching && <ConcertCardSkeleton count={6} />}
       </div>
       {error && <IsError onClick={refetch} />}
