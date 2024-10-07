@@ -1,21 +1,19 @@
-import { FetchConcertDetail, FetchConcertList } from '@/types/concert';
+import { FetchConcertDetail, FetchConcertResponse } from '@/types/concert';
 import customFetch from '../customFetch';
 import {
   dehydrate,
   useInfiniteQuery,
+  useMutation,
   useQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import concertKey from './concertKey';
 import getQueryClient from '@/utils/getQueryClient';
-
-interface FetchConcertRequest {
-  isFirstPage?: boolean;
-  lastUuid?: string;
-  pageSize?: number;
-  orderKey?: string;
-  orderDirection?: 'ASC' | 'DESC';
-}
+import type {
+  TicketBookRequest,
+  TicketBookResponse,
+  FetchConcertRequest,
+} from '@/types/ticket';
 
 export const fetchConcertList = async (
   {
@@ -31,7 +29,7 @@ export const fetchConcertList = async (
     orderKey: 'uuid',
   }
 ) => {
-  const response = await customFetch<FetchConcertList>(
+  const response = await customFetch<FetchConcertResponse>(
     `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}`
   );
   return response;
@@ -71,7 +69,7 @@ export const useFetchInfiniteConcert = (
 };
 
 export const useFetchConcertList = () => {
-  const result = useSuspenseQuery<FetchConcertList>({
+  const result = useSuspenseQuery<FetchConcertResponse>({
     queryKey: concertKey.list(),
     queryFn: () => fetchConcertList(),
   });
@@ -110,4 +108,25 @@ export const useFetchConcertDetailDehydrateState = async (uuid: string) => {
   });
 
   return dehydrate(queryClient);
+};
+
+export const bookTicket = async (request: TicketBookRequest) => {
+  const response = await customFetch<TicketBookResponse>('/tickets', {
+    method: 'post',
+    body: request,
+  });
+
+  return response;
+};
+
+export const useBookTicket = () => {
+  const mutate = useMutation({
+    mutationFn: ({
+      ticketBookRequest,
+    }: {
+      ticketBookRequest: TicketBookRequest;
+    }) => bookTicket(ticketBookRequest),
+    throwOnError: true,
+  });
+  return mutate;
 };

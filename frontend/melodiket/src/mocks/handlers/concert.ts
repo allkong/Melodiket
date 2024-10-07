@@ -1,8 +1,9 @@
 import { http, HttpResponse } from 'msw';
 import { delay } from './index';
-import type { FetchConcertDetail, FetchConcertList } from '@/types/concert';
+import type { FetchConcertDetail, FetchConcertResponse } from '@/types/concert';
+import { TicketBookRequest, TicketBookResponse } from '@/types/ticket';
 
-const CONCERT_LIST: FetchConcertList = {
+const CONCERT_LIST: FetchConcertResponse = {
   pageInfo: {
     hasNextPage: false,
     requestedSize: 10,
@@ -140,7 +141,7 @@ const CONCERT_DETAIL: FetchConcertDetail = {
 };
 
 export const concertList = [
-  http.get<never, null, FetchConcertList, '/concerts'>(
+  http.get<never, null, FetchConcertResponse, '/concerts'>(
     '/concerts',
     async () => {
       await delay(1500);
@@ -158,6 +159,34 @@ export const concertList = [
     async () => {
       return HttpResponse.json({
         isFavorite: Math.random() < 0.5 ? true : false,
+      });
+    }
+  ),
+  http.post<never, TicketBookRequest, TicketBookResponse>(
+    '/tickets',
+    async () => {
+      delay(1500);
+      return HttpResponse.json({
+        userName: 'username',
+        ticketUuid: '123e4567-e89b-12d3-a456-426614174000',
+        concertTitle: 'The Golden Hour : 오렌지 태양 아래',
+        posterCid:
+          'https://i.namu.wiki/i/6954AWgOwNRZw-HzI4AhrWvXzGeHvHiQzUIS4clHj2C0-EW5joO7ojEOHF0W1_ub9SeZajsIj2tBD0m5VFehVRjwFse59QjWyXwjfNi_5IRD2H-9xjgzAf8_bzJbwrJHg21lSvuLqD9Gdq4HMj628w.webp',
+        stageName: '서울올림픽주경기장',
+        stageAddress: '서울올림픽주경기장',
+        ticketPrice: 120000,
+        status: 'NOT_USED',
+        seatRow: 1,
+        seatCol: 1,
+        refundAt: '',
+        usedAt: '',
+        createdAt: '2024-09-26T10:44:48.330372',
+        startAt: '2024-09-26T10:44:48.330372',
+        myFavoriteMusician: {
+          musicianName: '아이유',
+          musicainImageUrl:
+            'https://i.namu.wiki/i/LfH7oUFrOa_2P4QIgyGlGX0UREjOLpOoeYy-EXbEn2ZCrZ3b4z_Rd34MbCZlkLvGIFtFmA2G9DERjw_SY8kgqWKSTnJE6HRLQS2of4PYI2d14CxUGmpXWpCuelUKgN5BKNEZcLtsmXm186oSMI6mcg.webp',
+        },
       });
     }
   ),
