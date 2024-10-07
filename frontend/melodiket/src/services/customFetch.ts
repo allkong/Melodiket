@@ -33,7 +33,8 @@ const customFetch = async <T>(
       throw new Error(`Error: ${response.status}`);
     }
 
-    return await response.json();
+    const responseText = await response.text();
+    return responseText ? JSON.parse(responseText) : null;
   } catch (error) {
     throw error;
   }
