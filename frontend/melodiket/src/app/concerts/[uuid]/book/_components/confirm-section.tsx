@@ -39,10 +39,10 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
           <div className="space-y-3">
             {result?.musicians.map((musician) => (
               <LabelCheckbox
-                key={musician.uuid}
-                label={'뮤지션 이름'}
-                isChecked={selectedMusician === musician.uuid}
-                onChange={() => handleSelectMusician(musician.uuid)}
+                key={musician.musicianUuid}
+                label={musician.name}
+                isChecked={selectedMusician === musician.musicianUuid}
+                onChange={() => handleSelectMusician(musician.musicianUuid)}
               />
             ))}
           </div>
@@ -91,8 +91,8 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
               label="응원하는 뮤지션"
               value={
                 result?.musicians.find(
-                  (musician) => musician.uuid === selectedMusician
-                )?.uuid ?? '선택되지 않았습니다'
+                  (musician) => musician.musicianUuid === selectedMusician
+                )?.name ?? '선택되지 않았습니다'
               }
             />
           </div>

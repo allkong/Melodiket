@@ -86,13 +86,22 @@ const CONCERT_DETAIL: FetchConcertDetail = {
     location: '무신사 게러지',
     musicians: [
       {
-        uuid: '0',
+        musicianUuid: '0',
+        name: '한로로',
+        imageUrl:
+          'https://i.namu.wiki/i/DiRZTq4yBGq81-IgMuSglVAC_1pOoJG1EkJFwknd-DxFEBWo_XAHU4cIx-rPa_t82wnGgxkrVoQ_WeGRStW_cQ.webp',
       },
       {
-        uuid: '1',
+        musicianUuid: '1',
+        name: '빈지노',
+        imageUrl:
+          'https://i1.sndcdn.com/artworks-S0GeUXNsiAmWpsE6-55G5vg-t500x500.jpg',
       },
       {
-        uuid: '2',
+        musicianUuid: '2',
+        name: '아이묭',
+        imageUrl:
+          'https://i.namu.wiki/i/TY6C7IX49vy2Ed6P9zlbfYMra3A7vSCSbIDql-xQ3IksVdPU5N6CaCW0zeWSvKmuQWipMyPAQyTHQwPXJmm_BA.webp',
       },
     ],
     posterCid:

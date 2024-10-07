@@ -29,7 +29,9 @@ export interface Concert {
   ownerStake: string;
   favoriteMusicianStake: string;
   musicians: {
-    uuid: string;
+    musicianUuid: string;
+    name: string;
+    imageUrl: string;
   }[];
   isDeleted: boolean;
   location?: string;
