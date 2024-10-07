@@ -14,11 +14,6 @@ import lombok.NoArgsConstructor;
         @UniqueConstraint(columnNames = {"seatRow", "seatCol", "concert_id"})
 })
 public class ConcertSeatEntity extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private Long seatRow;
     private Long seatCol;
 
