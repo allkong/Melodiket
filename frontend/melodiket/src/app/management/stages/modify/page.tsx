@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/organisms/navigation/Header';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import StageItem from '@/components/molecules/item/StageItem';
-import { useGetMyStages } from "@/services/stage/fetchStage";
+import { useGetMyStages } from '@/services/stage/fetchStage';
 
 const Page = () => {
   const router = useRouter();
@@ -30,7 +30,8 @@ const Page = () => {
               key={stage.id}
               title={stage.name}
               content={stage.address}
-              isModify={true}
+              isModify={false}
+              uuid={stage.uuid}
             />
           ))}
         </div>
