@@ -22,7 +22,7 @@ const SignUpNameInput = ({
 
   useEffect(() => {
     setIsNameValid(isLengthValid);
-  }, [setIsLengthValid, isLengthValid]);
+  }, [setIsNameValid, isLengthValid]);
 
   return (
     <div>
