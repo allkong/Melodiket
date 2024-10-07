@@ -28,7 +28,29 @@ const MusicianInformation = ({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMusiciansQuery();
 
-  console.log(data);
+  const endRef = useRef<HTMLDivElement>(null);
+  const isFetchingRef = useRef(false); // 스크롤이 여러 번 호출되는 것을 방지하기 위한 플래그
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (endRef.current) {
+      observer.observe(endRef.current);
+    }
+
+    return () => {
+      if (endRef.current) {
+        observer.unobserve(endRef.current);
+      }
+    };
+  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   const isFormValid = Object.keys(musicianList).length > 0;
 
@@ -54,11 +76,12 @@ const MusicianInformation = ({
 
   const allMusicians = data?.pages.flatMap((page) => page.result) || [];
 
-  const filteredMusicians = musicianName
-    ? allMusicians.filter((musician) =>
-        musician.nickname.toLowerCase().includes(musicianName.toLowerCase())
-      )
-    : allMusicians;
+  const filteredMusicians =
+    musicianName.trim().length > 0
+      ? allMusicians.filter((musician) =>
+          musician.nickname.toLowerCase().includes(musicianName.toLowerCase())
+        )
+      : [];
 
   const selectedMusicians = allMusicians.filter(
     (musician) => !!musicianList[musician.nickname]
@@ -108,7 +131,7 @@ const MusicianInformation = ({
               onClick={() => toggleMusician(musician.nickname)}
             />
           ))}
-          <div className="h-10" />
+          <div ref={endRef} className="h-10" />
           {isFetchingNextPage && <p>Loading more...</p>}
         </div>
       </div>
