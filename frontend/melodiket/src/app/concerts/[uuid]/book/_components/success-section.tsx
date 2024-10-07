@@ -49,7 +49,7 @@ const SuccessSection = ({ seatCol, seatRow }: SuccessSectionProps) => {
           <div className="w-0 flex-grow">
             <p className="text-tiny">{result?.title}</p>
             <div className="text-xs text-gray-500">
-              <p>{result?.location}</p>
+              <p>{result?.stageName}</p>
               <p className="mb-3">{`${seatRow}행 ${seatCol}열`}</p>
               <p>{result?.startAt}</p>
             </div>

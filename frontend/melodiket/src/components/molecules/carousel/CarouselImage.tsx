@@ -47,7 +47,7 @@ const CarouselImage = ({
         </div>
         <div className="flex items-center gap-1">
           <Location width="8" height="10" className="fill-current" />
-          <p className="text-sm">{data.location}</p>
+          <p className="text-sm">{data.stageName}</p>
         </div>
       </div>
     </div>

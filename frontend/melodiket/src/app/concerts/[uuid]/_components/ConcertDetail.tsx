@@ -5,7 +5,7 @@ import { formatPrice } from '@/utils/concertFormatter';
 interface ConcertDetailProps
   extends Pick<
     Concert,
-    'startAt' | 'ticketingAt' | 'isAvailableSeat' | 'ticketPrice'
+    'startAt' | 'ticketingAt' | 'isAvailableSeat' | 'ticketPrice' | 'isStanding'
   > {}
 
 const ConcertDetail = ({
@@ -13,6 +13,7 @@ const ConcertDetail = ({
   startAt,
   isAvailableSeat,
   ticketPrice,
+  isStanding,
 }: ConcertDetailProps) => {
   return (
     <div className="space-y-2">
@@ -23,7 +24,7 @@ const ConcertDetail = ({
         value={`${isAvailableSeat.length * isAvailableSeat[0].length}명`}
       />
       <LabelValueText label="가격" value={formatPrice(ticketPrice ?? 0)} />
-      {/* <LabelValueText label="형태" value={isSeat ? '좌석' : '스탠딩'} /> */}
+      <LabelValueText label="형태" value={isStanding ? '스탠딩' : '좌석'} />
     </div>
   );
 };

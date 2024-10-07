@@ -21,23 +21,23 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
 
   const {
     title,
-    location,
+    stageName,
     description,
     musicians,
     ticketingAt,
     isAvailableSeat,
     ticketPrice,
     startAt,
+    isStanding,
   } = result;
 
   return (
     <div className="relative w-full flex-grow h-fit px-7 pb-14 space-y-6">
       <div className="absolute w-full h-10 -top-5 left-0 right-0 bg-white rounded-2xl" />
-      <ConcertTitle title={title} location={location} />
+      <ConcertTitle title={title} stageName={stageName} />
       <ThinDivider />
       <ConcertDetail
-        // capability={isAvailableSeat.length * isAvailableSeat[0].length}
-        // isSeat={isAvailableSeat}
+        isStanding={isStanding}
         isAvailableSeat={isAvailableSeat}
         ticketPrice={ticketPrice}
         startAt={startAt}

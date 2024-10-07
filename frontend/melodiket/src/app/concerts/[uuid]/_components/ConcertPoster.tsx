@@ -13,7 +13,7 @@ interface ConcertPosterProps {
 const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const { data } = useFetchConcertDetail(uuid);
   const { result } = data!;
-  const { posterCid, title, location } = result;
+  const { posterCid, title, stageName } = result;
 
   return (
     <div className="relative w-full h-96">
@@ -31,7 +31,7 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
           <div className="flex flex-col justify-between flex-grow">
             <div className="space-y-3">
               <p className="text-xl">{title}</p>
-              <p className="text-xs">{location}</p>
+              <p className="text-xs">{stageName}</p>
             </div>
             <div className="flex gap-2 self-end text-sm">
               <p className="text-sm">{999}</p>

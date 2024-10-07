@@ -1,4 +1,4 @@
-import { dehydrate, useQuery } from '@tanstack/react-query';
+import { dehydrate, useMutation, useQuery } from '@tanstack/react-query';
 import customFetch from '../customFetch';
 import type { FavoriteMusician } from '@/types/favorite';
 import getQueryClient from '@/utils/getQueryClient';
@@ -26,4 +26,21 @@ export const useFetchFavoriteMusiciansListDehydrateState = () => {
   });
 
   return dehydrate(queryClient);
+};
+
+export const toggleFavorite = async (conterUuid: string) => {
+  const response = await customFetch<{ isFavorite: boolean }>(
+    `/concerts/${conterUuid}/favorite`
+  );
+
+  return response;
+};
+
+export const useToggleFavorite = () => {
+  const mutate = useMutation({
+    mutationFn: ({ concertUuid }: { concertUuid: string }) =>
+      toggleFavorite(concertUuid),
+  });
+
+  return mutate;
 };

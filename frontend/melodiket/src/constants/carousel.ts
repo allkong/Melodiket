@@ -3,7 +3,7 @@ import { CarouselConcert } from '@/types/concert';
 const CAROUSEL_DATAS: CarouselConcert[] = [
   {
     description: '누구일까?\n비밀의 콘서트',
-    location: '고척스카이돔',
+    stageName: '고척스카이돔',
     title: '콘서트 제목',
     ticketingAt: '2024.09.03',
     posterCid:
@@ -11,7 +11,7 @@ const CAROUSEL_DATAS: CarouselConcert[] = [
   },
   {
     description: '눈이 반짝',
-    location: '양재',
+    stageName: '양재',
     title: '콘서트 제목',
     ticketingAt: '2024.09.03',
     posterCid:
@@ -19,7 +19,7 @@ const CAROUSEL_DATAS: CarouselConcert[] = [
   },
   {
     description: '눈 찌릿',
-    location: '싸피 서울캠퍼스',
+    stageName: '싸피 서울캠퍼스',
     title: '콘서트 제목',
     ticketingAt: '2024.09.03',
     posterCid:
@@ -27,7 +27,7 @@ const CAROUSEL_DATAS: CarouselConcert[] = [
   },
   {
     description: '내가 최고',
-    location: '싸피 식당',
+    stageName: '싸피 식당',
     title: '콘서트 제목',
     ticketingAt: '2024.09.03',
     posterCid:
@@ -35,7 +35,7 @@ const CAROUSEL_DATAS: CarouselConcert[] = [
   },
   {
     description: '하트',
-    location: '텐퍼센트 커피',
+    stageName: '텐퍼센트 커피',
     title: '콘서트 제목',
     ticketingAt: '2024.09.03',
     posterCid:

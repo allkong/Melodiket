@@ -53,7 +53,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
         <Accordion label="공연 정보">
           <div className="space-y-3">
             <LabelValueText label="공연 제목" value={result?.title} />
-            <LabelValueText label="공연 장소" value={result?.location} />
+            <LabelValueText label="공연 장소" value={result?.stageName} />
             <LabelValueText label="공연일" value={result?.startAt} />
           </div>
         </Accordion>

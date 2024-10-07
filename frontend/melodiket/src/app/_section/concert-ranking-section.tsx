@@ -15,7 +15,7 @@ const ConcertRankingSection = () => {
           <ConcertRankingCard
             key={concert.concertUuid}
             concertUuid={concert.concertUuid}
-            location={concert.location}
+            stageName={concert.stageName}
             posterCid={concert.posterCid}
             ticketingAt={concert.ticketingAt}
             title={concert.title}
