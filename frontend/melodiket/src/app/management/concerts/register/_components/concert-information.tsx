@@ -10,7 +10,7 @@ import FileInput from '@/components/atoms/input/FileInput';
 import DateInput from '@/components/atoms/input/DateInput';
 
 import { ConcertData } from '@/types/concert';
-import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
+import { formatDateCustom, formatDateToYMDHM } from '@/utils/dayjsPlugin';
 
 interface ConcertInformationProps {
   concertData: ConcertData;
@@ -47,8 +47,8 @@ const ConcertInformation = ({
     const updatedConcertData: ConcertData = {
       ...concertData,
       title: title,
-      startAt: formatDateToYMDHM(startAt),
-      ticketingAt: formatDateToYMDHM(ticketingAt),
+      startAt: formatDateCustom(startAt, 'YYYY-MM-DDTHH:mm:ss'),
+      ticketingAt: formatDateCustom(ticketingAt, 'YYYY-MM-DDTHH:mm:ss'),
       description: description,
       posterCid: posterCid || '',
     };
