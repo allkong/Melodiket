@@ -15,7 +15,12 @@ interface SelectStageProps {
 }
 
 const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
-  const [selectedStage, setSelectedStage] = useState<string | null>(null);
+  const [selectedStage, setSelectedStage] = useState<{
+    name: string;
+    address: string;
+    uuid: string;
+  } | null>(null);
+
   const { mutate: getStages, data } = useGetMyStages();
 
   useEffect(() => {
@@ -24,19 +29,24 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
 
   const isFormValid = selectedStage !== null;
 
-  const handleStageSelect = (stageName: string) => {
-    setSelectedStage(stageName);
+  const handleStageSelect = (
+    stageName: string,
+    stageAddress: string,
+    stageUuid: string
+  ) => {
+    setSelectedStage({
+      name: stageName,
+      address: stageAddress,
+      uuid: stageUuid,
+    });
   };
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
       ...concertData,
-      stageInformation: {
-        ...concertData.stageInformation,
-        name: selectedStage || '',
-        address: '서울특별시 구로구 경인로 430', // This address can be dynamic if you use the data
-      },
+      stageUuid: selectedStage?.uuid || '',
     };
+    console.log(updatedConcertData);
     onNext(updatedConcertData);
   };
 
@@ -53,8 +63,10 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
               key={stage.id}
               title={stage.name}
               content={stage.address}
-              onClick={() => handleStageSelect(stage.name)}
-              isSelected={selectedStage === stage.name}
+              onClick={() =>
+                handleStageSelect(stage.name, stage.address, stage.uuid)
+              }
+              isSelected={selectedStage?.uuid === stage.uuid}
               isModify={false}
               isRemove={false}
               uuid={stage.uuid}
