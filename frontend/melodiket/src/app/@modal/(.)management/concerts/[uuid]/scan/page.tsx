@@ -2,8 +2,8 @@
 
 import { useParams, useSearchParams } from 'next/navigation';
 
-import { useTicketDetail } from '@/services/ticket/useTicketdetail';
-import { useTicketUse } from '@/services/ticket/useTicketUse';
+import { useTicketDetail } from '@/services/ticket/fetchTicket';
+import { useTicketUse } from '@/services/ticket/fetchTicket';
 import { formatSeatPosition } from '@/utils/concertFormatter';
 
 import ConfirmModal from '@/components/organisms/modal/ConfirmModal';
@@ -43,7 +43,7 @@ const Modal = () => {
     if (ticketUuid) {
       ticketUse(ticketUuid);
     } else {
-      console.error('티켓 정보가 없어요😥');
+      console.error('티켓 정보가 없어요');
     }
   };
 

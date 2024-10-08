@@ -1,7 +1,7 @@
 'use client';
 
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
-import { useTicketList } from '@/services/ticket/useTicketList';
+import { useTicketList } from '@/services/ticket/fetchTicket';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
 
 const TicketSection = () => {
