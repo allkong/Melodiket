@@ -1,24 +1,32 @@
 'use client';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
-import type { TicketBook } from '@/types/ticket';
+import type { TicketBookRequest } from '@/types/ticket';
 import { Suspense, useState } from 'react';
-import SeatSelector from './seat-selector';
+import SeatSelector from '../_components/seat-selector';
 import { formatPrice } from '@/utils/concertFormatter';
 
 interface SeatSectionProps {
-  onNext: (
-    data: Pick<TicketBook, 'seatRow' | 'seatCol' | 'tokenAmount'>
-  ) => void;
+  onNext: (data: Pick<TicketBookRequest, 'seatRow' | 'seatCol'>) => void;
+  price: number;
 }
 
-const SeatSection = ({ onNext }: SeatSectionProps) => {
+const isDisabled = ({
+  seatRow,
+  seatCol,
+}: {
+  seatRow: number;
+  seatCol: number;
+}) => {
+  return seatRow === -1 || seatCol === -1;
+};
+
+const SeatSection = ({ onNext, price }: SeatSectionProps) => {
   const [seatInfo, setSeatInfo] = useState<
-    Pick<TicketBook, 'seatRow' | 'seatCol' | 'tokenAmount'>
+    Pick<TicketBookRequest, 'seatRow' | 'seatCol'>
   >({
     seatRow: -1,
     seatCol: -1,
-    tokenAmount: 0,
   });
 
   return (
@@ -36,20 +44,20 @@ const SeatSection = ({ onNext }: SeatSectionProps) => {
         <div>
           <p className="text-base font-semibold">선택된 좌석</p>
           <p className="text-xs">
-            {seatInfo.tokenAmount !== 0
-              ? `${seatInfo.seatRow}행 ${seatInfo.seatCol}열`
-              : '좌석을 선택해주세요'}
+            {isDisabled(seatInfo)
+              ? '좌석을 선택해주세요'
+              : `${seatInfo.seatRow + 1}행 ${seatInfo.seatCol + 1}열`}
           </p>
         </div>
         <p className="text-base font-semibold">
-          가격 {formatPrice(seatInfo.tokenAmount)}
+          가격 {formatPrice(isDisabled(seatInfo) ? 0 : price)}
         </p>
       </div>
       <div className="fixed w-full max-w-xl bottom-0 left-1/2 -translate-x-1/2 px-6 py-3 bg-white">
         <LargeButton
           label="다음 단계"
           onClick={() => onNext(seatInfo)}
-          disabled={seatInfo.tokenAmount === 0}
+          disabled={isDisabled(seatInfo)}
         />
       </div>
     </div>
