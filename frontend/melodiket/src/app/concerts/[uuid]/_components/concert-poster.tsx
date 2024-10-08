@@ -38,9 +38,15 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const handleToggleFavorite = async () => {
     const response = await mutate.mutateAsync({ concertUuid: uuid });
     setIsFavorite(response.isFavorite);
-    toast(`찜 ${response.isFavorite ? '추가' : '제거'}`, {
-      icon: '💜',
-    });
+    if (response.isFavorite) {
+      toast('찜 추가', {
+        icon: '💜',
+      });
+    } else {
+      toast('찜 제거', {
+        icon: '🩶',
+      });
+    }
   };
 
   return (

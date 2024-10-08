@@ -66,9 +66,15 @@ export const useToggleFavoriteMusician = () => {
   return useMutation({
     mutationFn: (musicianUuid: string) => toggleFavoriteMusician(musicianUuid),
     onSuccess: (data) => {
-      toast(`찜 ${data.status ? '추가' : '제거'}`, {
-        icon: '💜',
-      });
+      if (data.status) {
+        toast('찜 추가', {
+          icon: '💜',
+        });
+      } else {
+        toast('찜 제거', {
+          icon: '🩶',
+        });
+      }
     },
     onError: () => {
       toast.error('찜 실패');
