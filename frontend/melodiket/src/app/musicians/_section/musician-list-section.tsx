@@ -8,8 +8,8 @@ import useIsOnScreen from '@/hooks/useIsOnScreen';
 
 import MusicianItem from '@/components/molecules/item/MusicianItem';
 import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
-import IsEnd from '@/app/concerts/_components/is-end';
-import IsError from '@/app/concerts/_components/is-error';
+import IsEnd from '@/components/atoms/label/IsEnd';
+import IsError from '@/components/atoms/button/IsErrorButton';
 
 const MusicianListSection = () => {
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
