@@ -109,6 +109,9 @@ public class TicketService {
                 log.info("Purchased seating ticket for concert {}, by audience {}", concert.getTitle(), audienceEntity.getName());
             }
 
+            concert.decreaseRemainingTicket();
+            concertRepository.save(concert);
+
             TicketEntity ticket = TicketEntity.builder()
                     .uuid(ticketUUID)
                     .userName(audienceEntity.getName())
@@ -235,34 +238,54 @@ public class TicketService {
         }
     }
 
-    public TicketResponse refundTicket(UUID ticketUUID) {
+    @Async
+    @DistributedLock(key = "#loginId.concat('-refundTicket')")
+    @Transactional(rollbackFor = Exception.class)
+    public void refundTicket(String loginId, UUID ticketUUID) {
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
-        MusicianEntity favoriteMusician = ticket.getFavoriteMusician();
-        TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician);
         ConcertEntity concert = ticket.getConcertEntity();
-        StageEntity stage = concert.getStageEntity();
 
-        ticket.updateStatusRefunded(Status.REFUNDED);
+        WalletResp audienceWallet = walletService.getWalletOf(ticket.getAudienceEntity());
+        Credentials audienceCredentials = Credentials.create(audienceWallet.privateKey());
+        AudienceContract audienceContract = new AudienceContract(blockchainConfig, audienceCredentials);
+        try {
+            audienceContract.refundTicket(concert.getUuid(), ticketUUID);
 
-        //TODO:: 토큰 반환해주기
+            // 상태 갱신
+            ticket.updateStatusRefunded(Status.REFUNDED);
+            ticketRepository.save(ticket);
 
-        return TicketResponse.builder()
-                .userName(ticket.getUserName())
-                .ticketUuid(ticket.getUuid())
-                .concertTitle(concert.getTitle())
-                .posterCid(concert.getPosterCid())
-                .stageName(stage.getName())
-                .stageAddress(stage.getAddress())
-                .ticketPrice(ticket.getConcertEntity().getTicketPrice())
-                .status(Status.USED)
-                .seatRow(ticket.getSeatRow())
-                .seatCol(ticket.getSeatCol())
-                .refundAt(ticket.getRefundedAt())
-                .usedAt(ticket.getUsedAt())
-                .createdAt(ticket.getCreatedAt())
-                .startAt(concert.getStartAt())
-                .myFavoriteMusician(favoriteMusicianDto)
-                .build();
+            // 좌석 티켓인 경우 좌석 해제
+            boolean isStanding = concert.getStageEntity().getIsStanding();
+            if (!isStanding) {
+                ConcertSeatEntity seat = concertSeatEntityRepository.findByConcertEntity_UuidAndSeatRowAndSeatCol(concert.getUuid(), ticket.getSeatRow(), ticket.getSeatCol());
+                concertSeatEntityRepository.delete(seat);
+                concert.getConcertSeats().remove(seat);
+            }
+
+            // 남은 티켓 개수 증가
+            concert.increaseRemainingTicket();
+            concertRepository.save(concert);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public void checkTicketRefundAvailable(AppUserEntity user, UUID ticketUuid) {
+        AudienceEntity audienceEntity = audienceRepository.findByLoginId(user.getLoginId())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
+
+        TicketEntity ticket = ticketRepository.findByUuid(ticketUuid)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
+
+        if (!ticket.getAudienceEntity().equals(audienceEntity)) {
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE);
+        }
+
+        if (ticket.getStatus() != Status.NOT_USED) {
+            throw new HttpResponseException(ErrorDetail.TICKET_ALREADY_USED);
+        }
     }
 }

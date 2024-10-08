@@ -48,9 +48,11 @@ public class TicketController {
     }
 
     @PostMapping("/{ticketUuid}/refund")
-    public ResponseEntity<TicketResponse> refundTicket(@PathVariable @Valid @ValidRefundUUID UUID ticketUuid) {
-        TicketResponse response = ticketService.refundTicket(ticketUuid);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> refundTicket(Authentication authentication, @PathVariable @Valid @ValidRefundUUID UUID ticketUuid) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        ticketService.checkTicketRefundAvailable(user, ticketUuid);
+        ticketService.refundTicket(user.getLoginId(), ticketUuid);
+        return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/{ticketUuid}/use")

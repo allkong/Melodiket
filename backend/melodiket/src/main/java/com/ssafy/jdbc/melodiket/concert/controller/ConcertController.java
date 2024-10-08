@@ -88,6 +88,14 @@ public class ConcertController {
         return ResponseEntity.ok(assignments);
     }
 
+    @PostMapping("/{id}/close")
+    public ResponseEntity<Void> closeConcert(Authentication authentication, @PathVariable UUID id) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        concertService.checkIsConcertClosable(user, id);
+        concertService.closeConcert(user.getLoginId(), user, id);
+        return ResponseEntity.accepted().build();
+    }
+
     @GetMapping("/me/created")
     public ResponseEntity<List<ConcertResp>> getCreatedConcerts(Authentication authentication) {
         UUID stageManagerUuid = ((AppUserEntity) authentication.getPrincipal()).getUuid();
