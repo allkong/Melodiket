@@ -13,7 +13,7 @@ spring:
       release: release
     active: ${CURRENT_ENV}
   elasticsearch:
-    uris: http://localhost:9200
+    uris: ${ELASTICSEARCH_HOST}
 
 server:
   port: ${SERVER_PORT}

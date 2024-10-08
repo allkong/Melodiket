@@ -56,9 +56,9 @@ public class AuthController {
 
     // 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
+    public ResponseEntity<Void> logout() {
         userService.logout();
-        return ResponseEntity.ok("로그아웃 성공");
+        return ResponseEntity.ok().build();
     }
 
     // loginId 중복 체크 API

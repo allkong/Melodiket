@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -52,9 +53,9 @@ public class ConcertController {
     }
 
     @PostMapping("/{id}/approve")
-    public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal) {
+    public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal, @RequestBody ConcertApproveReq concertApproveReq) {
         String loginId = principal.getName();
-        concertService.approveConcert(concertId, loginId);
+        concertService.approveConcert(concertId, loginId, concertApproveReq);
         return ResponseEntity.accepted().build();
     }
 
@@ -96,5 +97,12 @@ public class ConcertController {
         concertService.checkIsConcertClosable(user, id);
         concertService.closeConcert(user.getLoginId(), user, id);
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/me/created")
+    public ResponseEntity<List<ConcertResp>> getCreatedConcerts(Authentication authentication) {
+        UUID stageManagerUuid = ((AppUserEntity) authentication.getPrincipal()).getUuid();
+        List<ConcertResp> createdConcerts = concertService.getCreatedConcertsByStageManager(stageManagerUuid);
+        return ResponseEntity.ok(createdConcerts);
     }
 }
