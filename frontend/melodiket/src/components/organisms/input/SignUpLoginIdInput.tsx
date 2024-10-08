@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
 import { SIGN_UP_DATA_LENGTH_LIMITS } from '@/constants/signUp';
-import { useIsLoginIdDuplicated } from '@/services/auth/useLogin';
+import { useIsLoginIdDuplicated } from '@/services/auth/fetchAuth';
 
 const MIN_LENGTH = SIGN_UP_DATA_LENGTH_LIMITS.MIN_LOGIN_ID_LENGTH;
 const MAX_LENGTH = SIGN_UP_DATA_LENGTH_LIMITS.MAX_LOGIN_ID_LENGTH;
