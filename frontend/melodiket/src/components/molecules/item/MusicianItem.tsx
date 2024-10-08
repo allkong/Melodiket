@@ -1,35 +1,56 @@
-import FavoriteButton from '@/components/atoms/button/FavoriteButton';
-import Profile from '@/components/atoms/profile/Profile';
 import Link from 'next/link';
+import { useState } from 'react';
+
+import { useToggleFavoriteMusician } from '@/services/favorite/fetchFavorite';
+
+import Profile from '@/components/atoms/profile/Profile';
+import FavoriteButton from '@/components/atoms/button/FavoriteButton';
 
 interface MusicianItemProps {
-  href: string;
+  uuid: string;
   src: string;
   musicianName: string;
-  favoriteCount: number;
-  isFavorite?: boolean;
+  initialFavoriteCount: number;
+  initialFavorite: boolean;
 }
 
 const MusicianItem = ({
-  href,
+  uuid,
   src,
   musicianName,
-  favoriteCount,
-  isFavorite = false,
+  initialFavoriteCount,
+  initialFavorite,
 }: MusicianItemProps) => {
+  const { mutate: toggleFavorite } = useToggleFavoriteMusician();
+
+  const [isFavorite, setIsFavorite] = useState(initialFavorite);
+  const [likeCount, setLikeCount] = useState(initialFavoriteCount);
+
+  const handleFavoriteToggle = async () => {
+    toggleFavorite(uuid, {
+      onSuccess: (data) => {
+        console.log(data.status);
+        setIsFavorite(data.status);
+        setLikeCount((prevCount) =>
+          data.status ? prevCount + 1 : prevCount - 1
+        );
+      },
+    });
+  };
+
   return (
-    <Link href={href || '/'}>
-      <div className="flex flex-row items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
-        <div className="flex flex-row items-center space-x-4">
+    <div className="flex items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
+      <Link href={`/musicians/${uuid}` || '/'} className="w-full">
+        <div className="flex items-center space-x-4 flex-grow">
           <Profile src={src} size="sm" />
           <div className="flex space-x-3">
             <p className="font-medium">{musicianName}</p>
-            <span className="text-primary">{favoriteCount}</span>
+            <span className="text-primary">{likeCount}</span>
           </div>
         </div>
-        <FavoriteButton isOn={isFavorite} />
-      </div>
-    </Link>
+      </Link>
+      <FavoriteButton isOn={isFavorite} onClick={handleFavoriteToggle} />
+    </div>
   );
 };
 
