@@ -20,6 +20,8 @@ import com.ssafy.jdbc.melodiket.concert.service.dto.SeatingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.concert.service.dto.StandingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
+import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
+import com.ssafy.jdbc.melodiket.ticket.repository.TicketRepository;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianInfo;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
@@ -56,6 +58,7 @@ public class ConcertService {
     private final WalletService walletService;
     private final BlockchainConfig blockchainConfig;
     private final JPAQueryFactory jpaQueryFactory;
+    private final TicketRepository ticketRepository;
 
     // 커서 기반 공연 목록 조회 메서드
     public PageResponse<ConcertResp> getConcerts(ConcertCursorPagingReq pagingReq) {
@@ -103,9 +106,14 @@ public class ConcertService {
             try {
                 managerContract.cancelConcert(concert.getUuid());
 
-                // TODO : 구매된 티켓이 있으면 모두 환불 처리
                 concert.cancel();
                 concertRepository.save(concert);
+
+                List<TicketEntity> tickets = concert.getTickets();
+                for (TicketEntity ticket : tickets) {
+                    ticket.refund();
+                    ticketRepository.delete(ticket);
+                }
             } catch (Exception e) {
                 log.error("Failed to cancel concert", e);
                 throw new RuntimeException(e);
@@ -337,6 +345,45 @@ public class ConcertService {
         MusicianEntity musician = musicianRepository.findByLoginId(user.getLoginId())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.MUSICIAN_NOT_FOUND));
         return concertParticipantMusicianCursorRepository.getConcertAssignmentsOf(musician, cursorPagingReq);
+    }
+
+    public void checkIsConcertClosable(AppUserEntity user, UUID id) {
+        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        ConcertEntity concert = concertRepository.findByUuid(id)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+
+        if (!concert.getOwner().getUuid().equals(owner.getUuid())) {
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
+
+        if (concert.getConcertStatus() != ConcertStatus.ACTIVE) {
+            throw new HttpResponseException(ErrorDetail.CONFLICT);
+        }
+    }
+
+    @Async
+    @DistributedLock(key = "#loginId.concat('-closeConcert')")
+    @Transactional(rollbackFor = Exception.class)
+    public void closeConcert(String loginId, AppUserEntity user, UUID id) {
+        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        ConcertEntity concert = concertRepository.findByUuid(id)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+
+        WalletResp ownerWallet = walletService.getWalletOf(owner.getUuid());
+        Credentials ownerCredentials = Credentials.create(ownerWallet.privateKey());
+        ManagerContract managerContract = new ManagerContract(blockchainConfig, ownerCredentials);
+
+        try {
+            managerContract.closeConcert(concert.getUuid());
+            concert.close();
+            concertRepository.save(concert);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private BooleanExpression combineConditions(List<BooleanExpression> conditions) {
