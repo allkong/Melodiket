@@ -1,5 +1,3 @@
-import { StageData } from './stage';
-
 export interface ConcertData {
   stageUuid: string;
   title: string;
@@ -90,4 +88,19 @@ export interface ConcertApprovalStatus {
   ticketPrice: number;
   concertStatus: string;
   approvalStatus: string;
+}
+
+export interface CreateConcertResponse {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  posterCid: string;
+  owner: string;
+  ownerStake: string;
+  musicianStake: string;
+  favoriteMusicianStake: string;
+  musicians: string[];
+  isDeleted: boolean;
 }
