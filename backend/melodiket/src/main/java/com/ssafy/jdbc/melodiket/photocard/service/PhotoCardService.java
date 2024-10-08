@@ -51,12 +51,12 @@ public class PhotoCardService {
         QPhotoCardEntity photoCardEntity = QPhotoCardEntity.photoCardEntity;
         // 나의 티켓 가져오기
         // Boolean expression 사용
-        AudienceEntity user = audienceRepository.findByLoginId(p.getName()).orElseThrow(()->new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+        AudienceEntity user = audienceRepository.findByLoginId(p.getName()).orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
         List<TicketEntity> tickets = ticketRepository.findAllByAudienceEntity(user);
         List<BooleanExpression> expressions = new ArrayList<>();
-        for (TicketEntity ticket : tickets){
-            expressions.add(ticket!=null?photoCardEntity.ticketEntity.eq(ticket):null);
+        for (TicketEntity ticket : tickets) {
+            expressions.add(ticket != null ? photoCardEntity.ticketEntity.eq(ticket) : null);
         }
 
         BooleanExpression combinedExpression = null;
@@ -71,12 +71,12 @@ public class PhotoCardService {
         return photoCardCursorRepository.findWithPagination(pagingReq, PhotoCardResp::from, combinedExpression);
     }
 
-    public PhotoCardResp getPhotoCardDetail(UUID uuid){
-        return PhotoCardResp.from(photoCardRepository.findByUuid(uuid).orElseThrow(()->new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND)));
+    public PhotoCardResp getPhotoCardDetail(UUID uuid) {
+        return PhotoCardResp.from(photoCardRepository.findByUuid(uuid).orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND)));
     }
 
-    public PhotoCardResp getPhotoCardDetailForSharing(UUID uuid){
-        return PhotoCardResp.fromForAll(photoCardRepository.findByUuid(uuid).orElseThrow(()->new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND)));
+    public PhotoCardResp getPhotoCardDetailForSharing(UUID uuid) {
+        return PhotoCardResp.fromForAll(photoCardRepository.findByUuid(uuid).orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND)));
     }
 
     @Async
@@ -105,7 +105,7 @@ public class PhotoCardService {
             log.info("gogo ipfs");
             // Sending request to IPFS server
             ResponseEntity<CidResponse> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, CidResponse.class);
-            log.info("received from ipfs {}" , responseEntity.getBody());
+            log.info("received from ipfs {}", responseEntity.getBody());
 
             // Null check
             String cid = Objects.requireNonNull(responseEntity.getBody()).getCid();
@@ -124,9 +124,9 @@ public class PhotoCardService {
         }
     }
 
-    public void onUploadComplete(AppUserEntity user, String cid, UUID ticketUUID){
-        webPushService.initiatePushNotification(user, "포토카드 업로드 완료.");
-        TicketEntity ticket = ticketRepository.findByUuid(ticketUUID).orElseThrow(()-> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
+    public void onUploadComplete(AppUserEntity user, String cid, UUID ticketUUID) {
+        webPushService.initiatePushNotification(user, "포토카드 업로드 완료.", "포토카드 업로드 완료했습니다", new HashMap<String, String>());
+        TicketEntity ticket = ticketRepository.findByUuid(ticketUUID).orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         photoCardRepository.save(
                 PhotoCardEntity.builder()
                         .uuid(UUID.randomUUID())
