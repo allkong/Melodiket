@@ -2,6 +2,7 @@
 
 import ConcertRankingCard from '@/components/molecules/card/ConcertRankingCard';
 import { useFetchConcertList } from '@/services/concert/fetchConcert';
+import { getCidUrl } from '@/utils/getUrl';
 
 const ConcertRankingSection = () => {
   const { data } = useFetchConcertList();
@@ -16,7 +17,7 @@ const ConcertRankingSection = () => {
             key={`${concert.concertUuid}-${concert.posterCid}`}
             concertUuid={concert.concertUuid}
             stageName={concert.stageName}
-            posterCid={concert.posterCid}
+            posterCid={getCidUrl(concert.posterCid)}
             ticketingAt={concert.ticketingAt}
             title={concert.title}
             ranking={idx + 1}
