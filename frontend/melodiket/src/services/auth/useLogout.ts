@@ -14,8 +14,9 @@ export const useLogout = () => {
 
   return async () => {
     try {
-      await logout();
+      // await logout();
       clearAuth();
+      sessionStorage.clear();
       router.push('/');
     } catch (error) {
       alert('로그아웃 실패😥');
