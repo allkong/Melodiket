@@ -16,6 +16,7 @@ public class BlockchainConfig {
     private final String melodiketContractAddress;
     private final String melodyTokenContractAddress;
     private final String ticketContractAddress;
+    private final String photoCardContractAddress;
     private final long gasPrice;
     private final long gasLimit;
 
@@ -26,6 +27,7 @@ public class BlockchainConfig {
             @Value("${blockchain.contract-addresses.melodiket}") String melodiketContractAddress,
             @Value("${blockchain.contract-addresses.melody-token}") String melodyTokenContractAddress,
             @Value("${blockchain.contract-addresses.ticket}") String ticketContractAddress,
+            @Value("${blockchain.contract-addresses.photo-card}") String photoCardContractAddress,
             @Value("${blockchain.gas-price}") long gasPrice,
             @Value("${blockchain.gas-limit}") long gasLimit
     ) {
@@ -35,6 +37,7 @@ public class BlockchainConfig {
         this.melodiketContractAddress = melodiketContractAddress;
         this.melodyTokenContractAddress = melodyTokenContractAddress;
         this.ticketContractAddress = ticketContractAddress;
+        this.photoCardContractAddress = photoCardContractAddress;
         this.gasPrice = gasPrice;
         this.gasLimit = gasLimit;
     }
