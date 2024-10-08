@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
@@ -9,6 +9,7 @@ import TextBanner from '@/components/molecules/text/TextBanner';
 
 import { ConcertData } from '@/types/concert';
 import LineDivider from '@/components/atoms/divider/LineDivider';
+import { useMusiciansQuery } from '@/services/musician/fetchMusicians';
 
 interface MusicianInformationProps {
   concertData: ConcertData;
@@ -19,53 +20,69 @@ const MusicianInformation = ({
   concertData,
   onNext,
 }: MusicianInformationProps) => {
-  const [musicianList, setMusicianList] = useState<{ [key: string]: string }>(
-    {}
-  );
+  const [musicianList, setMusicianList] = useState<string[]>([]);
   const [musicianName, setMusicianName] = useState('');
 
-  const isFormValid = Object.keys(musicianList).length > 0;
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMusiciansQuery();
 
-  const toggleMusician = (name: string) => {
-    setMusicianList((prev) => {
-      const updatedList = { ...prev };
-      if (updatedList[name]) {
-        delete updatedList[name];
-      } else {
-        updatedList[name] = name;
+  const endRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (endRef.current) {
+      observer.observe(endRef.current);
+    }
+
+    return () => {
+      if (endRef.current) {
+        observer.unobserve(endRef.current);
       }
-      return updatedList;
+    };
+  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
+
+  const isFormValid = musicianList.length > 0;
+
+  const toggleMusician = (uuid: string) => {
+    setMusicianList((prev) => {
+      if (prev.includes(uuid)) {
+        return prev.filter((id) => id !== uuid);
+      } else {
+        return [...prev, uuid];
+      }
     });
   };
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
       ...concertData,
-      musicianList: musicianList,
+      musicians: musicianList,
     };
     onNext(updatedConcertData);
   };
 
-  const allMusicians = [
-    '주나주나',
-    '정다빈밴드',
-    '잔나비',
-    '이디어츠',
-    '박유빈',
-    '정유빈',
-  ];
+  const allMusicians = data?.pages.flatMap((page) => page.result) || [];
 
-  const filteredMusicians = musicianName
-    ? allMusicians.filter((musician) =>
-        musician.toLowerCase().includes(musicianName.toLowerCase())
-      )
-    : [];
+  const filteredMusicians =
+    musicianName.trim().length > 0
+      ? allMusicians.filter((musician) =>
+          musician.nickname.toLowerCase().includes(musicianName.toLowerCase())
+        )
+      : [];
 
-  const selectedMusicians = allMusicians.filter(
-    (musician) => !!musicianList[musician]
+  const selectedMusicians = allMusicians.filter((musician) =>
+    musicianList.includes(musician.uuid)
   );
   const unselectedMusicians = allMusicians.filter(
-    (musician) => !musicianList[musician]
+    (musician) => !musicianList.includes(musician.uuid)
   );
 
   return (
@@ -86,29 +103,31 @@ const MusicianInformation = ({
           {filteredMusicians.length > 0 &&
             filteredMusicians.map((musician) => (
               <MusicianSelectButton
-                key={musician}
-                label={musician}
-                isSelected={!!musicianList[musician]}
-                onClick={() => toggleMusician(musician)}
+                key={musician.uuid}
+                label={musician.nickname}
+                isSelected={musicianList.includes(musician.uuid)}
+                onClick={() => toggleMusician(musician.uuid)}
               />
             ))}
           {filteredMusicians.length > 0 && <LineDivider />}
           {selectedMusicians.map((musician) => (
             <MusicianSelectButton
-              key={musician}
-              label={musician}
-              isSelected={!!musicianList[musician]}
-              onClick={() => toggleMusician(musician)}
+              key={musician.uuid}
+              label={musician.nickname}
+              isSelected={musicianList.includes(musician.uuid)}
+              onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
           {unselectedMusicians.map((musician) => (
             <MusicianSelectButton
-              key={musician}
-              label={musician}
-              isSelected={!!musicianList[musician]}
-              onClick={() => toggleMusician(musician)}
+              key={musician.uuid}
+              label={musician.nickname}
+              isSelected={musicianList.includes(musician.uuid)}
+              onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
+          <div ref={endRef} className="h-10" />
+          {isFetchingNextPage && <p>Loading more...</p>}
         </div>
       </div>
       <div className="my-4 h-fit">
