@@ -57,15 +57,31 @@ export interface FetchConcertResponse {
   >[];
 }
 
-export interface FetchConcertDetail {
-  pageInfo: {
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-    pageNo: number;
-    requestedSize: number;
-    responsedSize: number;
-  };
-  result: Concert;
+export interface ConcertDetail {
+  availableTickets: number;
+  capacity: number;
+  concertUuid: string;
+  createdAt: string;
+  description: string;
+  favoriteMusicianStake: number;
+  isStanding: boolean;
+  musicianStake: number;
+  musicians: {
+    musicianUuid: string;
+    name: string;
+    imageUrl: string;
+  }[];
+  ownerStake: number;
+  posterCid: string;
+  stageName: string;
+  stageUuid: string;
+  startAt: string;
+  status: string;
+  ticketPrice: number;
+  ticketingAt: string;
+  title: string;
+  isLike: boolean;
+  likeCount: number;
 }
 
 export interface FetchMyConcertsResponse {
