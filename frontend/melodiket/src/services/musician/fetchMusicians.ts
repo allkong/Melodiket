@@ -18,7 +18,6 @@ export const fetchGetMusicians = async (
   const response = await customFetch<FetchMusiciansResponse>(
     `/users/musicians?${queryParams}`
   );
-  console.log(response);
   return response;
 };
 

@@ -165,7 +165,6 @@ const createConcert = async (concertData: ConcertData) => {
       body: concertData,
     }
   );
-  console.log(response);
   return response;
 };
 

@@ -25,17 +25,14 @@ const FileInput = forwardRef(
           const formData = new FormData();
           formData.append('file', file);
 
-          console.log('요청 보냄');
           const response = await fetch('https://j11a310.p.ssafy.io/kubo/ipfs', {
             method: 'POST',
             body: formData,
           });
-          console.log(response);
 
           if (response.ok) {
             const result = await response.json();
             const cid = result.cid || null;
-            console.log(cid);
             if (onChange) {
               onChange(cid);
             }
