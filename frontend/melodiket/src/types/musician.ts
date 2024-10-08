@@ -36,10 +36,14 @@ export interface FetchMusiciansResponse {
   result: MusicianListItem[];
 }
 
-export interface MusicianResponse {
+export interface MusicianDetail {
+  uuid: string;
   loginId: string;
-  role: 'MUSICIAN';
+  role: 'ROLE_MUSICIAN';
   nickname: string;
   description: string;
+  registeredAt: string;
   imageUrl: string;
+  likeCount: number;
+  isLike: boolean;
 }
