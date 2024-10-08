@@ -8,7 +8,10 @@ import Input from '@/components/atoms/input/Input';
 import OptionButton from '@/components/atoms/button/OptionButton';
 
 import { StageData } from '@/types/stage';
-import { useRegisterSeatingStage, useRegisterStandingStage } from '@/services/stage/fetchStage';
+import {
+  useRegisterSeatingStage,
+  useRegisterStandingStage,
+} from '@/services/stage/fetchStage';
 
 interface StageInformationProps {
   stageData: StageData;
@@ -42,7 +45,7 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
       registerSeatingStage({
         name,
         address,
-        numOfRow: Number(numOfRow), 
+        numOfRow: Number(numOfRow),
         numOfCol: Number(numOfCol),
       });
     }
