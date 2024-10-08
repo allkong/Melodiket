@@ -38,7 +38,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        System.out.println(123);
         // 사용자의 요청이 authentication을 필요로 하지 않는다면 그냥 넘기기
         if (securityConfig.isAnonymousAllowedPath(request.getRequestURI())) {
             Authentication authentication = new AnonymousAuthenticationToken(
@@ -54,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // 요청에서 JWT 토큰 추출
         String uuid = getValidIdentifier(request);
         String token = jwtService.resolveToken(request);
-        if(redisTemplate.hasKey(token)){
+        if (redisTemplate.hasKey(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is blacklisted");
         }
         // JWT 토큰이 존재
