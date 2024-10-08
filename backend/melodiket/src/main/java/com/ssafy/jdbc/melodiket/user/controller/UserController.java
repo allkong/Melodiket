@@ -3,6 +3,7 @@ package com.ssafy.jdbc.melodiket.user.controller;
 import com.ssafy.jdbc.melodiket.auth.service.AuthService;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.user.controller.dto.MusicianCursorPagingReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
@@ -67,7 +68,7 @@ public class UserController {
     }
 
     @GetMapping("/musicians")
-    public ResponseEntity<PageResponse<MusicianResp>> getMusicians(@Valid CursorPagingReq pagingReq) {
+    public ResponseEntity<PageResponse<MusicianResp>> getMusicians(@Valid MusicianCursorPagingReq pagingReq) {
         PageResponse<MusicianResp> musicianResp = authService.getMusicians(pagingReq);
         return ResponseEntity.ok(musicianResp);
     }
