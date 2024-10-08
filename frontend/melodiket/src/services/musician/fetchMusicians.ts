@@ -10,15 +10,15 @@ export const fetchGetMusicians = async (
     orderDirection: 'ASC',
   }
 ): Promise<FetchMusiciansResponse> => {
-  const { isFirstPage, lastUuid, pageSize, orderKey, orderDirection } =
-    pageParam;
+  const { isFirstPage, lastUuid, pageSize } = pageParam;
   const queryParams = isFirstPage
-    ? `isFirstPage=true&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}`
-    : `isFirstPage=false&lastUuid=${lastUuid}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}`;
+    ? `isFirstPage=true&pageSize=${pageSize}`
+    : `isFirstPage=false&lastUuid=${lastUuid}&pageSize=${pageSize}`;
 
   const response = await customFetch<FetchMusiciansResponse>(
     `/users/musicians?${queryParams}`
   );
+  console.log(response);
   return response;
 };
 
