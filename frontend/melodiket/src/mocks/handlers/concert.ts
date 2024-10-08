@@ -17,6 +17,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: 'wave to earth 1회 공연',
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
     {
       concertUuid: '1',
@@ -25,6 +26,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: 'あいみょん 2024 SSAFY ソウルキャンパス',
       stageName: '싸피서울캠퍼스',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
     {
       concertUuid: '2',
@@ -33,6 +35,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: '양문학',
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
     {
       concertUuid: '3',
@@ -41,6 +44,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: '아이유에유',
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
     {
       concertUuid: '4',
@@ -49,6 +53,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: 'wave to earth 1회 공연',
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
     {
       concertUuid: '5',
@@ -57,6 +62,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: 'あいみょん 2024 SSAFY ソウルキャンパス',
       stageName: '싸피서울캠퍼스',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
     {
       concertUuid: '6',
@@ -65,6 +71,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       title: '양문학',
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
+      startAt: '2024.09.03',
     },
   ],
 };

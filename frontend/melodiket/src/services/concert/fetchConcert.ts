@@ -21,33 +21,33 @@ import type {
   FetchConcertRequest,
 } from '@/types/ticket';
 
-export const fetchConcertList = async (
-  {
-    isFirstPage,
-    lastUuid,
-    pageSize,
-    orderKey,
-    orderDirection,
-  }: FetchConcertRequest = {
-    isFirstPage: true,
-    pageSize: 10,
-    orderDirection: 'ASC',
-    orderKey: 'uuid',
-  }
-) => {
+export const fetchConcertList = async ({
+  isFirstPage,
+  lastUuid,
+  pageSize,
+  orderKey,
+  orderDirection,
+  title,
+}: FetchConcertRequest) => {
   const response = await customFetch<FetchConcertResponse>(
-    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}`
+    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}`
   );
   return response;
 };
 
 export const useFetchInfiniteConcert = (
-  pageSize: number = 10,
+  pageSize: number = 2,
   orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC'
+  orderDirection: 'ASC' | 'DESC' = 'ASC',
+  title: string = ''
 ) => {
   const result = useInfiniteQuery({
-    queryKey: concertKey.infinite(),
+    queryKey: concertKey.infinite({
+      pageSize,
+      orderKey,
+      orderDirection,
+      title,
+    }),
     queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
       const { pageInfo } = lastPage ?? {};
@@ -61,6 +61,7 @@ export const useFetchInfiniteConcert = (
         orderDirection,
         orderKey,
         pageSize,
+        title,
       };
     },
     initialPageParam: {
@@ -68,6 +69,7 @@ export const useFetchInfiniteConcert = (
       orderDirection,
       orderKey,
       pageSize,
+      title,
     },
   });
 
@@ -77,20 +79,16 @@ export const useFetchInfiniteConcert = (
 export const useFetchConcertList = () => {
   const result = useSuspenseQuery<FetchConcertResponse>({
     queryKey: concertKey.list(),
-    queryFn: () => fetchConcertList(),
+    queryFn: () =>
+      fetchConcertList({
+        isFirstPage: true,
+        orderDirection: 'ASC',
+        orderKey: 'uuid',
+        pageSize: 10,
+      }),
   });
 
   return result;
-};
-
-export const useFetchConcertListDehydrateState = async () => {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: concertKey.list(),
-    queryFn: () => fetchConcertList(),
-  });
-
-  return dehydrate(queryClient);
 };
 
 export const fetchConcertDetail = async (uuid: string) => {
