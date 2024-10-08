@@ -53,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // 요청에서 JWT 토큰 추출
         String uuid = getValidIdentifier(request);
         String token = jwtService.resolveToken(request);
-        if (redisTemplate.hasKey(token)) {
+        if (token != null && !securityConfig.isAnonymousAllowedPath(request.getRequestURI()) && redisTemplate.hasKey(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is blacklisted");
         }
         // JWT 토큰이 존재
@@ -68,8 +68,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인하지 않았거나, 유효하지 않은 토큰입니다.");
+                return;  // 여기서 필터 체인을 종료하고, 다음 필터로 넘기지 않음
             }
         } else {
             Authentication authentication = new AnonymousAuthenticationToken(
