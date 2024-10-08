@@ -45,7 +45,12 @@ export const useFetchInfiniteConcert = (
   title: string = ''
 ) => {
   const result = useInfiniteQuery({
-    queryKey: concertKey.infinite(),
+    queryKey: concertKey.infinite({
+      pageSize,
+      orderKey,
+      orderDirection,
+      title,
+    }),
     queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
       const { pageInfo } = lastPage ?? {};
