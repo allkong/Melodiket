@@ -93,4 +93,16 @@ public class ConcertEntity extends ExposableEntity {
     public void active() {
         this.concertStatus = ConcertStatus.ACTIVE;
     }
+
+    public void close() {
+        this.concertStatus = ConcertStatus.TRANSFERRED;
+    }
+
+    public void increaseRemainingTicket() {
+        this.availableTickets++;
+    }
+
+    public void decreaseRemainingTicket() {
+        this.availableTickets--;
+    }
 }
