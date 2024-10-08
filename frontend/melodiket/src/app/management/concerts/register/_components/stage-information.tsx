@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useCreateConcert } from '@/services/concert/fetchConcert';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import StageItem from '@/components/molecules/item/StageItem';
@@ -22,6 +23,7 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
   } | null>(null);
 
   const { mutate: getStages, data } = useGetMyStages();
+  const { mutate: createConcert } = useCreateConcert();
 
   useEffect(() => {
     getStages();
@@ -46,6 +48,8 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
       ...concertData,
       stageUuid: selectedStage?.uuid || '',
     };
+
+    createConcert(updatedConcertData);
     onNext(updatedConcertData);
   };
 

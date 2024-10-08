@@ -10,7 +10,7 @@ import FileInput from '@/components/atoms/input/FileInput';
 import DateInput from '@/components/atoms/input/DateInput';
 
 import { ConcertData } from '@/types/concert';
-import { formatDateCustom, formatDateToYMDHM } from '@/utils/dayjsPlugin';
+import { formatDateCustom } from '@/utils/dayjsPlugin';
 
 interface ConcertInformationProps {
   concertData: ConcertData;
