@@ -1,3 +1,6 @@
+import useAuthStore from '@/store/authStore';
+import { useLogout } from '@/services/auth/useLogout';
+
 import MenuPortal from './MenuPortal';
 import MenuMain from './MenuMain';
 import ThinDivider from '@/components/atoms/divider/ThinDivider';
@@ -14,9 +17,9 @@ import {
   Music,
   MyPage,
 } from '@/public/icons';
-import { useLogout } from '@/services/auth/useLogout';
 
 const MenuWithPortal = () => {
+  const { user } = useAuthStore();
   const handleLogout = useLogout();
 
   return (
@@ -25,32 +28,54 @@ const MenuWithPortal = () => {
         <Menu.Header />
         <Menu.Profile />
         <Menu.Divider />
-        <Menu.Item href="/concerts" icon={<Music />} label="공연" />
         <Menu.Item
-          href="/management/concerts"
-          icon={<Music />}
-          label="공연 생성"
+          href="/concerts"
+          icon={<Music className="text-secondary" />}
+          label="공연"
         />
         <Menu.Item href="/musicians" icon={<Guitar />} label="뮤지션" />
         <Menu.Divider />
-        <Menu.Item
-          href="/favorites"
-          icon={<Favorite />}
-          label="찜한 공연/뮤지션"
-        />
-        <Menu.Item href="/mytickets" icon={<Basket />} label="예매내역" />
-        <Menu.Item
-          href="/photocards"
-          icon={<Card width={22} height={22} className="text-purple-200" />}
-          label="포토카드"
-        />
-        <Menu.Item
-          href="/management/concerts"
-          icon={<Microphone />}
-          label="내 공연"
-        />
-        <Menu.Divider />
-        <Menu.Item href="/mypage" icon={<MyPage />} label="마이페이지" />
+        {user?.role === 'AUDIENCE' && (
+          <Menu.Item href="/favorites" icon={<Favorite />} label="찜 리스트" />
+        )}
+        {user?.role === 'AUDIENCE' && (
+          <Menu.Item href="/mytickets" icon={<Basket />} label="예매내역" />
+        )}
+        {user?.role === 'AUDIENCE' && (
+          <Menu.Item
+            href="/photocards"
+            icon={<Card width={22} height={22} className="text-purple-200" />}
+            label="포토카드"
+          />
+        )}
+        {user?.role === 'STAGE_MANAGER' ||
+          (user?.role === 'MUSICIAN' && (
+            <Menu.Item
+              href="/management/concerts"
+              icon={<Microphone />}
+              label="내 공연"
+            />
+          ))}
+        {user?.role === 'STAGE_MANAGER' && (
+          <Menu.Item
+            href="/management/concerts/register"
+            icon={<Music className="text-purple-200" />}
+            label="공연 등록"
+          />
+        )}
+        {user?.role === 'MUSICIAN' && (
+          <Menu.Item
+            href="/management/concerts/approval"
+            icon={<Music className="text-purple-200" />}
+            label="공연 승인"
+          />
+        )}
+        {user && (
+          <>
+            <Menu.Divider />
+            <Menu.Item href="/mypage" icon={<MyPage />} label="마이페이지" />
+          </>
+        )}
         <Menu.Item
           onClick={handleLogout}
           icon={<BackLine />}
