@@ -8,6 +8,10 @@ import Input from '@/components/atoms/input/Input';
 import OptionButton from '@/components/atoms/button/OptionButton';
 
 import { StageData } from '@/types/stage';
+import {
+  useRegisterSeatingStage,
+  useRegisterStandingStage,
+} from '@/services/stage/fetchStage';
 
 interface StageInformationProps {
   stageData: StageData;
@@ -15,25 +19,45 @@ interface StageInformationProps {
 }
 
 const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
-  const [stageName, setStageName] = useState('');
-  const [stageAddress, setStageAddress] = useState('');
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
   const [isStanding, setIsStanding] = useState(true);
   const [capacity, setCapacity] = useState('');
   const [numOfRow, setNumOfRow] = useState('');
   const [numOfCol, setNumOfCol] = useState('');
 
+  const { mutate: registerStandingStage } = useRegisterStandingStage();
+  const { mutate: registerSeatingStage } = useRegisterSeatingStage();
+
   const isFormValid =
-    stageName && stageAddress && (isStanding ? capacity : numOfRow && numOfCol);
+    name && address && (isStanding ? capacity : numOfRow && numOfCol);
 
   const handleNext = () => {
+    if (isStanding) {
+      // 스탠딩 스테이지 등록
+      registerStandingStage({
+        name,
+        address,
+        capacity: Number(capacity),
+      });
+    } else {
+      // 좌석 스테이지 등록
+      registerSeatingStage({
+        name,
+        address,
+        numOfRow: Number(numOfRow),
+        numOfCol: Number(numOfCol),
+      });
+    }
     const updatedStageData: StageData = {
-      stageName,
-      stageAddress,
+      name,
+      address,
       isStanding,
-      capacity: isStanding ? Number(capacity) : undefined,
-      numOfRow: !isStanding ? Number(numOfRow) : undefined,
-      numOfCol: !isStanding ? Number(numOfCol) : undefined,
+      capacity: isStanding ? Number(capacity) : 0,
+      numOfRow: !isStanding ? Number(numOfRow) : 0,
+      numOfCol: !isStanding ? Number(numOfCol) : 0,
     };
+
     onNext(updatedStageData);
   };
 
@@ -46,17 +70,13 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
         />
         <div className="mt-10 mb-4 flex-grow">
           <h2 className="font-semibold mb-2">공연장 이름</h2>
-          <Input
-            value={stageName}
-            onChange={setStageName}
-            placeholder="공연장 이름"
-          />
+          <Input value={name} onChange={setName} placeholder="공연장 이름" />
         </div>
         <div className="mb-4">
           <h2 className="font-semibold mb-2">공연장 주소</h2>
           <Input
-            value={stageAddress}
-            onChange={setStageAddress}
+            value={address}
+            onChange={setAddress}
             placeholder="공연장 주소"
           />
         </div>

@@ -1,17 +1,15 @@
-import { StageData } from './stage';
-
 export interface ConcertData {
-  concertName: string;
-  startAt: Date;
-  ticketingAt: Date;
-  concertDescription: string;
-  concertPoster: File;
-  musicianList: { [key: string]: string };
+  stageUuid: string;
+  title: string;
+  startAt: string;
+  ticketingAt: string;
+  description: string;
+  posterCid: string;
+  musicians: string[];
   ticketPrice: number;
   ownerStake: number;
   musicianStake: number;
   favoriteMusicianStake: number;
-  stageInformation: StageData;
 }
 
 export interface Concert {
@@ -73,4 +71,41 @@ export interface FetchConcertDetail {
     responsedSize: number;
   };
   result: Concert;
+}
+
+export interface FetchMyConcertsResponse {
+  pageInfo: {
+    hasNextPage: boolean;
+    requestedSize: number;
+    responsedSize: number;
+  };
+  result: ConcertApprovalStatus[];
+}
+
+export interface ConcertApprovalStatus {
+  uuid: string;
+  title: string;
+  stageName: string;
+  createdAt: string;
+  startAt: string;
+  ticketingAt: string;
+  description: string;
+  ticketPrice: number;
+  concertStatus: string;
+  approvalStatus: string;
+}
+
+export interface CreateConcertResponse {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  posterCid: string;
+  owner: string;
+  ownerStake: string;
+  musicianStake: string;
+  favoriteMusicianStake: string;
+  musicians: string[];
+  isDeleted: boolean;
 }
