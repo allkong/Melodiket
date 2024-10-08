@@ -39,7 +39,7 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/auth/[^/]+/field-duplication-check$"),
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
-//            Pattern.compile("^/api/v1/users/musicians$"),
+            Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
             Pattern.compile("^/api/v1/concerts$"),

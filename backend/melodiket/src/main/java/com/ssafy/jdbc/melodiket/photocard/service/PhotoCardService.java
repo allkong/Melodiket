@@ -33,6 +33,7 @@ import org.web3j.crypto.Credentials;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -100,7 +101,7 @@ public class PhotoCardService {
         WalletResp wallet = walletService.getWalletOf(user.getUuid());
         Credentials credentials = Credentials.create(wallet.privateKey());
         PhotoCardContract photoCardContract = new PhotoCardContract(blockchainConfig, credentials);
-        
+
         UUID uuid = UUID.randomUUID();
         try {
             photoCardContract.createPhotoCard(uuid.toString(), ticketUUID.toString(), wallet.address(), imageCid);
@@ -112,7 +113,7 @@ public class PhotoCardService {
     }
 
     public void onUploadComplete(UUID uuid, AppUserEntity user, String cid, UUID ticketUUID) {
-        webPushService.initiatePushNotification(user, "포토카드 업로드 완료.");
+        webPushService.initiatePushNotification(user, "포토카드 업로드 완료.", "포토카드 업로드 완료.", Map.of());
         TicketEntity ticket = ticketRepository.findByUuid(ticketUUID).orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         photoCardRepository.save(
                 PhotoCardEntity.builder()
