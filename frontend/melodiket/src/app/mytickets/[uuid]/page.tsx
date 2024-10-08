@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTicketDetail } from '@/services/ticket/useTicketdetail';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
+import { getCidUrl, getS3Url } from '@/utils/getUrl';
 import { TICKET_STATUS_LABELS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
@@ -15,11 +16,9 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
-import { getCidUrl, getS3Url } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
-
   const { data: ticket } = useTicketDetail();
 
   const ticketInfo = [
