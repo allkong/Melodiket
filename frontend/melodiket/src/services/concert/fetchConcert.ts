@@ -1,7 +1,7 @@
 import {
   ConcertData,
   CreateConcertResponse,
-  FetchConcertDetail,
+  ConcertDetail,
   FetchConcertResponse,
   FetchMyConcertsResponse,
 } from '@/types/concert';
@@ -94,16 +94,15 @@ export const useFetchConcertListDehydrateState = async () => {
 };
 
 export const fetchConcertDetail = async (uuid: string) => {
-  const response = await customFetch<FetchConcertDetail>(`/concerts/${uuid}`);
+  const response = await customFetch<ConcertDetail>(`/concerts/${uuid}`);
   return response;
 };
 
 export const useFetchConcertDetail = (uuid: string) => {
-  const result = useQuery({
+  return useQuery<ConcertDetail>({
     queryKey: concertKey.detail(uuid),
     queryFn: () => fetchConcertDetail(uuid),
   });
-  return result;
 };
 
 export const useFetchConcertDetailDehydrateState = async (uuid: string) => {
