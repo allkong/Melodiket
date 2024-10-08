@@ -42,10 +42,10 @@ const MusicianListSection = () => {
                 isFavorite
               />
             ))}
-        {isFetching && <MusicianItemSkeleton count={5} />}
+        {isFetching && <MusicianItemSkeleton count={6} />}
       </div>
       {error && <IsError onClick={refetch} />}
-      {!hasNextPage && <IsEnd />}
+      {data && !hasNextPage && <IsEnd />}
       <div ref={endRef} />
     </>
   );
