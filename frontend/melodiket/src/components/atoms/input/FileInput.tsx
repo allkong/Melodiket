@@ -1,9 +1,9 @@
 'use client';
 
-import { ChangeEvent, ForwardedRef, forwardRef, useState } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useRef, useState } from 'react';
 
 interface FileInputProps {
-  onChange?: (file: File | null) => void;
+  onChange?: (cid: string | null) => void;
   onBlur?: () => void;
   value?: string;
 }
@@ -14,27 +14,50 @@ const FileInput = forwardRef(
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const [fileName, setFileName] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0] || null;
       setFileName(file ? file.name : null);
 
-      if (onChange) {
-        onChange(file);
+      if (file) {
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          console.log('요청 보냄');
+          const response = await fetch('https://j11a310.p.ssafy.io/kubo/ipfs', {
+            method: 'POST',
+            body: formData,
+          });
+          console.log(response);
+
+          if (response.ok) {
+            const result = await response.json();
+            const cid = result.cid || null;
+            console.log(cid);
+            if (onChange) {
+              onChange(cid);
+            }
+          } else {
+            console.error('파일 업로드 실패:', response.statusText);
+          }
+        } catch (error) {
+          console.error('파일 업로드 중 오류 발생:', error);
+        }
       }
     };
 
     const handleIconClick = () => {
-      const input = document.getElementById('file-input');
-      if (input) {
-        input.click();
+      if (inputRef.current) {
+        inputRef.current.click();
       }
     };
 
     return (
       <div className="relative w-full">
         <input
-          ref={ref}
+          ref={inputRef}
           id="file-input"
           type="file"
           onChange={handleChange}
