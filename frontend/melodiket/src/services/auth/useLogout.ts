@@ -19,6 +19,7 @@ export const useLogout = () => {
       await logout();
       clearAuth();
       sessionStorage.clear();
+      toast.success('로그아웃 완료');
       router.push('/');
     } catch (error) {
       toast.error('로그아웃 실패');
