@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useTicketDetail } from '@/services/ticket/useTicketdetail';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
@@ -19,7 +19,6 @@ import { getCidUrl, getS3Url } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
-  const pathname = usePathname();
 
   const { data: ticket } = useTicketDetail();
 
@@ -64,7 +63,7 @@ const Page = () => {
   };
 
   const handleMobileTicketClick = () => {
-    router.push(`${pathname}/mobile-ticket`);
+    router.push(`/mytickets/${ticket?.ticketUuid}/mobile-ticket`);
   };
 
   return (
