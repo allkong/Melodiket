@@ -1,17 +1,15 @@
-import dynamic from 'next/dynamic';
+import CAROUSEL_DATAS from '@/constants/carousel';
 
 import Header from '@/components/organisms/navigation/Header';
 import MusicianItem from '@/components/molecules/item/MusicianItem';
-const ControlsBar = dynamic(
-  () => import('@/components/organisms/controls/ControlsBar'),
-  { ssr: false }
-);
+import Carousel from '@/components/molecules/carousel/Carousel';
+import ControlsBar from '@/components/organisms/controls/ControlsBar';
 
 const Page = () => {
   return (
     <div>
       <Header isFixed />
-      <div className="h-40 bg-gray-200"></div>
+      <Carousel data={CAROUSEL_DATAS} />
       <ControlsBar />
       <div>
         <MusicianItem
