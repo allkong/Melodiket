@@ -46,11 +46,7 @@ const StageInformation = ({ stageData, onNext }: StageInformationProps) => {
         />
         <div className="mt-10 mb-4 flex-grow">
           <h2 className="font-semibold mb-2">공연장 이름</h2>
-          <Input
-            value={name}
-            onChange={setName}
-            placeholder="공연장 이름"
-          />
+          <Input value={name} onChange={setName} placeholder="공연장 이름" />
         </div>
         <div className="mb-4">
           <h2 className="font-semibold mb-2">공연장 주소</h2>
