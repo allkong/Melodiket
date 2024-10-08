@@ -34,11 +34,11 @@ const Page = () => {
         {activeTab === 'musician' && (
           <div>
             <MusicianItem
-              href=""
+              uuid=""
               src={''}
               musicianName={'장원영'}
-              favoriteCount={10}
-              isFavorite
+              initialFavoriteCount={10}
+              initialFavorite
             />
           </div>
         )}
