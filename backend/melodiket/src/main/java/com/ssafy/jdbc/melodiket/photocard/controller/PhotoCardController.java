@@ -9,7 +9,6 @@ import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.webpush.controller.dto.AcceptedResp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +31,7 @@ public class PhotoCardController {
         photoCardService.checkPhotoCardMintingAvailable(user, req.ticketUuid());
         String operationId = UUID.randomUUID().toString();
         photoCardService.mintPhotoCard(user.getLoginId(), user, req.imageCid(), req.ticketUuid(), operationId);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new AcceptedResp(operationId));
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @GetMapping("/me")

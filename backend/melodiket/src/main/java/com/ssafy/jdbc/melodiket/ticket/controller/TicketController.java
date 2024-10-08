@@ -6,6 +6,7 @@ import com.ssafy.jdbc.melodiket.ticket.service.TicketService;
 import com.ssafy.jdbc.melodiket.ticket.validation.ValidRefundUUID;
 import com.ssafy.jdbc.melodiket.ticket.validation.ValidUseUUID;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.AcceptedResp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,13 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<Void> purchaseTicket(Authentication authentication, @RequestBody @Valid TicketPurchaseRequest ticketPurchaseRequest) {
+    public ResponseEntity<AcceptedResp> purchaseTicket(Authentication authentication, @RequestBody @Valid TicketPurchaseRequest ticketPurchaseRequest) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         ticketService.checkTicketPurchaseAvailable(user, ticketPurchaseRequest);
         ticketService.approveTransfer(user, ticketPurchaseRequest.getConcertId());
-        ticketService.createTicket(user.getLoginId(), user, ticketPurchaseRequest);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        ticketService.createTicket(user.getLoginId(), user, ticketPurchaseRequest, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @GetMapping("/me")
@@ -48,17 +50,19 @@ public class TicketController {
     }
 
     @PostMapping("/{ticketUuid}/refund")
-    public ResponseEntity<Void> refundTicket(Authentication authentication, @PathVariable @Valid @ValidRefundUUID UUID ticketUuid) {
+    public ResponseEntity<AcceptedResp> refundTicket(Authentication authentication, @PathVariable @Valid @ValidRefundUUID UUID ticketUuid) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         ticketService.checkTicketRefundAvailable(user, ticketUuid);
-        ticketService.refundTicket(user.getLoginId(), ticketUuid);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        ticketService.refundTicket(user.getLoginId(), ticketUuid, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @PostMapping("/{ticketUuid}/use")
-    public ResponseEntity<Void> useTicket(Authentication authentication, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
+    public ResponseEntity<AcceptedResp> useTicket(Authentication authentication, @PathVariable @Valid @ValidUseUUID UUID ticketUuid) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        ticketService.useTicket(user.getLoginId(), user, ticketUuid);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        ticketService.useTicket(user.getLoginId(), user, ticketUuid, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 }
