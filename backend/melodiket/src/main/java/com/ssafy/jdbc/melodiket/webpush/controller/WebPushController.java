@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.webpush.controller;
 
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.webpush.controller.dto.NotificationReq;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.TransactionResultResp;
 import com.ssafy.jdbc.melodiket.webpush.service.WebPushService;
 import lombok.RequiredArgsConstructor;
 import nl.martijndwars.webpush.Subscription;
@@ -10,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,23 +34,30 @@ public class WebPushController {
 
     //for test
     @PostMapping("/send")
-    public ResponseEntity<String> sendNotification(Authentication authentication, @RequestBody NotificationReq notificationRequest) {
+    public ResponseEntity<Map<String, String>> sendNotification(Authentication authentication, @RequestBody NotificationReq notificationRequest) {
         try {
             // 사용자 정보를 가져오는 부분은 가정된 내용입니다.
             AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
             if (user == null) {
-                return ResponseEntity.badRequest().body("Invalid user ID");
+                return ResponseEntity.badRequest().build();
             }
 
             // 알림 전송
+            String operationId = UUID.randomUUID().toString();
+            TransactionResultResp resp = TransactionResultResp.builder()
+                    .status(TransactionResultResp.ResultStatus.SUCCESS)
+                    .operationId(operationId)
+                    .operation("sendNotification")
+                    .targetUuid(null)
+                    .build();
             webPushService.sendPushNotification(user,
                     notificationRequest.getTitle(),
                     notificationRequest.getBody(),
-                    notificationRequest.getData());
+                    resp);
 
-            return ResponseEntity.ok("Notification sent successfully");
+            return ResponseEntity.ok(Map.of("operationId", operationId));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error sending notification: " + e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("message", e.getMessage()));
         }
     }
 
