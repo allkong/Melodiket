@@ -14,6 +14,6 @@ public class CursorPagingReq {
     @NotNull(message = "`pageSize` must not be null")
     @Min(value = 1, message = "`pageSize` must be greater than 0")
     Integer pageSize = 10;
-    String orderKey = "uuid";
+    String orderKey = "id";
     String orderDirection = "ASC";
 }
