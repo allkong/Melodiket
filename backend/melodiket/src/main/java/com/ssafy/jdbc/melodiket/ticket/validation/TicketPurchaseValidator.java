@@ -31,7 +31,6 @@ public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchas
         Optional<ConcertEntity> optionalConcert = concertRepository.findByUuid(ticketPurchaseRequest.getConcertId());
         context.disableDefaultConstraintViolation();
 
-        log.info(SecurityContextHolder.getContext().getAuthentication().toString());
         AppUserEntity user = (AppUserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (optionalConcert.isEmpty()) {
