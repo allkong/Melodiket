@@ -34,6 +34,7 @@ const Page = () => {
         {activeTab === 'musician' && (
           <div>
             <MusicianItem
+              href=""
               src={''}
               musicianName={'장원영'}
               favoriteCount={10}
