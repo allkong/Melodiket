@@ -3,7 +3,7 @@ import ArrowButton from '@/components/atoms/button/ArrowButton';
 interface MyPageItemProps {
   label: string;
   content?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const MyPageItem = ({ label, content, onClick }: MyPageItemProps) => {
@@ -11,7 +11,7 @@ const MyPageItem = ({ label, content, onClick }: MyPageItemProps) => {
     <div onClick={onClick} className="w-full px-5 py-3 text-black bg-white">
       <div className="flex items-center justify-between">
         <div>
-          <p className="font-semibold">{label}</p>
+          <p className="font-medium">{label}</p>
           {content && <p>{content}</p>}
         </div>
         {<ArrowButton direction="right" color="text-gray-400" />}

@@ -11,7 +11,7 @@ import useElementSize from '@/hooks/useElementSize';
 import useAutoIndex from '@/hooks/useAutoIndex';
 
 interface CarouselProps {
-  datas: CarouselConcert[];
+  data: CarouselConcert[];
   size?: 'md' | 'lg';
   delay?: number;
   gap?: number;
@@ -20,12 +20,12 @@ interface CarouselProps {
 
 const Carousel = ({
   size = 'md',
-  datas,
+  data,
   delay = 4000,
   gap = 0,
   rounded = false,
 }: CarouselProps) => {
-  const [autoIndex, setAutoIndex] = useAutoIndex(0, 0, datas.length - 1, delay);
+  const [autoIndex, setAutoIndex] = useAutoIndex(0, 0, data.length - 1, delay);
   const handleClickIndicator = (index: number) => {
     setAutoIndex(index);
   };
@@ -37,12 +37,12 @@ const Carousel = ({
     -index * (width + gap);
 
   const [translate, setTranslate] = useState(
-    datas.map((_, index) => getTranslateValue(index, width, gap))
+    data.map((_, index) => getTranslateValue(index, width, gap))
   );
 
   useEffect(() => {
-    setTranslate(datas.map((_, index) => getTranslateValue(index, width, gap)));
-  }, [width, gap]);
+    setTranslate(data.map((_, index) => getTranslateValue(index, width, gap)));
+  }, [data, width, gap]);
 
   return (
     <div
@@ -61,18 +61,18 @@ const Carousel = ({
             columnGap: gap,
           }}
         >
-          {datas.map((data) => (
+          {data.map((concert) => (
             <CarouselImage
-              key={data.index}
+              key={concert.posterCid}
               size={size}
-              data={data}
+              data={concert}
               rounded={rounded}
             />
           ))}
         </div>
       </div>
       <CarouselIndicator
-        size={datas.length}
+        size={data.length}
         currentIndex={autoIndex}
         onClick={handleClickIndicator}
       />

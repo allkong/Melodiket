@@ -7,7 +7,10 @@ type JsonRequestInit = Omit<NonNullable<RequestInit>, 'body'> & {
   body?: object;
 };
 
-const customFetch = async <T>(url: string, options?: JsonRequestInit) => {
+const customFetch = async <T>(
+  url: string,
+  options?: JsonRequestInit
+): Promise<T> => {
   const defaultHeaders = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${accessToken}`,
@@ -30,7 +33,8 @@ const customFetch = async <T>(url: string, options?: JsonRequestInit) => {
       throw new Error(`Error: ${response.status}`);
     }
 
-    return await response.json();
+    const responseText = await response.text();
+    return responseText ? JSON.parse(responseText) : null;
   } catch (error) {
     throw error;
   }
