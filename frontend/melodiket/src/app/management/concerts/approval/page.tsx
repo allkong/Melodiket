@@ -16,8 +16,6 @@ const Page = () => {
     fetchMyConcerts();
   }, []);
 
-  console.log(data);
-
   return (
     <div className="flex flex-col h-screen">
       <Header />
