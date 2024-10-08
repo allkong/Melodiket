@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-import { useLogin } from '@/services/auth/useLogin';
+import { useLogin } from '@/services/auth/fetchAuth';
 
 import { LogoText } from '@/public/icons';
 import Input from '@/components/atoms/input/Input';

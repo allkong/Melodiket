@@ -1,5 +1,5 @@
 import useAuthStore from '@/store/authStore';
-import { useLogout } from '@/services/auth/useLogout';
+import { useLogout } from '@/services/auth/fetchAuth';
 
 import MenuPortal from './MenuPortal';
 import MenuMain from './MenuMain';

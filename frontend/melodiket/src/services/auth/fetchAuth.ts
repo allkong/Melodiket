@@ -93,3 +93,26 @@ export const useSignUp = () => {
   });
   return mutate;
 };
+
+const logout = async () => {
+  return await customFetch('/auth/logout', {
+    method: 'POST',
+  });
+};
+
+export const useLogout = () => {
+  const router = useRouter();
+  const { clearAuth } = useAuthStore();
+
+  return async () => {
+    try {
+      await logout();
+      clearAuth();
+      sessionStorage.clear();
+      toast.success('로그아웃 완료');
+      router.push('/');
+    } catch (error) {
+      toast.error('로그아웃 실패');
+    }
+  };
+};

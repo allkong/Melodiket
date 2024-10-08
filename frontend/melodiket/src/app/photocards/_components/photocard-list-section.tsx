@@ -1,8 +1,10 @@
 'use client';
 
-import PhotocardCard from '@/components/molecules/card/PhotocardCard';
-import { usePhotocardList } from '@/services/photocard/usePhotocardList';
 import Link from 'next/link';
+
+import { usePhotocardList } from '@/services/photocard/fetchPhotocard';
+
+import PhotocardCard from '@/components/molecules/card/PhotocardCard';
 
 const PhotocardListSection = () => {
   const { data: photocards } = usePhotocardList();
