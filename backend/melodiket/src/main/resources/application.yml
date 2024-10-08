@@ -33,6 +33,7 @@ blockchain:
     melodiket: ${MELODIKET_CONTRACT_ADDRESS}
     melody-token: ${MELODY_TOKEN_CONTRACT_ADDRESS}
     ticket: ${TICKET_CONTRACT_ADDRESS}
+    photo-card: ${PHOTO_CARD_CONTRACT_ADDRESS}
 
 cloud:
   aws:

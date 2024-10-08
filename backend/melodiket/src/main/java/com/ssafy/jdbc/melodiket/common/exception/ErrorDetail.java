@@ -52,6 +52,7 @@ public enum ErrorDetail {
     NOT_ENOUGH_TOKEN_BALANCE(HttpStatus.CONFLICT, "E409004", "Not enough token balance."),
     ALREADY_PURCHASED_SEAT(HttpStatus.CONFLICT, "E409005", "Already purchased seat."),
     TICKET_ALREADY_USED(HttpStatus.CONFLICT, "E409006", "이미 사용된 티켓입니다."),
+    TICKET_NOT_USED(HttpStatus.CONFLICT, "E409007", "사용되지 않은 티켓입니다."),
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500000", "Internal Server Error");
 

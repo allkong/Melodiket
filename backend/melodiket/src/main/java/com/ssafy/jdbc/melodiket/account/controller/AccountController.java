@@ -23,7 +23,6 @@ public class AccountController {
 
     @GetMapping("/me")
     public PageResponse<AccountResp> getMyAccounts(CursorPagingReq pagingReq) {
-        System.out.println(pagingReq);
         return null;
     }
 
