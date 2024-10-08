@@ -45,3 +45,9 @@ cloud:
       presigned-url-expired: ${PRESIGNED_EXPIRE_TIME}
 cloudfront:
   domain: ${CLOUDFRONT_DOMAIN}
+
+vapid:
+  public:
+    key: ${VAPID_PUBLIC_KEY}
+  private:
+    key: ${VAPID_PRIVATE_KEY}

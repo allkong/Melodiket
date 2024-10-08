@@ -22,16 +22,23 @@ import com.ssafy.jdbc.melodiket.user.controller.dto.stagemanager.StageManagerRes
 import com.ssafy.jdbc.melodiket.user.entity.*;
 import com.ssafy.jdbc.melodiket.user.repository.*;
 import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.web3j.crypto.Credentials;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +49,7 @@ public class UserService implements AuthService {
     public static final String LIKE_COUNT = "likeCount"; // 좋아요 개수
     public static final String REGISTERED_AT = "registeredAt"; // 등록 날짜
 
+    private final RedisTemplate<String, String> redisTemplate;
     private final AppUserRepository appUserRepository;
     private final AudienceRepository audienceRepository;
     private final MusicianRepository musicianRepository;
@@ -177,7 +185,18 @@ public class UserService implements AuthService {
 
     @Override
     public void logout() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String token = jwtService.resolveToken(request);
+        if (token == null) {
+            throw new HttpResponseException(ErrorDetail.UNAUTHORIZED);
+        } else {
+            Claims claims = jwtService.getClaims(token);
+            long expiration = claims.getExpiration().getTime() - System.currentTimeMillis();
 
+            redisTemplate.opsForValue().set(token, "blacklisted", expiration, TimeUnit.MILLISECONDS);
+
+            SecurityContextHolder.clearContext();
+        }
     }
 
     @Override
@@ -286,15 +305,6 @@ public class UserService implements AuthService {
     public MusicianResp getMusicianDetail(UUID uuid) {
         MusicianEntity musician = musicianRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
-        return new MusicianResp(
-                musician.getUuid(),
-                musician.getLoginId(),
-                musician.getRole().name(),
-                musician.getNickname(),
-                musician.getDescription(),
-                musician.getRegisteredAt(),
-                null,// TODO : imageUrl 선개발시 null 처리
-                musician.getFavoriteMusicians().size()
-        );
+        return MusicianResp.from(musician);
     }
 }
