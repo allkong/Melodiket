@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
 import { SIGN_UP_DATA_LENGTH_LIMITS } from '@/constants/signUp';
+import { useIsLoginIdDuplicated } from '@/services/auth/useLogin';
 
 const MIN_LENGTH = SIGN_UP_DATA_LENGTH_LIMITS.MIN_LOGIN_ID_LENGTH;
 const MAX_LENGTH = SIGN_UP_DATA_LENGTH_LIMITS.MAX_LOGIN_ID_LENGTH;
@@ -22,23 +23,33 @@ const SignUpLoginIdInput = ({
 }: SignUpLoginIdInputProps) => {
   const [isLengthValid, setIsLengthValid] = useState(true);
   const [isDuplicateValid, setIsDuplicateValid] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
+  const mutate = useIsLoginIdDuplicated();
 
   const validateLoginIdLength = (value: string) => {
     return MIN_LENGTH <= value.length && value.length <= MAX_LENGTH;
   };
 
-  const validateLoginIdDuplicate = (value: string) => {
-    // value를 서버로 보내 중복 검증
-    return true;
+  const validateLoginIdDuplicate = async (value: string) => {
+    const { loginId: isDuplicated } = await mutate.mutateAsync({
+      loginId: value,
+    });
+
+    return !isDuplicated;
   };
 
   const handleLoginIdChange = (value: string) => {
     setLoginId(value);
     setIsLengthValid(validateLoginIdLength(value));
+
+    setIsTyping(true);
+    setIsDuplicateValid(true);
   };
 
-  const handleLoginIdDuplicate = () => {
-    setIsDuplicateValid(validateLoginIdDuplicate(loginId));
+  const handleLoginIdDuplicate = async () => {
+    const result = await validateLoginIdDuplicate(loginId);
+    setIsDuplicateValid(result);
+    setIsTyping(false);
   };
 
   const getAlertLabel = () => {
@@ -55,8 +66,8 @@ const SignUpLoginIdInput = ({
   };
 
   useEffect(() => {
-    setIsLoginIdValid(isLengthValid && isDuplicateValid);
-  }, [isLengthValid, isDuplicateValid, setIsLoginIdValid]);
+    setIsLoginIdValid(isLengthValid && isDuplicateValid && !isTyping);
+  }, [isLengthValid, isDuplicateValid, isTyping, setIsLoginIdValid]);
 
   return (
     <div>
