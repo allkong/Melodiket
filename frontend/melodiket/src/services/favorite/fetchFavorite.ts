@@ -4,9 +4,12 @@ import type { FavoriteMusician } from '@/types/favorite';
 import getQueryClient from '@/utils/getQueryClient';
 import favoriteKey from './favoriteKey';
 import useAuthStore from '@/store/authStore';
+import toast from 'react-hot-toast';
 
 export const fetchFavoriteMusiciansList = async () => {
-  const response = await customFetch<FavoriteMusician>('/musicians/liked/me');
+  const response = await customFetch<FavoriteMusician>(
+    '/users/musicians/liked/me'
+  );
   return response;
 };
 
@@ -32,7 +35,7 @@ export const useFetchFavoriteMusiciansListDehydrateState = () => {
   return dehydrate(queryClient);
 };
 
-export const toggleFavorite = async (concertUuid: string) => {
+export const toggleFavoriteConcert = async (concertUuid: string) => {
   const response = await customFetch<{ isFavorite: boolean }>(
     `/concerts/${concertUuid}/favorite`,
     { method: 'post' }
@@ -41,11 +44,34 @@ export const toggleFavorite = async (concertUuid: string) => {
   return response;
 };
 
-export const useToggleFavorite = () => {
+export const useToggleFavoriteConcert = () => {
   const mutate = useMutation({
     mutationFn: ({ concertUuid }: { concertUuid: string }) =>
-      toggleFavorite(concertUuid),
+      toggleFavoriteConcert(concertUuid),
   });
 
   return mutate;
+};
+
+const toggleFavoriteMusician = async (musicianUuid: string) => {
+  const response = await customFetch<{ status: boolean }>(
+    `/users/musicians/${musicianUuid}/like`,
+    { method: 'post' }
+  );
+
+  return response;
+};
+
+export const useToggleFavoriteMusician = () => {
+  return useMutation({
+    mutationFn: (musicianUuid: string) => toggleFavoriteMusician(musicianUuid),
+    onSuccess: (data) => {
+      toast(`찜 ${data.status ? '추가' : '제거'}`, {
+        icon: '💜',
+      });
+    },
+    onError: () => {
+      toast.error('찜 실패');
+    },
+  });
 };
