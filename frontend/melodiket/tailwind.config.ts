@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss';
 // @ts-expect-error: TypeScript types for tailwind-scrollbar-hide are not available
 import scrollbarHide from 'tailwind-scrollbar-hide';
+import lineClamp from '@tailwindcss/line-clamp';
 
 const config: Config = {
   content: [
@@ -25,6 +26,7 @@ const config: Config = {
         foreground: 'var(--foreground)',
         primary: '#E28EFF',
         secondary: '#A293FF',
+        black: '#17171B',
         purple: {
           100: '#F9F1FF',
           200: '#C090FF',
@@ -42,6 +44,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [scrollbarHide],
+  plugins: [scrollbarHide, lineClamp],
 };
 export default config;

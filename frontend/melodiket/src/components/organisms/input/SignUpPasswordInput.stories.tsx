@@ -14,6 +14,7 @@ export const Default: Story = {
   render: () => {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     return (
       <SignUpPasswordInput
