@@ -10,8 +10,8 @@ import Header from '@/components/organisms/navigation/Header';
 
 const RegisterConcert = () => {
   const [stageData, setStageData] = useState<StageData>({
-    stageName: '',
-    stageAddress: '',
+    name: '',
+    address: '',
     isStanding: true,
     capacity: 0,
     numOfRow: 0,
