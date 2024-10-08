@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,17 +52,19 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final UserService userService;
     private final List<String> allowedOrigins;
+    private final RedisTemplate redisTemplate;
 
-    public SecurityConfig(JwtService jwtService, UserService userService, @Value("#{'${security.allowed-origins}'.split(';')}") List<String> allowedOrigins) {
+    public SecurityConfig(JwtService jwtService, UserService userService, @Value("#{'${security.allowed-origins}'.split(';')}") List<String> allowedOrigins, RedisTemplate redisTemplate) {
         this.jwtService = jwtService;
         this.userService = userService;
         this.allowedOrigins = allowedOrigins;
+        this.redisTemplate = redisTemplate;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         security
-                .addFilterBefore(new JwtFilter(this, jwtService, userService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(redisTemplate,this, jwtService, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/error").permitAll()
                         // 혹시 나중에 swagger 테스트 할수도 있어서 미리
