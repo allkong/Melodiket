@@ -2,7 +2,10 @@ package com.ssafy.jdbc.melodiket.concert.controller;
 
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertAssignmentResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertCursorPagingReq;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.CreateConcertReq;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.validation.Valid;
@@ -85,5 +88,13 @@ public class ConcertController {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         PageResponse<ConcertAssignmentResp> assignments = concertService.getAssignedConcerts(user, cursorPagingReq);
         return ResponseEntity.ok(assignments);
+    }
+
+    @PostMapping("/{id}/close")
+    public ResponseEntity<Void> closeConcert(Authentication authentication, @PathVariable UUID id) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        concertService.checkIsConcertClosable(user, id);
+        concertService.closeConcert(user.getLoginId(), user, id);
+        return ResponseEntity.accepted().build();
     }
 }

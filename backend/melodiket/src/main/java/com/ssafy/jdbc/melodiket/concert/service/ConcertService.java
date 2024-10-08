@@ -36,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.abi.datatypes.Bool;
 import org.web3j.crypto.Credentials;
 
 import java.util.ArrayList;
@@ -328,5 +327,44 @@ public class ConcertService {
         MusicianEntity musician = musicianRepository.findByLoginId(user.getLoginId())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.MUSICIAN_NOT_FOUND));
         return concertParticipantMusicianCursorRepository.getConcertAssignmentsOf(musician, cursorPagingReq);
+    }
+
+    public void checkIsConcertClosable(AppUserEntity user, UUID id) {
+        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        ConcertEntity concert = concertRepository.findByUuid(id)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+
+        if (!concert.getOwner().getUuid().equals(owner.getUuid())) {
+            throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
+        }
+
+        if (concert.getConcertStatus() != ConcertStatus.ACTIVE) {
+            throw new HttpResponseException(ErrorDetail.CONFLICT);
+        }
+    }
+
+    @Async
+    @DistributedLock(key = "#loginId.concat('-closeConcert')")
+    @Transactional(rollbackFor = Exception.class)
+    public void closeConcert(String loginId, AppUserEntity user, UUID id) {
+        StageManagerEntity owner = stageManagerRepository.findByUuid(user.getUuid())
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER));
+
+        ConcertEntity concert = concertRepository.findByUuid(id)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+
+        WalletResp ownerWallet = walletService.getWalletOf(owner.getUuid());
+        Credentials ownerCredentials = Credentials.create(ownerWallet.privateKey());
+        ManagerContract managerContract = new ManagerContract(blockchainConfig, ownerCredentials);
+
+        try {
+            managerContract.closeConcert(concert.getUuid());
+            concert.close();
+            concertRepository.save(concert);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
