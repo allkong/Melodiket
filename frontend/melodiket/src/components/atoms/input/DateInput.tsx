@@ -49,7 +49,7 @@ const DateInput = forwardRef(
         <input
           ref={ref}
           className="w-full h-12 pl-5 pr-10 text-base border outline-none rounded-2xl text-gray-200"
-          type="date"
+          type="datetime-local"
           placeholder={placeholder}
           value={value}
           onChange={handleChange}

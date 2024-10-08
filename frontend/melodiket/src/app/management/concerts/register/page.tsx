@@ -13,24 +13,17 @@ import Header from '@/components/organisms/navigation/Header';
 
 const RegisterConcert = () => {
   const [concertData, setConcertData] = useState<ConcertData>({
-    concertName: '',
-    startAt: new Date(),
-    ticketingAt: new Date(),
-    concertDescription: '',
-    concertPoster: new File([], ''),
-    musicianList: {},
+    stageUuid: '',
+    title: '',
+    startAt: '',
+    ticketingAt: '',
+    description: '',
+    posterCid: '',
+    musicians: [],
     ticketPrice: 0,
     ownerStake: 0,
     musicianStake: 0,
     favoriteMusicianStake: 0,
-    stageInformation: {
-      stageName: '',
-      stageAddress: '',
-      isStanding: true,
-      capacity: undefined,
-      numOfRow: undefined,
-      numOfCol: undefined,
-    },
   });
   const [step, setStep] = useState<
     'CONCERT' | 'MUSICIAN' | 'TICKET' | 'STAGE' | 'SUCCESS'
