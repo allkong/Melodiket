@@ -1,7 +1,7 @@
 'use client';
 
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
-import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavoriteMusiciansList';
+import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavorite';
 
 const FavoriteMusicianSection = () => {
   const { data } = useFetchFavoriteMusiciansList();
@@ -18,7 +18,7 @@ const FavoriteMusicianSection = () => {
             src={musician.imageUrl}
           />
         ))}
-      {pageInfo?.responsedSize === 0 && <div>등록 된 뮤지션이 없어요.</div>}
+      {pageInfo?.responsedSize === 0 && <div>등록된 뮤지션이 없어요.</div>}
     </>
   );
 };
