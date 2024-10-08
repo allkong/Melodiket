@@ -2,12 +2,13 @@
 
 import React, { useEffect, useRef } from 'react';
 
+import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
+import useIsOnScreen from '@/hooks/useIsOnScreen';
+
 import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
-import useIsOnScreen from '@/hooks/useIsOnScreen';
 import IsEnd from '../_components/is-end';
 import IsError from '../_components/is-error';
-import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
 
 const ConcertListSection = () => {
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
@@ -32,6 +33,7 @@ const ConcertListSection = () => {
             .map((concert) => (
               <ConcertCard
                 key={`${concert.concertUuid}-${concert.posterCid}`}
+                href={`/concerts/${concert.concertUuid}`}
                 {...concert}
               />
             ))}
