@@ -46,7 +46,6 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
       ...concertData,
       stageUuid: selectedStage?.uuid || '',
     };
-    console.log(updatedConcertData);
     onNext(updatedConcertData);
   };
 
