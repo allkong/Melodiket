@@ -2,7 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useTicketDetail } from '@/services/ticket/useTicketdetail';
+import {
+  useTicketDetail,
+  useTicketRefund,
+} from '@/services/ticket/fetchTicket';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
 import { getCidUrl, getS3Url } from '@/utils/getUrl';
@@ -16,10 +19,12 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
+import toast from 'react-hot-toast';
 
 const Page = () => {
   const router = useRouter();
   const { data: ticket } = useTicketDetail();
+  const { mutate: ticketRefund } = useTicketRefund();
 
   const ticketInfo = [
     { label: '예매자', value: '정다빈' },
@@ -58,11 +63,21 @@ const Page = () => {
   const handleConcertPageNavigation = () => {
     if (ticket?.concertUuid) {
       router.push(`/concerts/${ticket?.concertUuid}`);
+    } else {
+      toast('티켓 조회 불가', { icon: '😥' });
     }
   };
 
   const handleMobileTicketClick = () => {
     router.push(`/mytickets/${ticket?.ticketUuid}/mobile-ticket`);
+  };
+
+  const handleTicketRefund = () => {
+    if (ticket?.ticketUuid) {
+      ticketRefund(ticket.ticketUuid);
+    } else {
+      toast('티켓 조회 불가', { icon: '😥' });
+    }
   };
 
   return (
@@ -106,7 +121,7 @@ const Page = () => {
                 ? formatPrice(ticket?.ticketPrice)
                 : '정보 없음'}
             </p>
-            <SmallButton label="예매 취소" onClick={() => alert('예매 취소')} />
+            <SmallButton label="예매 취소" onClick={handleTicketRefund} />
           </div>
         </DetailSection>
       </div>
