@@ -12,15 +12,14 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const params = useParams<{ uuid: string }>();
-  const { data } = useFetchConcertDetail(params.uuid);
-  const { result } = data ?? {};
+  const { data: concert } = useFetchConcertDetail(params.uuid);
 
   const router = useRouter();
 
   return (
     <div className="flex flex-col w-full min-h-screen">
       <SubHeader
-        title={result?.title ?? ''}
+        title={concert?.title ?? ''}
         onPrev={() => router.push(`/concerts/${params.uuid}`)}
         canGoPrev
       />

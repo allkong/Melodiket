@@ -15,12 +15,11 @@ import useFunnel from '@/hooks/useFunnel';
 
 const Page = () => {
   const params = useParams<{ uuid: string }>();
-  const { data } = useFetchConcertDetail(params.uuid);
-  const { result } = data ?? {};
+  const { data: concert } = useFetchConcertDetail(params.uuid);
 
   const [ticketBookInformation, setTicketBookInformation] =
     useState<TicketBookRequest>({
-      concertId: result?.concertUuid ?? '',
+      concertId: concert?.concertUuid ?? '',
       seatRow: -1,
       seatCol: -1,
       favoriteMusician: '',
@@ -40,7 +39,7 @@ const Page = () => {
       <Funnel>
         <Funnel.Step step="seat">
           <SeatSection
-            price={data?.result.ticketPrice ?? 0}
+            price={concert?.ticketPrice ?? 0}
             onNext={(data) => {
               setTicketBookInformation((prev) => ({ ...prev, ...data }));
               setStep('confirm');
