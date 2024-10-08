@@ -1,4 +1,10 @@
-import { FetchConcertDetail, FetchConcertResponse } from '@/types/concert';
+import {
+  ConcertData,
+  CreateConcertResponse,
+  FetchConcertDetail,
+  FetchConcertResponse,
+  FetchMyConcertsResponse,
+} from '@/types/concert';
 import customFetch from '../customFetch';
 import {
   dehydrate,
@@ -15,23 +21,14 @@ import type {
   FetchConcertRequest,
 } from '@/types/ticket';
 
-export const fetchConcertList = async (
-  {
-    isFirstPage,
-    lastUuid,
-    pageSize,
-    orderKey,
-    orderDirection,
-    title,
-  }: FetchConcertRequest = {
-    isFirstPage: true,
-    lastUuid: '',
-    pageSize: 10,
-    orderDirection: 'ASC',
-    orderKey: 'uuid',
-    title: '',
-  }
-) => {
+export const fetchConcertList = async ({
+  isFirstPage,
+  lastUuid,
+  pageSize,
+  orderKey,
+  orderDirection,
+  title,
+}: FetchConcertRequest) => {
   const response = await customFetch<FetchConcertResponse>(
     `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}`
   );
@@ -39,7 +36,7 @@ export const fetchConcertList = async (
 };
 
 export const useFetchInfiniteConcert = (
-  pageSize: number = 10,
+  pageSize: number = 2,
   orderKey: string = 'uuid',
   orderDirection: 'ASC' | 'DESC' = 'ASC',
   title: string = ''
@@ -82,20 +79,16 @@ export const useFetchInfiniteConcert = (
 export const useFetchConcertList = () => {
   const result = useSuspenseQuery<FetchConcertResponse>({
     queryKey: concertKey.list(),
-    queryFn: () => fetchConcertList(),
+    queryFn: () =>
+      fetchConcertList({
+        isFirstPage: true,
+        orderDirection: 'ASC',
+        orderKey: 'uuid',
+        pageSize: 10,
+      }),
   });
 
   return result;
-};
-
-export const useFetchConcertListDehydrateState = async () => {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: concertKey.list(),
-    queryFn: () => fetchConcertList(),
-  });
-
-  return dehydrate(queryClient);
 };
 
 export const fetchConcertDetail = async (uuid: string) => {
@@ -140,4 +133,44 @@ export const useBookTicket = () => {
     throwOnError: true,
   });
   return mutate;
+};
+
+const getMyAssignedConcerts = async () => {
+  const response = await customFetch<FetchMyConcertsResponse>(
+    '/concerts/me/assigned',
+    {
+      method: 'GET',
+    }
+  );
+
+  return response;
+};
+
+export const useGetMyAssignedConcerts = () => {
+  return useMutation<FetchMyConcertsResponse, Error>({
+    mutationFn: () => getMyAssignedConcerts(),
+    onError: () => {
+      alert('내 공연 목록 가져오기 실패!');
+    },
+  });
+};
+
+const createConcert = async (concertData: ConcertData) => {
+  const response = await customFetch<CreateConcertResponse>(
+    '/concerts/create',
+    {
+      method: 'POST',
+      body: concertData,
+    }
+  );
+  return response;
+};
+
+export const useCreateConcert = () => {
+  return useMutation<CreateConcertResponse, Error, ConcertData>({
+    mutationFn: (concertData) => createConcert(concertData),
+    onError: () => {
+      alert('공연 등록 실패!');
+    },
+  });
 };
