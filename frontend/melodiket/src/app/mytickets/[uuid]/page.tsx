@@ -15,7 +15,7 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
-import { getCidUrl } from '@/utils/getUrl';
+import { getCidUrl, getS3Url } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
@@ -57,6 +57,12 @@ const Page = () => {
     },
   ].filter(Boolean) as { label: string; value: string }[];
 
+  const handleConcertPageNavigation = () => {
+    if (ticket?.concertUuid) {
+      router.push(`/concerts/${ticket?.concertUuid}`);
+    }
+  };
+
   const handleMobileTicketClick = () => {
     router.push(`${pathname}/mobile-ticket`);
   };
@@ -73,8 +79,8 @@ const Page = () => {
               {ticket?.concertTitle || '콘서트 정보 없음'}
             </h1>
             <SmallButton
-              label="예매 페이지 보기"
-              onClick={() => alert('페이지 이동')}
+              label="공연 페이지 보기"
+              onClick={handleConcertPageNavigation}
             />
           </div>
         </div>
@@ -82,7 +88,7 @@ const Page = () => {
         {/* 최애 밴드 */}
         <DetailSection title="최애 밴드">
           <MusicianStatusProfile
-            src={ticket?.myFavoriteMusician.musicianImageUrl || ''}
+            src={getS3Url(ticket?.myFavoriteMusician.musicianImageUrl || '')}
             musicianName={
               ticket?.myFavoriteMusician.musicianName || '정보 없음'
             }
