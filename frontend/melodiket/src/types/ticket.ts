@@ -79,4 +79,5 @@ export interface FetchConcertRequest {
   pageSize?: number;
   orderKey?: string;
   orderDirection?: 'ASC' | 'DESC';
+  title?: string;
 }

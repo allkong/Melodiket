@@ -5,8 +5,8 @@ import React, { useEffect, useRef } from 'react';
 import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
 import useIsOnScreen from '@/hooks/useIsOnScreen';
-import IsEnd from '../_components/is-end';
-import IsError from '../_components/is-error';
+import IsEnd from '@/components/atoms/label/IsEnd';
+import IsError from '@/components/atoms/button/IsErrorButton';
 import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
 
 const ConcertListSection = () => {
@@ -38,7 +38,7 @@ const ConcertListSection = () => {
         {isFetching && <ConcertCardSkeleton count={6} />}
       </div>
       {error && <IsError onClick={refetch} />}
-      {!hasNextPage && <IsEnd />}
+      {!hasNextPage && !error && <IsEnd />}
       <div ref={endRef} className="w-full h-3 bg-white" />
     </>
   );
