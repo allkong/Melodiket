@@ -1,11 +1,45 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Header from '@/components/organisms/navigation/Header';
 import LargeButton from '@/components/atoms/button/LargeButton';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import Input from '@/components/atoms/input/Input';
+import Textarea from '@/components/atoms/textarea/Textarea';
+
+import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
 
 const Page = () => {
+  const { mutate: getMe, data } = useGetMe();
+  const { mutate: updateMe } = useUpdateMe();
+
+  const [nickname, setNickname] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    getMe();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setNickname(data.nickname);
+      setDescription(data.description);
+      setImageUrl(data.imageUrl);
+    }
+  }, [data]);
+
+  const handleUpdate = () => {
+    const updateData = {
+      nickname,
+      description,
+      imageUrl,
+    };
+
+    updateMe(updateData);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -23,14 +57,21 @@ const Page = () => {
                 </div>
               </div>
               <div className="flex flex-col space-y-4 mt-10">
-                <Input placeholder="소개" />
-                <Input placeholder="닉네임" />
-                <Input placeholder="비밀번호" />
+                <Input
+                  placeholder="닉네임"
+                  value={nickname}
+                  onChange={setNickname}
+                />
+                <Textarea
+                  placeholder="소개"
+                  value={description}
+                  onChange={setDescription}
+                />
               </div>
             </div>
           </div>
           <div className="my-4 h-fit p-4">
-            <LargeButton label="수정하기" />
+            <LargeButton label="수정하기" onClick={handleUpdate} />
           </div>
         </div>
       </div>
