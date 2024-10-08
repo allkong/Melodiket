@@ -5,6 +5,7 @@ import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.AcceptedResp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,31 +37,35 @@ public class ConcertController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createConcert(Authentication authentication, @RequestBody CreateConcertReq createConcertReq) {
+    public ResponseEntity<AcceptedResp> createConcert(Authentication authentication, @RequestBody CreateConcertReq createConcertReq) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        concertService.createConcert(user.getLoginId(), user, createConcertReq);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.createConcert(user.getLoginId(), user, createConcertReq, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelConcert(Authentication authentication, @PathVariable UUID id) {
+    public ResponseEntity<AcceptedResp> cancelConcert(Authentication authentication, @PathVariable UUID id) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        concertService.cancelConcert(user.getLoginId(), user, id);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.cancelConcert(user.getLoginId(), user, id, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @PostMapping("/{id}/approve")
-    public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal, @RequestBody ConcertApproveReq concertApproveReq) {
+    public ResponseEntity<AcceptedResp> approveConcert(@PathVariable("id") UUID concertId, Principal principal, @RequestBody ConcertApproveReq concertApproveReq) {
         String loginId = principal.getName();
-        concertService.approveConcert(concertId, loginId, concertApproveReq);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.approveConcert(concertId, loginId, concertApproveReq, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @PostMapping("/{id}/deny")
-    public ResponseEntity<Void> denyConcert(@PathVariable("id") UUID concertId, Principal principal) {
+    public ResponseEntity<AcceptedResp> denyConcert(@PathVariable("id") UUID concertId, Principal principal) {
         String loginId = principal.getName();
-        concertService.denyConcert(concertId, loginId);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.denyConcert(concertId, loginId, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @GetMapping("/by-stage-managers/{id}")
@@ -89,11 +94,12 @@ public class ConcertController {
     }
 
     @PostMapping("/{id}/close")
-    public ResponseEntity<Void> closeConcert(Authentication authentication, @PathVariable UUID id) {
+    public ResponseEntity<AcceptedResp> closeConcert(Authentication authentication, @PathVariable UUID id) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         concertService.checkIsConcertClosable(user, id);
-        concertService.closeConcert(user.getLoginId(), user, id);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.closeConcert(user.getLoginId(), user, id, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @GetMapping("/me/created")

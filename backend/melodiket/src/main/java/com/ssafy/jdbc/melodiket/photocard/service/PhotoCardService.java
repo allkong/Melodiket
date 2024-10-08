@@ -21,6 +21,7 @@ import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
 import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.TransactionResultResp;
 import com.ssafy.jdbc.melodiket.webpush.service.WebPushService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,6 @@ import org.web3j.crypto.Credentials;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -95,25 +95,37 @@ public class PhotoCardService {
     }
 
     @Async
-    @DistributedLock(key = "#loginId.concat('-uploadImageToIPFS')")
+    @DistributedLock(key = "#loginId.concat('-mintPhotoCard')")
     @Transactional(rollbackFor = Exception.class)
-    public void uploadImageToIPFS(String loginId, AppUserEntity user, String imageCid, UUID ticketUUID) {
+    public void mintPhotoCard(String loginId, AppUserEntity user, String imageCid, UUID ticketUUID, String operationId) {
         WalletResp wallet = walletService.getWalletOf(user.getUuid());
         Credentials credentials = Credentials.create(wallet.privateKey());
         PhotoCardContract photoCardContract = new PhotoCardContract(blockchainConfig, credentials);
 
         UUID uuid = UUID.randomUUID();
+        TransactionResultResp.TransactionResultRespBuilder respBuilder = TransactionResultResp.builder()
+                .operationId(operationId)
+                .operation("mintPhotoCard");
         try {
             photoCardContract.createPhotoCard(uuid.toString(), ticketUUID.toString(), wallet.address(), imageCid);
             onUploadComplete(uuid, user, imageCid, ticketUUID);
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.SUCCESS)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(user, "포토 카드 업로드 완료", "포토 카드 업로드 완료", resp);
         } catch (Exception e) {
             log.error("Error occurred while uploading image to IPFS: " + e.getMessage());
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.FAIL)
+                    .targetUuid(null)
+                    .build();
+            webPushService.initiatePushNotification(user, "포토 카드 업로드 실패", "포토 카드 업로드 실패", resp);
             throw new RuntimeException(e);
         }
     }
 
     public void onUploadComplete(UUID uuid, AppUserEntity user, String cid, UUID ticketUUID) {
-        webPushService.initiatePushNotification(user, "포토카드 업로드 완료.", "포토카드 업로드 완료.", Map.of());
         TicketEntity ticket = ticketRepository.findByUuid(ticketUUID).orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         photoCardRepository.save(
                 PhotoCardEntity.builder()
