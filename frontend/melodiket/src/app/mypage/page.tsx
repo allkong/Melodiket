@@ -10,22 +10,16 @@ import { MLDY, Authority } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import { useGetMe } from '@/services/user/fetchUser';
 import { useEffect } from 'react';
-import { useLogout } from '@/services/auth/useLogout';
 
 const Page = () => {
   const router = useRouter();
   const { mutate: getMe, data } = useGetMe();
-  const { mutate: logout } = useLogout();
 
   const isStageManager = data?.role === 'STAGE_MANAGER';
   const isAudience = data?.role === 'AUDIENCE';
 
   const handleNavigation = (path: string) => {
     router.push(path);
-  };
-
-  const handleLogout = () => {
-    logout();
   };
 
   useEffect(() => {
@@ -105,7 +99,7 @@ const Page = () => {
             />
           </div>
           <div className="my-4 h-fit p-4">
-            <LargeButton label="로그아웃" onClick={handleLogout} />
+            <LargeButton label="로그아웃" />
           </div>
         </div>
       </div>
