@@ -174,7 +174,7 @@ public class UserService implements AuthService {
                         "role", user.getRole().name()
                 ),  // Payload에 사용자 UUID 추가
 
-                3600000  // 1시간
+                360000000  // 100시간
         );
         return new LoginResp(
                 token,
