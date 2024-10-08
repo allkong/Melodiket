@@ -1,20 +1,24 @@
 import { Photocard, PhotocardList } from '@/types/photocard';
-import { dehydrate, useSuspenseQuery } from '@tanstack/react-query';
+import { dehydrate, useQuery } from '@tanstack/react-query';
 import photocardKey from './photocardKey';
 import customFetch from '../customFetch';
 import getQueryClient from '@/utils/getQueryClient';
+import useAuthStore from '@/store/authStore';
 
 const getPhotocardList = async () => {
   return await customFetch<PhotocardList>('/photo-cards/me');
 };
 
 export const usePhotocardList = () => {
-  const response = useSuspenseQuery<Photocard[], Error>({
+  const { user } = useAuthStore();
+
+  const response = useQuery<Photocard[], Error>({
     queryKey: photocardKey.list(),
     queryFn: async () => {
       const response = await getPhotocardList();
       return response.result;
     },
+    enabled: !!user,
   });
 
   return response;

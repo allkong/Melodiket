@@ -10,6 +10,7 @@ import FileInput from '@/components/atoms/input/FileInput';
 import DateInput from '@/components/atoms/input/DateInput';
 
 import { ConcertData } from '@/types/concert';
+import { formatDateCustom } from '@/utils/dayjsPlugin';
 
 interface ConcertInformationProps {
   concertData: ConcertData;
@@ -20,11 +21,11 @@ const ConcertInformation = ({
   concertData,
   onNext,
 }: ConcertInformationProps) => {
-  const [concertName, setConcertName] = useState('');
+  const [title, setTitle] = useState('');
   const [startAt, setStartAt] = useState('');
   const [ticketingAt, setTicketingAt] = useState('');
-  const [concertDescription, setConcertDescription] = useState('');
-  const [concertPoster, setConcertPoster] = useState<File | null>(null);
+  const [description, setDescription] = useState('');
+  const [posterCid, setPosterCid] = useState<string | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -40,20 +41,16 @@ const ConcertInformation = ({
   }, [startAt]);
 
   const isFormValid =
-    concertName &&
-    startAt &&
-    ticketingAt &&
-    concertDescription &&
-    concertPoster;
+    title && startAt && ticketingAt && description && posterCid;
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
       ...concertData,
-      concertName: concertName,
-      startAt: new Date(startAt),
-      ticketingAt: new Date(ticketingAt),
-      concertDescription: concertDescription,
-      concertPoster: concertPoster as File,
+      title: title,
+      startAt: formatDateCustom(startAt, 'YYYY-MM-DDTHH:mm:ss'),
+      ticketingAt: formatDateCustom(ticketingAt, 'YYYY-MM-DDTHH:mm:ss'),
+      description: description,
+      posterCid: posterCid || '',
     };
     onNext(updatedConcertData);
   };
@@ -67,11 +64,7 @@ const ConcertInformation = ({
         />
         <div className="mt-10 mb-4 flex-grow">
           <h2 className="font-semibold mb-2">공연 이름</h2>
-          <Input
-            value={concertName}
-            onChange={setConcertName}
-            placeholder="공연 이름"
-          />
+          <Input value={title} onChange={setTitle} placeholder="공연 이름" />
         </div>
         <div className="mb-4">
           <h2 className="font-semibold mb-2">공연 일시</h2>
@@ -95,14 +88,14 @@ const ConcertInformation = ({
         <div className="mb-4 flex-grow">
           <h2 className="font-semibold mb-2">공연 내용</h2>
           <Textarea
-            value={concertDescription}
-            onChange={setConcertDescription}
+            value={description}
+            onChange={setDescription}
             placeholder="공연 내용"
           />
         </div>
         <div className="mb-4">
           <h2 className="font-semibold mb-2">공연 포스터</h2>
-          <FileInput onChange={setConcertPoster} />
+          <FileInput onChange={(cid: string | null) => setPosterCid(cid)} />
         </div>
       </div>
       <div className="my-4 h-fit">

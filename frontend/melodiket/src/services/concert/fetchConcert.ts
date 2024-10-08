@@ -1,4 +1,10 @@
-import { FetchConcertDetail, FetchConcertResponse } from '@/types/concert';
+import {
+  ConcertData,
+  CreateConcertResponse,
+  FetchConcertDetail,
+  FetchConcertResponse,
+  FetchMyConcertsResponse,
+} from '@/types/concert';
 import customFetch from '../customFetch';
 import {
   dehydrate,
@@ -129,4 +135,44 @@ export const useBookTicket = () => {
     throwOnError: true,
   });
   return mutate;
+};
+
+const getMyAssignedConcerts = async () => {
+  const response = await customFetch<FetchMyConcertsResponse>(
+    '/concerts/me/assigned',
+    {
+      method: 'GET',
+    }
+  );
+
+  return response;
+};
+
+export const useGetMyAssignedConcerts = () => {
+  return useMutation<FetchMyConcertsResponse, Error>({
+    mutationFn: () => getMyAssignedConcerts(),
+    onError: () => {
+      alert('내 공연 목록 가져오기 실패!');
+    },
+  });
+};
+
+const createConcert = async (concertData: ConcertData) => {
+  const response = await customFetch<CreateConcertResponse>(
+    '/concerts/create',
+    {
+      method: 'POST',
+      body: concertData,
+    }
+  );
+  return response;
+};
+
+export const useCreateConcert = () => {
+  return useMutation<CreateConcertResponse, Error, ConcertData>({
+    mutationFn: (concertData) => createConcert(concertData),
+    onError: () => {
+      alert('공연 등록 실패!');
+    },
+  });
 };
