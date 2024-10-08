@@ -24,7 +24,7 @@ const CarouselImage = ({
       })}
     >
       <Image
-        src={data.posterURL}
+        src={data.posterCid}
         alt="carousel 이미지"
         className={clsx('object-cover', {
           'rounded-lg': rounded,
@@ -33,11 +33,7 @@ const CarouselImage = ({
       />
       <div
         className={clsx(
-          'absolute w-full top-0 bottom-0 left-0 right-0 bg-[radial-gradient(circle_at_50%_75%,rgba(0,0,0,0.2),black)] opacity-90',
-          {
-            'h-[250px]': size === 'md',
-            'h-[360px]': size === 'lg',
-          },
+          'absolute w-full h-full top-0 bottom-0 left-0 right-0 bg-[radial-gradient(circle_at_50%_75%,rgba(0,0,0,0.2),black)] opacity-90',
           { 'rounded-lg': rounded }
         )}
       ></div>
@@ -51,7 +47,7 @@ const CarouselImage = ({
         </div>
         <div className="flex items-center gap-1">
           <Location width="8" height="10" className="fill-current" />
-          <p className="text-sm">{data.location}</p>
+          <p className="text-sm">{data.stageName}</p>
         </div>
       </div>
     </div>
