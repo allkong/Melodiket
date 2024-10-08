@@ -1,5 +1,7 @@
 'use client';
 
+import { Suspense } from 'react';
+
 import { useMusicianDetail } from '@/services/musician/fetchMusician';
 import { getS3Url } from '@/utils/getUrl';
 
@@ -7,6 +9,7 @@ import Header from '@/components/organisms/navigation/Header';
 import BackgroundFrame from '@/components/atoms/image-frame/BackgroundFrame';
 import FavoriteProfile from '@/components/molecules/profile/FavoriteProfile';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
+import ControlsBarSkeleton from '@/components/organisms/controls/ControlsBarSkeleton';
 
 interface PageProps {
   params: { uuid: string };
@@ -35,7 +38,9 @@ const Page = ({ params }: PageProps) => {
       </div>
       <div className="w-full my-4">
         <h2 className="mx-5 text-lg font-medium">뮤지션의 공연</h2>
-        <ControlsBar />
+        <Suspense fallback={<ControlsBarSkeleton />}>
+          <ControlsBar />
+        </Suspense>
         <div className="mx-5 bg-purple-100 h-96">공연 목록</div>
       </div>
     </div>
