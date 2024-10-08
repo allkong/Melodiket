@@ -1,11 +1,12 @@
 'use client';
 
+import { useMusicianDetail } from '@/services/musician/fetchMusician';
+import { getS3Url } from '@/utils/getUrl';
+
+import Header from '@/components/organisms/navigation/Header';
 import BackgroundFrame from '@/components/atoms/image-frame/BackgroundFrame';
 import FavoriteProfile from '@/components/molecules/profile/FavoriteProfile';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
-import Header from '@/components/organisms/navigation/Header';
-import { useMusicianDetail } from '@/services/musician/fetchMusician';
-import { getS3Url } from '@/utils/getUrl';
 
 interface PageProps {
   params: { uuid: string };
