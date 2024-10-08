@@ -1,4 +1,6 @@
 import {
+  ConcertData,
+  CreateConcertResponse,
   FetchConcertDetail,
   FetchConcertResponse,
   FetchMyConcertsResponse,
@@ -151,6 +153,27 @@ export const useGetMyAssignedConcerts = () => {
     mutationFn: () => getMyAssignedConcerts(),
     onError: () => {
       alert('내 공연 목록 가져오기 실패!');
+    },
+  });
+};
+
+const createConcert = async (concertData: ConcertData) => {
+  const response = await customFetch<CreateConcertResponse>(
+    '/concerts/create',
+    {
+      method: 'POST',
+      body: concertData,
+    }
+  );
+  console.log(response);
+  return response;
+};
+
+export const useCreateConcert = () => {
+  return useMutation<CreateConcertResponse, Error, ConcertData>({
+    mutationFn: (concertData) => createConcert(concertData),
+    onError: () => {
+      alert('공연 등록 실패!');
     },
   });
 };
