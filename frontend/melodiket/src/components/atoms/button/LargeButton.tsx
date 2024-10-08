@@ -1,18 +1,31 @@
 'use client';
 
 import clsx from 'clsx';
-import { cloneElement, ReactElement } from 'react';
+import { useRouter } from 'next/navigation';
+import { ReactElement } from 'react';
 
 interface LargeButtonProps {
+  href?: string;
   label: string;
   onClick?: () => void;
   disabled?: boolean;
   icon?: ReactElement;
 }
 
-const LargeButton = ({ label, onClick, disabled, icon }: LargeButtonProps) => {
+const LargeButton = ({
+  href,
+  label,
+  onClick,
+  disabled,
+  icon,
+}: LargeButtonProps) => {
+  const router = useRouter();
+
   const handleClickButton = () => {
     onClick?.();
+    if (href) {
+      router.push(href);
+    }
   };
 
   return (
@@ -27,10 +40,10 @@ const LargeButton = ({ label, onClick, disabled, icon }: LargeButtonProps) => {
       onClick={handleClickButton}
       disabled={disabled}
     >
-      <div className="flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-2">
         {icon && (
-          <div className="w-6 h-6 flex items-center justify-center overflow-hidden">
-            {cloneElement(icon, { className: 'fill-current' })}
+          <div className="flex items-center justify-center w-6 h-6 overflow-hidden">
+            {icon}
           </div>
         )}
         <p>{label}</p>

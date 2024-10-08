@@ -35,4 +35,24 @@ export const auth = [
       );
     }
   }),
+  http.post<never, { loginId: string }, { loginId: boolean }>(
+    '/auth/login-id/field-duplication-check',
+    async ({ request }) => {
+      const { loginId: requestLoginId } = await request.json();
+
+      let response = false;
+      if (requestLoginId === 'ssafy') response = true;
+      return HttpResponse.json({ loginId: response });
+    }
+  ),
+  http.post<never, { nickname: string }, { nickname: boolean }>(
+    '/auth/nickname/field-duplication-check',
+    async ({ request }) => {
+      const { nickname: requestNickname } = await request.json();
+
+      let response = false;
+      if (requestNickname === 'ssafy') response = true;
+      return HttpResponse.json({ nickname: response });
+    }
+  ),
 ];
