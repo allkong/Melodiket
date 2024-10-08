@@ -58,6 +58,9 @@ dependencies {
     implementation "co.elastic.clients:elasticsearch-java:8.9.0"
 
     implementation group: 'nl.martijndwars', name: 'web-push', version: '5.1.1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.data:spring-data-redis'
 }
 
 tasks.named('test') {
