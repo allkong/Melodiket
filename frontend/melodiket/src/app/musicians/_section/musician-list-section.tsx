@@ -33,12 +33,12 @@ const MusicianListSection = () => {
             ?.flatMap((page) => page.result)
             .map((musician) => (
               <MusicianItem
-                href={`/musicians/${musician.uuid}`}
                 key={musician.uuid}
+                uuid={musician.uuid}
                 src={getS3Url(musician.imageUrl)}
                 musicianName={musician.nickname}
-                favoriteCount={musician.likeCount}
-                isFavorite={musician.isLike}
+                initialFavoriteCount={musician.likeCount}
+                initialFavorite={musician.isLike}
               />
             ))}
         {isFetching && <MusicianItemSkeleton count={6} />}

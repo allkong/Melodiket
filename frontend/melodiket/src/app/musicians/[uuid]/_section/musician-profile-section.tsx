@@ -16,18 +16,10 @@ const MusicianProfileSection = ({
   musicianUuid,
 }: MusicianProfileSectionProps) => {
   const { data: musician } = useMusicianDetail(musicianUuid);
+  const { mutate: toggleFavorite } = useToggleFavoriteMusician();
 
   const [isFavorite, setIsFavorite] = useState(musician?.isLike ?? false);
   const [likeCount, setLikeCount] = useState(musician?.likeCount ?? 0);
-
-  const { mutate: toggleFavorite } = useToggleFavoriteMusician();
-
-  useEffect(() => {
-    if (musician) {
-      setIsFavorite(musician.isLike ?? false);
-      setLikeCount(musician.likeCount ?? 0);
-    }
-  }, [musician]);
 
   const handleFavoriteToggle = async () => {
     toggleFavorite(musicianUuid, {
