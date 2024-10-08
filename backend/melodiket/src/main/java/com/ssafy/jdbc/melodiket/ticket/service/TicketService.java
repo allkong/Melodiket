@@ -26,6 +26,8 @@ import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
 import com.ssafy.jdbc.melodiket.user.repository.MusicianRepository;
 import com.ssafy.jdbc.melodiket.user.repository.StageManagerRepository;
 import com.ssafy.jdbc.melodiket.wallet.service.WalletService;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.TransactionResultResp;
+import com.ssafy.jdbc.melodiket.webpush.service.WebPushService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -48,6 +50,7 @@ public class TicketService {
     private final WalletService walletService;
     private final BlockchainConfig blockchainConfig;
     private final ConcertSeatEntityRepository concertSeatEntityRepository;
+    private final WebPushService webPushService;
 
     public void checkTicketPurchaseAvailable(AppUserEntity user, TicketPurchaseRequest ticketPurchaseRequest) {
         AudienceEntity audienceEntity = audienceRepository.findByLoginId(user.getLoginId())
@@ -79,7 +82,7 @@ public class TicketService {
     @Async
     @DistributedLock(key = "#loginId.concat('-purchaseTicket')")
     @Transactional(rollbackFor = Exception.class, timeout = 120)
-    public void createTicket(String loginId, AppUserEntity user, TicketPurchaseRequest ticketPurchaseRequest) {
+    public void createTicket(String loginId, AppUserEntity user, TicketPurchaseRequest ticketPurchaseRequest, String operationId) {
         AudienceEntity audienceEntity = audienceRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.FORBIDDEN_AUDIENCE));
         ConcertEntity concert = concertRepository.findByUuid(ticketPurchaseRequest.getConcertId())
@@ -87,6 +90,9 @@ public class TicketService {
         MusicianEntity favoriteMusician = musicianRepository.findByUuid(ticketPurchaseRequest.getFavoriteMusician())
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
+        TransactionResultResp.TransactionResultRespBuilder respBuilder = TransactionResultResp.builder()
+                .operationId(operationId)
+                .operation("purchaseTicket");
         WalletResp audienceWallet = walletService.getWalletOf(audienceEntity);
         Credentials audienceCredentials = Credentials.create(audienceWallet.privateKey());
         AudienceContract audienceContract = new AudienceContract(blockchainConfig, audienceCredentials);
@@ -125,7 +131,18 @@ public class TicketService {
             ticketRepository.save(ticket);
 
             log.info("Ticket purchase completed for concert {}, by audience {} (Ticket UUID: {})", concert.getTitle(), audienceEntity.getName(), ticketUUID);
+
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.SUCCESS)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(user, "티켓 구매 완료", "티켓 구매 완료", resp);
         } catch (Exception e) {
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.FAIL)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(user, "티켓 구매 실패", "티켓 구매 실패", resp);
             throw new RuntimeException(e);
         }
     }
@@ -208,7 +225,7 @@ public class TicketService {
 
     @Async
     @DistributedLock(key = "#loginId.concat('-useTicket')")
-    public void useTicket(String loginId, AppUserEntity user, UUID ticketUUID) {
+    public void useTicket(String loginId, AppUserEntity user, UUID ticketUUID, String operationId) {
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         if (ticket.getStatus() != Status.NOT_USED) {
@@ -225,6 +242,9 @@ public class TicketService {
             throw new HttpResponseException(ErrorDetail.FORBIDDEN_STAGE_MANAGER);
         }
 
+        TransactionResultResp.TransactionResultRespBuilder respBuilder = TransactionResultResp.builder()
+                .operationId(operationId)
+                .operation("useTicket");
         WalletResp stageManagerWallet = walletService.getWalletOf(stageManager);
         Credentials stageManagerCredentials = Credentials.create(stageManagerWallet.privateKey());
         ManagerContract managerContract = new ManagerContract(blockchainConfig, stageManagerCredentials);
@@ -233,7 +253,18 @@ public class TicketService {
             managerContract.useTicket(concert.getUuid(), ticketUUID);
             ticket.updateStatusUsed();
             ticketRepository.save(ticket);
+
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.SUCCESS)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(user, "티켓 사용 완료", "티켓 사용 완료", resp);
         } catch (Exception e) {
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.FAIL)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(user, "티켓 사용 실패", "티켓 사용 실패", resp);
             throw new RuntimeException(e);
         }
     }
@@ -241,11 +272,14 @@ public class TicketService {
     @Async
     @DistributedLock(key = "#loginId.concat('-refundTicket')")
     @Transactional(rollbackFor = Exception.class)
-    public void refundTicket(String loginId, UUID ticketUUID) {
+    public void refundTicket(String loginId, UUID ticketUUID, String operationId) {
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
         ConcertEntity concert = ticket.getConcertEntity();
 
+        TransactionResultResp.TransactionResultRespBuilder respBuilder = TransactionResultResp.builder()
+                .operationId(operationId)
+                .operation("refundTicket");
         WalletResp audienceWallet = walletService.getWalletOf(ticket.getAudienceEntity());
         Credentials audienceCredentials = Credentials.create(audienceWallet.privateKey());
         AudienceContract audienceContract = new AudienceContract(blockchainConfig, audienceCredentials);
@@ -267,7 +301,18 @@ public class TicketService {
             // 남은 티켓 개수 증가
             concert.increaseRemainingTicket();
             concertRepository.save(concert);
+
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.SUCCESS)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(ticket.getAudienceEntity(), "티켓 환불 완료", "티켓 환불 완료", resp);
         } catch (Exception e) {
+            TransactionResultResp resp = respBuilder
+                    .status(TransactionResultResp.ResultStatus.FAIL)
+                    .targetUuid(ticketUUID.toString())
+                    .build();
+            webPushService.initiatePushNotification(ticket.getAudienceEntity(), "티켓 환불 실패", "티켓 환불 실패", resp);
             throw new RuntimeException(e);
         }
 
