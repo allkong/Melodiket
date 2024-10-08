@@ -15,6 +15,7 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
+import { getCidUrl } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const Page = () => {
       <div className="px-6 pb-24 overflow-y-auto">
         {/* 포스터 및 제목 */}
         <div className="flex py-4 space-x-4 border-b">
-          <PosterFrame src={ticket?.posterCid || ''} size="md" />
+          <PosterFrame src={getCidUrl(ticket?.posterCid || '')} size="md" />
           <div className="flex flex-col justify-between">
             <h1 className="font-medium">
               {ticket?.concertTitle || '콘서트 정보 없음'}
