@@ -38,7 +38,6 @@ const Page = () => {
               src={''}
               musicianName={'장원영'}
               favoriteCount={10}
-              bookingCount={2}
               isFavorite
             />
           </div>

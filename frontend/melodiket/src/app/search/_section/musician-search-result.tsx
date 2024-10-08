@@ -40,7 +40,6 @@ const MusicianSearchResult = ({ currentTab }: MusicianSearchResultProps) => {
                 key={musician.uuid}
                 href={`/musicians/${musician.uuid}`}
                 src={'/' + musician.imageUrl}
-                bookingCount={-999}
                 favoriteCount={musician.likeCount}
                 musicianName={musician.nickname}
               />

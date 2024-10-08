@@ -38,8 +38,7 @@ const MusicianListSection = () => {
                 src={getS3Url(musician.imageUrl)}
                 musicianName={musician.nickname}
                 favoriteCount={musician.likeCount}
-                bookingCount={2}
-                isFavorite
+                isFavorite={musician.isLike}
               />
             ))}
         {isFetching && <MusicianItemSkeleton count={6} />}
