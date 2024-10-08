@@ -1,8 +1,12 @@
 import { MenuLine } from '@/public/icons';
 
-const MenuButton = () => {
+interface MenuButtonProps {
+  onClick?: () => void;
+}
+
+const MenuButton = ({ onClick }: MenuButtonProps) => {
   return (
-    <button onClick={() => {}}>
+    <button onClick={onClick}>
       <MenuLine />
     </button>
   );

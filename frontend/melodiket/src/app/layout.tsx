@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
-import { MSWComponent } from './_component/MSWComponent';
+import { MSWComponent } from './_components/MSWComponent';
+import KakaoScript from './_lib/KakaoScript';
 
 export const metadata: Metadata = {
   title: 'melodiket',
@@ -15,19 +16,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
-    <html lang="kor">
+    <html lang="ko">
       <body>
         <Providers>
           <MSWComponent />
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
+            {modal}
           </div>
+          <div
+            id="menu-portal"
+            className="fixed top-0 z-10 w-full max-w-xl min-h-screen mx-auto overflow-x-hidden -translate-x-1/2 pointer-events-none left-1/2"
+          ></div>
         </Providers>
       </body>
+      <KakaoScript />
     </html>
   );
 }
