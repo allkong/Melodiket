@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,12 +23,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
-
+    private final RedisTemplate redisTemplate;
     private final SecurityConfig securityConfig;
     private final JwtService jwtService;
     private final UserService userService;
 
-    public JwtFilter(SecurityConfig securityConfig, JwtService jwtService, UserService userService) {
+    public JwtFilter(RedisTemplate redisTemplate, SecurityConfig securityConfig, JwtService jwtService, UserService userService) {
+        this.redisTemplate = redisTemplate;
         this.securityConfig = securityConfig;
         this.jwtService = jwtService;
         this.userService = userService;
@@ -51,7 +53,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 요청에서 JWT 토큰 추출
         String uuid = getValidIdentifier(request);
-
+        String token = jwtService.resolveToken(request);
+        if(redisTemplate.hasKey(token)){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The token is blacklisted");
+        }
         // JWT 토큰이 존재
         if (uuid != null) {
             try {
