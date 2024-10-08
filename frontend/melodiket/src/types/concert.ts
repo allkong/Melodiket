@@ -64,6 +64,7 @@ export interface FetchConcertResponse {
 
 export interface ConcertDetail {
   availableTickets: number;
+  isAvailableSeat?: boolean[][];
   capacity: number;
   concertUuid: string;
   createdAt: string;
