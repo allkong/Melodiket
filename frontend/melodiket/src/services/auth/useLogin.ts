@@ -27,7 +27,7 @@ export const useLogin = () => {
       router.push('/');
     },
     onError: () => {
-      toast.error('로그인 실패😥');
+      toast.error('로그인 실패');
     },
   });
 };
