@@ -40,6 +40,7 @@ const Page = () => {
             onChange={setPassword}
             placeholder="비밀번호"
             type="password"
+            onClickEnter={handleLogin}
           />
         </div>
         <div className="flex flex-row space-x-2.5 text-sm text-gray-400">
