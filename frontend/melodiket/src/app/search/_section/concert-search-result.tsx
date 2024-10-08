@@ -1,13 +1,13 @@
 'use client';
 
-import ConcertCard from '@/components/molecules/card/ConcertCard';
+import TicketItem from '@/components/molecules/item/TicketItem';
 import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import useIsOnScreen from '@/hooks/useIsOnScreen';
 import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
 import { useEffect, useRef } from 'react';
 import IsError from '@/components/atoms/button/IsErrorButton';
 import IsEnd from '@/components/atoms/label/IsEnd';
-import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
+import TicketItemSkeleton from '@/components/molecules/item/TicketItemSkeleton';
 
 interface ConcertSearchResultProps {
   query: string;
@@ -31,17 +31,20 @@ const ConcertSearchResult = ({
 
   return (
     <div className="flex flex-col flex-shrink-0 h-full w-full overflow-y-auto">
-      <div className="w-full grid grid-flow-row grid-cols-2 lg:grid-cols-3 place-items-center">
+      <div className="flex flex-col gap-2 w-full">
         {data &&
           data.pages.map((page) =>
             page.result.map((concert) => (
-              <ConcertCard
-                key={`${concert.concertUuid}-${concert.posterCid}`}
-                {...concert}
+              <TicketItem
+                key={concert.posterCid}
+                concertTitle={concert.title}
+                stageName={concert.stageName}
+                src={'/' + concert.posterCid}
+                startAt={concert.startAt}
               />
             ))
           )}
-        {isFetching && <ConcertCardSkeleton count={6} />}
+        {isFetching && <TicketItemSkeleton count={6} />}
       </div>
       <div ref={endRef} className="w-full h-3 bg-white" />
       {error && <IsError onClick={refetch} />}

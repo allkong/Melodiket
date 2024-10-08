@@ -15,23 +15,14 @@ import type {
   FetchConcertRequest,
 } from '@/types/ticket';
 
-export const fetchConcertList = async (
-  {
-    isFirstPage,
-    lastUuid,
-    pageSize,
-    orderKey,
-    orderDirection,
-    title,
-  }: FetchConcertRequest = {
-    isFirstPage: true,
-    lastUuid: '',
-    pageSize: 10,
-    orderDirection: 'ASC',
-    orderKey: 'uuid',
-    title: '',
-  }
-) => {
+export const fetchConcertList = async ({
+  isFirstPage,
+  lastUuid,
+  pageSize,
+  orderKey,
+  orderDirection,
+  title,
+}: FetchConcertRequest) => {
   const response = await customFetch<FetchConcertResponse>(
     `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}`
   );
@@ -39,7 +30,7 @@ export const fetchConcertList = async (
 };
 
 export const useFetchInfiniteConcert = (
-  pageSize: number = 10,
+  pageSize: number = 2,
   orderKey: string = 'uuid',
   orderDirection: 'ASC' | 'DESC' = 'ASC',
   title: string = ''
@@ -82,20 +73,16 @@ export const useFetchInfiniteConcert = (
 export const useFetchConcertList = () => {
   const result = useSuspenseQuery<FetchConcertResponse>({
     queryKey: concertKey.list(),
-    queryFn: () => fetchConcertList(),
+    queryFn: () =>
+      fetchConcertList({
+        isFirstPage: true,
+        orderDirection: 'ASC',
+        orderKey: 'uuid',
+        pageSize: 10,
+      }),
   });
 
   return result;
-};
-
-export const useFetchConcertListDehydrateState = async () => {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: concertKey.list(),
-    queryFn: () => fetchConcertList(),
-  });
-
-  return dehydrate(queryClient);
 };
 
 export const fetchConcertDetail = async (uuid: string) => {
