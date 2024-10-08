@@ -1,4 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+
 import customFetch from '../customFetch';
 
 const ticketUse = async (ticketUuid: string) => {
@@ -13,7 +15,7 @@ export const useTicketUse = () => {
   return useMutation({
     mutationFn: (ticketUuid: string) => ticketUse(ticketUuid),
     onError: () => {
-      alert('티켓 사용 실패😥');
+      toast.error('티켓 사용 실패😥');
     },
   });
 };

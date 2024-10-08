@@ -1,12 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
+
+import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
+import { useToggleFavorite } from '@/services/favorite/fetchFavoriteMusiciansList';
 
 import DarkedImage from '@/components/atoms/image/DarkedImage';
-import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
 import FavoriteButton from '@/components/atoms/button/FavoriteButton';
-import { useToggleFavorite } from '@/services/favorite/fetchFavoriteMusiciansList';
-import { useState } from 'react';
 
 interface ConcertPosterProps {
   uuid: string;
@@ -41,9 +43,9 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const handleToggleFavorite = async () => {
     const response = await mutate.mutateAsync({ concertUuid: uuid });
     setIsFavorite(response.isFavorite);
-    window.alert(
-      `좋아요 목록에 ${response.isFavorite ? '추가' : '삭제'}하였습니다.`
-    );
+    toast(`좋아요 목록에 ${response.isFavorite ? '추가' : '삭제'}하였습니다.`, {
+      icon: '👍',
+    });
   };
 
   return (
