@@ -1,8 +1,10 @@
-import { Photocard, PhotocardList } from '@/types/photocard';
 import { dehydrate, useQuery } from '@tanstack/react-query';
-import photocardKey from './photocardKey';
+import { useParams } from 'next/navigation';
+
 import customFetch from '../customFetch';
+import photocardKey from './photocardKey';
 import getQueryClient from '@/utils/getQueryClient';
+import { Photocard, PhotocardDetail, PhotocardList } from '@/types/photocard';
 import useAuthStore from '@/store/authStore';
 
 const getPhotocardList = async () => {
@@ -35,4 +37,19 @@ export const usePhotocardListDehydrateState = () => {
   });
 
   return dehydrate(queryClient);
+};
+
+const getPhotocardDetail = async (uuid: string) => {
+  return await customFetch<PhotocardDetail>(`/photo-cards/${uuid}`);
+};
+
+export const usePhotocardDetail = () => {
+  const params = useParams();
+  const uuid = params?.uuid;
+
+  return useQuery<PhotocardDetail>({
+    queryKey: photocardKey.detail(uuid as string),
+    queryFn: () => getPhotocardDetail(uuid as string),
+    enabled: !!uuid,
+  });
 };
