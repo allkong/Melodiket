@@ -6,6 +6,7 @@ import com.ssafy.jdbc.melodiket.photocard.controller.dto.PhotoCardCreateReq;
 import com.ssafy.jdbc.melodiket.photocard.dto.PhotoCardResp;
 import com.ssafy.jdbc.melodiket.photocard.service.PhotoCardService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.AcceptedResp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,14 +24,15 @@ public class PhotoCardController {
     private final PhotoCardService photoCardService;
 
     @PostMapping
-    public ResponseEntity<String> uploadImage(
+    public ResponseEntity<AcceptedResp> uploadImage(
             Authentication authentication,
             @Valid @RequestBody PhotoCardCreateReq req
     ) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         photoCardService.checkPhotoCardMintingAvailable(user, req.ticketUuid());
-        photoCardService.uploadImageToIPFS(user.getLoginId(), user, req.imageCid(), req.ticketUuid());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        String operationId = UUID.randomUUID().toString();
+        photoCardService.mintPhotoCard(user.getLoginId(), user, req.imageCid(), req.ticketUuid(), operationId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new AcceptedResp(operationId));
     }
 
     @GetMapping("/me")

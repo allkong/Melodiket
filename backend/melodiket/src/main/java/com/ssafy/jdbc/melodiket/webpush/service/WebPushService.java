@@ -5,6 +5,7 @@ import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AppUserRepository;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.TransactionResultResp;
 import com.ssafy.jdbc.melodiket.webpush.entity.SubscriptionEntity;
 import com.ssafy.jdbc.melodiket.webpush.repository.WebPushRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +61,7 @@ public class WebPushService {
     }
 
     @Async
-    public void sendPushNotification(AppUserEntity user, String title, String body, Map<String, String> data) {
+    public void sendPushNotification(AppUserEntity user, String title, String body, TransactionResultResp data) {
         List<SubscriptionEntity> subscriptions = user.getSubscriptionEntities();
         ObjectMapper objectMapper = new ObjectMapper();  // JSON 직렬화를 위한 ObjectMapper 사용
         for (SubscriptionEntity subscriptionEntity : subscriptions) {
@@ -95,7 +96,7 @@ public class WebPushService {
     }
 
     @Transactional
-    public void initiatePushNotification(AppUserEntity user, String title, String body, Map<String, String> data) {
+    public void initiatePushNotification(AppUserEntity user, String title, String body, TransactionResultResp data) {
         // 컬렉션을 트랜잭션 내에서 초기화
         user.getSubscriptionEntities().size();
 
