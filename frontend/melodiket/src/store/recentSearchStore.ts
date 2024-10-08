@@ -1,21 +1,48 @@
+import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 
 interface SearchItem {
   index: number;
+  type: keyof typeof FAVORITE_TYPES;
   label: string;
+}
+
+interface MusicianSearchItem extends SearchItem {
+  type: 'musician';
+}
+
+interface ConcertSearchItem extends SearchItem {
+  type: 'concert';
 }
 
 interface RecentSearchStore {
   index: number;
-  recentSearchList: SearchItem[];
-  addRecentSearchItem: (label: string) => void;
-  removeRecentSearchItem: (index: number) => void;
-  removeAll: () => void;
+  recentMusicianSearchList: MusicianSearchItem[];
+  recentConcertSearchList: ConcertSearchItem[];
+  addRecentSearchItem: (
+    label: string,
+    type: keyof typeof FAVORITE_TYPES
+  ) => void;
+  removeRecentSearchItem: (
+    index: number,
+    type: keyof typeof FAVORITE_TYPES
+  ) => void;
+  removeAll: (type: keyof typeof FAVORITE_TYPES) => void;
 }
 
-const removeItem = (recentSearchList: SearchItem[], index: number) => {
+const removeItem = (
+  recentSearchList: (MusicianSearchItem | ConcertSearchItem)[],
+  index: number
+) => {
   return recentSearchList.filter((item) => item.index !== index);
+};
+
+const findType = (type: keyof typeof FAVORITE_TYPES) => {
+  if (type === 'concert') {
+    return 'recentConcertSearchList';
+  }
+  return 'recentMusicianSearchList';
 };
 
 const useRecentSearchStore = create<RecentSearchStore>()(
@@ -23,34 +50,47 @@ const useRecentSearchStore = create<RecentSearchStore>()(
     devtools((set) => ({
       index: 0,
       recentSearchList: [],
-      addRecentSearchItem: (label: string) =>
+      recentMusicianSearchList: [],
+      recentConcertSearchList: [],
+      addRecentSearchItem: (label: string, type: keyof typeof FAVORITE_TYPES) =>
         set((state) => {
-          const find = state.recentSearchList.find(
-            (search) => search.label === label
-          );
+          const value = findType(type);
+          const searchList = state[value];
 
-          const newItem: SearchItem = { index: state.index, label };
+          const find = searchList.find((search) => search.label === label);
+          const newItem: SearchItem = { index: state.index, label, type };
 
           if (find) {
-            const removed = removeItem(state.recentSearchList, find.index);
+            const removed = removeItem(searchList, find.index);
             return {
               index: state.index + 1,
-              recentSearchList: [newItem, ...removed],
+              [value]: [newItem, ...removed],
             };
           }
 
           return {
             index: state.index + 1,
-            recentSearchList: [newItem, ...state.recentSearchList],
+            [value]: [newItem, ...state[value]],
           };
         }),
-      removeRecentSearchItem: (index: number) =>
+      removeRecentSearchItem: (
+        index: number,
+        type: keyof typeof FAVORITE_TYPES
+      ) =>
         set((state) => {
+          const value = findType(type);
           return {
-            recentSearchList: removeItem(state.recentSearchList, index),
+            [value]: removeItem(state[value], index),
           };
         }),
-      removeAll: () => set({ recentSearchList: [], index: 0 }),
+      removeAll: (type: keyof typeof FAVORITE_TYPES) => {
+        set(() => {
+          const value = findType(type);
+          return {
+            [value]: [],
+          };
+        });
+      },
     })),
     {
       name: 'search-storage',
