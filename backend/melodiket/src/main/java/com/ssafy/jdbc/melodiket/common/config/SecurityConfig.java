@@ -39,7 +39,7 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/auth/[^/]+/field-duplication-check$"),
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
-//            Pattern.compile("^/api/v1/users/musicians$"),
+            Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
             Pattern.compile("^/api/v1/concerts$"),
@@ -64,7 +64,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         security
-                .addFilterBefore(new JwtFilter(redisTemplate,this, jwtService, userService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(redisTemplate, this, jwtService, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/error").permitAll()
                         // 혹시 나중에 swagger 테스트 할수도 있어서 미리
@@ -102,7 +102,6 @@ public class SecurityConfig {
         for (Pattern pattern : anonymousAllowedPatterns) {
             Matcher matcher = pattern.matcher(path);
             if (matcher.matches()) {
-                System.out.println(path);
                 return true;
             }
         }
