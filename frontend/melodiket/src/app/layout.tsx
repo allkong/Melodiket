@@ -3,6 +3,7 @@ import Providers from '@/app/providers';
 import '../styles/globals.css';
 import { MSWComponent } from './_components/MSWComponent';
 import KakaoScript from './_lib/KakaoScript';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'melodiket',
@@ -29,6 +30,7 @@ export default function RootLayout({
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
             {modal}
+            <Toaster position="top-center" />
           </div>
           <div
             id="menu-portal"

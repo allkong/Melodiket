@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
 import clsx from 'clsx';
 
-import type { CarouselConcert } from '@/types/concert';
-import CarouselImage from '@/components/molecules/carousel/CarouselImage';
-import CarouselIndicator from '@/components/molecules/carousel/CarouselIndicator';
+import { getCidUrl } from '@/utils/getUrl';
 import useElementSize from '@/hooks/useElementSize';
 import useAutoIndex from '@/hooks/useAutoIndex';
+import type { CarouselConcert } from '@/types/concert';
+
+import CarouselImage from '@/components/molecules/carousel/CarouselImage';
+import CarouselIndicator from '@/components/molecules/carousel/CarouselIndicator';
 
 interface CarouselProps {
   data: CarouselConcert[];
@@ -63,7 +64,7 @@ const Carousel = ({
         >
           {data.map((concert) => (
             <CarouselImage
-              key={concert.posterCid}
+              key={getCidUrl(concert.posterCid)}
               size={size}
               data={concert}
               rounded={rounded}

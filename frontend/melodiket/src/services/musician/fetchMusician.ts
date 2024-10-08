@@ -1,8 +1,13 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import customFetch from '../customFetch';
-import { FetchMusiciansResponse, PageParam } from '@/types/musician';
+import {
+  FetchMusiciansResponse,
+  MusicianDetail,
+  PageParam,
+} from '@/types/musician';
+import musicianKey from './musicianKey';
 
-export const fetchGetMusicians = async (
+export const getMusicians = async (
   pageParam: PageParam = {
     isFirstPage: true,
     pageSize: 5,
@@ -27,8 +32,8 @@ export const useMusiciansQuery = (
   orderDirection: 'ASC' | 'DESC' = 'ASC'
 ) => {
   return useInfiniteQuery({
-    queryKey: ['musicians'],
-    queryFn: ({ pageParam }) => fetchGetMusicians(pageParam),
+    queryKey: musicianKey.list(),
+    queryFn: ({ pageParam }) => getMusicians(pageParam),
     initialPageParam: { isFirstPage: true, pageSize, orderKey, orderDirection },
     getNextPageParam: (lastPage) => {
       const { pageInfo } = lastPage;
@@ -42,5 +47,17 @@ export const useMusiciansQuery = (
           }
         : null;
     },
+  });
+};
+
+export const getMusicianDetail = async (uuid: string) => {
+  return await customFetch<MusicianDetail>(`/users/musicians/${uuid}`);
+};
+
+export const useMusicianDetail = (uuid: string) => {
+  return useQuery<MusicianDetail>({
+    queryKey: musicianKey.detail(uuid),
+    queryFn: () => getMusicianDetail(uuid),
+    enabled: !!uuid,
   });
 };
