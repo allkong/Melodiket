@@ -19,7 +19,7 @@ const MusicianItem = ({
   isFavorite = false,
 }: MusicianItemProps) => {
   return (
-    <Link href={href || ''}>
+    <Link href={href || '/'}>
       <div className="flex flex-row items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
         <div className="flex flex-row items-center space-x-4">
           <Profile src={src} size="sm" />
