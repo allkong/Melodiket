@@ -14,19 +14,19 @@ export const SIGN_UP_ROLE_DATAS: SignUpRole[] = [
     key: 0,
     title: '관객',
     description: '뮤지션이 진행하는 공연을 즐기고 싶어요.',
-    value: 'AUDIENCE',
+    value: 'audience',
   },
   {
     key: 1,
     title: '뮤지션',
     description: '제 공연을 관객들에게 선보이고 싶어요.',
-    value: 'MUSICIAN',
+    value: 'musician',
   },
   {
     key: 2,
     title: '매니저',
     description: '제 공연장을 제공하고 싶어요.',
-    value: 'MANAGER',
+    value: 'stage-manager',
   },
 ] as const;
 
@@ -39,3 +39,37 @@ export const SIGN_UP_DATA_LENGTH_LIMITS = {
   MIN_PASSWORD_LENGTH: 5,
   MAX_PASSWORD_LENGTH: 20,
 } as const;
+
+export const BEFORE_LOGIN_FAVORITE_MUSICIANS = [
+  {
+    loginId: '1',
+    description: '아이묭입니다',
+    role: 'MUSICIAN',
+    nickname: '아이묭',
+    imageUrl:
+      'https://i1.sndcdn.com/artworks-Dq5srslWYpDO1H0j-cTCo1w-t500x500.jpg',
+  },
+  {
+    description: 'hi',
+    loginId: 'me',
+    nickname: 'hitsujibungaku',
+    role: 'MUSICIAN',
+    imageUrl:
+      'https://i.pinimg.com/236x/65/3b/f5/653bf5ae181cab407c7cbd5c616672a6.jpg',
+  },
+  {
+    nickname: '빈지노',
+    description: 'hi',
+    loginId: 'beenzino',
+    role: 'MUSICIAN',
+    imageUrl: 'https://img.hankyung.com/photo/202103/01.25846226.3.jpg',
+  },
+  {
+    nickname: '김장훈',
+    role: 'MUSICIAN',
+    description: '독도킥 보여드리겠습니다.',
+    loginId: 'jang',
+    imageUrl:
+      'https://newsimg-hams.hankookilbo.com/2022/08/13/601df9d2-7c82-4b2d-bdd1-dc0bcc2e81e4.jpg',
+  },
+] as const;

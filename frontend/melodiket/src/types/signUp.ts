@@ -2,7 +2,9 @@ export interface SignUpData {
   loginId: string;
   password: string;
   nickname: string;
-  description: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
   role: SignUpRole['value'];
 }
 
@@ -16,5 +18,5 @@ export interface SignUpRole {
   key: number;
   title: string;
   description: string;
-  value: 'AUDIENCE' | 'MUSICIAN' | 'MANAGER';
+  value: 'audience' | 'musician' | 'stage-manager';
 }
