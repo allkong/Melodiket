@@ -23,6 +23,8 @@ import com.ssafy.jdbc.melodiket.concert.service.dto.SeatingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.concert.service.dto.StandingConcertCreateReq;
 import com.ssafy.jdbc.melodiket.stage.entity.StageEntity;
 import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
+import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
+import com.ssafy.jdbc.melodiket.ticket.repository.TicketRepository;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianInfo;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
@@ -58,6 +60,7 @@ public class ConcertService {
     private final WalletService walletService;
     private final BlockchainConfig blockchainConfig;
     private final JPAQueryFactory jpaQueryFactory;
+    private final TicketRepository ticketRepository;
 
     // 커서 기반 공연 목록 조회 메서드
     public PageResponse<ConcertResp> getConcerts(ConcertCursorPagingReq pagingReq) {
@@ -94,9 +97,14 @@ public class ConcertService {
             try {
                 managerContract.cancelConcert(concert.getUuid());
 
-                // TODO : 구매된 티켓이 있으면 모두 환불 처리
                 concert.cancel();
                 concertRepository.save(concert);
+
+                List<TicketEntity> tickets = concert.getTickets();
+                for (TicketEntity ticket : tickets) {
+                    ticket.refund();
+                    ticketRepository.delete(ticket);
+                }
             } catch (Exception e) {
                 log.error("Failed to cancel concert", e);
                 throw new RuntimeException(e);

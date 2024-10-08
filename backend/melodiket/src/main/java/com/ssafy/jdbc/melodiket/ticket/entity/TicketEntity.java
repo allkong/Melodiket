@@ -51,4 +51,9 @@ public class TicketEntity extends ExposableEntity {
         this.status = status;
         this.refundedAt = LocalDateTime.now();
     }
+
+    public void refund() {
+        this.status = Status.REFUNDED;
+        this.refundedAt = LocalDateTime.now();
+    }
 }
