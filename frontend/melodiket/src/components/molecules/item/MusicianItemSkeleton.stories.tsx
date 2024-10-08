@@ -10,6 +10,6 @@ type Story = StoryObj<typeof MusicianItemSkeleton>;
 
 export const Default: Story = {
   args: {
-    count: 1,
+    count: 3,
   },
 };

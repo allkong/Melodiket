@@ -1,13 +1,15 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
+import { useMusiciansQuery } from '@/services/musician/fetchMusician';
+import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
+import useIsOnScreen from '@/hooks/useIsOnScreen';
+
 import IsErrorButton from '@/components/atoms/button/IsErrorButton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import MusicianItem from '@/components/molecules/item/MusicianItem';
 import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
-import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
-import useIsOnScreen from '@/hooks/useIsOnScreen';
-import { useMusiciansQuery } from '@/services/musician/fetchMusicians';
-import { useEffect, useRef } from 'react';
 
 interface MusicianSearchResultProps {
   query: string;
@@ -36,6 +38,7 @@ const MusicianSearchResult = ({ currentTab }: MusicianSearchResultProps) => {
             page.result.map((musician) => (
               <MusicianItem
                 key={musician.uuid}
+                href={`/musicians/${musician.uuid}`}
                 src={'/' + musician.imageUrl}
                 bookingCount={-999}
                 favoriteCount={musician.likeCount}

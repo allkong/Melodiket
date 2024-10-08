@@ -1,10 +1,11 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useTicketDetail } from '@/services/ticket/useTicketdetail';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
+import { getCidUrl, getS3Url } from '@/utils/getUrl';
 import { TICKET_STATUS_LABELS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
@@ -18,8 +19,6 @@ import DetailSection from '@/components/molecules/section/DetailSection';
 
 const Page = () => {
   const router = useRouter();
-  const pathname = usePathname();
-
   const { data: ticket } = useTicketDetail();
 
   const ticketInfo = [
@@ -56,8 +55,14 @@ const Page = () => {
     },
   ].filter(Boolean) as { label: string; value: string }[];
 
+  const handleConcertPageNavigation = () => {
+    if (ticket?.concertUuid) {
+      router.push(`/concerts/${ticket?.concertUuid}`);
+    }
+  };
+
   const handleMobileTicketClick = () => {
-    router.push(`${pathname}/mobile-ticket`);
+    router.push(`/mytickets/${ticket?.ticketUuid}/mobile-ticket`);
   };
 
   return (
@@ -66,14 +71,14 @@ const Page = () => {
       <div className="px-6 pb-24 overflow-y-auto">
         {/* 포스터 및 제목 */}
         <div className="flex py-4 space-x-4 border-b">
-          <PosterFrame src={ticket?.posterCid || ''} size="md" />
+          <PosterFrame src={getCidUrl(ticket?.posterCid || '')} size="md" />
           <div className="flex flex-col justify-between">
             <h1 className="font-medium">
               {ticket?.concertTitle || '콘서트 정보 없음'}
             </h1>
             <SmallButton
-              label="예매 페이지 보기"
-              onClick={() => alert('페이지 이동')}
+              label="공연 페이지 보기"
+              onClick={handleConcertPageNavigation}
             />
           </div>
         </div>
@@ -81,7 +86,7 @@ const Page = () => {
         {/* 최애 밴드 */}
         <DetailSection title="최애 밴드">
           <MusicianStatusProfile
-            src={ticket?.myFavoriteMusician.musicianImageUrl || ''}
+            src={getS3Url(ticket?.myFavoriteMusician.musicianImageUrl || '')}
             musicianName={
               ticket?.myFavoriteMusician.musicianName || '정보 없음'
             }
