@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import StageItem from '@/components/molecules/item/StageItem';
 import TextBanner from '@/components/molecules/text/TextBanner';
 
 import { ConcertData } from '@/types/concert';
+import { useGetMyStages } from '@/services/stage/fetchStage';
 
 interface SelectStageProps {
   concertData: ConcertData;
@@ -15,6 +16,11 @@ interface SelectStageProps {
 
 const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
   const [selectedStage, setSelectedStage] = useState<string | null>(null);
+  const { mutate: getStages, data } = useGetMyStages();
+
+  useEffect(() => {
+    getStages();
+  }, []);
 
   const isFormValid = selectedStage !== null;
 
@@ -28,7 +34,7 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
       stageInformation: {
         ...concertData.stageInformation,
         name: selectedStage || '',
-        address: '서울특별시 구로구 경인로 430',
+        address: '서울특별시 구로구 경인로 430', // This address can be dynamic if you use the data
       },
     };
     onNext(updatedConcertData);
@@ -42,24 +48,18 @@ const SelectStage = ({ concertData, onNext }: SelectStageProps) => {
           description="공연장을 선택해주세요"
         />
         <div className="mt-10 mb-4">
-          <StageItem
-            title="고척 스카이돔"
-            content="서울특별시 구로구 경인로 430"
-            onClick={() => handleStageSelect('고척 스카이돔')}
-            isSelected={selectedStage === '고척 스카이돔'}
-          />
-          <StageItem
-            title="잠실 종합운동장"
-            content="서울특별시 송파구 올림픽로 25"
-            onClick={() => handleStageSelect('잠실 종합운동장')}
-            isSelected={selectedStage === '잠실 종합운동장'}
-          />
-          <StageItem
-            title="올림픽공원 체조경기장"
-            content="서울특별시 송파구 방이동 올림픽로 424"
-            onClick={() => handleStageSelect('올림픽공원 체조경기장')}
-            isSelected={selectedStage === '올림픽공원 체조경기장'}
-          />
+          {data?.stages?.map((stage) => (
+            <StageItem
+              key={stage.id}
+              title={stage.name}
+              content={stage.address}
+              onClick={() => handleStageSelect(stage.name)}
+              isSelected={selectedStage === stage.name}
+              isModify={false}
+              isRemove={false}
+              uuid={stage.uuid}
+            />
+          ))}
         </div>
       </div>
       <div className="my-4 h-fit">
