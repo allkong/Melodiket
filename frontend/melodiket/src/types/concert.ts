@@ -1,17 +1,17 @@
 import { StageData } from './stage';
 
 export interface ConcertData {
-  concertName: string;
-  startAt: Date;
-  ticketingAt: Date;
-  concertDescription: string;
-  concertPoster: File;
-  musicianList: { [key: string]: string };
+  stageUuid: string;
+  title: string;
+  startAt: string;
+  ticketingAt: string;
+  description: string;
+  posterCid: string;
+  musicians: string[];
   ticketPrice: number;
   ownerStake: number;
   musicianStake: number;
   favoriteMusicianStake: number;
-  stageInformation: StageData;
 }
 
 export interface Concert {
