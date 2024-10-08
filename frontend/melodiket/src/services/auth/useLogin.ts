@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import type { LoginRequest, LoginResponse } from '@/types/login';
 import type { SignUpData } from '@/types/signUp';
@@ -26,7 +27,7 @@ export const useLogin = () => {
       router.push('/');
     },
     onError: () => {
-      alert('로그인 실패😥');
+      toast.error('로그인 실패😥');
     },
   });
 };

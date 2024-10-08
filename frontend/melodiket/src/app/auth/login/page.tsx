@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 import { useLogin } from '@/services/auth/useLogin';
 
@@ -44,7 +45,10 @@ const Page = () => {
           />
         </div>
         <div className="flex flex-row space-x-2.5 text-sm text-gray-400">
-          <p onClick={() => alert('준비중🔨')} className="cursor-pointer">
+          <p
+            onClick={() => toast('준비중', { icon: '🔨' })}
+            className="cursor-pointer"
+          >
             ID/PW 찾기
           </p>
           <p>|</p>
