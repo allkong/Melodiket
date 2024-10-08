@@ -2,12 +2,15 @@ package com.ssafy.jdbc.melodiket.common.config;
 
 import com.ssafy.jdbc.melodiket.auth.filter.JwtFilter;
 import com.ssafy.jdbc.melodiket.auth.service.JwtService;
+import com.ssafy.jdbc.melodiket.user.entity.Role;
 import com.ssafy.jdbc.melodiket.user.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -69,6 +72,9 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                         // 혹시 나중에 swagger 테스트 할수도 있어서 미리
                         .requestMatchers("/swagger-resources/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/concerts/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/concerts/{id}")
+                        .hasAnyRole(Role.AUDIENCE.name(), Role.MUSICIAN.name(), Role.STAGE_MANAGER.name())
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/users/musicians").permitAll()
                         .requestMatchers("/api/v1/users/me").authenticated()
@@ -77,7 +83,16 @@ public class SecurityConfig {
                             return isAnonymousAllowedPath(path);
                         }).permitAll()
                         .anyRequest().authenticated()
-                ).csrf(AbstractHttpConfigurer::disable)
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증이 필요합니다. 로그인 해주세요.");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 권한이 없습니다.");
+                        })
+                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
                     corsConfiguration.setAllowedOrigins(allowedOrigins);
