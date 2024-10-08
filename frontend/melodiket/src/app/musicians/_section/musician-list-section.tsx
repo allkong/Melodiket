@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { useMusiciansQuery } from '@/services/musician/fetchMusicians';
+import { useMusiciansQuery } from '@/services/musician/fetchMusician';
 import { getS3Url } from '@/utils/getUrl';
 import useIsOnScreen from '@/hooks/useIsOnScreen';
 
