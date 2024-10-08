@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Builder
 public record ConcertResp(
-        UUID uuid,                // 공연 UUID
+        UUID concertUuid,                // 공연 UUID
         UUID stageUuid,           // 공연장 UUID
         String title,             // 공연 타이틀
         LocalDateTime createdAt,  // 생성 날짜
@@ -39,7 +39,7 @@ public record ConcertResp(
                 .toList();
 
         return ConcertResp.builder()
-                .uuid(entity.getUuid())
+                .concertUuid(entity.getUuid())
                 .stageUuid(entity.getStageEntity().getUuid())
                 .title(entity.getTitle())
                 .createdAt(entity.getCreatedAt())
