@@ -38,7 +38,7 @@ const ConcertListSection = () => {
         {isFetching && <ConcertCardSkeleton count={6} />}
       </div>
       {error && <IsError onClick={refetch} />}
-      {!hasNextPage && <IsEnd />}
+      {!hasNextPage && !error && <IsEnd />}
       <div ref={endRef} className="w-full h-3 bg-white" />
     </>
   );

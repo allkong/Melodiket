@@ -22,15 +22,18 @@ export const fetchConcertList = async (
     pageSize,
     orderKey,
     orderDirection,
+    title,
   }: FetchConcertRequest = {
     isFirstPage: true,
+    lastUuid: '',
     pageSize: 10,
     orderDirection: 'ASC',
     orderKey: 'uuid',
+    title: '',
   }
 ) => {
   const response = await customFetch<FetchConcertResponse>(
-    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}`
+    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}`
   );
   return response;
 };
@@ -38,7 +41,8 @@ export const fetchConcertList = async (
 export const useFetchInfiniteConcert = (
   pageSize: number = 10,
   orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC'
+  orderDirection: 'ASC' | 'DESC' = 'ASC',
+  title: string = ''
 ) => {
   const result = useInfiniteQuery({
     queryKey: concertKey.infinite(),
@@ -55,6 +59,7 @@ export const useFetchInfiniteConcert = (
         orderDirection,
         orderKey,
         pageSize,
+        title,
       };
     },
     initialPageParam: {
@@ -62,6 +67,7 @@ export const useFetchInfiniteConcert = (
       orderDirection,
       orderKey,
       pageSize,
+      title,
     },
   });
 
