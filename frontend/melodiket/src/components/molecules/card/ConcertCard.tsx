@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import FavoriteButton from '@/components/atoms/button/FavoriteButton';
-import { CalendarFilled, Location } from '@/public/icons';
+import { getCidUrl } from '@/utils/getUrl';
 import type { Concert } from '@/types/concert';
+
+import { CalendarFilled, Location } from '@/public/icons';
+import FavoriteButton from '@/components/atoms/button/FavoriteButton';
 
 interface ConcertCardProps
   extends Pick<
@@ -33,7 +35,7 @@ const ConcertCard = ({
         {/* 이미지 영역 */}
         <div className="relative w-[10.6rem] h-60">
           <Image
-            src={posterCid ?? '/'}
+            src={getCidUrl(posterCid) || ''}
             alt="concert card image"
             className="object-cover rounded-md"
             fill
