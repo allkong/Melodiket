@@ -7,7 +7,6 @@ interface MusicianItemProps {
   src: string;
   musicianName: string;
   favoriteCount: number;
-  bookingCount: number;
   isFavorite?: boolean;
 }
 
