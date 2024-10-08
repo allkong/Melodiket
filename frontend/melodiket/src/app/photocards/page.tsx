@@ -1,12 +1,6 @@
-import { Suspense } from 'react';
-import { HydrationBoundary } from '@tanstack/react-query';
-
-import { usePhotocardListDehydrateState } from '@/services/photocard/usePhotocardList';
-
 import Header from '@/components/organisms/navigation/Header';
 import PageTitle from '@/components/molecules/title/PageTitle';
 import PhotocardListSection from './_components/photocard-list-section';
-import PhotocardListSkeleton from './_components/photocard-list-skeleton';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Card } from '@/public/icons';
 
@@ -18,11 +12,7 @@ const Page = () => {
         <PageTitle title="포토카드" total={2} />
       </div>
       <div className="overflow-y-scroll">
-        <HydrationBoundary state={usePhotocardListDehydrateState()}>
-          <Suspense fallback={<PhotocardListSkeleton count={2} />}>
-            <PhotocardListSection />
-          </Suspense>
-        </HydrationBoundary>
+        <PhotocardListSection />
       </div>
       <FixedButton
         href="/photocards/create"
