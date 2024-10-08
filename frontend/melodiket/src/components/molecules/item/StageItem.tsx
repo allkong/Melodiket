@@ -9,6 +9,7 @@ interface StageItemProps {
   isSelected?: boolean;
   onClick?: () => void;
   isModify?: boolean;
+  isRemove?: boolean;
   uuid: UUID;
 }
 
@@ -18,6 +19,7 @@ const StageItem = ({
   isSelected,
   onClick,
   isModify,
+  isRemove,
   uuid,
 }: StageItemProps) => {
   const deleteStageMutation = useDeleteStage();
@@ -44,9 +46,15 @@ const StageItem = ({
             <OptionButton label="수정" isSelected={true} />
           </div>
         )}
-        <div className="flex">
-          <OptionButton label="삭제" isSelected={true} onClick={handleDelete} />
-        </div>
+        {isRemove && (
+          <div className="flex">
+            <OptionButton
+              label="삭제"
+              isSelected={true}
+              onClick={handleDelete}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
