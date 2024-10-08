@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginReq;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.LoginResp;
 import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpReq;
@@ -14,6 +15,7 @@ import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.token.service.contract.MelodyTokenContract;
+import com.ssafy.jdbc.melodiket.user.controller.dto.MusicianCursorPagingReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
@@ -297,8 +299,17 @@ public class UserService implements AuthService {
     }
 
     @Override
-    public PageResponse<MusicianResp> getMusicians(CursorPagingReq pagingReq) {
-        return musicianCursorRepository.findAll(pagingReq);
+    public PageResponse<MusicianResp> getMusicians(MusicianCursorPagingReq pagingReq) {
+        // 필터 조건이 없으면 모든 뮤지션 목록을 조회
+        BooleanExpression condition = QMusicianEntity.musicianEntity.isNotNull();
+
+        // name 필터가 있는 경우
+        if (pagingReq.getName() != null && !pagingReq.getName().isEmpty()) {
+            condition = condition.and(QMusicianEntity.musicianEntity.name.containsIgnoreCase(pagingReq.getName()));
+        }
+
+        // 조건에 맞는 뮤지션 목록을 조회
+        return musicianCursorRepository.findWithPagination(pagingReq, MusicianResp::from, condition);
     }
 
     @Override
