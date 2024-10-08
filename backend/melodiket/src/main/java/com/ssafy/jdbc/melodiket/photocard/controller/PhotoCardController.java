@@ -2,13 +2,16 @@ package com.ssafy.jdbc.melodiket.photocard.controller;
 
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.photocard.controller.dto.PhotoCardCreateReq;
 import com.ssafy.jdbc.melodiket.photocard.dto.PhotoCardResp;
 import com.ssafy.jdbc.melodiket.photocard.service.PhotoCardService;
+import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -21,12 +24,13 @@ public class PhotoCardController {
 
     @PostMapping
     public ResponseEntity<String> uploadImage(
-            Principal principal,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("ticketUUID") UUID uuid
+            Authentication authentication,
+            @Valid @RequestBody PhotoCardCreateReq req
     ) {
-        photoCardService.uploadImageToIPFS(principal, image, uuid);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("이미지 업로드 요청 완료");
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        photoCardService.checkPhotoCardMintingAvailable(user, req.ticketUuid());
+        photoCardService.uploadImageToIPFS(user.getLoginId(), user, req.imageCid(), req.ticketUuid());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @GetMapping("/me")
