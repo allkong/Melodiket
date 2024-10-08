@@ -55,7 +55,12 @@ export interface FetchConcertResponse {
   };
   result: Pick<
     Concert,
-    'concertUuid' | 'posterCid' | 'title' | 'stageName' | 'ticketingAt'
+    | 'concertUuid'
+    | 'posterCid'
+    | 'title'
+    | 'stageName'
+    | 'ticketingAt'
+    | 'startAt'
   >[];
 }
 
