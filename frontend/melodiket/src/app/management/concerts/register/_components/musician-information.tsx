@@ -20,16 +20,13 @@ const MusicianInformation = ({
   concertData,
   onNext,
 }: MusicianInformationProps) => {
-  const [musicianList, setMusicianList] = useState<{ [key: string]: string }>(
-    {}
-  );
+  const [musicianList, setMusicianList] = useState<string[]>([]);
   const [musicianName, setMusicianName] = useState('');
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMusiciansQuery();
 
   const endRef = useRef<HTMLDivElement>(null);
-  const isFetchingRef = useRef(false); // 스크롤이 여러 번 호출되는 것을 방지하기 위한 플래그
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,24 +49,22 @@ const MusicianInformation = ({
     };
   }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
 
-  const isFormValid = Object.keys(musicianList).length > 0;
+  const isFormValid = musicianList.length > 0;
 
-  const toggleMusician = (name: string) => {
+  const toggleMusician = (uuid: string) => {
     setMusicianList((prev) => {
-      const updatedList = { ...prev };
-      if (updatedList[name]) {
-        delete updatedList[name];
+      if (prev.includes(uuid)) {
+        return prev.filter((id) => id !== uuid);
       } else {
-        updatedList[name] = name;
+        return [...prev, uuid];
       }
-      return updatedList;
     });
   };
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
       ...concertData,
-      musicianList: musicianList,
+      musicians: musicianList,
     };
     onNext(updatedConcertData);
   };
@@ -83,11 +78,11 @@ const MusicianInformation = ({
         )
       : [];
 
-  const selectedMusicians = allMusicians.filter(
-    (musician) => !!musicianList[musician.nickname]
+  const selectedMusicians = allMusicians.filter((musician) =>
+    musicianList.includes(musician.uuid)
   );
   const unselectedMusicians = allMusicians.filter(
-    (musician) => !musicianList[musician.nickname]
+    (musician) => !musicianList.includes(musician.uuid)
   );
 
   return (
@@ -110,8 +105,8 @@ const MusicianInformation = ({
               <MusicianSelectButton
                 key={musician.uuid}
                 label={musician.nickname}
-                isSelected={!!musicianList[musician.nickname]}
-                onClick={() => toggleMusician(musician.nickname)}
+                isSelected={musicianList.includes(musician.uuid)}
+                onClick={() => toggleMusician(musician.uuid)}
               />
             ))}
           {filteredMusicians.length > 0 && <LineDivider />}
@@ -119,16 +114,16 @@ const MusicianInformation = ({
             <MusicianSelectButton
               key={musician.uuid}
               label={musician.nickname}
-              isSelected={!!musicianList[musician.nickname]}
-              onClick={() => toggleMusician(musician.nickname)}
+              isSelected={musicianList.includes(musician.uuid)}
+              onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
           {unselectedMusicians.map((musician) => (
             <MusicianSelectButton
               key={musician.uuid}
               label={musician.nickname}
-              isSelected={!!musicianList[musician.nickname]}
-              onClick={() => toggleMusician(musician.nickname)}
+              isSelected={musicianList.includes(musician.uuid)}
+              onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
           <div ref={endRef} className="h-10" />
