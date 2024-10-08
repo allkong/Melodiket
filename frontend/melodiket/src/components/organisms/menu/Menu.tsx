@@ -12,6 +12,7 @@ import {
   Basket,
   Card,
   Favorite,
+  ForwardLine,
   Guitar,
   Microphone,
   Music,
@@ -70,17 +71,19 @@ const MenuWithPortal = () => {
             label="공연 승인"
           />
         )}
-        {user && (
+        {user ? (
           <>
             <Menu.Divider />
             <Menu.Item href="/mypage" icon={<MyPage />} label="마이페이지" />
+            <Menu.Item
+              onClick={handleLogout}
+              icon={<BackLine />}
+              label="로그아웃"
+            />
           </>
+        ) : (
+          <Menu.Item href="/auth/login" icon={<ForwardLine />} label="로그인" />
         )}
-        <Menu.Item
-          onClick={handleLogout}
-          icon={<BackLine />}
-          label="로그아웃"
-        />
       </MenuMain>
     </MenuPortal>
   );
