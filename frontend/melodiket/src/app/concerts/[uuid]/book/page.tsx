@@ -25,11 +25,11 @@ const Page = () => {
       favoriteMusician: '',
     });
 
-  const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>(
-    true,
-    true,
-    'seat'
-  );
+  const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>({
+    addToHistory: true,
+    preventForwardNavigate: true,
+    initialStep: 'seat',
+  });
 
   const mutate = useBookTicket();
   const [bookResult, setBookResult] = useState<TicketBookResponse | null>(null);
