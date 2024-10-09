@@ -1,15 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import Link from 'next/link';
 
-import { useTicketList } from '@/services/ticket/useTicketList';
+import { useTicketList } from '@/services/ticket/fetchTicket';
 import { TICKET_STATUS } from '@/constants/tickets';
 
-import ConcertItem from '@/components/molecules/item/ConcertItem';
+import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
 import usePosterStore from '@/store/posterStore';
-import { useRouter } from 'next/navigation';
 
 const ReservedTicketListSection = () => {
   const router = useRouter();
@@ -43,7 +42,7 @@ const ReservedTicketListSection = () => {
               handleTicketClick(ticket.ticketUuid, ticket.posterCid)
             }
           >
-            <ConcertItem
+            <TicketItem
               src={ticket.posterCid}
               concertTitle={ticket.concertTitle}
               stageName={ticket.stageName}

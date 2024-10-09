@@ -11,7 +11,7 @@ import { TICKET_STATUS } from '@/constants/tickets';
 import Header from '@/components/organisms/navigation/Header';
 import Tabs from '@/components/organisms/controls/Tabs';
 import LargeButton from '@/components/atoms/button/LargeButton';
-import TicketItem from '@/components/molecules/item/ConcertItem';
+import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
 
 const Page = () => {
