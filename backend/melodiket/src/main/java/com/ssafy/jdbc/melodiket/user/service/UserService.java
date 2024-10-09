@@ -276,22 +276,45 @@ public class UserService implements AuthService {
                 throw new HttpResponseException(ErrorDetail.DUPLICATED_NICKNAME);
             }
         }
-        String imageUrl = updateUserReq.imageUrl();
+        String updatedDescription = updateUserReq.description().orElse(user.getDescription());
 
-        // 유저 정보 변경
-        AppUserEntity updateUser = user.toBuilder()
-                .nickname(updateUserReq.nickname().orElse(user.getNickname()))
-                .description(updateUserReq.description().orElse(user.getDescription()))
+        String updatedNickname = updateUserReq.nickname().orElse(user.getNickname());
+
+        user = user.toBuilder()
+                .nickname(updatedNickname)
+                .description(updatedDescription)
                 .build();
-        appUserRepository.save(updateUser);
+
+        String imageUrl = updateUserReq.imageUrl();
+        if (imageUrl != null) {
+            if (user instanceof AudienceEntity audience) {
+                audience = audience.toBuilder()
+                        .imageUrl(imageUrl)
+                        .build();
+                audienceRepository.save(audience);
+            } else if (user instanceof MusicianEntity musician) {
+                musician = musician.toBuilder()
+                        .imageUrl(imageUrl)
+                        .build();
+                musicianRepository.save(musician);
+            } else if (user instanceof StageManagerEntity stageManager) {
+                stageManager = stageManager.toBuilder()
+                        .imageUrl(imageUrl)
+                        .build();
+                stageMangerRepository.save(stageManager);
+            }
+        } else {
+            // 공통 속성만 업데이트하고 저장
+            appUserRepository.save(user);
+        }
 
         return new UserProfileResp(
-                updateUser.getUuid(),
-                updateUser.getLoginId(),
-                updateUser.getRole().name(),
-                updateUser.getNickname(),
-                updateUser.getDescription(),
-                updateUser.getRegisteredAt(),
+                user.getUuid(),
+                user.getLoginId(),
+                user.getRole().name(),
+                user.getNickname(),
+                user.getDescription(),
+                user.getRegisteredAt(),
                 imageUrl
         );
     }
