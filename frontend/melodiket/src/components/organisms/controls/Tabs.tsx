@@ -5,6 +5,7 @@ interface TabsProps {
   activeTab: string;
   onClick: (tabValue: string) => void;
   labelMap: Record<string, string>;
+  color?: 'purple' | 'secondary';
   line?: boolean;
 }
 
@@ -13,6 +14,7 @@ const Tabs = ({
   activeTab,
   onClick,
   labelMap,
+  color = 'purple',
   line = true,
 }: TabsProps) => {
   return (
@@ -23,6 +25,7 @@ const Tabs = ({
           label={labelMap[tab]}
           isSelected={tab === activeTab}
           onClick={() => onClick(tab)}
+          color={color}
           line={line}
         />
       ))}
