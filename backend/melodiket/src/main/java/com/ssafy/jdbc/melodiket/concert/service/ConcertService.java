@@ -9,10 +9,7 @@ import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
 import com.ssafy.jdbc.melodiket.concert.entity.*;
-import com.ssafy.jdbc.melodiket.concert.repository.ConcertCursorRepository;
-import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianCursorRepository;
-import com.ssafy.jdbc.melodiket.concert.repository.ConcertParticipantMusicianRepository;
-import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
+import com.ssafy.jdbc.melodiket.concert.repository.*;
 import com.ssafy.jdbc.melodiket.concert.service.contract.ManagerContract;
 import com.ssafy.jdbc.melodiket.concert.service.contract.MusicianContract;
 import com.ssafy.jdbc.melodiket.concert.service.dto.SeatingConcertCreateReq;
@@ -22,7 +19,6 @@ import com.ssafy.jdbc.melodiket.stage.repository.StageRepository;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import com.ssafy.jdbc.melodiket.ticket.repository.TicketRepository;
 import com.ssafy.jdbc.melodiket.user.controller.dto.WalletResp;
-import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianInfo;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import com.ssafy.jdbc.melodiket.user.entity.StageManagerEntity;
@@ -60,6 +56,7 @@ public class ConcertService {
     private final BlockchainConfig blockchainConfig;
     private final TicketRepository ticketRepository;
     private final WebPushService webPushService;
+    private final ConcertSeatEntityRepository concertSeatEntityRepository;
 
     // 커서 기반 공연 목록 조회 메서드
     public PageResponse<ConcertResp> getConcerts(ConcertCursorPagingReq pagingReq) {
@@ -213,10 +210,20 @@ public class ConcertService {
                 .operation("createConcert")
                 .operationId(operationId);
         try {
+
+            // 미리 영속화
+            concert = concertRepository.save(concert);
+
+            // 좌석콘서트라면 좌석 미리 초기화
+            if (!concert.getStageEntity().getIsStanding()) {
+                initializeSeats(concert); // 이 파라미터 concert 가 영속화되어야만 함
+            }
             if (concert.getStageEntity().getIsStanding()) {
+                // 스탠딩 콘서트라면 스탠딩 콘서트 생성
                 StandingConcertCreateReq req = new StandingConcertCreateReq(concert, musicianWalletAddresses);
                 log.info("Created standing concert : {}", managerContract.createStandingConcert(req));
             } else {
+                // 좌석 콘서트 생성
                 StageEntity stage = concert.getStageEntity();
                 SeatingConcertCreateReq req = new SeatingConcertCreateReq(concert, musicianWalletAddresses, stage);
                 log.info("Created seating concert : {}", managerContract.createSeatingConcert(req));
@@ -348,7 +355,7 @@ public class ConcertService {
 
             String anotherMessageBody = String.format("공연 [%s]에 대한 뮤지션 [%s]님의 참여 거절이 완료되었어요.", concert.getTitle(), musician.getNickname());
             webPushService.sendPushNotification(concert.getOwner(), "공연 참여 거절", anotherMessageBody, resp);
-            for(ConcertParticipantMusicianEntity anotherParticipant : concert.getConcertParticipantMusicians()) {
+            for (ConcertParticipantMusicianEntity anotherParticipant : concert.getConcertParticipantMusicians()) {
                 if (!anotherParticipant.getMusicianEntity().getUuid().equals(musician.getUuid())) {
                     webPushService.sendPushNotification(anotherParticipant.getMusicianEntity(), "공연 참여 거절", anotherMessageBody, resp);
                 }
@@ -489,6 +496,30 @@ public class ConcertService {
         return createdConcerts.stream()
                 .map(ConcertResp::from)
                 .collect(Collectors.toList());
+    }
+
+    // 좌석 초기화 메소드
+    private void initializeSeats(ConcertEntity concert) {
+        StageEntity stage = concert.getStageEntity();
+        long numOfRows = stage.getNumOfRow();
+        long numOfCols = stage.getNumOfCol();
+
+        List<ConcertSeatEntity> seats = new ArrayList<>();
+        for (long row = 1; row <= numOfRows; row++) {
+            for (long col = 1; col <= numOfCols; col++) {
+                ConcertSeatEntity seat = ConcertSeatEntity.builder()
+                        .concertEntity(concert)  // 이미 영속화된 concertEntity 할당
+                        .seatRow(row)
+                        .seatCol(col)
+                        .isAvailable(true)  // 초기화 시 모든 좌석은 구매 가능 상태로 설정
+                        .build();
+                seats.add(seat);
+            }
+        }
+
+        // 좌석 정보 저장 (concertSeatEntityRepository에 저장)
+        concertSeatEntityRepository.saveAll(seats);
+        log.info("Initialized {} seats for concert {}", seats.size(), concert.getTitle());
     }
 }
 

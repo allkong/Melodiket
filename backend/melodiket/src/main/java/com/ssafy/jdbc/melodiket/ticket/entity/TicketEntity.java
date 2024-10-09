@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.ticket.entity;
 
 import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertSeatEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import jakarta.persistence.*;
@@ -26,6 +27,10 @@ public class TicketEntity extends ExposableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id", nullable = false)
     private ConcertEntity concertEntity;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "concert_seat_id", referencedColumnName = "id")
+    private ConcertSeatEntity concertSeatEntity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
