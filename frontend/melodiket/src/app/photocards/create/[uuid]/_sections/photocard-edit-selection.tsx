@@ -5,13 +5,11 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 
 import { preventContextMenu } from '@/utils/eventUtil';
-import type { Sticker, Text } from '@/types/photocard';
+import { PHOTOCARD_EDIT_TYPES } from '@/constants/photocard';
 
 import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
-import { getDatetime } from '@/utils/dayjsPlugin';
 import usePhotocardStore from '@/store/photocardStore';
 import Tabs from '@/components/organisms/controls/Tabs';
-import { PHOTOCARD_EDIT_TYPES } from '@/constants/photocard';
 import MoveableSticker from '../_components/moveable-sticker';
 
 interface PhotocardEditSelectionProps {
@@ -26,7 +24,7 @@ const PhotocardEditSelection = ({
   onNext,
 }: PhotocardEditSelectionProps) => {
   const router = useRouter();
-  const {} = usePhotocardStore();
+  const { stickers } = usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState(
     Object.keys(PHOTOCARD_EDIT_TYPES)[0]
@@ -38,15 +36,6 @@ const PhotocardEditSelection = ({
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
     router.push(`/photocards/create/${uuid}?step=edit&select=${tabValue}`);
-  };
-
-  const sticker: Sticker = {
-    id: getDatetime(),
-    src: '/stickers/bear.svg',
-    x: 150,
-    y: 200,
-    scale: 1,
-    rotate: 0,
   };
 
   return (
@@ -63,12 +52,15 @@ const PhotocardEditSelection = ({
             />
           </PhotocardFrame>
 
-          <MoveableSticker
-            sticker={sticker}
-            isSelected={selectedId === sticker.id}
-            onSelect={() => setSelectedId(sticker.id)}
-            containerRef={photocardRef}
-          />
+          {stickers?.map((sticker) => (
+            <MoveableSticker
+              key={sticker.id}
+              sticker={sticker}
+              isSelected={selectedId === sticker.id}
+              onSelect={() => setSelectedId(sticker.id)}
+              containerRef={photocardRef}
+            />
+          ))}
         </div>
         {/* <button
           onClick={() => {}}

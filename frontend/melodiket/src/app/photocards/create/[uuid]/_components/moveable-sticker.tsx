@@ -1,12 +1,10 @@
-import { useRef } from 'react';
-import Image from 'next/image';
+import { cloneElement, isValidElement, useRef } from 'react';
 import Moveable from 'react-moveable';
 
-import { preventContextMenu } from '@/utils/eventUtil';
-import { Sticker } from '@/types/photocard';
+import { SelectSticker } from '@/types/photocard';
 
 interface MoveableStickerProps {
-  sticker: Sticker;
+  sticker: SelectSticker;
   isSelected: boolean;
   onSelect: () => void;
   containerRef: React.RefObject<HTMLElement>;
@@ -19,7 +17,7 @@ const MoveableSticker = ({
   containerRef,
 }: MoveableStickerProps) => {
   const stickerRef = useRef<HTMLDivElement | null>(null);
-  console.log(sticker.x, sticker.y);
+
   return (
     <>
       <div
@@ -28,14 +26,9 @@ const MoveableSticker = ({
         className="absolute"
         style={{ left: `${sticker.x}px`, top: `${sticker.y}px` }}
       >
-        <Image
-          src={sticker.src}
-          alt="sticker"
-          width={80}
-          height={80}
-          draggable={false}
-          onContextMenu={preventContextMenu}
-        />
+        <div className="w-16 h-16">
+          {isValidElement(sticker.image) && cloneElement(sticker.image)}
+        </div>
       </div>
 
       {isSelected && (

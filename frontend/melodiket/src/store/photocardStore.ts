@@ -1,14 +1,14 @@
 import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 
-import type { Sticker, Text } from '@/types/photocard';
+import type { SelectSticker, SelectText } from '@/types/photocard';
 
 interface PhotocardState {
-  stickers: Sticker[] | null;
-  texts: Text[] | null;
+  stickers: SelectSticker[] | null;
+  texts: SelectText[] | null;
 
-  setStickers: (stickers: Sticker[]) => void;
-  setTexts: (texts: Text[]) => void;
+  setStickers: (stickers: SelectSticker[]) => void;
+  setTexts: (texts: SelectText[]) => void;
 
   removeSticker: (selectedId: string) => void;
   removeText: (selectedId: string) => void;
@@ -37,7 +37,7 @@ const usePhotocardStore = create<PhotocardState>()(
       }),
       {
         name: 'photocard-storage',
-        getStorage: () => localStorage,
+        storage: createJSONStorage(() => sessionStorage),
       }
     )
   )
