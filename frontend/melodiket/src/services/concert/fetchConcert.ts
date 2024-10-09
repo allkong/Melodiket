@@ -37,11 +37,20 @@ export const fetchConcertList = async ({
 };
 
 export const useFetchInfiniteConcert = (
-  pageSize: number = 6,
-  orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC',
-  title: string = ''
+  options: {
+    pageSize?: number;
+    orderKey?: string;
+    orderDirection?: 'ASC' | 'DESC';
+    title?: string;
+  } = {}
 ) => {
+  const {
+    pageSize = 6,
+    orderKey = 'createdAt',
+    orderDirection = 'ASC',
+    title = '',
+  } = options;
+
   const { user } = useAuthStore();
 
   const result = useInfiniteQuery({
