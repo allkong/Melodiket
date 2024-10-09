@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
@@ -30,13 +30,15 @@ const getFavorites = (
 
 const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const { data: concert } = useFetchConcertDetail(uuid);
+  const mutate = useToggleFavoriteConcert();
+
   const [isFavorite, setIsFavorite] = useState<boolean>(
     concert?.isLike ?? false
   );
-  const mutate = useToggleFavoriteConcert();
 
   const handleToggleFavorite = async () => {
     const response = await mutate.mutateAsync({ concertUuid: uuid });
+
     setIsFavorite(response.isFavorite);
     if (response.isFavorite) {
       toast('찜 추가', {
@@ -48,6 +50,10 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
       });
     }
   };
+
+  useEffect(() => {
+    setIsFavorite(concert?.isLike ?? false);
+  }, [concert]);
 
   return (
     <div className="relative w-full h-96">
@@ -74,7 +80,6 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
                   isFavorite,
                   concert?.likeCount ?? 0
                 )}
-                {concert?.likeCount}
               </p>
               <FavoriteButton
                 isOn={isFavorite}
