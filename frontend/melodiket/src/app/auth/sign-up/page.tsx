@@ -10,7 +10,7 @@ import SignUpInformation from './_section/sign-up-information';
 import SignUpDescription from './_section/sign-up-description';
 import SignUpSuccess from './_section/sign-up-success';
 import useFunnel from '@/hooks/useFunnel';
-import { useSignUp } from '@/services/auth/useLogin';
+import { useSignUp } from '@/services/auth/fetchAuth';
 
 const Page = () => {
   const { Funnel, setStep } = useFunnel<

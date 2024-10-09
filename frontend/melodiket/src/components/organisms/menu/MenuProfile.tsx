@@ -26,12 +26,26 @@ const MenuProfile = () => {
     }
   };
 
+  const getUserRoleLabel = (role: string): string => {
+    if (role) {
+      switch (role) {
+        case 'AUDIENCE':
+          return '관객';
+        case 'MUSICIAN':
+          return '뮤지션';
+        case 'STAGE_MANAGER':
+          return '공연 관리자';
+      }
+    }
+    return 'Unknown';
+  };
+
   return (
     <div
       onClick={handleClickProfile}
       className="flex items-center gap-4 w-full h-[104px] px-5 py-4 text-gray-500 cursor-pointer"
     >
-      <Profile size="sm" />
+      <Profile size="md" />
       {user ? (
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
@@ -39,14 +53,14 @@ const MenuProfile = () => {
             <ArrowButton />
           </div>
           <OptionButton
-            label={user.role ?? 'Unknown User'}
+            label={getUserRoleLabel(user.role || '')}
             isSelected={true}
             onClick={() => {}}
           />
         </div>
       ) : (
         <div>
-          <p>로그인 후 이용해주세요.</p>
+          <p>로그인 후 이용해 주세요</p>
         </div>
       )}
     </div>

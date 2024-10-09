@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 
-import { useTicketDetail } from '@/services/ticket/useTicketdetail';
+import { useTicketDetail } from '@/services/ticket/fetchTicket';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
 import { TICKET_STATUS_LABELS } from '@/constants/tickets';
