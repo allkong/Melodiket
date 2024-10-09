@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist, createJSONStorage } from 'zustand/middleware';
-
-interface User {
-  nickname: string | null;
-  role: string | null;
-}
+import type { User } from '@/types/user';
 
 interface AuthState {
   accessToken: string | null;
