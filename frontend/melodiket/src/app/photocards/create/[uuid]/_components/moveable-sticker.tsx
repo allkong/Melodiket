@@ -36,8 +36,25 @@ const MoveableSticker = ({
           target={stickerRef.current}
           container={containerRef.current}
           draggable={true}
-          onDrag={({ target, transform }) => {
-            target!.style.transform = transform;
+          onDrag={({ target, left, top }) => {
+            // 스티커가 bounds를 벗어나지 않도록 조정
+            const stickerWidth = stickerRef.current?.offsetWidth || 0;
+            const stickerHeight = stickerRef.current?.offsetHeight || 0;
+            const containerWidth = containerRef.current?.offsetWidth || 0;
+            const containerHeight = containerRef.current?.offsetHeight || 0;
+
+            // 스티커가 부모 컨테이너를 넘지 않도록 조정
+            const newLeft = Math.min(
+              Math.max(0, left),
+              containerWidth - stickerWidth
+            );
+            const newTop = Math.min(
+              Math.max(0, top),
+              containerHeight - stickerHeight
+            );
+
+            target!.style.left = `${newLeft}px`;
+            target!.style.top = `${newTop}px`;
           }}
           keepRatio={true}
           scalable={true}
@@ -50,6 +67,12 @@ const MoveableSticker = ({
           }}
           pinchable={true}
           pinchOutside={true}
+          bounds={{
+            left: 0,
+            top: 0,
+            right: containerRef.current?.offsetWidth || 0,
+            bottom: containerRef.current?.offsetHeight || 0,
+          }}
         />
       )}
     </>
