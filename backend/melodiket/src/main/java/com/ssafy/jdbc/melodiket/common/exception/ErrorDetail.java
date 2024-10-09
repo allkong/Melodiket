@@ -44,6 +44,7 @@ public enum ErrorDetail {
     PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404009", "존재하지 않는 승인 정보 입니다."),
     CONCERT_PARTICIPANT_MUSICIAN_NOT_FOUND(HttpStatus.NOT_FOUND, "E404010", "존재하지 않는 공연 참가 뮤지션 정보 입니다."),
     PHOTOCARD_NOT_FOUND(HttpStatus.NOT_FOUND, "E404011", "존재하지 않는 포토카드 입니다."),
+    SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404012", "존재하지 않는 공연 좌석 입니다."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
