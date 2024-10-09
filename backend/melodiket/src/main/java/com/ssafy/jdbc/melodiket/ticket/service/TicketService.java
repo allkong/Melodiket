@@ -136,13 +136,15 @@ public class TicketService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(user, "티켓 구매 완료", "티켓 구매 완료", resp);
+            String body = String.format("공연 [%s]에 대한 티켓 구매가 완료 되었습니다. 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "티켓 구매 완료", body, resp);
         } catch (Exception e) {
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(user, "티켓 구매 실패", "티켓 구매 실패", resp);
+            String body = String.format("공연 [%s]에 대한 티켓 구매가 실패했습니다. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "티켓 구매 실패", body, resp);
             throw new RuntimeException(e);
         }
     }
@@ -260,13 +262,20 @@ public class TicketService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(user, "티켓 사용 완료", "티켓 사용 완료", resp);
+
+            String managerBody = String.format("공연 [%s]의 티켓 사용이 완료 되었습니다. 입장을 안내해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "티켓 사용 완료", managerBody, resp);
+
+            String audienceBody = String.format("공연 [%s]의 티켓 사용이 완료 되었습니다. 안내에 따라 입장해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(ticket.getAudienceEntity(), "티켓 사용 완료", audienceBody, resp);
         } catch (Exception e) {
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(user, "티켓 사용 실패", "티켓 사용 실패", resp);
+            String body = String.format("공연 [%s]의 티켓 사용이 실패했습니다. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "티켓 사용 실패", body, resp);
+            webPushService.sendPushNotification(ticket.getAudienceEntity(), "티켓 사용 실패", body, resp);
             throw new RuntimeException(e);
         }
     }
@@ -308,13 +317,15 @@ public class TicketService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(ticket.getAudienceEntity(), "티켓 환불 완료", "티켓 환불 완료", resp);
+            String body = String.format("공연 [%s]의 티켓 환불이 완료 되었습니다. 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(ticket.getAudienceEntity(), "티켓 환불 완료", body, resp);
         } catch (Exception e) {
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(ticket.getAudienceEntity(), "티켓 환불 실패", "티켓 환불 실패", resp);
+            String body = String.format("공연 [%s]의 티켓 환불이 실패했습니다. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(ticket.getAudienceEntity(), "티켓 환불 실패", body, resp);
             throw new RuntimeException(e);
         }
 
