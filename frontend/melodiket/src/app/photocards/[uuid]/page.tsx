@@ -1,6 +1,6 @@
 'use client';
 
-import { usePhotocardDetail } from '@/services/photocard/usePhotocardDetail';
+import { usePhotocardDetail } from '@/services/photocard/fetchPhotocard';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
 
 import Header from '@/components/organisms/navigation/Header';

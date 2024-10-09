@@ -5,17 +5,7 @@ import clsx from 'clsx';
 
 import MenuButton from '@/components/atoms/button/MenuButton';
 import SearchButton from '@/components/atoms/button/SearchButton';
-import {
-  LogoText,
-  BackLine,
-  Basket,
-  Card,
-  Favorite,
-  Guitar,
-  Microphone,
-  Music,
-  MyPage,
-} from '@/public/icons';
+import { LogoText } from '@/public/icons';
 import useMenuStore from '@/store/menuStore';
 import Menu from '@/components/organisms/menu/Menu';
 
@@ -55,38 +45,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
           <SearchButton />
         </div>
       </header>
-      <Menu>
-        <Menu.Header />
-        <Menu.Profile />
-        <Menu.Divider />
-        <Menu.Item href="/concerts" icon={<Music />} label="공연" />
-        <Menu.Item
-          href="/management/concerts"
-          icon={<Music />}
-          label="공연 생성"
-        />
-        <Menu.Item href="/musicians" icon={<Guitar />} label="뮤지션" />
-        <Menu.Divider />
-        <Menu.Item
-          href="/favorites"
-          icon={<Favorite />}
-          label="찜한 공연/뮤지션"
-        />
-        <Menu.Item href="/mytickets" icon={<Basket />} label="예매내역" />
-        <Menu.Item
-          href="/photocards"
-          icon={<Card width={22} height={22} className="text-purple-200" />}
-          label="포토카드"
-        />
-        <Menu.Item
-          href="/management/concerts"
-          icon={<Microphone />}
-          label="내 공연"
-        />
-        <Menu.Divider />
-        <Menu.Item href="/mypage" icon={<MyPage />} label="마이페이지" />
-        <Menu.Item href="/" icon={<BackLine />} label="로그아웃" />
-      </Menu>
+      <Menu />
     </>
   );
 };

@@ -7726,6 +7726,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"goober@npm:^2.1.10":
+  version: 2.1.15
+  resolution: "goober@npm:2.1.15"
+  peerDependencies:
+    csstype: ^3.0.10
+  checksum: 10c0/144782b3777206560078121c90dd50fd498952f6400db89add6a82053423be5d7a84f7559933966a14b344ef9513c55abdd8757aebd13a0a465dea62ce821052
+  languageName: node
+  linkType: hard
+
 "gopd@npm:^1.0.1":
   version: 1.0.1
   resolution: "gopd@npm:1.0.1"
@@ -9142,6 +9151,7 @@ __metadata:
     react-dom: "npm:^18"
     react-error-boundary: "npm:^4.0.13"
     react-moveable: "npm:^0.56.0"
+    react-hot-toast: "npm:^2.4.1"
     storybook: "npm:^8.2.9"
     tailwind-scrollbar-hide: "npm:^1.1.7"
     tailwindcss: "npm:^3.4.1"
@@ -10817,6 +10827,18 @@ __metadata:
   peerDependencies:
     react: ">=16.13.1"
   checksum: 10c0/6f3e0e4d7669f680ccf49c08c9571519c6e31f04dcfc30a765a7136c7e6fbbbe93423dd5a9fce12107f8166e54133e9dd5c2079a00c7a38201ac811f7a28b8e7
+  languageName: node
+  linkType: hard
+
+"react-hot-toast@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "react-hot-toast@npm:2.4.1"
+  dependencies:
+    goober: "npm:^2.1.10"
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 10c0/591ecec3c6adc1cdb70f00165a57baa3d7f75d0d30fa767213c36496bdcc6be2b2e6a3edbf7c04f7d726a1b17dcfb5e7feb2136b04b17c9ccb769894b970f365
   languageName: node
   linkType: hard
 

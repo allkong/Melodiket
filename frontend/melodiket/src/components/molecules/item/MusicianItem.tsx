@@ -1,39 +1,55 @@
-import FavoriteButton from '@/components/atoms/button/FavoriteButton';
+import Link from 'next/link';
+import { useState } from 'react';
+
+import { useToggleFavoriteMusician } from '@/services/favorite/fetchFavorite';
+
 import Profile from '@/components/atoms/profile/Profile';
+import FavoriteButton from '@/components/atoms/button/FavoriteButton';
 
 interface MusicianItemProps {
+  uuid: string;
   src: string;
   musicianName: string;
-  favoriteCount: number;
-  bookingCount: number;
-  isFavorite?: boolean;
+  initialFavoriteCount: number;
+  initialFavorite: boolean;
 }
 
 const MusicianItem = ({
+  uuid,
   src,
   musicianName,
-  favoriteCount,
-  bookingCount,
-  isFavorite = false,
+  initialFavoriteCount,
+  initialFavorite,
 }: MusicianItemProps) => {
+  const { mutate: toggleFavorite } = useToggleFavoriteMusician();
+
+  const [isFavorite, setIsFavorite] = useState(initialFavorite);
+  const [likeCount, setLikeCount] = useState(initialFavoriteCount);
+
+  const handleFavoriteToggle = async () => {
+    toggleFavorite(uuid, {
+      onSuccess: (data) => {
+        console.log(data.status);
+        setIsFavorite(data.status);
+        setLikeCount((prevCount) =>
+          data.status ? prevCount + 1 : prevCount - 1
+        );
+      },
+    });
+  };
+
   return (
-    <div className="flex flex-row items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
-      <div className="flex flex-row items-center space-x-4">
-        <Profile src={src} size="sm" />
-        <div className="space-y-1">
-          <p className="font-medium">{musicianName}</p>
-          <div className="flex flex-row space-x-2.5 text-sm">
-            <p>
-              찜 <span className="text-primary">{favoriteCount}</span>
-            </p>
-            <p>|</p>
-            <p>
-              예매중 <span className="text-primary">{bookingCount}</span>
-            </p>
+    <div className="flex items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
+      <Link href={`/musicians/${uuid}` || '/'} className="w-full">
+        <div className="flex items-center space-x-4 flex-grow">
+          <Profile src={src} size="sm" />
+          <div className="flex space-x-3">
+            <p className="font-medium">{musicianName}</p>
+            <span className="text-primary">{likeCount}</span>
           </div>
         </div>
-      </div>
-      <FavoriteButton isOn={isFavorite} />
+      </Link>
+      <FavoriteButton isOn={isFavorite} onClick={handleFavoriteToggle} />
     </div>
   );
 };

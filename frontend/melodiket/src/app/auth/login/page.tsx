@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
-import { useLogin } from '@/services/auth/useLogin';
+import { useLogin } from '@/services/auth/fetchAuth';
 
 import { LogoText } from '@/public/icons';
 import Input from '@/components/atoms/input/Input';
@@ -40,14 +41,18 @@ const Page = () => {
             onChange={setPassword}
             placeholder="비밀번호"
             type="password"
+            onClickEnter={handleLogin}
           />
         </div>
         <div className="flex flex-row space-x-2.5 text-sm text-gray-400">
-          <p onClick={() => alert('준비중🔨')} className="cursor-pointer">
+          <p
+            onClick={() => toast('준비중', { icon: '🔨' })}
+            className="cursor-pointer"
+          >
             ID/PW 찾기
           </p>
           <p>|</p>
-          <Link href={'/auth/sign-up'}>회원가입</Link>
+          <Link href={'/auth/sign-up?step=policy'}>회원가입</Link>
         </div>
       </div>
       <FixedButton

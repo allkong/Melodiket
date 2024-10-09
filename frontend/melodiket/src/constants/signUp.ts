@@ -39,3 +39,53 @@ export const SIGN_UP_DATA_LENGTH_LIMITS = {
   MIN_PASSWORD_LENGTH: 5,
   MAX_PASSWORD_LENGTH: 20,
 } as const;
+
+export const BEFORE_LOGIN_FAVORITE_MUSICIANS = [
+  {
+    loginId: '1',
+    description: '아이묭입니다',
+    role: 'ROLE_MUSICIAN',
+    nickname: '아이묭',
+    imageUrl:
+      'https://i1.sndcdn.com/artworks-Dq5srslWYpDO1H0j-cTCo1w-t500x500.jpg',
+    uuid: '',
+    registeredAt: '',
+    likeCount: 0,
+    isLike: false,
+  },
+  {
+    description: 'hi',
+    loginId: 'me',
+    nickname: 'hitsujibungaku',
+    role: 'ROLE_MUSICIAN',
+    imageUrl:
+      'https://i.pinimg.com/236x/65/3b/f5/653bf5ae181cab407c7cbd5c616672a6.jpg',
+    uuid: '',
+    registeredAt: '',
+    likeCount: 0,
+    isLike: false,
+  },
+  {
+    nickname: '빈지노',
+    description: 'hi',
+    loginId: 'beenzino',
+    role: 'ROLE_MUSICIAN',
+    imageUrl: 'https://img.hankyung.com/photo/202103/01.25846226.3.jpg',
+    uuid: '',
+    registeredAt: '',
+    likeCount: 0,
+    isLike: false,
+  },
+  {
+    nickname: '김장훈',
+    role: 'ROLE_MUSICIAN',
+    description: '독도킥 보여드리겠습니다.',
+    loginId: 'jang',
+    imageUrl:
+      'https://newsimg-hams.hankookilbo.com/2022/08/13/601df9d2-7c82-4b2d-bdd1-dc0bcc2e81e4.jpg',
+    uuid: '',
+    registeredAt: '',
+    likeCount: 0,
+    isLike: false,
+  },
+] as const;
