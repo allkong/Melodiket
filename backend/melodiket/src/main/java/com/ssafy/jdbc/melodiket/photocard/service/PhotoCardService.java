@@ -7,6 +7,7 @@ import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.common.service.redis.DistributedLock;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.photocard.dto.PhotoCardResp;
 import com.ssafy.jdbc.melodiket.photocard.entity.PhotoCardEntity;
 import com.ssafy.jdbc.melodiket.photocard.entity.QPhotoCardEntity;
@@ -102,6 +103,9 @@ public class PhotoCardService {
         Credentials credentials = Credentials.create(wallet.privateKey());
         PhotoCardContract photoCardContract = new PhotoCardContract(blockchainConfig, credentials);
 
+        TicketEntity ticket = ticketRepository.findByUuid(ticketUUID).orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
+        ConcertEntity concert = ticket.getConcertEntity();
+
         UUID uuid = UUID.randomUUID();
         TransactionResultResp.TransactionResultRespBuilder respBuilder = TransactionResultResp.builder()
                 .operationId(operationId)
@@ -113,14 +117,17 @@ public class PhotoCardService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(ticketUUID.toString())
                     .build();
-            webPushService.initiatePushNotification(user, "포토 카드 업로드 완료", "포토 카드 업로드 완료", resp);
+            String body = String.format("공연 [%s]의 포토 카드 발급이 완료 되었습니다. 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "포토 카드 발급 완료", body, resp);
         } catch (Exception e) {
             log.error("Error occurred while uploading image to IPFS: " + e.getMessage());
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(null)
                     .build();
-            webPushService.initiatePushNotification(user, "포토 카드 업로드 실패", "포토 카드 업로드 실패", resp);
+
+            String body = String.format("티켓 [%s]에 대한 정산이 실패했어요. 다시 시도해 주세요.", concert.getUuid().toString());
+            webPushService.sendPushNotification(user, "포토 카드 발급 실패", body, resp);
             throw new RuntimeException(e);
         }
     }
