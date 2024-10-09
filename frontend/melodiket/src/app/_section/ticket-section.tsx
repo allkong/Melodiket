@@ -9,7 +9,7 @@ const TicketSection = () => {
 
   return (
     <TicketInfoCarousel
-      datas={
+      data={
         data?.map(
           (ticket) =>
             `${ticket.concertTitle} - ${formatDateToYMD(ticket.startAt ?? '')}`
