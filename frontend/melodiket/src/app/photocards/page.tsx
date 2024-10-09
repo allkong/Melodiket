@@ -11,7 +11,7 @@ const Page = () => {
         <Header />
         <PageTitle title="포토카드" total={2} />
       </div>
-      <div className="overflow-y-scroll">
+      <div className="overflow-y-scroll flex-grow">
         <PhotocardListSection />
       </div>
       <FixedButton
