@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 
-import { useTicketList } from '@/services/ticket/useTicketList';
+import { useTicketList } from '@/services/ticket/fetchTicket';
 import { HISTORY_TYPES, TICKET_STATUS } from '@/constants/tickets';
 import { getCidUrl } from '@/utils/getUrl';
 

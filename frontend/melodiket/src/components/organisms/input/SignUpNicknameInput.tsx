@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Input from '@/components/atoms/input/Input';
 import AlertLabel from '@/components/atoms/label/AlertLabel';
 import { SIGN_UP_DATA_LENGTH_LIMITS } from '@/constants/signUp';
-import { useIsNicknameDuplicated } from '@/services/auth/useLogin';
+import { useIsNicknameDuplicated } from '@/services/auth/fetchAuth';
 
 interface SignUpNicknameInputProps {
   nickname: string;

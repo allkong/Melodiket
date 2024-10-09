@@ -6,10 +6,11 @@ import { useMusiciansQuery } from '@/services/musician/fetchMusician';
 import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import useIsOnScreen from '@/hooks/useIsOnScreen';
 
-import IsErrorButton from '@/components/atoms/button/IsErrorButton';
-import IsEnd from '@/components/atoms/label/IsEnd';
 import MusicianItem from '@/components/molecules/item/MusicianItem';
 import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
+import IsErrorButton from '@/components/atoms/button/IsErrorButton';
+import IsEnd from '@/components/atoms/label/IsEnd';
+import { getS3Url } from '@/utils/getUrl';
 
 interface MusicianSearchResultProps {
   query: string;
@@ -38,11 +39,11 @@ const MusicianSearchResult = ({ currentTab }: MusicianSearchResultProps) => {
             page.result.map((musician) => (
               <MusicianItem
                 key={musician.uuid}
-                href={`/musicians/${musician.uuid}`}
-                src={'/' + musician.imageUrl}
-                bookingCount={-999}
-                favoriteCount={musician.likeCount}
+                uuid={musician.uuid}
+                src={getS3Url(musician.imageUrl)}
                 musicianName={musician.nickname}
+                initialFavoriteCount={musician.likeCount}
+                initialFavorite={musician.isLike}
               />
             ))
           )}
