@@ -1,27 +1,18 @@
 'use client';
 
-import SelectModal from '@/components/organisms/modal/SelectModal';
 import { useSearchParams } from 'next/navigation';
+
+import StickerSelectModal from './_components/StickerSelectModal';
 
 const Modal = () => {
   const searchParams = useSearchParams();
   const select = searchParams.get('select');
 
-  if (select === 'text') {
-    return (
-      <SelectModal>
-        <p>텍스트</p>
-      </SelectModal>
-    );
+  if (select === 'sticker') {
+    return <StickerSelectModal />;
   }
 
-  if (select === 'sticker') {
-    return (
-      <SelectModal>
-        <p>스티커</p>
-      </SelectModal>
-    );
-  }
+  return null;
 };
 
 export default Modal;
