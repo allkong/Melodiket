@@ -26,7 +26,6 @@ public class FavoriteConcertService {
     private final FavoriteConcertRepository favoriteConcertRepository;
     private final AudienceRepository audienceRepository;
 
-    @Transactional
     public FavoriteConcertResp toggleFavoriteConcert(UUID concertId, String loginId) {
 
         // 공연 존재 여부 확인
