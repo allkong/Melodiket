@@ -11,6 +11,7 @@ import { MLDY, Authority } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
 import { useUploadImage } from '@/services/user/fetchUser';
+import { getS3Url } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
@@ -61,9 +62,7 @@ const Page = () => {
 
             if (uploadResponse.ok) {
               updateMe(
-                {
-                  imageUrl,
-                },
+                { imageUrl },
                 {
                   onSuccess: () => {
                     alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
@@ -99,7 +98,7 @@ const Page = () => {
             <div className="flex items-center space-x-4 mb-4 p-4 relative">
               <Profile
                 size="md"
-                src={data?.imageUrl}
+                src={data?.imageUrl ? getS3Url(data.imageUrl) : undefined}
                 onClick={handleProfileClick}
               />
               <input
