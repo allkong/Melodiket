@@ -318,14 +318,17 @@ public class TicketService {
             boolean isStanding = concert.getStageEntity().getIsStanding();
             if (!isStanding) {
                 ConcertSeatEntity seat = concertSeatEntityRepository.findByConcertEntity_UuidAndSeatRowAndSeatCol(concert.getUuid(), ticket.getSeatRow(), ticket.getSeatCol());
-                concertSeatEntityRepository.delete(seat);
-                concert.getConcertSeats().remove(seat);
+
+                if (seat != null && !seat.getIsAvailable()) {
+                    seat.cancel();
+                    concertSeatEntityRepository.save(seat);
+                    concert.getConcertSeats().add(seat);
+                }
             }
 
             // 남은 티켓 개수 증가
             concert.increaseRemainingTicket();
             concertRepository.save(concert);
-
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(ticketUUID.toString())
