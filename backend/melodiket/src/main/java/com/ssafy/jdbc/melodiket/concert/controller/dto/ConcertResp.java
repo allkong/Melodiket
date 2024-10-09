@@ -33,7 +33,8 @@ public record ConcertResp(
         Long capacity,             // 공연장 수용 인원
         Boolean isStanding,        // 스탠딩 여부
         ConcertStatus status,       // 공연 상태
-        Boolean isLike
+        Boolean isLike,
+        Long likeCount
 ) {
     public static ConcertResp from(ConcertEntity entity) {
         List<MusicianInfo> musicians = entity.getConcertParticipantMusicians().stream()
@@ -75,6 +76,7 @@ public record ConcertResp(
                 .isStanding(entity.getStageEntity().getIsStanding()) // 공연장 스탠딩 여부
                 .status(entity.getConcertStatus())
                 .isLike(_isLike)
+                .likeCount(entity.getLikeCount())
                 .build();
     }
 }
