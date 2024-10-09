@@ -7,6 +7,7 @@ interface PhotocardState {
   stickers: SelectSticker[] | null;
   texts: SelectText[] | null;
 
+  setStickers: (stickers: SelectSticker[]) => void;
   addSticker: (sticker: SelectSticker) => void;
   removeSticker: (selectedId: string) => void;
   clearStickers: () => void;
@@ -22,6 +23,7 @@ const usePhotocardStore = create<PhotocardState>()(
         stickers: null,
         texts: null,
 
+        setStickers: (stickers) => set({ stickers }),
         addSticker: (sticker) =>
           set((state) => ({
             stickers: state.stickers ? [...state.stickers, sticker] : [sticker],

@@ -2,7 +2,7 @@ import TabButton from '@/components/molecules/item/TabButton';
 
 interface TabsProps {
   tabs: string[];
-  activeTab: string;
+  activeTab: string | null;
   onClick: (tabValue: string) => void;
   labelMap: Record<string, string>;
   line?: boolean;

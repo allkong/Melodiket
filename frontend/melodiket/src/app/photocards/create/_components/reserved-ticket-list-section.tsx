@@ -41,6 +41,7 @@ const ReservedTicketListSection = () => {
             onClick={() =>
               handleTicketClick(ticket.ticketUuid, ticket.posterCid)
             }
+            className="cursor-pointer"
           >
             <TicketItem
               src={ticket.posterCid}
