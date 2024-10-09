@@ -189,6 +189,7 @@ public class TicketService {
                             .createdAt(ticket.getCreatedAt())
                             .startAt(concert.getStartAt())
                             .myFavoriteMusician(favoriteMusicianDto)
+                            .concertUuid(concert.getUuid())
                             .build();
                 }
         ).toList();
@@ -220,6 +221,7 @@ public class TicketService {
                 .createdAt(ticket.getCreatedAt())
                 .startAt(concert.getStartAt())
                 .myFavoriteMusician(favoriteMusicianDto)
+                .concertUuid(concert.getUuid())
                 .build();
     }
 
