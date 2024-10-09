@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.controller;
 
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.FavoriteConcertResp;
 import com.ssafy.jdbc.melodiket.concert.service.FavoriteConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
@@ -19,12 +20,12 @@ public class FavoriteConcertController {
     private final FavoriteConcertService favoriteConcertService;
 
     @PostMapping("/{id}/favorite")
-    public ResponseEntity<FavoriteConcertResp> toggleFavorite(
+    public ResponseEntity<ConcertResp> toggleFavorite(
             @PathVariable UUID id,
             Authentication authentication
     ) {
         String loginId = authentication.getName();
-        FavoriteConcertResp response = favoriteConcertService.toggleFavoriteConcert(id, loginId);
+        ConcertResp response = favoriteConcertService.toggleFavoriteConcert(id, loginId);
         return ResponseEntity.ok(response);
     }
 
