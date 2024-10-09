@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PresignedUrl {
 
-    private String presigend;
+    private String presigned;
     private String cdn;
 
 }
