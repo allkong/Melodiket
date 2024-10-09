@@ -20,24 +20,26 @@ export const stickers: Sticker[] = [
 
 const StickerSelectModal = () => {
   const router = useRouter();
-  const { setStickers } = usePhotocardStore();
+  const { addSticker } = usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState(
     Object.keys(STICKER_CATEGORIES)[0]
   );
 
+  const filteredStickers = stickers.filter(
+    (sticker) => sticker.category === activeTab
+  );
+
   const handleStickerSelect = (sticker: Sticker) => {
-    setStickers([
-      {
-        ...sticker,
-        id: getDatetime(),
-        image: sticker.image,
-        x: 150,
-        y: 200,
-        scale: 1,
-        rotate: 0,
-      },
-    ]);
+    addSticker({
+      ...sticker,
+      id: getDatetime(),
+      image: sticker.image,
+      x: 150,
+      y: 200,
+      scale: 1,
+      rotate: 0,
+    });
 
     router.back();
   };
@@ -53,7 +55,7 @@ const StickerSelectModal = () => {
         line={false}
       />
       <div className="overflow-x-scroll space-x-4 px-4">
-        {stickers.map((sticker) => (
+        {filteredStickers.map((sticker) => (
           <button
             key={sticker.name}
             onClick={() => handleStickerSelect(sticker)}
