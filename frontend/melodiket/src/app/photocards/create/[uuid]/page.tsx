@@ -1,12 +1,18 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 import useFunnel from '@/hooks/useFunnel';
 
 import SubHeader from '@/components/organisms/navigation/SubHeader';
 import PhotocardImageSelectSection from './_sections/photocard-image-select-section';
-import PhotocardEditSelection from './_sections/photocard-edit-selection';
+const PhotocardEditSelection = dynamic(
+  () => import('./_sections/photocard-edit-selection'),
+  {
+    ssr: false,
+  }
+);
 import { useState } from 'react';
 
 interface PageProps {
