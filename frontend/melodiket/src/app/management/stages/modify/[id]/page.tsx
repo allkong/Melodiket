@@ -11,8 +11,8 @@ import type { StageData } from '@/types/stage';
 
 const ModifyConcert = () => {
   const [stageData, setStageData] = useState<StageData>({
-    stageName: '',
-    stageAddress: '',
+    name: '',
+    address: '',
     isStanding: true,
     capacity: 0,
     numOfRow: 0,

@@ -13,6 +13,7 @@ type Story = StoryObj<typeof SignUpLoginIdInput>;
 export const Default: Story = {
   render: () => {
     const [loginId, setLoginId] = useState('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoginIdValid, setIsLoginIdValid] = useState(false);
     return (
       <SignUpLoginIdInput

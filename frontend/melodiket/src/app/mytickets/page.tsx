@@ -3,12 +3,13 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 
-import { useTicketList } from '@/services/ticket/useTicketList';
+import { useTicketList } from '@/services/ticket/fetchTicket';
 import { HISTORY_TYPES, TICKET_STATUS } from '@/constants/tickets';
+import { getCidUrl } from '@/utils/getUrl';
 
 import Header from '@/components/organisms/navigation/Header';
 import Tabs from '@/components/organisms/controls/Tabs';
-import ConcertItem from '@/components/molecules/item/ConcertItem';
+import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
 
 const Page = () => {
@@ -49,8 +50,8 @@ const Page = () => {
             href={`/mytickets/${ticket.ticketUuid}`}
             key={ticket.ticketUuid}
           >
-            <ConcertItem
-              src={ticket.posterCid}
+            <TicketItem
+              src={getCidUrl(ticket.posterCid)}
               concertTitle={ticket.concertTitle}
               stageName={ticket.stageName}
               createdAt={ticket.createdAt}

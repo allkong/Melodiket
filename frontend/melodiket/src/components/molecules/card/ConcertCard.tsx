@@ -3,22 +3,28 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import FavoriteButton from '@/components/atoms/button/FavoriteButton';
-import { CalendarFilled, Location } from '@/public/icons';
-import type { ConcertListItem } from '@/types/concert';
+import { getCidUrl } from '@/utils/getUrl';
+import type { Concert } from '@/types/concert';
 
-interface ConcertCardProps extends ConcertListItem {
+import { CalendarFilled, Location } from '@/public/icons';
+import FavoriteButton from '@/components/atoms/button/FavoriteButton';
+
+interface ConcertCardProps
+  extends Pick<
+    Concert,
+    'concertUuid' | 'posterCid' | 'title' | 'stageName' | 'ticketingAt'
+  > {
   href?: string;
   isFavorite?: boolean;
   onClickFavorite?: (id: string) => void;
 }
 
 const ConcertCard = ({
-  concertId,
+  concertUuid,
+  posterCid,
   ticketingAt,
   title,
-  location,
-  posterURL,
+  stageName,
   href,
   isFavorite,
   onClickFavorite,
@@ -29,7 +35,7 @@ const ConcertCard = ({
         {/* 이미지 영역 */}
         <div className="relative w-[10.6rem] h-60">
           <Image
-            src={posterURL ?? ''}
+            src={getCidUrl(posterCid) || ''}
             alt="concert card image"
             className="object-cover rounded-md"
             fill
@@ -37,7 +43,7 @@ const ConcertCard = ({
           <div className="absolute right-2 bottom-2">
             <FavoriteButton
               isOn={isFavorite}
-              onClick={() => onClickFavorite?.(concertId)}
+              onClick={() => onClickFavorite?.(concertUuid)}
             />
           </div>
         </div>
@@ -52,7 +58,7 @@ const ConcertCard = ({
           </div>
           <div className="flex items-center gap-1 text-[8px] text-gray-500 truncate">
             <Location width="6" height="8" className="fill-current" />
-            {location && <p>{location}</p>}
+            {stageName && <p>{stageName}</p>}
           </div>
         </div>
       </div>

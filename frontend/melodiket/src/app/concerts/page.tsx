@@ -1,32 +1,23 @@
-import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+
+import CAROUSEL_DATAS from '@/constants/carousel';
 
 import Header from '@/components/organisms/navigation/Header';
-import ConcertListSection from './_components/concert-list-section';
-import { HydrationBoundary } from '@tanstack/react-query';
-import {
-  useFetchCarouselListDehydrateState,
-  useFetchConcertListDehydrateState,
-} from '@/services/concert/fetchConcert';
-import CarouselSection from './_components/carousel-section';
-
-const ControlsBar = dynamic(
-  () => import('@/components/organisms/controls/ControlsBar'),
-  { ssr: false }
-);
+import ConcertListSection from './_section/concert-list-section';
+import Carousel from '@/components/molecules/carousel/Carousel';
+import ControlsBar from '@/components/organisms/controls/ControlsBar';
+import ControlsBarSkeleton from '@/components/organisms/controls/ControlsBarSkeleton';
 
 const Page = async () => {
   return (
     <div className="w-full">
       <Header isFixed />
-      <HydrationBoundary state={await useFetchCarouselListDehydrateState()}>
-        <CarouselSection />
-      </HydrationBoundary>
-      <ControlsBar />
-      <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">
-        <HydrationBoundary state={await useFetchConcertListDehydrateState()}>
-          <ConcertListSection />
-        </HydrationBoundary>
-      </div>
+      <Carousel data={CAROUSEL_DATAS} />
+      <Suspense fallback={<ControlsBarSkeleton />}>
+        <ControlsBar />
+      </Suspense>
+
+      <ConcertListSection />
     </div>
   );
 };
