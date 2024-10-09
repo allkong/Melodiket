@@ -24,7 +24,7 @@ const PhotocardEditSelection = ({
   onNext,
 }: PhotocardEditSelectionProps) => {
   const router = useRouter();
-  const { stickers } = usePhotocardStore();
+  const { stickers, clearStickers } = usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState(
     Object.keys(PHOTOCARD_EDIT_TYPES)[0]
@@ -45,6 +45,12 @@ const PhotocardEditSelection = ({
     }
   };
 
+  useEffect(() => {
+    return () => {
+      clearStickers();
+    };
+  }, [clearStickers]);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center h-full">
@@ -60,6 +66,7 @@ const PhotocardEditSelection = ({
               fill
               draggable={false}
               onContextMenu={preventContextMenu}
+              className="select-none"
             />
           </PhotocardFrame>
 
