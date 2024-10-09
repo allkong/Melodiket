@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 
@@ -12,14 +15,17 @@ import { PHOTOCARD_EDIT_TYPES } from '@/constants/photocard';
 import MoveableSticker from '../_components/moveable-sticker';
 
 interface PhotocardEditSelectionProps {
+  uuid: string;
   src: string;
   onNext: () => void;
 }
 
 const PhotocardEditSelection = ({
+  uuid,
   src,
   onNext,
 }: PhotocardEditSelectionProps) => {
+  const router = useRouter();
   const {} = usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState(
@@ -31,6 +37,7 @@ const PhotocardEditSelection = ({
 
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
+    router.push(`/photocards/create/${uuid}?step=edit&select=${tabValue}`);
   };
 
   const sticker: Sticker = {

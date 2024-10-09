@@ -9,7 +9,11 @@ import PhotocardImageSelectSection from './_sections/photocard-image-select-sect
 import PhotocardEditSelection from './_sections/photocard-edit-selection';
 import { useState } from 'react';
 
-const Page = () => {
+interface PageProps {
+  params: { uuid: string };
+}
+
+const Page = ({ params }: PageProps) => {
   const router = useRouter();
   const { Funnel, setStep } = useFunnel<'select' | 'edit'>(
     true,
@@ -45,6 +49,7 @@ const Page = () => {
         </Funnel.Step>
         <Funnel.Step step="edit">
           <PhotocardEditSelection
+            uuid={params.uuid}
             src={imageUrl}
             onNext={() => {
               router.push('/');
