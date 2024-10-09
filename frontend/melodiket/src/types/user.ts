@@ -14,3 +14,13 @@ export interface UpdateMeRequest {
   description?: string;
   imageUrl?: string;
 }
+
+export interface UploadImageRequest {
+  type?: string;
+  fileName: string;
+}
+
+export interface UploadImageResponse {
+  presigned: string;
+  cdn: string;
+}
