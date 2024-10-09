@@ -42,23 +42,42 @@ public class FavoriteConcertService {
 
         boolean isFavorite;
         if (existingFavorite.isPresent()) {
-            favoriteConcertRepository.delete(existingFavorite.get());
+            // 찜 해제
+            FavoriteConcertEntity favorite = existingFavorite.get();
+
+            // 연관 관계에서 해당 엔티티를 제거
+            concert.getFavoriteConcerts().removeIf(fav -> fav.getId().equals(favorite.getId()));
+
+            // DB에서 엔티티 삭제
+            favoriteConcertRepository.delete(favorite);
+
+            // Hibernate의 EntityManager를 통한 상태 동기화 및 삭제 처리
+            favoriteConcertRepository.flush();  // 즉시 데이터베이스에 반영
+
+            // 좋아요 수 감소
             concert.decrementLikeCount();
+            concertRepository.saveAndFlush(concert);  // 변경 사항 저장 및 즉시 반영
             isFavorite = false;
         } else {
+            // 찜 추가
             FavoriteConcertEntity favoriteConcert = FavoriteConcertEntity.builder()
                     .audienceEntity(audience)
                     .concertEntity(concert)
                     .build();
-            favoriteConcertRepository.save(favoriteConcert);
+
+            concert.getFavoriteConcerts().add(favoriteConcert);
+
+            // DB에 엔티티 저장
+            favoriteConcertRepository.saveAndFlush(favoriteConcert);
+            // 좋아요 수 증가
             concert.incrementLikeCount();
+            concertRepository.saveAndFlush(concert);
             isFavorite = true;
         }
 
-        concertRepository.save(concert);
-
         return new FavoriteConcertResp(audience.getUuid(), concert.getUuid(), isFavorite, concert.getLikeCount());
     }
+
 
     public List<FavoriteConcertResp> getLikedConcerts(UUID audienceUuid) {
         AudienceEntity audience = audienceRepository.findByUuid(audienceUuid)
