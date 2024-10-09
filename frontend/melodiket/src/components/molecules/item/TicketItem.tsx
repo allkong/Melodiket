@@ -3,7 +3,7 @@ import { formatDateToYMD } from '@/utils/dayjsPlugin';
 import PosterFrame from '@/components/atoms/image-frame/PosterFrame';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 
-interface ConcertItemProps {
+interface TicketItemProps {
   src: string;
   concertTitle: string;
   stageName: string;
@@ -12,14 +12,14 @@ interface ConcertItemProps {
   startAt?: string;
 }
 
-const ConcertItem = ({
+const TicketItem = ({
   src,
   concertTitle,
   stageName,
   createdAt,
   refundAt,
   startAt,
-}: ConcertItemProps) => {
+}: TicketItemProps) => {
   const ticketInfo = [
     { label: '장소', value: stageName },
     createdAt ? { label: '예매일', value: formatDateToYMD(createdAt) } : null,
@@ -40,4 +40,4 @@ const ConcertItem = ({
   );
 };
 
-export default ConcertItem;
+export default TicketItem;
