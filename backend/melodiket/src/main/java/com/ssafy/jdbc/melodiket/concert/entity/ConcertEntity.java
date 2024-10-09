@@ -70,6 +70,9 @@ public class ConcertEntity extends ExposableEntity {
     @Enumerated(EnumType.STRING)
     private ConcertStatus concertStatus;
 
+    @Column(nullable = false)
+    private long likeCount = 0;
+
     @Builder.Default
     @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TicketEntity> tickets = new ArrayList<>();
@@ -104,5 +107,13 @@ public class ConcertEntity extends ExposableEntity {
 
     public void decreaseRemainingTicket() {
         this.availableTickets--;
+    }
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        this.likeCount--;
     }
 }

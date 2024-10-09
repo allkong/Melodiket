@@ -44,6 +44,7 @@ public class FavoriteConcertService {
         boolean isFavorite;
         if (existingFavorite.isPresent()) {
             favoriteConcertRepository.delete(existingFavorite.get());
+            concert.decrementLikeCount();
             isFavorite = false;
         } else {
             FavoriteConcertEntity favoriteConcert = FavoriteConcertEntity.builder()
@@ -51,10 +52,13 @@ public class FavoriteConcertService {
                     .concertEntity(concert)
                     .build();
             favoriteConcertRepository.save(favoriteConcert);
+            concert.incrementLikeCount();
             isFavorite = true;
         }
 
-        return new FavoriteConcertResp(audience.getUuid(), concert.getUuid(), isFavorite);
+        concertRepository.save(concert);
+
+        return new FavoriteConcertResp(audience.getUuid(), concert.getUuid(), isFavorite, concert.getLikeCount());
     }
 
     public List<FavoriteConcertResp> getLikedConcerts(UUID audienceUuid) {
@@ -67,7 +71,8 @@ public class FavoriteConcertService {
                 .map(favorite -> new FavoriteConcertResp(
                         favorite.getAudienceEntity().getUuid(),
                         favorite.getConcertEntity().getUuid(),
-                        true
+                        true,
+                        favorite.getConcertEntity().getLikeCount()
                 ))
                 .collect(Collectors.toList());
     }
