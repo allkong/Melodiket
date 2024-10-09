@@ -170,9 +170,9 @@ public class TicketService {
         List<TicketResponse> ticketResponses = ticketEntities.stream().map(
                 (ticket) -> {
                     MusicianEntity favoriteMusician = ticket.getFavoriteMusician();
-                    TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician);
                     ConcertEntity concert = ticket.getConcertEntity();
                     StageEntity stage = concert.getStageEntity();
+                    TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician, concert);
                     return TicketResponse.builder()
                             .userName(ticket.getUserName())
                             .ticketUuid(ticket.getUuid())
@@ -199,10 +199,10 @@ public class TicketService {
     public TicketResponse readTicketDetail(UUID ticketUUID) {
         Optional<TicketEntity> _ticket = ticketRepository.findByUuid(ticketUUID);
         TicketEntity ticket = _ticket.orElseThrow(() -> new HttpResponseException(ErrorDetail.TICKET_NOT_FOUND));
-        MusicianEntity favoriteMusician = ticket.getFavoriteMusician();
-        TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician);
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
+        MusicianEntity favoriteMusician = ticket.getFavoriteMusician();
+        TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician,concert);
 
         return TicketResponse.builder()
                 .userName(ticket.getUserName())
