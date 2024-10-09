@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 import { preventContextMenu } from '@/utils/eventUtil';
@@ -38,10 +38,28 @@ const PhotocardEditSelection = ({
     router.push(`/photocards/create/${uuid}?step=edit&select=${tabValue}`);
   };
 
+  // 스티커 밖 포토카드 배경을 클릭하면 선택 해제
+  const handleDeselect = (e: React.MouseEvent) => {
+    if (e.target === photocardRef.current) {
+      setSelectedId(null);
+    }
+  };
+
+  useEffect(() => {
+    if (photocardRef.current) {
+      const { offsetWidth, offsetHeight } = photocardRef.current;
+      const rect = photocardRef.current.getBoundingClientRect();
+
+      console.log('PhotocardRef width:', offsetWidth);
+      console.log('PhotocardRef height:', offsetHeight);
+      console.log('PhotocardRef position:', rect);
+    }
+  }, [photocardRef]);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center h-full">
-        <div ref={photocardRef} className="relative">
+        <div ref={photocardRef} className="relative" onClick={handleDeselect}>
           <PhotocardFrame>
             <Image
               src={src}
