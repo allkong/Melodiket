@@ -50,7 +50,7 @@ const PhotocardEditSelection = ({
       <div className="flex flex-col items-center justify-center h-full">
         <div
           ref={photocardRef}
-          className="relative overflow-hidden"
+          className="relative overflow-hidden rounded-lg"
           onClick={handleDeselect}
         >
           <PhotocardFrame>
