@@ -16,7 +16,6 @@ const Page = async () => {
       <Suspense fallback={<ControlsBarSkeleton />}>
         <ControlsBar />
       </Suspense>
-
       <ConcertListSection />
     </div>
   );
