@@ -20,6 +20,7 @@ import type {
   TicketBookResponse,
   FetchConcertRequest,
 } from '@/types/ticket';
+import useAuthStore from '@/store/authStore';
 
 export const fetchConcertList = async ({
   isFirstPage,
@@ -36,17 +37,29 @@ export const fetchConcertList = async ({
 };
 
 export const useFetchInfiniteConcert = (
-  pageSize: number = 2,
-  orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC',
-  title: string = ''
+  options: {
+    pageSize?: number;
+    orderKey?: string;
+    orderDirection?: 'ASC' | 'DESC';
+    title?: string;
+  } = {}
 ) => {
+  const {
+    pageSize = 6,
+    orderKey = 'createdAt',
+    orderDirection = 'ASC',
+    title = '',
+  } = options;
+
+  const { user } = useAuthStore();
+
   const result = useInfiniteQuery({
     queryKey: concertKey.infinite({
       pageSize,
       orderKey,
       orderDirection,
       title,
+      user,
     }),
     queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
@@ -97,16 +110,20 @@ export const fetchConcertDetail = async (uuid: string) => {
 };
 
 export const useFetchConcertDetail = (uuid: string) => {
+  const { user } = useAuthStore();
+
   return useQuery<ConcertDetail>({
-    queryKey: concertKey.detail(uuid),
+    queryKey: concertKey.detail(uuid, user),
     queryFn: () => fetchConcertDetail(uuid),
   });
 };
 
 export const useFetchConcertDetailDehydrateState = async (uuid: string) => {
+  const { user } = useAuthStore();
+
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: concertKey.detail(uuid),
+    queryKey: concertKey.detail(uuid, user),
     queryFn: () => fetchConcertDetail(uuid),
   });
 

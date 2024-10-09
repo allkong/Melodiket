@@ -18,6 +18,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: false,
     },
     {
       concertUuid: '1',
@@ -27,6 +28,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '싸피서울캠퍼스',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: true,
     },
     {
       concertUuid: '2',
@@ -36,6 +38,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: false,
     },
     {
       concertUuid: '3',
@@ -45,6 +48,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: true,
     },
     {
       concertUuid: '4',
@@ -54,6 +58,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: true,
     },
     {
       concertUuid: '5',
@@ -63,6 +68,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '싸피서울캠퍼스',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: false,
     },
     {
       concertUuid: '6',
@@ -72,6 +78,7 @@ const CONCERT_LIST: FetchConcertResponse = {
       stageName: '고척스카이돔',
       ticketingAt: '2024.09.03',
       startAt: '2024.09.03',
+      isLike: true,
     },
   ],
 };

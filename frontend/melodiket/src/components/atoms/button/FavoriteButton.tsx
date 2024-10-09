@@ -4,7 +4,7 @@ import clsx from 'clsx';
 interface FavoriteButtonProps {
   isOn?: boolean;
   size?: 'md' | 'lg';
-  onClick?: () => void;
+  onClick?: (e: MouseEvent) => void;
 }
 
 const FavoriteButton = ({

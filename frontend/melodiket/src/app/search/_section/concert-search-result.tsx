@@ -21,7 +21,12 @@ const ConcertSearchResult = ({
   const endRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useIsOnScreen(endRef);
   const { data, error, hasNextPage, isFetching, fetchNextPage, refetch } =
-    useFetchInfiniteConcert(10, 'uuid', 'ASC', query);
+    useFetchInfiniteConcert({
+      pageSize: 10,
+      orderDirection: 'ASC',
+      orderKey: 'createdAt',
+      title: query,
+    });
 
   useEffect(() => {
     if (isOnScreen && currentTab === 'concert' && hasNextPage) {
