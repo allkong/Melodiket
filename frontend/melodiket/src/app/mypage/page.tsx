@@ -11,11 +11,13 @@ import { MLDY, Authority } from '@/public/icons';
 import { useRouter } from 'next/navigation';
 import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
 import { useUploadImage } from '@/services/user/fetchUser';
+import { useGetMyWallet } from '@/services/wallet/fetchWallet';
 import { getS3Url } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
   const { mutate: getMe, data } = useGetMe();
+  const { mutate: getMyWallet, data: walletData } = useGetMyWallet();
   const { mutate: uploadImage } = useUploadImage();
   const { mutate: updateMe } = useUpdateMe();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -29,6 +31,7 @@ const Page = () => {
 
   useEffect(() => {
     getMe();
+    getMyWallet();
   }, []);
 
   const handleProfileClick = () => {
@@ -88,6 +91,7 @@ const Page = () => {
       });
     }
   };
+  console.log(walletData);
 
   return (
     <div className="flex flex-col h-screen">
@@ -130,7 +134,9 @@ const Page = () => {
                   <MLDY />
                   <p className="text-purple-400 font-medium">잔액</p>
                 </div>
-                <p className="text-black ml-auto">10,000 MLDY</p>
+                <p className="text-black ml-auto">
+                  {walletData?.tokenBalance ?? '0'} MLDY
+                </p>
               </div>
             </div>
 
