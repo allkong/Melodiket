@@ -4,6 +4,7 @@ export const PHOTOCARD_EDIT_TYPES = {
 } as const;
 
 export const STICKER_CATEGORIES = {
+  signature: '최애',
   animal: '동물',
   heart: '하트',
   fruit: '과일',

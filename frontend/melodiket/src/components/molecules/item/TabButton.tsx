@@ -17,11 +17,13 @@ const TabButton = ({
 }: TabButtonProps) => {
   return (
     <button
-      className={clsx('font-semibold bg-white w-full py-2', {
+      className={clsx('font-semibold bg-white py-2', {
         'text-purple-300': isSelected && color === 'purple',
         'text-secondary': isSelected && color === 'secondary',
         'border-b-2 border-purple-300': isSelected && line,
         'text-gray-400': !isSelected,
+        'w-full': color === 'purple',
+        'px-4': color === 'secondary',
       })}
       onClick={onClick}
     >
