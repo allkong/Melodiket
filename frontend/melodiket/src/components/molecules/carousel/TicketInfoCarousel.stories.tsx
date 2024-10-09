@@ -10,6 +10,6 @@ type Story = StoryObj<typeof TicketInfoCarousel>;
 
 export const Default: Story = {
   args: {
-    datas: ['예매한 티켓이 없어요 T_T', '사실 잇지롱', 'A310 화이팅~'],
+    data: ['예매한 티켓이 없어요 T_T', '사실 잇지롱', 'A310 화이팅~'],
   },
 };
