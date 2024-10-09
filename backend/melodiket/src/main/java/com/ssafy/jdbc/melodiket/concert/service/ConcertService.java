@@ -124,14 +124,22 @@ public class ConcertService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(concert.getUuid().toString())
                     .build();
-            webPushService.initiatePushNotification(user, "공연 취소 완료", "공연 취소 완료", resp);
+
+            String title = "공연 취소";
+            String body = String.format("공연 [%s]가 취소되었어요. 지금 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, title, body, resp);
+            for (ConcertParticipantMusicianEntity participant : concert.getConcertParticipantMusicians()) {
+                MusicianEntity musician = participant.getMusicianEntity();
+                webPushService.sendPushNotification(musician, title, body, resp);
+            }
         } catch (Exception e) {
             log.error("Failed to cancel concert", e);
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(concertId.toString())
                     .build();
-            webPushService.initiatePushNotification(user, "공연 취소 실패", "공연 취소 실패", resp);
+            String body = String.format("공연 [%s] 취소에 실패했어요. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "공연 취소 실패", body, resp);
             throw new RuntimeException(e);
         }
     }
@@ -219,14 +227,22 @@ public class ConcertService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(concert.getUuid().toString())
                     .build();
-            webPushService.initiatePushNotification(user, "공연 생성 완료", "공연 생성 완료", resp);
+            String managerMessageBody = String.format("공연 [%s]가 생성되었어요. 지금 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "공연 생성", managerMessageBody, resp);
+
+            for (ConcertParticipantMusicianEntity participant : concert.getConcertParticipantMusicians()) {
+                MusicianEntity musician = participant.getMusicianEntity();
+                String musicianMessageBody = String.format("공연 [%s]에 참여 요청이 왔어요. 지금 멜로디켓에서 확인해 보세요.", concert.getTitle());
+                webPushService.sendPushNotification(musician, "공연 참여 요청", musicianMessageBody, resp);
+            }
         } catch (Exception e) {
             log.error("Failed to create concert", e);
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(null)
                     .build();
-            webPushService.initiatePushNotification(user, "공연 생성 실패", "공연 생성 실패", resp);
+            String managerMessageBody = String.format("공연 [%s] 생성에 실패했어요. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "공연 생성 실패", managerMessageBody, resp);
             throw new RuntimeException(e);
         }
     }
@@ -275,14 +291,19 @@ public class ConcertService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(concert.getUuid().toString())
                     .build();
-            webPushService.initiatePushNotification(musician, "공연 참여 승인 완료", "공연 참여 승인 완료", resp);
+            String musicianMessageBody = String.format("공연 [%s] 참여 승인이 완료되었어요. 지금 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(musician, "공연 참여 승인 완료", musicianMessageBody, resp);
+
+            String managerMessageBody = String.format("공연 [%s]에 대한 뮤지션 [%s]님의 참여 승인이 완료되었어요.", concert.getTitle(), musician.getNickname());
+            webPushService.sendPushNotification(concert.getOwner(), "공연 참여 승인 완료", managerMessageBody, resp);
         } catch (Exception e) {
             log.error("Failed to approve concert", e);
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(concertId.toString())
                     .build();
-            webPushService.initiatePushNotification(musician, "공연 참여 승인 실패", "공연 참여 승인 실패", resp);
+            String musicianMessageBody = String.format("공연 [%s] 참여 승인이 실패했어요. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(musician, "공연 참여 승인 실패", musicianMessageBody, resp);
             throw new RuntimeException(e);
         }
 
@@ -322,14 +343,24 @@ public class ConcertService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(concert.getUuid().toString())
                     .build();
-            webPushService.initiatePushNotification(musician, "공연 참여 거절 완료", "공연 참여 거절 완료", resp);
+            String musicianMessageBody = String.format("공연 [%s] 참여 거절이 완료되었어요. 지금 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(musician, "공연 참여 거절", musicianMessageBody, resp);
+
+            String anotherMessageBody = String.format("공연 [%s]에 대한 뮤지션 [%s]님의 참여 거절이 완료되었어요.", concert.getTitle(), musician.getNickname());
+            webPushService.sendPushNotification(concert.getOwner(), "공연 참여 거절", anotherMessageBody, resp);
+            for(ConcertParticipantMusicianEntity anotherParticipant : concert.getConcertParticipantMusicians()) {
+                if (!anotherParticipant.getMusicianEntity().getUuid().equals(musician.getUuid())) {
+                    webPushService.sendPushNotification(anotherParticipant.getMusicianEntity(), "공연 참여 거절", anotherMessageBody, resp);
+                }
+            }
         } catch (Exception e) {
             log.error("Failed to deny concert", e);
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(concertId.toString())
                     .build();
-            webPushService.initiatePushNotification(musician, "공연 참여 거절 실패", "공연 참여 거절 실패", resp);
+            String musicianMessageBody = String.format("공연 [%s] 참여 거절이 실패했어요. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(musician, "공연 참여 거절 실패", musicianMessageBody, resp);
             throw new RuntimeException(e);
         }
     }
@@ -419,13 +450,20 @@ public class ConcertService {
                     .status(TransactionResultResp.ResultStatus.SUCCESS)
                     .targetUuid(concert.getUuid().toString())
                     .build();
-            webPushService.initiatePushNotification(user, "공연 종료 완료", "공연 종료 완료", resp);
+            String body = String.format("공연 [%s]에 대한 정산이 완료되었어요. 지금 멜로디켓에서 확인해 보세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "공연 정산 완료", body, resp);
+
+            for (ConcertParticipantMusicianEntity participant : concert.getConcertParticipantMusicians()) {
+                MusicianEntity musician = participant.getMusicianEntity();
+                webPushService.sendPushNotification(musician, "공연 정산 완료", body, resp);
+            }
         } catch (Exception e) {
             TransactionResultResp resp = respBuilder
                     .status(TransactionResultResp.ResultStatus.FAIL)
                     .targetUuid(concert.getUuid().toString())
                     .build();
-            webPushService.initiatePushNotification(user, "공연 종료 실패", "공연 종료 실패", resp);
+            String body = String.format("공연 [%s]에 대한 정산이 실패했어요. 다시 시도해 주세요.", concert.getTitle());
+            webPushService.sendPushNotification(user, "공연 정산 실패", body, resp);
             throw new RuntimeException(e);
         }
     }
