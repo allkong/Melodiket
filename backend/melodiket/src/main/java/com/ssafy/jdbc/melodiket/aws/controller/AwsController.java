@@ -20,7 +20,7 @@ import java.net.http.HttpResponse;
 public class AwsController {
     private final S3Service s3Service;
 
-    @PostMapping("/presiged-url")
+    @PostMapping("/presigned-url")
     public ResponseEntity<PresignedUrl> createPresignedUrl(
             @RequestBody @Valid CreateUploadPathRequest request
     ){
