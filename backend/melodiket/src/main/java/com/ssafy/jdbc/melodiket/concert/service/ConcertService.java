@@ -140,33 +140,7 @@ public class ConcertService {
         ConcertEntity concert = concertRepository.findByUuid(concertId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
 
-        List<MusicianInfo> musicians = concert.getConcertParticipantMusicians().stream()
-                .map(participant -> new MusicianInfo(
-                        participant.getMusicianEntity().getUuid(),
-                        participant.getMusicianEntity().getName(),
-                        participant.getMusicianEntity().getImageUrl()))
-                .toList();
-
-        return new ConcertResp(
-                concert.getUuid(),
-                concert.getStageEntity().getUuid(),
-                concert.getTitle(),
-                concert.getCreatedAt(),
-                concert.getStartAt(),
-                concert.getTicketingAt(),
-                concert.getAvailableTickets(),
-                concert.getDescription(),
-                concert.getPosterCid(),
-                concert.getTicketPrice(),
-                concert.getOwnerStake(),
-                concert.getMusicianStake(),
-                concert.getFavoriteMusicianStake(),
-                concert.getStageEntity().getName(),
-                musicians,
-                concert.getStageEntity().getCapacity(),
-                concert.getStageEntity().getIsStanding(),
-                concert.getConcertStatus()
-        );
+        return ConcertResp.from(concert);
     }
 
     private ConcertEntity getConcertEntityFromReq(StageManagerEntity stageManager, CreateConcertReq req) {
