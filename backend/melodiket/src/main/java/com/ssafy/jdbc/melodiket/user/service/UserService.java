@@ -161,7 +161,6 @@ public class UserService implements AuthService {
     @Override
     public LoginResp login(LoginReq loginReq) {
         AppUserEntity user = appUserRepository.findByLoginId(loginReq.loginId())
-                //Todo : Exception 재정의
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.UNAUTHORIZED));
 
         if (!PasswordUtil.verifyPassword(loginReq.password(), user.getPassword(), user.getSalt())) {
@@ -232,6 +231,23 @@ public class UserService implements AuthService {
         AppUserEntity appUserEntity = appUserRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
+        Role role = appUserEntity.getRole();
+        String imageUrl = null;
+        if(role == Role.STAGE_MANAGER){
+            StageManagerEntity stageManager = stageMangerRepository.findByLoginId(loginId)
+                    .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+            imageUrl = stageManager.getImageUrl();
+        }
+        if(role == Role.MUSICIAN){
+            MusicianEntity musician = musicianRepository.findByLoginId(loginId)
+                    .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+            imageUrl = musician.getImageUrl();
+        }
+        if(role == Role.AUDIENCE){
+            AudienceEntity audience = audienceRepository.findByLoginId(loginId)
+                    .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+            imageUrl = audience.getImageUrl();
+        }
         return new UserProfileResp(
                 appUserEntity.getUuid(),
                 appUserEntity.getLoginId(),
@@ -239,7 +255,7 @@ public class UserService implements AuthService {
                 appUserEntity.getNickname(),
                 appUserEntity.getDescription(),
                 appUserEntity.getRegisteredAt(),
-                null // imageUrl 선개발시 처리
+                imageUrl
         );
     }
 
@@ -258,6 +274,7 @@ public class UserService implements AuthService {
                 throw new HttpResponseException(ErrorDetail.DUPLICATED_NICKNAME);
             }
         }
+        String imageUrl = updateUserReq.imageUrl();
 
         // 유저 정보 변경
         AppUserEntity updateUser = user.toBuilder()
@@ -273,7 +290,7 @@ public class UserService implements AuthService {
                 updateUser.getNickname(),
                 updateUser.getDescription(),
                 updateUser.getRegisteredAt(),
-                null // imageUrl 선개발시 처리
+                imageUrl
         );
     }
 
@@ -284,15 +301,14 @@ public class UserService implements AuthService {
 
     @Override
     public StageManagerResp getStageManagerDetail(UUID uuid) {
-        AppUserEntity user = appUserRepository.findByUuid(uuid)
+        StageManagerEntity stageManager = stageMangerRepository.findByUuid(uuid)
                 .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
-
         return new StageManagerResp(
-                user.getLoginId(),
-                user.getRole().name(),
-                user.getNickname(),
-                user.getDescription(),
-                null  // TODO : imageUrl 선개발시 null 처리
+                stageManager.getLoginId(),
+                stageManager.getRole().name(),
+                stageManager.getNickname(),
+                stageManager.getDescription(),
+                stageManager.getImageUrl()
         );
     }
 
