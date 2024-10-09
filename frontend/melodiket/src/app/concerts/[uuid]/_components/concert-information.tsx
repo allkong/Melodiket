@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
-import { formatDateWithDayAndTime } from '@/utils/dayjsPlugin';
+import dayjs, { formatDateWithDayAndTime } from '@/utils/dayjsPlugin';
 
 import ThinDivider from '@/components/atoms/divider/ThinDivider';
 import ConcertTitle from './concert-title';
@@ -18,7 +18,6 @@ interface ConcertInformationProps {
 
 const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
   const router = useRouter();
-
   const { data: concert } = useFetchConcertDetail(uuid);
 
   return (
@@ -41,6 +40,7 @@ const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
         <LargeButton
           label="예매하기"
           onClick={() => router.push(`/concerts/${uuid}/book`)}
+          disabled={dayjs().isBefore(dayjs(concert?.ticketingAt))}
         />
       </div>
     </div>
