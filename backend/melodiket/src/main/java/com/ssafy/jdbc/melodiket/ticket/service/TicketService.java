@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.Credentials;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -73,7 +74,7 @@ public class TicketService {
             int row = ticketPurchaseRequest.getSeatRow().intValue();
             int col = ticketPurchaseRequest.getSeatCol().intValue();
             Set<ConcertSeatEntity> seats = concert.getConcertSeats();
-            if (seats.stream().anyMatch(seat -> seat.getSeatRow() == row && seat.getSeatCol() == col)) {
+            if (seats.stream().anyMatch(seat -> seat.getSeatRow() == row && seat.getSeatCol() == col && !seat.getIsAvailable())) {
                 throw new HttpResponseException(ErrorDetail.ALREADY_PURCHASED_SEAT);
             }
         }
@@ -101,16 +102,27 @@ public class TicketService {
         try {
             WalletResp favoriteMusicianWallet = walletService.getWalletOf(favoriteMusician);
             String favoriteMusicianAddress = favoriteMusicianWallet.address();
+            ConcertSeatEntity seat = null;
+
             if (concert.getStageEntity().getIsStanding()) {
                 audienceContract.purchaseStandingTicket(ticketUUID, concert.getUuid(), favoriteMusicianAddress);
                 log.info("Purchased standing ticket for concert {}, by audience {}", concert.getTitle(), audienceEntity.getName());
             } else {
-                int row = ticketPurchaseRequest.getSeatRow().intValue();
-                int col = ticketPurchaseRequest.getSeatCol().intValue();
+                long row = ticketPurchaseRequest.getSeatRow().intValue();
+                long col = ticketPurchaseRequest.getSeatCol().intValue();
                 audienceContract.purchaseSeatingTicket(ticketUUID, concert.getUuid(), favoriteMusicianAddress, row, col);
+                seat = concertSeatEntityRepository.findByConcertEntityAndSeatRowAndSeatCol(concert, row, col);
+                log.info("좌석 구매 전 상태: row={}, col={}, isAvailable={}", seat.getSeatRow(), seat.getSeatCol(), seat.getIsAvailable());
 
-                ConcertSeatEntity seat = new ConcertSeatEntity(ticketPurchaseRequest.getSeatRow(), ticketPurchaseRequest.getSeatCol(), concert);
+                if (!seat.getIsAvailable()) {
+                    throw new HttpResponseException(ErrorDetail.ALREADY_PURCHASED_SEAT);
+                }
+
+                seat.purchase();
                 concertSeatEntityRepository.save(seat);
+//                audienceContract.purchaseSeatingTicket(ticketUUID, concert.getUuid(), favoriteMusicianAddress, row, col);
+//                ConcertSeatEntity seat = new ConcertSeatEntity(ticketPurchaseRequest.getSeatRow(), ticketPurchaseRequest.getSeatCol(), concert);
+//                concertSeatEntityRepository.save(seat);
 
                 log.info("Purchased seating ticket for concert {}, by audience {}", concert.getTitle(), audienceEntity.getName());
             }
@@ -123,6 +135,7 @@ public class TicketService {
                     .userName(audienceEntity.getName())
                     .audienceEntity(audienceEntity)
                     .concertEntity(concert)
+                    .concertSeatEntity(seat)
                     .status(Status.NOT_USED)
                     .seatRow(ticketPurchaseRequest.getSeatRow())
                     .seatCol(ticketPurchaseRequest.getSeatCol())
@@ -205,7 +218,7 @@ public class TicketService {
         ConcertEntity concert = ticket.getConcertEntity();
         StageEntity stage = concert.getStageEntity();
         MusicianEntity favoriteMusician = ticket.getFavoriteMusician();
-        TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician,concert);
+        TicketResponse.FavoriteMusicianDto favoriteMusicianDto = new TicketResponse.FavoriteMusicianDto(favoriteMusician, concert);
 
         return TicketResponse.builder()
                 .userName(ticket.getUserName())
@@ -345,5 +358,41 @@ public class TicketService {
         if (ticket.getStatus() != Status.NOT_USED) {
             throw new HttpResponseException(ErrorDetail.TICKET_ALREADY_USED);
         }
+    }
+
+    public boolean[][] getSeatAvailability(UUID concertId) {
+        // 공연 정보 조회
+        ConcertEntity concert = concertRepository.findByUuid(concertId)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.CONCERT_NOT_FOUND));
+
+        // 스탠딩 공연일 경우 예외 처리 또는 빈 배열 반환
+        if (concert.getStageEntity().getIsStanding()) {
+            throw new HttpResponseException(ErrorDetail.INVALID_INPUT_VALUE, "해당 공연은 스탠딩 공연이므로 좌석 정보가 없습니다.");
+        }
+
+        // 좌석 행/열 수를 가져옴
+        Long numOfRows = concert.getStageEntity().getNumOfRow();
+        Long numOfCols = concert.getStageEntity().getNumOfCol();
+
+        // 좌석 배열 초기화 (모든 좌석을 true로 초기화)
+        boolean[][] seatAvailability = new boolean[Math.toIntExact(numOfRows) + 1][Math.toIntExact(numOfCols) + 1];
+        IntStream.range(1, numOfRows.intValue() + 1).forEach(row ->
+                IntStream.range(1, numOfCols.intValue() + 1).forEach(col -> seatAvailability[row][col] = true));
+
+        Set<ConcertSeatEntity> seats = concert.getConcertSeats();
+
+        // 좌석 정보에 따라 구매 불가능 상태를 업데이트 (구매된 좌석을 false로 설정)
+        seats.forEach(seat -> {
+            int row = seat.getSeatRow().intValue();
+            int col = seat.getSeatCol().intValue();
+            log.info("좌석 상태 업데이트: row={}, col={}, isAvailable={}", row, col, seat.getIsAvailable());
+
+            // 올바른 row, col 값으로 seatAvailability 배열을 업데이트
+            if (row >= 1 && row <= numOfRows && col >= 1 && col <= numOfCols) {
+                seatAvailability[row][col] = !seat.getIsAvailable();
+            }
+        });
+
+        return seatAvailability;
     }
 }
