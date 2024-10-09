@@ -35,7 +35,7 @@ export interface Concert {
   stageName: string;
   isFavorite: boolean;
   isStanding: boolean;
-  favorites?: number;
+  isLike: boolean;
 }
 
 export interface CarouselConcert
@@ -59,6 +59,7 @@ export interface FetchConcertResponse {
     | 'stageName'
     | 'ticketingAt'
     | 'startAt'
+    | 'isLike'
   >[];
 }
 
