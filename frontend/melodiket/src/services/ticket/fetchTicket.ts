@@ -19,7 +19,7 @@ export const useTicketList = () => {
   const { user } = useAuthStore();
 
   return useQuery<Ticket[], Error>({
-    queryKey: ticketKey.list(),
+    queryKey: ticketKey.list(user),
     queryFn: async () => {
       const response = await getTicketList();
       return response.result;

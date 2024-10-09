@@ -1,5 +1,9 @@
 import { UUID } from 'crypto';
 
+export interface User {
+  nickname: string | null;
+  role: string | null;
+}
 export interface GetMeResponse {
   uuid: UUID;
   loginId: string;
