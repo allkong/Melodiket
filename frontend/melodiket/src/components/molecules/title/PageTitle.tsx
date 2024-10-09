@@ -7,7 +7,7 @@ interface PageTitleProps {
 
 const PageTitle = ({ title, total }: PageTitleProps) => {
   return (
-    <div className="flex items-center px-6 py-3 space-x-4 bg-white">
+    <div className="flex items-center px-6 py-3 space-x-4 bg-white h-fit">
       <LogoImage className="w-8 h-auto" />
       <div className="flex space-x-3 text-xl font-medium">
         <p>{title}</p>
