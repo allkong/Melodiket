@@ -5,6 +5,7 @@ import java.util.UUID;
 public record FavoriteConcertResp(
         UUID audienceId,
         UUID concertId,
-        Boolean isFavorite
+        Boolean isFavorite,
+        long likeCount
 ) {
 }
