@@ -14,7 +14,7 @@ const PhotocardFrame = ({
   return (
     <div
       className={clsx(
-        'w-[20.7rem] h-[33.3rem] relative rounded-lg overflow-hidden border border-gray-200',
+        'w-[20.7rem] h-[33.3rem] relative rounded-lg overflow-hidden border border-gray-200 pointer-events-none',
         {
           'px-5 pt-5 bg-white': !isCreated,
           'bg-white flex flex-col py-10 px-5 justify-between': back,
