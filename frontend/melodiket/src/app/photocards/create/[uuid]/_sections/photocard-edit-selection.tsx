@@ -11,6 +11,7 @@ import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
 import usePhotocardStore from '@/store/photocardStore';
 import Tabs from '@/components/organisms/controls/Tabs';
 import MoveableSticker from '../_components/moveable-sticker';
+import SmallButton from '@/components/atoms/button/SmallButton';
 
 interface PhotocardEditSelectionProps {
   uuid: string;
@@ -24,11 +25,9 @@ const PhotocardEditSelection = ({
   onNext,
 }: PhotocardEditSelectionProps) => {
   const router = useRouter();
-  const { stickers, clearStickers } = usePhotocardStore();
+  const { stickers, setStickers, clearStickers } = usePhotocardStore();
 
-  const [activeTab, setActiveTab] = useState(
-    Object.keys(PHOTOCARD_EDIT_TYPES)[0]
-  );
+  const [activeTab, setActiveTab] = useState<string | null>(null);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const photocardRef = useRef<HTMLDivElement | null>(null);
@@ -45,6 +44,13 @@ const PhotocardEditSelection = ({
     }
   };
 
+  const handleSelectedRemove = () => {
+    if (stickers && selectedId !== null) {
+      setStickers(stickers.filter((sticker) => sticker.id !== selectedId));
+      setSelectedId(null);
+    }
+  };
+
   useEffect(() => {
     return () => {
       clearStickers();
@@ -54,6 +60,18 @@ const PhotocardEditSelection = ({
   return (
     <>
       <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex mb-3 text-sm justify-between w-[20.7rem]">
+          <button
+            onClick={handleSelectedRemove}
+            disabled={selectedId === null}
+            className="bg-gray-300 text-white px-4 py-2 rounded-full"
+          >
+            삭제
+          </button>
+          <button className="bg-primary text-white px-4 py-2 rounded-full">
+            완료
+          </button>
+        </div>
         <div
           ref={photocardRef}
           className="relative overflow-hidden rounded-lg"
@@ -80,13 +98,6 @@ const PhotocardEditSelection = ({
             />
           ))}
         </div>
-        {/* <button
-          onClick={() => {}}
-          disabled={selectedId === null}
-          className="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          삭제
-        </button> */}
       </div>
       <div className="w-full py-2 bg-white">
         <Tabs
