@@ -3,20 +3,21 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
+import html2canvas from 'html2canvas';
 
+import usePhotocardStore from '@/store/photocardStore';
 import { preventContextMenu } from '@/utils/eventUtil';
 import { PHOTOCARD_EDIT_TYPES } from '@/constants/photocard';
 
 import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
-import usePhotocardStore from '@/store/photocardStore';
 import Tabs from '@/components/organisms/controls/Tabs';
 import MoveableSticker from '../_components/moveable-sticker';
-import SmallButton from '@/components/atoms/button/SmallButton';
 
 interface PhotocardEditSelectionProps {
   uuid: string;
   src: string;
-  onNext: () => void;
+  onNext: (cid: string) => void;
 }
 
 const PhotocardEditSelection = ({
@@ -37,7 +38,6 @@ const PhotocardEditSelection = ({
     router.push(`/photocards/create/${uuid}?step=edit&select=${tabValue}`);
   };
 
-  // 스티커 밖 포토카드 배경을 클릭하면 선택 해제
   const handleDeselect = (e: React.MouseEvent) => {
     if (e.target === photocardRef.current) {
       setSelectedId(null);
@@ -57,6 +57,37 @@ const PhotocardEditSelection = ({
     };
   }, [clearStickers]);
 
+  const handlePhotocardCapture = async () => {
+    if (photocardRef.current) {
+      const canvas = await html2canvas(photocardRef.current);
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          const file = new File([blob], 'photocard.png', { type: 'image/png' });
+
+          const formData = new FormData();
+          formData.append('file', file);
+
+          try {
+            const ipfsUrl = process.env.NEXT_PUBLIC_IPFS_URL ?? '';
+            const response = await fetch(ipfsUrl, {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (!response.ok) {
+              toast.error('포토카드 업로드 실패');
+            }
+
+            const result = await response.json();
+            onNext(result.cid);
+          } catch (error) {
+            throw error;
+          }
+        }
+      });
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center h-full">
@@ -68,7 +99,10 @@ const PhotocardEditSelection = ({
           >
             삭제
           </button>
-          <button className="bg-primary text-white px-4 py-2 rounded-full">
+          <button
+            onClick={handlePhotocardCapture}
+            className="bg-primary text-white px-4 py-2 rounded-full"
+          >
             완료
           </button>
         </div>
