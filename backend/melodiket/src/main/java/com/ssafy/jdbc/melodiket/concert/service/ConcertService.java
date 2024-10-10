@@ -521,5 +521,22 @@ public class ConcertService {
         concertSeatEntityRepository.saveAll(seats);
         log.info("Initialized {} seats for concert {}", seats.size(), concert.getTitle());
     }
+
+    public PageResponse<ConcertResp> getConcertsByMusician(UUID musicianUuid, ConcertCursorPagingReq cursorPagingReq) {
+        MusicianEntity musician = musicianRepository.findByUuid(musicianUuid)
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
+
+        BooleanExpression condition = QConcertEntity.concertEntity.concertParticipantMusicians.any().musicianEntity.eq(musician);
+
+        if (cursorPagingReq.getStatus() != null && cursorPagingReq.getStatus().length > 0) {
+            List<ConcertStatus> statuses = Stream.of(cursorPagingReq.getStatus())
+                    .map(ConcertStatus::valueOf)
+                    .toList();
+            condition = condition.and(QConcertEntity.concertEntity.concertStatus.in(statuses));
+        }
+
+        return concertCursorRepository.findWithPagination(cursorPagingReq, ConcertResp::from, condition);
+    }
+
 }
 
