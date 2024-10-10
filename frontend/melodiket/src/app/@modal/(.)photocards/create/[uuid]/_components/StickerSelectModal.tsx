@@ -48,7 +48,7 @@ const StickerSelectModal = () => {
         labelMap={STICKER_CATEGORIES}
         line={false}
       />
-      <div className="overflow-x-scroll space-x-4 px-4">
+      <div className="overflow-x-auto whitespace-nowrap space-x-4 px-4 h-20 w-full">
         {filteredStickers.map((sticker) => (
           <button
             key={sticker.name}
