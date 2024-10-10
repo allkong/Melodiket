@@ -10,6 +10,11 @@ export interface Ticket {
   startAt?: string;
   createdAt?: string;
   refundAt?: string;
+  myFavoriteMusician: {
+    musicianName: string;
+    musicianImageUrl: string;
+    musicianSignatureImageUrl: string;
+  };
 }
 
 export interface TicketList {
@@ -34,6 +39,7 @@ export interface TicketDetail {
   myFavoriteMusician: {
     musicianName: string;
     musicianImageUrl: string;
+    musicianSignatureImageUrl: string;
   };
 }
 

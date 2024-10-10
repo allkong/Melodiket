@@ -76,12 +76,12 @@ async function handleServiceWorker() {
 
 const WebPush = () => {
   const { accessToken } = useAuthStore();
-  const { isSubscribed, setIsSubscribed } = useWebPushStore();
+  // const { isSubscribed, setIsSubscribed } = useWebPushStore();
   const isSupported = useIsNotificationUnsupported();
 
-  if (accessToken && isSupported && !isSubscribed) {
+  if (accessToken && isSupported) {
     handleServiceWorker();
-    setIsSubscribed(true);
+    // setIsSubscribed(true);
   }
 
   return null;
