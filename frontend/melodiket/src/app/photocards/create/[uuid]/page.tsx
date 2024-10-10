@@ -24,11 +24,11 @@ const Page = ({ params }: PageProps) => {
   const router = useRouter();
   const { mutateAsync: photocardUpload } = usePhotocardUpload();
 
-  const { Funnel, setStep } = useFunnel<'select' | 'edit'>(
-    true,
-    true,
-    'select'
-  );
+  const { Funnel, setStep } = useFunnel<'select' | 'edit'>({
+    addToHistory: true,
+    initialStep: 'select',
+    preventForwardNavigate: true,
+  });
   const [imageUrl, setImageUrl] = useState<string>('');
 
   const handlePrev = () => {

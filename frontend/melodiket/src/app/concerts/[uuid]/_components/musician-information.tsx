@@ -1,4 +1,6 @@
+import { getS3Url } from '@/utils/getUrl';
 import type { Concert } from '@/types/concert';
+
 import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatusProfile';
 
 interface MusiciansInformationProps
@@ -14,7 +16,7 @@ const MusiciansInformation = ({ musicians }: MusiciansInformationProps) => {
             <MusicianStatusProfile
               key={musician.musicianUuid}
               musicianName={musician.name}
-              src={musician.imageUrl}
+              src={getS3Url(musician.imageUrl)}
             />
           ))}
       </div>
