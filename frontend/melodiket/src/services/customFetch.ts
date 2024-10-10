@@ -1,7 +1,6 @@
 import useAuthStore from '@/store/authStore';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const accessToken = useAuthStore.getState().accessToken;
 
 type JsonRequestInit = Omit<NonNullable<RequestInit>, 'body'> & {
   body?: object;
@@ -11,6 +10,8 @@ const customFetch = async <T>(
   url: string,
   options?: JsonRequestInit
 ): Promise<T> => {
+  const accessToken = useAuthStore.getState().accessToken;
+
   const defaultHeaders = {
     'Content-Type': 'application/json',
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),

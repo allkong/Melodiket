@@ -15,7 +15,11 @@ import { useSignUp } from '@/services/auth/fetchAuth';
 const Page = () => {
   const { Funnel, setStep } = useFunnel<
     'policy' | 'role' | 'information' | 'description' | 'success'
-  >(false, true);
+  >({
+    addToHistory: true,
+    preventForwardNavigate: true,
+    initialStep: 'policy',
+  });
 
   const [signUpData, setSignUpData] = useState<SignUpData>({
     nickname: '',
