@@ -1,7 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.controller;
 
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.FavoriteConcertResp;
 import com.ssafy.jdbc.melodiket.concert.service.FavoriteConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +29,10 @@ public class FavoriteConcertController {
     }
 
     @GetMapping("/favorite/me")
-    public ResponseEntity<List<FavoriteConcertResp>> getLikedConcerts(Authentication authentication) {
+    public ResponseEntity<List<ConcertResp>> getLikedConcerts(Authentication authentication) {
         UUID audienceUuid = ((AppUserEntity) authentication.getPrincipal()).getUuid();
 
-        List<FavoriteConcertResp> likedConcerts = favoriteConcertService.getLikedConcerts(audienceUuid);
+        List<ConcertResp> likedConcerts = favoriteConcertService.getLikedConcerts(audienceUuid);
         return ResponseEntity.ok(likedConcerts);
     }
 }

@@ -3,10 +3,10 @@ package com.ssafy.jdbc.melodiket.concert.service;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
-import com.ssafy.jdbc.melodiket.concert.controller.dto.FavoriteConcertResp;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.repository.ConcertRepository;
 import com.ssafy.jdbc.melodiket.concert.repository.FavoriteConcertRepository;
+import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianInfo;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import com.ssafy.jdbc.melodiket.user.repository.AudienceRepository;
@@ -79,18 +79,39 @@ public class FavoriteConcertService {
     }
 
 
-    public List<FavoriteConcertResp> getLikedConcerts(UUID audienceUuid) {
+    public List<ConcertResp> getLikedConcerts(UUID audienceUuid) {
         AudienceEntity audience = audienceRepository.findByUuid(audienceUuid)
-                .orElseThrow(() -> new IllegalArgumentException("Audience not found"));
+                .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
 
-        List<FavoriteConcertEntity> favoriteConcerts = favoriteConcertRepository.findAllByAudienceEntity(audience);
+        List<ConcertEntity> favoriteConcerts = concertRepository.findAllByFavoriteConcertsAudienceEntity(audience);
 
         return favoriteConcerts.stream()
-                .map(favorite -> new FavoriteConcertResp(
-                        favorite.getAudienceEntity().getUuid(),
-                        favorite.getConcertEntity().getUuid(),
+                .map(favorite -> new ConcertResp(
+                        favorite.getUuid(),
+                        favorite.getStageEntity().getUuid(),
+                        favorite.getTitle(),
+                        favorite.getCreatedAt(),
+                        favorite.getStartAt(),
+                        favorite.getTicketingAt(),
+                        favorite.getAvailableTickets(),
+                        favorite.getDescription(),
+                        favorite.getPosterCid(),
+                        favorite.getTicketPrice(),
+                        favorite.getOwnerStake(),
+                        favorite.getMusicianStake(),
+                        favorite.getFavoriteMusicianStake(),
+                        favorite.getStageEntity().getName(),
+                        favorite.getConcertParticipantMusicians().stream()
+                                .map(participant -> new MusicianInfo(
+                                        participant.getMusicianEntity().getUuid(),
+                                        participant.getMusicianEntity().getName(),
+                                        participant.getMusicianEntity().getImageUrl()
+                                )).collect(Collectors.toList()),
+                        favorite.getStageEntity().getCapacity(),
+                        favorite.getStageEntity().getIsStanding(),
+                        favorite.getConcertStatus(),
                         true,
-                        favorite.getConcertEntity().getLikeCount()
+                        favorite.getLikeCount()
                 ))
                 .collect(Collectors.toList());
     }
