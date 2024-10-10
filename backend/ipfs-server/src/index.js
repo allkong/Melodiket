@@ -1,8 +1,13 @@
 import express from 'express';
+import cors from 'cors';
 
 import ipfsRouter from './router/ipfs.js';
 
 const app = express();
+
+app.use(cors({
+    origin: '*',
+}))
 
 app.get('/', async (req, res) => {
     res.send('Hello World!');

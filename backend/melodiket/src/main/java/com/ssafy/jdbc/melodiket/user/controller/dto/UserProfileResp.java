@@ -1,12 +1,16 @@
 package com.ssafy.jdbc.melodiket.user.controller.dto;
 
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 public record UserProfileResp(
+        UUID uuid,
         String loginId,
         String role,
         String nickname,
         String description,
-        String imageUrl,
-        Wallet wallet
+        LocalDateTime dateTime,
+        String imageUrl
 ) implements UserProfile {
-    public record Wallet(String address, long tokenBalance) {}
 }

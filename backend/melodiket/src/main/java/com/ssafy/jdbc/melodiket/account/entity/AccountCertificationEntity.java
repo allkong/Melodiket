@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.account.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,12 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountCertificationEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class AccountCertificationEntity extends BaseEntity {
     @Column(nullable = false)
     private String ownerName;
 
