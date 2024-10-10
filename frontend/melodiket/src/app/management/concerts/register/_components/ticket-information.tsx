@@ -77,6 +77,11 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
               type="number"
             />
           </div>
+          <h5 className="ml-2 font-extralight text-sm mb-2">
+            {favoriteMusicianStake} = {!ticketPrice ? 0 : ticketPrice} -{' '}
+            {!ownerStake ? 0 : ownerStake} - {musicianCount}명 *{' '}
+            {!musicianStake ? 0 : musicianStake}
+          </h5>
           <Input
             placeholder="추가 비율"
             value={
@@ -84,6 +89,9 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
             }
             disabled={true}
           />
+          <h5 className="ml-2 font-extralight text-sm mb-2">
+            * 좋아하는 뮤지션 선정 시 분배되는 추가 수익
+          </h5>
         </div>
       </div>
       <div className="my-4 h-fit">
