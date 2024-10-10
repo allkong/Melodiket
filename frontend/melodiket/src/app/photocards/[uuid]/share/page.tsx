@@ -9,9 +9,13 @@ import Header from '@/components/organisms/navigation/Header';
 import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
 import LargeButton from '@/components/atoms/button/LargeButton';
 
-const Page = () => {
+interface PageProps {
+  params: { uuid: string };
+}
+
+const Page = ({ params }: PageProps) => {
   const router = useRouter();
-  const { data: photocard } = usePhotocardDetail();
+  const { data: photocard } = usePhotocardDetail(params.uuid);
 
   if (!photocard) {
     return null;

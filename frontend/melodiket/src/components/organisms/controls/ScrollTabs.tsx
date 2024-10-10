@@ -1,29 +1,29 @@
 import TabButton from '@/components/molecules/item/TabButton';
 
-interface TabsProps {
+interface ScrollTabsProps {
   tabs: string[];
-  activeTab: string | null;
+  activeTab: string;
   onClick: (tabValue: string) => void;
   labelMap: Record<string, string>;
   line?: boolean;
 }
 
-const Tabs = ({
+const ScrollTabs = ({
   tabs,
   activeTab,
   onClick,
   labelMap,
   line = true,
-}: TabsProps) => {
+}: ScrollTabsProps) => {
   return (
-    <div className="flex w-full">
+    <div className="flex w-full overflow-x-auto whitespace-nowrap py-1">
       {tabs.map((tab) => (
         <TabButton
           key={tab}
           label={labelMap[tab]}
           isSelected={tab === activeTab}
           onClick={() => onClick(tab)}
-          color="purple"
+          color={'secondary'}
           line={line}
         />
       ))}
@@ -31,4 +31,4 @@ const Tabs = ({
   );
 };
 
-export default Tabs;
+export default ScrollTabs;
