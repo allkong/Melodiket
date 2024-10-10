@@ -49,3 +49,26 @@ export interface MusicianDetail {
   likeCount: number;
   isLike: boolean;
 }
+
+export interface ConcertByMusicianRequest {
+  musicianUuid: string;
+  isFirstPage?: boolean;
+  lastUuid?: string;
+  pageSize?: number;
+  orderKey?: string;
+  orderDirection?: 'ASC' | 'DESC';
+}
+
+export interface ConcertByMusicianResponse {
+  pageInfo: PageInfo;
+  result: ConcertByMusician[];
+}
+
+export interface ConcertByMusician {
+  concertUuid: string;
+  title: string;
+  posterCid: string;
+  ticketingAt: string;
+  stageName: string;
+  isLike: boolean;
+}
