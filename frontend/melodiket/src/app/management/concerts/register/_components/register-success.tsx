@@ -20,10 +20,11 @@ const RegisterSuccess = ({ onNext }: RegisterSuccessProps) => {
 
   return (
     <div className="flex flex-col h-full p-4">
-      <div className="flex-grow h-0 overflow-y-auto">
+      <div className="flex-grow h-0 overflow-y-auto mt-[10vh]">
         <TextBanner
-          title="공연 등록 완료!"
-          description="뮤지션들에게 공연 승인 알람을 보냈어요"
+          hasLogo
+          title="공연 등록 신청 완료!"
+          description={`블록체인에 공연 정보가 기록되고 있어요.\n\n공연이 성공적으로 생성되면\n알림과 함께 뮤지션들에게 알림이 전송돼요.`}
         />
       </div>
       <div className="my-4 h-fit">
