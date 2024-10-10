@@ -19,7 +19,6 @@ const QRScan = () => {
   const handleScan = useCallback(
     (result: QrScanner.ScanResult | null) => {
       if (result) {
-        console.log(result.data);
         router.push(`${pathname}?ticket=${result.data}`);
       }
     },
