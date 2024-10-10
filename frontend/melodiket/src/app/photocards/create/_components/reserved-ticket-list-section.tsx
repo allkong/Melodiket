@@ -30,7 +30,7 @@ const ReservedTicketListSection = () => {
 
   const handleTicketClick = (ticketUuid: string, posterCid: string) => {
     setPosterCid(posterCid);
-    router.push(`/photocards/create/${ticketUuid}?step=select`);
+    router.push(`/photocards/create/${ticketUuid}`);
   };
 
   return (

@@ -118,7 +118,7 @@ const PhotocardEditSelection = ({
               fill
               draggable={false}
               onContextMenu={preventContextMenu}
-              className="select-none"
+              className="select-none object-cover"
             />
           </PhotocardFrame>
 
