@@ -13,12 +13,13 @@ export const getMusicians = async (
     pageSize: 5,
     orderKey: 'uuid',
     orderDirection: 'ASC',
+    query: '',
   }
 ): Promise<FetchMusiciansResponse> => {
-  const { isFirstPage, lastUuid, pageSize } = pageParam;
+  const { isFirstPage, lastUuid, pageSize, query } = pageParam;
   const queryParams = isFirstPage
-    ? `isFirstPage=true&pageSize=${pageSize}`
-    : `isFirstPage=false&lastUuid=${lastUuid}&pageSize=${pageSize}`;
+    ? `isFirstPage=true&pageSize=${pageSize}&name=${query}`
+    : `isFirstPage=false&lastUuid=${lastUuid}&pageSize=${pageSize}&name=${query}`;
 
   const response = await customFetch<FetchMusiciansResponse>(
     `/users/musicians?${queryParams}`
@@ -29,12 +30,24 @@ export const getMusicians = async (
 export const useMusiciansQuery = (
   pageSize: number = 5,
   orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC'
+  orderDirection: 'ASC' | 'DESC' = 'ASC',
+  query: string = ''
 ) => {
   return useInfiniteQuery({
-    queryKey: musicianKey.list(),
+    queryKey: musicianKey.list({
+      orderDirection,
+      orderKey,
+      pageSize,
+      query,
+    }),
     queryFn: ({ pageParam }) => getMusicians(pageParam),
-    initialPageParam: { isFirstPage: true, pageSize, orderKey, orderDirection },
+    initialPageParam: {
+      isFirstPage: true,
+      pageSize,
+      orderKey,
+      orderDirection,
+      query,
+    },
     getNextPageParam: (lastPage) => {
       const { pageInfo } = lastPage;
       return pageInfo.hasNextPage
@@ -44,6 +57,7 @@ export const useMusiciansQuery = (
             pageSize,
             orderKey,
             orderDirection,
+            query,
           }
         : null;
     },
