@@ -28,9 +28,7 @@ const ConcertInformation = ({
   const [description, setDescription] = useState('');
   const [posterCid, setPosterCid] = useState<string | null>(null);
 
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDateForTicketing = tomorrow.toISOString().slice(0, 16);
+  const today = new Date().toISOString().slice(0, 16);
 
   const handleStartAtChange = (newStartAt: string) => {
     setStartAt(newStartAt);
@@ -80,19 +78,25 @@ const ConcertInformation = ({
             value={startAt}
             onChange={handleStartAtChange}
             placeholder="공연 일시"
-            minDate={minDateForTicketing}
+            minDate={today}
           />
+          {isStartAtDateInvalid && (
+            <AlertLabel label="공연 일시는 현재 시각 이후로 설정해야 합니다." />
+          )}
         </div>
         <div className="mb-4">
-          <h2 className="font-semibold mb-2">티케팅 시작 일시</h2>
+          <h2 className="font-semibold mb-2">티켓팅 시작 일시</h2>
           <DateInput
             value={ticketingAt}
             onChange={setTicketingAt}
-            placeholder="티케팅 시작 일시"
-            minDate={minDateForTicketing}
+            placeholder="티켓팅 시작 일시"
+            minDate={today}
           />
           {isTicketingDateInvalid && (
-            <AlertLabel label="티케팅 시작 일시는 공연 일시보다 빨라야 합니다." />
+            <AlertLabel label="티켓팅 시작 일시는 공연 일시보다 빨라야 합니다." />
+          )}
+          {isTicketingAtDateInvalid && (
+            <AlertLabel label="티켓팅 시작 일시는 현재 시각 이후로 설정해야 합니다." />
           )}
         </div>
         <div className="mb-4 flex-grow">
