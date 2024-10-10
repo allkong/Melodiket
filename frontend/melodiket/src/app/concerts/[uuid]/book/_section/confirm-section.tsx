@@ -68,7 +68,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
             {/* {concert?.isSeat && ( */}
             <LabelValueText
               label="좌석 위치"
-              value={`${seatRow + 1}행 ${seatCol + 1}열`}
+              value={`${seatRow}행 ${seatCol}열`}
             />
             {/* )} */}
             <LabelValueText

@@ -5,6 +5,7 @@ import getQueryClient from '@/utils/getQueryClient';
 import favoriteKey from './favoriteKey';
 import useAuthStore from '@/store/authStore';
 import toast from 'react-hot-toast';
+import { FetchConcertResponse } from '@/types/concert';
 
 export const fetchFavoriteMusiciansList = async () => {
   const response = await customFetch<FavoriteMusician>(
@@ -33,6 +34,24 @@ export const useFetchFavoriteMusiciansListDehydrateState = () => {
   });
 
   return dehydrate(queryClient);
+};
+
+export const fetchFavoriteConcert = async () => {
+  const response = await customFetch<FetchConcertResponse>(
+    '/concerts/favorite/me'
+  );
+  return response;
+};
+
+export const useFetchFavoriteConcert = () => {
+  const { user } = useAuthStore();
+
+  const result = useQuery({
+    queryKey: favoriteKey.concerts(user),
+    queryFn: fetchFavoriteConcert,
+    enabled: !!user,
+  });
+  return result;
 };
 
 export const toggleFavoriteConcert = async (concertUuid: string) => {
