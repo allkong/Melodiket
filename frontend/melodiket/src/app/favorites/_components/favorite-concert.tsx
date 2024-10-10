@@ -1,16 +1,24 @@
-import ConcertCard from '@/components/molecules/card/ConcertCard';
+'use client';
 
-const FavoriteConcert = () => {
+import ConcertCard from '@/components/molecules/card/ConcertCard';
+import { FetchFavoriteResponse } from '@/types/concert';
+import { RefetchOptions } from '@tanstack/react-query';
+
+interface FavoriteConcertProps {
+  data?: FetchFavoriteResponse[];
+  refetch?: (options?: RefetchOptions) => void;
+}
+
+const FavoriteConcert = ({ data, refetch }: FavoriteConcertProps) => {
   return (
     <div className="grid grid-flow-row grid-cols-2 lg:grid-cols-3 place-items-center w-full mt-7">
-      {Array.from({ length: 7 }, () => 0).map((_, idx) => (
+      {data?.map((concert) => (
         <ConcertCard
-          key={idx}
-          concertUuid="12"
-          stageName="종합운동장"
-          posterCid="https://i.namu.wiki/i/DiRZTq4yBGq81-IgMuSglVAC_1pOoJG1EkJFwknd-DxFEBWo_XAHU4cIx-rPa_t82wnGgxkrVoQ_WeGRStW_cQ.webp"
-          ticketingAt="2024.03.06"
-          title="빈지노"
+          key={concert.concertUuid}
+          onClickFavorite={() => refetch?.()}
+          isFavorite={concert.isLike}
+          href={`/concerts/${concert.concertUuid}`}
+          {...concert}
         />
       ))}
     </div>

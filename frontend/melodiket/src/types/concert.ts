@@ -35,7 +35,7 @@ export interface Concert {
   stageName: string;
   isFavorite: boolean;
   isStanding: boolean;
-  favorites?: number;
+  isLike: boolean;
 }
 
 export interface CarouselConcert
@@ -59,18 +59,46 @@ export interface FetchConcertResponse {
     | 'stageName'
     | 'ticketingAt'
     | 'startAt'
+    | 'isLike'
   >[];
 }
 
-export interface FetchConcertDetail {
-  pageInfo: {
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-    pageNo: number;
-    requestedSize: number;
-    responsedSize: number;
-  };
-  result: Concert;
+export interface FetchFavoriteResponse {
+  posterCid: string;
+  concertUuid: string;
+  startAt: string;
+  ticketingAt: string;
+  stageName: string;
+  title: string;
+  isLike: boolean;
+}
+
+export interface ConcertDetail {
+  availableTickets: number;
+  isAvailableSeat?: boolean[][];
+  capacity: number;
+  concertUuid: string;
+  createdAt: string;
+  description: string;
+  favoriteMusicianStake: number;
+  isStanding: boolean;
+  musicianStake: number;
+  musicians: {
+    musicianUuid: string;
+    name: string;
+    imageUrl: string;
+  }[];
+  ownerStake: number;
+  posterCid: string;
+  stageName: string;
+  stageUuid: string;
+  startAt: string;
+  status: string;
+  ticketPrice: number;
+  ticketingAt: string;
+  title: string;
+  isLike: boolean;
+  likeCount: number;
 }
 
 export interface FetchMyConcertsResponse {

@@ -1,7 +1,7 @@
 import {
   ConcertData,
   CreateConcertResponse,
-  FetchConcertDetail,
+  ConcertDetail,
   FetchConcertResponse,
   FetchMyConcertsResponse,
 } from '@/types/concert';
@@ -20,6 +20,7 @@ import type {
   TicketBookResponse,
   FetchConcertRequest,
 } from '@/types/ticket';
+import useAuthStore from '@/store/authStore';
 
 export const fetchConcertList = async ({
   isFirstPage,
@@ -36,17 +37,29 @@ export const fetchConcertList = async ({
 };
 
 export const useFetchInfiniteConcert = (
-  pageSize: number = 2,
-  orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC',
-  title: string = ''
+  options: {
+    pageSize?: number;
+    orderKey?: string;
+    orderDirection?: 'ASC' | 'DESC';
+    title?: string;
+  } = {}
 ) => {
+  const {
+    pageSize = 6,
+    orderKey = 'createdAt',
+    orderDirection = 'ASC',
+    title = '',
+  } = options;
+
+  const { user } = useAuthStore();
+
   const result = useInfiniteQuery({
     queryKey: concertKey.infinite({
       pageSize,
       orderKey,
       orderDirection,
       title,
+      user,
     }),
     queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
@@ -92,22 +105,25 @@ export const useFetchConcertList = () => {
 };
 
 export const fetchConcertDetail = async (uuid: string) => {
-  const response = await customFetch<FetchConcertDetail>(`/concerts/${uuid}`);
+  const response = await customFetch<ConcertDetail>(`/concerts/${uuid}`);
   return response;
 };
 
 export const useFetchConcertDetail = (uuid: string) => {
-  const result = useQuery({
-    queryKey: concertKey.detail(uuid),
+  const { user } = useAuthStore();
+
+  return useQuery<ConcertDetail>({
+    queryKey: concertKey.detail(uuid, user),
     queryFn: () => fetchConcertDetail(uuid),
   });
-  return result;
 };
 
 export const useFetchConcertDetailDehydrateState = async (uuid: string) => {
+  const { user } = useAuthStore();
+
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: concertKey.detail(uuid),
+    queryKey: concertKey.detail(uuid, user),
     queryFn: () => fetchConcertDetail(uuid),
   });
 
@@ -130,7 +146,7 @@ export const useBookTicket = () => {
     }: {
       ticketBookRequest: TicketBookRequest;
     }) => bookTicket(ticketBookRequest),
-    throwOnError: true,
+    // throwOnError: true,
   });
   return mutate;
 };
@@ -173,4 +189,20 @@ export const useCreateConcert = () => {
       alert('공연 등록 실패!');
     },
   });
+};
+
+export const fetchRemainSeat = async (concertUuid: string) => {
+  const response = await customFetch<boolean[][]>(
+    `/concerts/seats/${concertUuid}`
+  );
+  return response;
+};
+
+export const useFetchRemainSeat = (concertUuid: string) => {
+  const result = useQuery({
+    queryKey: [],
+    queryFn: () => fetchRemainSeat(concertUuid),
+    gcTime: 0,
+  });
+  return result;
 };

@@ -2,12 +2,13 @@
 
 import React, { useEffect, useRef } from 'react';
 
+import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
+import useIsOnScreen from '@/hooks/useIsOnScreen';
+
 import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
-import useIsOnScreen from '@/hooks/useIsOnScreen';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
-import { useFetchInfiniteConcert } from '@/services/concert/fetchConcert';
 
 const ConcertListSection = () => {
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
@@ -23,6 +24,10 @@ const ConcertListSection = () => {
     }
   }, [isOnScreen, hasNextPage, fetchNextPage]);
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <>
       <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">
@@ -31,8 +36,11 @@ const ConcertListSection = () => {
             ?.flatMap((page) => page.result)
             .map((concert) => (
               <ConcertCard
-                key={`${concert.concertUuid}-${concert.posterCid}`}
+                key={concert.concertUuid}
+                href={`/concerts/${concert.concertUuid}`}
+                isFavorite={concert?.isLike}
                 {...concert}
+                onClickFavorite={refetch}
               />
             ))}
         {isFetching && <ConcertCardSkeleton count={6} />}

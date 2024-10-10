@@ -1,7 +1,7 @@
 'use client';
 
 import TicketInfoCarousel from '@/components/molecules/carousel/TicketInfoCarousel';
-import { useTicketList } from '@/services/ticket/useTicketList';
+import { useTicketList } from '@/services/ticket/fetchTicket';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
 
 const TicketSection = () => {
@@ -9,7 +9,7 @@ const TicketSection = () => {
 
   return (
     <TicketInfoCarousel
-      datas={
+      data={
         data?.map(
           (ticket) =>
             `${ticket.concertTitle} - ${formatDateToYMD(ticket.startAt ?? '')}`

@@ -7,21 +7,28 @@ import { ReactElement } from 'react';
 interface MenuItemProps {
   icon: ReactElement;
   label: string;
-  href: string;
+  href?: string;
+  onClick?: () => void;
 }
 
-const MenuItem = ({ icon, label, href }: MenuItemProps) => {
+const MenuItem = ({ icon, label, href, onClick }: MenuItemProps) => {
   const router = useRouter();
   const { setIsOpen } = useMenuStore();
 
-  const handleClick = (href: string) => {
+  const handleClick = () => {
     setIsOpen(false);
-    router.push(href);
+
+    if (onClick) {
+      onClick();
+    }
+    if (href) {
+      router.push(href);
+    }
   };
 
   return (
     <div
-      onClick={() => handleClick(href)}
+      onClick={handleClick}
       className="flex items-center gap-[10px] w-full h-[41px] px-6 cursor-pointer"
     >
       <div>{icon}</div>

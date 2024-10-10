@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import type { LoginRequest, LoginResponse } from '@/types/login';
 import type { SignUpData } from '@/types/signUp';
@@ -8,12 +9,10 @@ import useAuthStore from '@/store/authStore';
 import customFetch from '../customFetch';
 
 const login = async (loginData: LoginRequest) => {
-  const response = await customFetch<LoginResponse>('/auth/login', {
+  return await customFetch<LoginResponse>('/auth/login', {
     method: 'POST',
     body: loginData,
   });
-
-  return response;
 };
 
 export const useLogin = () => {
@@ -28,7 +27,7 @@ export const useLogin = () => {
       router.push('/');
     },
     onError: () => {
-      alert('로그인 실패😥');
+      toast.error('로그인 실패');
     },
   });
 };
@@ -93,4 +92,27 @@ export const useSignUp = () => {
     throwOnError: true,
   });
   return mutate;
+};
+
+const logout = async () => {
+  return await customFetch('/auth/logout', {
+    method: 'POST',
+  });
+};
+
+export const useLogout = () => {
+  const router = useRouter();
+  const { clearAuth } = useAuthStore();
+
+  return async () => {
+    try {
+      await logout();
+      clearAuth();
+      sessionStorage.clear();
+      toast.success('로그아웃 완료');
+      router.push('/');
+    } catch (error) {
+      toast.error('로그아웃 실패');
+    }
+  };
 };
