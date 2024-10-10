@@ -39,6 +39,7 @@ public class WebPushService {
         this.pushService.setPublicKey(publicKey);
         this.publicKey = publicKey;
         this.pushService.setPrivateKey(privateKey);
+        this.pushService.setSubject("mailto:kkho9654@naver.com");
         this.webPushRepository = webPushRepository;
         this.appUserRepository = appUserRepository;
     }
@@ -89,6 +90,7 @@ public class WebPushService {
 
                 // 알림 전송
                 pushService.send(notification);
+                System.out.println(notification.getOrigin() + notification.getEndpoint());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
