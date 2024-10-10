@@ -30,7 +30,7 @@ const MenuProfile = () => {
 
   const handleClickProfile = () => {
     if (user) {
-      closeMenuAndNavigate('/');
+      closeMenuAndNavigate('/mypage');
     } else {
       closeMenuAndNavigate('/auth/login');
     }
@@ -57,7 +57,7 @@ const MenuProfile = () => {
     >
       <Profile
         size="md"
-        src={data?.imageUrl ? getS3Url(data.imageUrl) : undefined}
+        src={user && data?.imageUrl ? getS3Url(data.imageUrl) : undefined}
       />
       {user ? (
         <div className="flex flex-col gap-3">
