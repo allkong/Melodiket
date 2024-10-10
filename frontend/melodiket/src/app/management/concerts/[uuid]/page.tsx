@@ -12,7 +12,7 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import SmallButton from '@/components/atoms/button/SmallButton';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice } from '@/utils/concertFormatter';
-import { getCidUrl } from '@/utils/getUrl';
+import { getCidUrl, getS3Url } from '@/utils/getUrl';
 import toast from 'react-hot-toast';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Ticket } from '@/public/icons';
@@ -92,7 +92,7 @@ const ConcertDetailPage = () => {
           {concert?.musicians?.map((musician) => (
             <MusicianStatusProfile
               key={musician.musicianUuid}
-              src={musician.imageUrl || ''}
+              src={getS3Url(musician.imageUrl || '')}
               musicianName={musician.name || '정보 없음'}
               status={musician.approvalStatus}
             />
