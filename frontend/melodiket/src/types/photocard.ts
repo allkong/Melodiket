@@ -22,7 +22,7 @@ export interface PhotocardDetail {
   seatCol: number;
   musicans: string[];
   favoriteMusician: string;
-  nickname: string;
+  nickName: string;
 }
 
 export interface Sticker {

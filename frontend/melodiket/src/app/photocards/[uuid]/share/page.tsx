@@ -31,7 +31,7 @@ const Page = ({ params }: PageProps) => {
       <div className="flex flex-col items-center py-8">
         <section className="flex flex-col items-center mb-9">
           <h1 className="flex text-lg">
-            <p className="font-semibold">{photocard.nickname}</p>님의 포토카드
+            <p className="font-semibold">{photocard.nickName}</p>님의 포토카드
           </h1>
           <div className="relative flex flex-col items-center w-fit">
             <p className="relative z-10">
