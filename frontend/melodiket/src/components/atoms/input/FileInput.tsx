@@ -58,6 +58,7 @@ const FileInput = forwardRef(
           ref={inputRef}
           id="file-input"
           type="file"
+          accept="image/png"
           onChange={handleChange}
           onBlur={onBlur}
           className="absolute w-0 h-0 p-0 overflow-hidden border-0"
