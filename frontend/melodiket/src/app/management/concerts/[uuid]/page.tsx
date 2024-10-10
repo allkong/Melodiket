@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useGetConcertInfo } from '@/services/concert/fetchConcert';
 import { useCancelConcert } from '@/services/approval/fetchApproval';
+import { useConcertClose } from '@/services/wallet/fetchWallet';
 import Header from '@/components/organisms/navigation/Header';
 import PosterFrame from '@/components/atoms/image-frame/PosterFrame';
 import DetailSection from '@/components/molecules/section/DetailSection';
@@ -24,6 +25,7 @@ const ConcertDetailPage = () => {
 
   const { mutate: getConcertInfo, data: concert } = useGetConcertInfo();
   const { mutate: cancelConcert } = useCancelConcert();
+  const { mutate: concertClose } = useConcertClose(); // Use the concert close mutation
 
   useEffect(() => {
     if (concertUuid) {
@@ -72,6 +74,20 @@ const ConcertDetailPage = () => {
     }
   };
 
+  const handleConcertClose = () => {
+    if (concertUuid) {
+      concertClose(concertUuid, {
+        onSuccess: () => {
+          toast('공연 정산이 성공적으로 완료되었습니다.');
+          getConcertInfo(concertUuid); // Refresh concert info after closing
+        },
+        onError: () => {
+          toast.error('공연 정산 실패!');
+        },
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -82,21 +98,27 @@ const ConcertDetailPage = () => {
             <h1 className="font-medium">
               {concert?.title || '콘서트 정보 없음'}
             </h1>
-            {showCancelButton && (
-              <SmallButton label="공연 취소" onClick={handleCancelConcert} />
-            )}
+            <div className="flex space-x-2">
+              {showCancelButton && (
+                <SmallButton label="공연 취소" onClick={handleCancelConcert} />
+              )}
+              {concert?.status === 'ACTIVE' && (
+                <SmallButton label="공연 정산" onClick={handleConcertClose} />
+              )}
+            </div>
           </div>
         </div>
-
         <DetailSection title="참여 뮤지션">
-          {concert?.musicians?.map((musician) => (
-            <MusicianStatusProfile
-              key={musician.musicianUuid}
-              src={getS3Url(musician.imageUrl || '')}
-              musicianName={musician.name || '정보 없음'}
-              status={musician.approvalStatus}
-            />
-          ))}
+          <div className="flex flex-wrap gap-4">
+            {concert?.musicians?.map((musician) => (
+              <MusicianStatusProfile
+                key={musician.musicianUuid}
+                src={getS3Url(musician.imageUrl || '')}
+                musicianName={musician.name || '정보 없음'}
+                status={musician.approvalStatus}
+              />
+            ))}
+          </div>
         </DetailSection>
 
         <DetailSection title="공연 정보">
