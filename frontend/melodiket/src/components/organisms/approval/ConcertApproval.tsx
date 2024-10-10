@@ -5,6 +5,7 @@ import ArrowButton from '@/components/atoms/button/ArrowButton';
 import clsx from 'clsx';
 import SmallButton from '@/components/atoms/button/SmallButton';
 import { useUploadImage } from '@/services/user/fetchUser';
+import toast from 'react-hot-toast';
 
 interface ConcertApprovalProps {
   concertName: string;
@@ -12,6 +13,7 @@ interface ConcertApprovalProps {
   price: string;
   onApprove?: (signatureUrl: string) => void;
   onReject?: () => void;
+  isChecked: boolean;
 }
 
 const ConcertApproval = ({
@@ -20,6 +22,7 @@ const ConcertApproval = ({
   price,
   onApprove,
   onReject,
+  isChecked,
 }: ConcertApprovalProps) => {
   const [isSigning, setIsSigning] = useState(false);
   const signatureCanvasRef = useRef<SignatureCanvas | null>(null);
@@ -63,18 +66,18 @@ const ConcertApproval = ({
               onApprove?.(imageUrl);
               setIsSigning(false);
             } else {
-              alert('S3 업로드에 실패했습니다.');
+              toast.error('S3 업로드에 실패했습니다.');
             }
           } catch (error) {
-            alert('S3 업로드 중 오류가 발생했습니다.');
+            toast.error('S3 업로드 중 오류가 발생했습니다.');
           }
         },
         onError: () => {
-          alert('이미지 업로드 요청 실패!');
+          toast.error('이미지 업로드 요청 실패!');
         },
       });
     } else {
-      alert('서명을 완료해주세요.');
+      toast.error('서명을 완료해주세요.');
     }
   };
 
@@ -91,10 +94,12 @@ const ConcertApproval = ({
           <p>{date}</p>
           <p>{price}</p>
         </div>
-        <div className="flex space-x-2">
-          <ApprovalButton label="승인" onClick={handleOpenSignature} />
-          <ApprovalButton label="거절" onClick={onReject} />
-        </div>
+        {!isChecked && (
+          <div className="flex space-x-2">
+            <ApprovalButton label="승인" onClick={handleOpenSignature} />
+            <ApprovalButton label="거절" onClick={onReject} />
+          </div>
+        )}
       </div>
 
       {isSigning && (
