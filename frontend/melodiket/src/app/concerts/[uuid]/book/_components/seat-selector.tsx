@@ -30,7 +30,7 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
         {remainSeat &&
           remainSeat.map((line, row) => (
             <div key={row} className="flex flex-row gap-1">
-              {line?.map((available, col) => (
+              {line?.map((occupied, col) => (
                 <SeatRadio
                   key={`${row}-${col}`}
                   name="seat"
@@ -38,7 +38,7 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
                   checked={seatInfo.seatRow === row && seatInfo.seatCol === col}
                   row={row}
                   col={col}
-                  disabled={!available}
+                  disabled={occupied}
                   hidden={row === 0 || col === 0}
                 />
               ))}
