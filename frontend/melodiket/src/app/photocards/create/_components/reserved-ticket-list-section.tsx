@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 
 import { useTicketList } from '@/services/ticket/fetchTicket';
 import { TICKET_STATUS } from '@/constants/tickets';
+import { getCidUrl } from '@/utils/getUrl';
 
 import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
@@ -44,7 +45,7 @@ const ReservedTicketListSection = () => {
             className="cursor-pointer"
           >
             <TicketItem
-              src={ticket.posterCid}
+              src={getCidUrl(ticket.posterCid)}
               concertTitle={ticket.concertTitle}
               stageName={ticket.stageName}
               createdAt={ticket.createdAt}
