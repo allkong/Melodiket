@@ -21,18 +21,16 @@ const Page = () => {
     fetchMyConcerts();
   }, []);
 
-  console.log(data);
-
   const handleApprove = (signatureUrl: string, concertUuid: string) => {
     approveConcert({
       id: concertUuid,
       approvalRequest: { signatureImageUrl: signatureUrl },
     });
+    router.push(`/management/concerts/${concertUuid}`);
   };
 
   const handleReject = (concertUuid: string) => {
     denyConcert(concertUuid);
-    console.log(`거절된 콘서트 UUID: ${concertUuid}`);
   };
 
   return (
@@ -47,6 +45,7 @@ const Page = () => {
         {data?.result.map((concert) => (
           <div key={concert.uuid} className="mb-4 mx-2">
             <ConcertApproval
+              concertUuid={concert.uuid}
               concertName={concert.title}
               date={new Date(concert.ticketingAt).toLocaleDateString('ko-KR')}
               price={`${concert.ticketPrice.toLocaleString('ko-KR')} MLDY`}

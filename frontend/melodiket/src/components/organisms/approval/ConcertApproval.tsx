@@ -6,30 +6,40 @@ import clsx from 'clsx';
 import SmallButton from '@/components/atoms/button/SmallButton';
 import { useUploadImage } from '@/services/user/fetchUser';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface ConcertApprovalProps {
   concertName: string;
+  concertUuid: string;
   date: string;
   price: string;
   onApprove?: (signatureUrl: string) => void;
   onReject?: () => void;
   isChecked: boolean;
+  onClick?: () => void;
 }
 
 const ConcertApproval = ({
   concertName,
+  concertUuid,
   date,
   price,
   onApprove,
   onReject,
   isChecked,
+  onClick,
 }: ConcertApprovalProps) => {
   const [isSigning, setIsSigning] = useState(false);
   const signatureCanvasRef = useRef<SignatureCanvas | null>(null);
   const { mutate: uploadImage } = useUploadImage();
+  const router = useRouter();
 
   const handleOpenSignature = () => {
     setIsSigning(true);
+  };
+
+  const handleMove = () => {
+    router.push(`/management/concerts/${concertUuid}`);
   };
 
   const handleClearSignature = () => {
@@ -87,7 +97,11 @@ const ConcertApproval = ({
     >
       <div className="flex justify-between items-center mb-4">
         <p className="font-semibold text-lg">{concertName}</p>
-        <ArrowButton direction="right" color="text-gray-400" />
+        <ArrowButton
+          direction="right"
+          color="text-gray-400"
+          onClick={handleMove}
+        />
       </div>
       <div className="flex items-center justify-between text-gray-500">
         <div>
