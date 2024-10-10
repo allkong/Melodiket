@@ -11,6 +11,7 @@ export interface Musician {
   musicianUuid: string;
   name: string;
   imageUrl: string;
+  approvalStatus: 'APPROVED' | 'PENDING' | 'DENIED';
 }
 
 export interface MusicianListItem {

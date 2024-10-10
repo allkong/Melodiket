@@ -23,6 +23,7 @@ import type {
   FetchConcertRequest,
 } from '@/types/ticket';
 import useAuthStore from '@/store/authStore';
+import toast from 'react-hot-toast';
 
 export const fetchConcertList = async ({
   isFirstPage,
@@ -157,7 +158,7 @@ export const useGetMyAssignedConcerts = () => {
   return useMutation<FetchMyConcertsResponse, Error>({
     mutationFn: () => getMyAssignedConcerts(),
     onError: () => {
-      alert('내 공연 목록 가져오기 실패!');
+      toast.error('내 공연 목록 가져오기 실패!');
     },
   });
 };
@@ -173,7 +174,7 @@ export const useGetMyConcerts = () => {
   return useMutation<ConcertResp, Error>({
     mutationFn: () => getMyConcerts(),
     onError: () => {
-      alert('내 공연 목록 가져오기 실패!');
+      toast.error('내 공연 목록 가져오기 실패!');
     },
   });
 };
@@ -189,7 +190,7 @@ export const useGetConcertInfo = () => {
   return useMutation<ConcertRespInfo, Error, string>({
     mutationFn: (id) => getConcertInfo(id),
     onError: () => {
-      alert('공연 정보 가져오기 실패!');
+      toast.error('공연 정보 가져오기 실패!');
     },
   });
 };
@@ -209,7 +210,7 @@ export const useCreateConcert = () => {
   return useMutation<CreateConcertResponse, Error, ConcertData>({
     mutationFn: (concertData) => createConcert(concertData),
     onError: () => {
-      alert('공연 등록 실패!');
+      toast.error('공연 등록 실패!');
     },
   });
 };
