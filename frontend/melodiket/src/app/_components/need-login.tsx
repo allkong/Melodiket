@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import LargeButton from '@/components/atoms/button/LargeButton';
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
 import { BEFORE_LOGIN_FAVORITE_MUSICIANS } from '@/constants/signUp';
+import { getS3Url } from '@/utils/getUrl';
 
 const NeedLogin = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const NeedLogin = () => {
           <MusicianProfileCard
             key={musician.loginId}
             musicianName={musician.nickname}
-            src={musician.imageUrl}
+            src={getS3Url(musician.imageUrl)}
           />
         ))}
       </div>
