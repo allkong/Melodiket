@@ -15,7 +15,11 @@ interface InputProps {
   onClickEnter?: () => void;
   onBlur?: () => void;
   placeholder?: string;
-  type?: Extract<ComponentProps<'input'>['type'], 'text' | 'password'>;
+  type?: Extract<
+    ComponentProps<'input'>['type'],
+    'text' | 'password' | 'number'
+  >;
+  disabled?: boolean;
 }
 
 const Input = forwardRef(
@@ -26,7 +30,8 @@ const Input = forwardRef(
       onClickEnter,
       onBlur,
       placeholder,
-      type,
+      type = 'text',
+      disabled = false,
     }: InputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
@@ -36,6 +41,11 @@ const Input = forwardRef(
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const eventValue = e.target.value;
+
+      if (type === 'number' && isNaN(Number(eventValue)) && eventValue !== '') {
+        return;
+      }
+
       if (!isControlled) {
         setValue(eventValue);
       }
@@ -59,6 +69,8 @@ const Input = forwardRef(
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onBlur={onBlur}
+        disabled={disabled}
+        inputMode={type === 'number' ? 'numeric' : undefined} // 모바일 키패드에 숫자 패드 표시
       />
     );
   }
