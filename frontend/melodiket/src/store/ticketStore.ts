@@ -8,7 +8,7 @@ interface TicketState {
   clearTicketDetail: () => void;
 }
 
-export const useTicketStore = create<TicketState>()(
+const useTicketStore = create<TicketState>()(
   devtools(
     persist(
       (set) => ({

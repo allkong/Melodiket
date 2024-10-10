@@ -1,3 +1,5 @@
+import { STICKER_CATEGORIES } from '@/constants/photocard';
+
 export interface Photocard {
   photocardUuid: string;
   concertName: string;
@@ -21,4 +23,27 @@ export interface PhotocardDetail {
   musicans: string[];
   favoriteMusician: string;
   nickname: string;
+}
+
+export interface Sticker {
+  name: string;
+  category: keyof typeof STICKER_CATEGORIES;
+  image: React.ReactNode;
+}
+
+export interface SelectSticker extends Sticker {
+  id: string;
+  x: number;
+  y: number;
+  scale: number;
+  rotate: number;
+}
+
+export interface SelectText {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  scale: number;
+  rotate: number;
 }

@@ -1,5 +1,5 @@
-import { dehydrate, useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
+import { dehydrate, useMutation, useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import customFetch from '../customFetch';
 import photocardKey from './photocardKey';
@@ -43,13 +43,37 @@ const getPhotocardDetail = async (uuid: string) => {
   return await customFetch<PhotocardDetail>(`/photo-cards/${uuid}`);
 };
 
-export const usePhotocardDetail = () => {
-  const params = useParams();
-  const uuid = params?.uuid;
-
+export const usePhotocardDetail = (uuid: string) => {
   return useQuery<PhotocardDetail>({
-    queryKey: photocardKey.detail(uuid as string),
-    queryFn: () => getPhotocardDetail(uuid as string),
+    queryKey: photocardKey.detail(uuid),
+    queryFn: () => getPhotocardDetail(uuid),
     enabled: !!uuid,
+  });
+};
+
+const postPhotocardUpload = async ({
+  uuid,
+  cid,
+}: {
+  uuid: string;
+  cid: string;
+}) => {
+  return await customFetch('/photo-cards', {
+    method: 'post',
+    body: {
+      ticketUuid: uuid,
+      imageCid: cid,
+    },
+  });
+};
+
+export const usePhotocardUpload = () => {
+  return useMutation({
+    mutationFn: (photocard: { uuid: string; cid: string }) =>
+      postPhotocardUpload(photocard),
+    onError: () => {
+      toast.error('포토카드 업로드 실패');
+    },
+    throwOnError: true,
   });
 };
