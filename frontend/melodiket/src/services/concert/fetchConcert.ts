@@ -120,18 +120,6 @@ export const useFetchConcertDetail = (uuid: string) => {
   });
 };
 
-export const useFetchConcertDetailDehydrateState = async (uuid: string) => {
-  const { user } = useAuthStore();
-
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: concertKey.detail(uuid, user),
-    queryFn: () => fetchConcertDetail(uuid),
-  });
-
-  return dehydrate(queryClient);
-};
-
 export const bookTicket = async (request: TicketBookRequest) => {
   const response = await customFetch<TicketBookResponse>('/tickets', {
     method: 'post',
