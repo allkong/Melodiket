@@ -1,11 +1,14 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import customFetch from '../customFetch';
 import {
+  ConcertByMusicianRequest,
+  ConcertByMusicianResponse,
   FetchMusiciansResponse,
   MusicianDetail,
   PageParam,
 } from '@/types/musician';
 import musicianKey from './musicianKey';
+import useAuthStore from '@/store/authStore';
 
 export const getMusicians = async (
   pageParam: PageParam = {
@@ -33,12 +36,14 @@ export const useMusiciansQuery = (
   orderDirection: 'ASC' | 'DESC' = 'ASC',
   query: string = ''
 ) => {
+  const { user } = useAuthStore();
   return useInfiniteQuery({
     queryKey: musicianKey.list({
       orderDirection,
       orderKey,
       pageSize,
       query,
+      user,
     }),
     queryFn: ({ pageParam }) => getMusicians(pageParam),
     initialPageParam: {
@@ -73,5 +78,65 @@ export const useMusicianDetail = (uuid: string) => {
     queryKey: musicianKey.detail(uuid),
     queryFn: () => getMusicianDetail(uuid),
     enabled: !!uuid,
+  });
+};
+
+const getConcertsByMusician = async ({
+  musicianUuid,
+  isFirstPage = true,
+  lastUuid = '',
+  pageSize = 5,
+  orderKey = 'startAt',
+  orderDirection = 'ASC',
+}: ConcertByMusicianRequest) => {
+  const queryParams = `isFirstPage=${isFirstPage}&lastUuid=${lastUuid}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}`;
+
+  const response = await customFetch<ConcertByMusicianResponse>(
+    `/concerts/by-musician/${musicianUuid}?${queryParams}`
+  );
+  return response;
+};
+
+export const useConcertsByMusician = (
+  musicianUuid: string,
+  pageSize: number = 5,
+  orderKey: string = 'startAt',
+  orderDirection: 'ASC' | 'DESC' = 'ASC'
+) => {
+  return useInfiniteQuery({
+    queryKey: musicianKey.concerts({
+      musicianUuid,
+      pageSize,
+      orderKey,
+      orderDirection,
+    }),
+    queryFn: ({ pageParam = { isFirstPage: true, lastUuid: '' } }) =>
+      getConcertsByMusician({
+        musicianUuid,
+        isFirstPage: pageParam.isFirstPage,
+        lastUuid: pageParam.lastUuid || '',
+        pageSize,
+        orderKey,
+        orderDirection,
+      }),
+    initialPageParam: {
+      isFirstPage: true,
+      lastUuid: '',
+      pageSize,
+      orderKey,
+      orderDirection,
+    },
+    getNextPageParam: (lastPage) => {
+      const { pageInfo } = lastPage;
+      return pageInfo.hasNextPage
+        ? {
+            isFirstPage: false,
+            lastUuid: lastPage.pageInfo.lastUuid,
+            pageSize,
+            orderKey,
+            orderDirection,
+          }
+        : null;
+    },
   });
 };
