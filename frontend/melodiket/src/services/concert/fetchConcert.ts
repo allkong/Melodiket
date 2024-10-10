@@ -4,6 +4,8 @@ import {
   ConcertDetail,
   FetchConcertResponse,
   FetchMyConcertsResponse,
+  ConcertResp,
+  ConcertRespInfo,
 } from '@/types/concert';
 import customFetch from '../customFetch';
 import {
@@ -167,6 +169,38 @@ export const useGetMyAssignedConcerts = () => {
     mutationFn: () => getMyAssignedConcerts(),
     onError: () => {
       alert('내 공연 목록 가져오기 실패!');
+    },
+  });
+};
+
+const getMyConcerts = async () => {
+  const response = await customFetch<ConcertResp>('/concerts/me/created', {
+    method: 'GET',
+  });
+  return response;
+};
+
+export const useGetMyConcerts = () => {
+  return useMutation<ConcertResp, Error>({
+    mutationFn: () => getMyConcerts(),
+    onError: () => {
+      alert('내 공연 목록 가져오기 실패!');
+    },
+  });
+};
+
+const getConcertInfo = async (id: string) => {
+  const response = await customFetch<ConcertRespInfo>(`/concerts/${id}`, {
+    method: 'GET',
+  });
+  return response;
+};
+
+export const useGetConcertInfo = () => {
+  return useMutation<ConcertRespInfo, Error, string>({
+    mutationFn: (id) => getConcertInfo(id),
+    onError: () => {
+      alert('공연 정보 가져오기 실패!');
     },
   });
 };
