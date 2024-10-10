@@ -27,8 +27,14 @@ const PhotocardEditSelection = ({
   onNext,
 }: PhotocardEditSelectionProps) => {
   const router = useRouter();
-  const { stickers, setStickers, clearStickers, texts, setTexts, clearTexts } =
-    usePhotocardStore();
+  const {
+    stickers,
+    removeSticker,
+    clearStickers,
+    texts,
+    removeText,
+    clearTexts,
+  } = usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState<string | null>(null);
 
@@ -48,16 +54,22 @@ const PhotocardEditSelection = ({
 
   const handleSelectedRemove = () => {
     if (stickers && selectedId !== null) {
-      setStickers(stickers.filter((sticker) => sticker.id !== selectedId));
-      setSelectedId(null);
+      removeSticker(selectedId);
     }
+
+    if (texts && selectedId !== null) {
+      removeText(selectedId);
+    }
+
+    setSelectedId(null);
   };
 
   useEffect(() => {
     return () => {
       clearStickers();
+      clearTexts();
     };
-  }, [clearStickers]);
+  }, [clearStickers, clearTexts]);
 
   const handlePhotocardCapture = async () => {
     if (photocardRef.current) {
