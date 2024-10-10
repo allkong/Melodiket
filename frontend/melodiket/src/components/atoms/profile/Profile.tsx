@@ -6,6 +6,7 @@ import defaultProfile from '@/public/images/default-profile.png';
 interface ProfileProps {
   src?: string;
   size: 'sm' | 'md' | 'lg';
+  onClick?: () => void;
 }
 
 const Profile = ({ src, size }: ProfileProps) => {

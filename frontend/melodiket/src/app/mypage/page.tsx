@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import Header from '@/components/organisms/navigation/Header';
 import Profile from '@/components/atoms/profile/Profile';
 import MyPageItem from '@/components/molecules/item/MyPageItem';
@@ -8,12 +9,18 @@ import LargeButton from '@/components/atoms/button/LargeButton';
 
 import { MLDY, Authority } from '@/public/icons';
 import { useRouter } from 'next/navigation';
-import { useGetMe } from '@/services/user/fetchUser';
-import { useEffect } from 'react';
+import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
+import { useUploadImage } from '@/services/user/fetchUser';
+import { useGetMyWallet } from '@/services/wallet/fetchWallet';
+import { getS3Url } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
   const { mutate: getMe, data } = useGetMe();
+  const { mutate: getMyWallet, data: walletData } = useGetMyWallet();
+  const { mutate: uploadImage } = useUploadImage();
+  const { mutate: updateMe } = useUpdateMe();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const isStageManager = data?.role === 'STAGE_MANAGER';
   const isAudience = data?.role === 'AUDIENCE';
@@ -24,7 +31,66 @@ const Page = () => {
 
   useEffect(() => {
     getMe();
+    getMyWallet();
   }, []);
+
+  const handleProfileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const fileName = file.name;
+      const uploadImageRequest = {
+        type: data?.role,
+        fileName: fileName,
+      };
+
+      uploadImage(uploadImageRequest, {
+        onSuccess: async (response) => {
+          const imageUrl = response.cdn;
+          const presignedUrl = response.presigned;
+
+          try {
+            const uploadResponse = await fetch(presignedUrl, {
+              method: 'PUT',
+              body: file,
+              headers: {
+                'Content-Type': file.type,
+              },
+            });
+
+            if (uploadResponse.ok) {
+              updateMe(
+                { imageUrl },
+                {
+                  onSuccess: () => {
+                    alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
+                    getMe();
+                  },
+                  onError: () => {
+                    alert('프로필 업데이트 실패!');
+                  },
+                }
+              );
+            } else {
+              console.error('파일 업로드 실패:', uploadResponse.statusText);
+              alert('파일 업로드에 실패했습니다.');
+            }
+          } catch (error) {
+            console.error('파일 업로드 중 오류 발생:', error);
+            alert('파일 업로드 중 오류가 발생했습니다.');
+          }
+        },
+        onError: () => {
+          alert('이미지 업로드 실패!');
+        },
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -32,8 +98,20 @@ const Page = () => {
       <div className="flex-grow h-0">
         <div className="h-full flex flex-col">
           <div className="flex-grow h-0 overflow-y-auto">
-            <div className="flex items-center space-x-4 mb-4 p-4">
-              <Profile size="md" src={data?.imageUrl} />
+            <div className="flex items-center space-x-4 mb-4 p-4 relative">
+              <Profile
+                size="md"
+                src={data?.imageUrl ? getS3Url(data.imageUrl) : undefined}
+                onClick={handleProfileClick}
+              />
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+
               <div>
                 <p className="text-xl font-semibold text-black">
                   {data?.nickname}
@@ -55,7 +133,9 @@ const Page = () => {
                   <MLDY />
                   <p className="text-purple-400 font-medium">잔액</p>
                 </div>
-                <p className="text-black ml-auto">10,000 MLDY</p>
+                <p className="text-black ml-auto">
+                  {walletData?.tokenBalance ?? '0'} MLDY
+                </p>
               </div>
             </div>
 

@@ -1,38 +1,46 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import { CONCERT_TYPES } from '@/constants/concertTypes';
-import { useTicketList } from '@/services/ticket/fetchTicket';
-import { TICKET_STATUS } from '@/constants/tickets';
-
+import { useGetMyConcerts } from '@/services/concert/fetchConcert';
 import Header from '@/components/organisms/navigation/Header';
 import Tabs from '@/components/organisms/controls/Tabs';
 import LargeButton from '@/components/atoms/button/LargeButton';
 import TicketItem from '@/components/molecules/item/TicketItem';
 import EmptyData from '@/components/molecules/text/EmptyData';
+import { getCidUrl } from '@/utils/getUrl';
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState(Object.keys(CONCERT_TYPES)[0]);
   const router = useRouter();
 
-  const { data: tickets } = useTicketList();
+  const { mutate: getMyConcerts, data: concertData } = useGetMyConcerts();
 
-  const filteredTickets = useMemo(() => {
+  useEffect(() => {
+    getMyConcerts();
+  }, []);
+
+  const concerts = Array.isArray(concertData)
+    ? concertData
+    : concertData?.result || [];
+
+  const filteredConcerts = useMemo(() => {
     return (
-      tickets?.filter((ticket) => {
-        if (activeTab === 'reserved') {
+      concerts.filter((concert) => {
+        if (activeTab === 'isRegistered') {
           return (
-            ticket.status === TICKET_STATUS.reserved ||
-            ticket.status === TICKET_STATUS.used
+            concert.status === 'PREPARING' ||
+            concert.status === 'ACTIVE' ||
+            concert.status === 'TRANSFERED'
           );
         }
-        return ticket.status === TICKET_STATUS.cancelled;
+        return concert.status === 'CANCELED';
       }) || []
     );
-  }, [tickets, activeTab]);
+  }, [concerts, activeTab]);
 
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
@@ -52,27 +60,25 @@ const Page = () => {
         labelMap={CONCERT_TYPES}
       />
       <div className="flex-grow h-0 overflow-y-auto">
-        {filteredTickets.length ? (
-          filteredTickets.map((ticket) => (
+        {filteredConcerts.length ? (
+          filteredConcerts.map((concert) => (
             <Link
-              href={`/management/concerts/${ticket.ticketUuid}`}
-              key={ticket.ticketUuid}
+              href={`/management/concerts/${concert.concertUuid}`}
+              key={concert.concertUuid}
             >
               <TicketItem
-                src={ticket.posterCid}
-                concertTitle={ticket.concertTitle}
-                stageName={ticket.stageName}
-                createdAt={ticket.createdAt}
-                {...(ticket.refundAt
-                  ? { refundAt: ticket.refundAt }
-                  : { startAt: ticket.startAt })}
+                src={getCidUrl(concert.posterCid)}
+                concertTitle={concert.title}
+                stageName={concert.stageName}
+                createdAt={concert.createdAt}
+                startAt={concert.startAt}
               />
             </Link>
           ))
         ) : (
           <EmptyData
             text={
-              activeTab === 'reserved'
+              activeTab === 'isRegistered'
                 ? '등록된 공연이 없어요'
                 : '취소된 공연이 없어요'
             }
