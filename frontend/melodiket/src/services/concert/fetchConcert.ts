@@ -9,14 +9,12 @@ import {
 } from '@/types/concert';
 import customFetch from '../customFetch';
 import {
-  dehydrate,
   useInfiniteQuery,
   useMutation,
   useQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import concertKey from './concertKey';
-import getQueryClient from '@/utils/getQueryClient';
 import type {
   TicketBookRequest,
   TicketBookResponse,
@@ -34,7 +32,7 @@ export const fetchConcertList = async ({
   title,
 }: FetchConcertRequest) => {
   const response = await customFetch<FetchConcertResponse>(
-    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}`
+    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}&status=ACTIVE`
   );
   return response;
 };

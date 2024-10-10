@@ -21,7 +21,7 @@ export interface MusicianListItem {
   nickname: string;
   description: string;
   registeredAt: string;
-  imageUrl: string;
+  imageUrl?: string;
   likeCount: number;
   isLike: boolean;
 }
