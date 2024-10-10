@@ -27,8 +27,10 @@ const SuccessSection = ({ bookResult }: SuccessSectionProps) => {
       <div className="flex-grow pt-[10vh] px-7 overflow-y-auto">
         <TextBanner
           hasLogo
-          title="결제 완료!"
-          description="멜로디켓에서 행복한 공연 생활을 보내보세요."
+          title="결제 요청 완료!"
+          description={
+            '결제 정보를 블록체인에 기록중이에요\n블록체인 기록이 완료되면 알림으로 결과를 알려드려요'
+          }
         />
         <div className="mt-14 flex justify-between items-center gap-4">
           <div className="relative w-28 h-36 rounded-md overflow-none">
