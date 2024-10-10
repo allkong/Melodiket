@@ -48,7 +48,7 @@ const ReservedTicketListSection = () => {
               handleTicketClick(
                 ticket.ticketUuid,
                 ticket.posterCid,
-                ticket.myFavoriteMusician.musicianSignatureImageUrl
+                ticket.myFavoriteMusician?.musicianSignatureImageUrl
               )
             }
             className="cursor-pointer"

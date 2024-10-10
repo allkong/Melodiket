@@ -28,7 +28,9 @@ export const formatDateToYMDHM = (dateString: string): string => {
   if (!dateString) {
     return 'no data';
   }
-  return dayjs(dateString).format('YYYY.MM.DD HH:mm');
+  const dayjsDate = dayjs(dateString);
+  const after9hours = dayjsDate.add(9, 'hour');
+  return dayjs(after9hours).format('YYYY.MM.DD HH:mm');
 };
 
 export const formatDateWithDayAndTime = (dateString: string): string => {
