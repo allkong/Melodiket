@@ -1,30 +1,19 @@
 import { TransactionResponse } from '@/types/transaction';
 import customFetch from '../customFetch';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-const fetchTransaction = async (options?: {
-  isFirstPage?: boolean;
-  lastId?: string;
-}) => {
-  const { isFirstPage = true, lastId } = options ?? {};
-
-  const result = await customFetch<TransactionResponse>(
-    `/logs?pageSize=10&orderKey=timestamp&orderDirection=asc&isFirstPage=${isFirstPage}${lastId ? `&lastId=${lastId}` : ''}`
+const fetchTransaction = async (pageSize: number = 100) => {
+  const result = await customFetch<TransactionResponse[]>(
+    `/logs?pageSize=${pageSize}`
   );
   return result;
 };
 
-export const useFetchTransaction = () => {
-  const result = useInfiniteQuery({
+export const useFetchTransaction = (pageSize?: number) => {
+  const result = useQuery({
     queryKey: ['transaction'],
-    queryFn: ({ pageParam }) => fetchTransaction(pageParam),
-    initialPageParam: { isFirstPage: true },
-    getNextPageParam: (lastPage) => {
-      return {
-        isFirstPage: false,
-        lastId: lastPage.pageInfo.lastId,
-      };
-    },
+    queryFn: () => fetchTransaction(pageSize),
+    gcTime: 0,
   });
   return result;
 };
