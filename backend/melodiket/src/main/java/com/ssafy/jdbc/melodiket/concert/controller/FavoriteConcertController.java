@@ -1,6 +1,6 @@
 package com.ssafy.jdbc.melodiket.concert.controller;
 
-import com.ssafy.jdbc.melodiket.concert.controller.dto.FavoriteConcertResp;
+import com.ssafy.jdbc.melodiket.concert.controller.dto.ConcertResp;
 import com.ssafy.jdbc.melodiket.concert.service.FavoriteConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +19,20 @@ public class FavoriteConcertController {
     private final FavoriteConcertService favoriteConcertService;
 
     @PostMapping("/{id}/favorite")
-    public ResponseEntity<FavoriteConcertResp> toggleFavorite(
+    public ResponseEntity<ConcertResp> toggleFavorite(
             @PathVariable UUID id,
             Authentication authentication
     ) {
         String loginId = authentication.getName();
-        FavoriteConcertResp response = favoriteConcertService.toggleFavoriteConcert(id, loginId);
+        ConcertResp response = favoriteConcertService.toggleFavoriteConcert(id, loginId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/favorite/me")
-    public ResponseEntity<List<FavoriteConcertResp>> getLikedConcerts(Authentication authentication) {
+    public ResponseEntity<List<ConcertResp>> getLikedConcerts(Authentication authentication) {
         UUID audienceUuid = ((AppUserEntity) authentication.getPrincipal()).getUuid();
 
-        List<FavoriteConcertResp> likedConcerts = favoriteConcertService.getLikedConcerts(audienceUuid);
+        List<ConcertResp> likedConcerts = favoriteConcertService.getLikedConcerts(audienceUuid);
         return ResponseEntity.ok(likedConcerts);
     }
 }

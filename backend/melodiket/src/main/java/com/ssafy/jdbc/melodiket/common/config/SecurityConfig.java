@@ -42,11 +42,12 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/auth/[^/]+/field-duplication-check$"),
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
-            Pattern.compile("^/api/v1/users/musicians$"),
+//            Pattern.compile("^/api/v1/users/musicians$"),
             Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
-            Pattern.compile("^/api/v1/concerts$"),
+//            Pattern.compile("^/api/v1/concerts$"),
             Pattern.compile("^/api/v1/logs$"),
+            Pattern.compile("^/api/v1/concerts/seats/[^/]+$"),
             Pattern.compile("^/api/v1/webpush/publickey$"),
             Pattern.compile("^/api/v1/photo-cards/(?!me$).*"),
             Pattern.compile("^/$"),
@@ -77,6 +78,7 @@ public class SecurityConfig {
                         .hasAnyRole(Role.AUDIENCE.name(), Role.MUSICIAN.name(), Role.STAGE_MANAGER.name())
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/users/musicians").permitAll()
+                        .requestMatchers("/api/v1/concerts").permitAll()
                         .requestMatchers("/api/v1/users/me").authenticated()
                         .requestMatchers(request -> {
                             String path = request.getServletPath();
@@ -114,6 +116,7 @@ public class SecurityConfig {
     }
 
     public boolean isAnonymousAllowedPath(String path) {
+        System.out.println(path);
         for (Pattern pattern : anonymousAllowedPatterns) {
             Matcher matcher = pattern.matcher(path);
             if (matcher.matches()) {

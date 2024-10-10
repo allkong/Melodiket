@@ -4,5 +4,6 @@ import java.util.Optional;
 
 public record UpdateUserReq(
         Optional<String> nickname,
-        Optional<String> description
+        Optional<String> description,
+        String imageUrl
 ) {}
