@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
 import { MSWComponent } from './_components/MSWComponent';
@@ -13,6 +13,10 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     apple: '/pwa/icon-192x192.png',
   },
+};
+
+export const viewport: Viewport = {
+  userScalable: false,
 };
 
 export default function RootLayout({
