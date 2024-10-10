@@ -35,7 +35,7 @@ const MusicianListSection = () => {
               <MusicianItem
                 key={musician.uuid}
                 uuid={musician.uuid}
-                src={getS3Url(musician.imageUrl)}
+                src={getS3Url(musician?.imageUrl ?? '')}
                 musicianName={musician.nickname}
                 initialFavoriteCount={musician.likeCount}
                 initialFavorite={musician.isLike}
