@@ -1,6 +1,7 @@
 import { ApprovalRequest } from '@/types/approval';
 import customFetch from '../customFetch';
 import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 const approvalConcert = async (
   id: string,
@@ -28,7 +29,7 @@ export const useCancelConcert = () => {
   return useMutation<void, Error, string>({
     mutationFn: (id: string) => cancelConcert(id),
     onError: () => {
-      alert('공연 취소 실패!');
+      toast.error('공연 취소 실패!');
     },
   });
 };
@@ -37,7 +38,7 @@ export const useDenyConcert = () => {
   return useMutation<void, Error, string>({
     mutationFn: (id: string) => denyConcert(id),
     onError: () => {
-      alert('공연 거부 실패!');
+      toast.error('공연 거부 실패!');
     },
   });
 };
@@ -51,10 +52,10 @@ export const useApprovalConcert = () => {
     mutationFn: ({ id, approvalRequest }) =>
       approvalConcert(id, approvalRequest),
     onSuccess: () => {
-      alert('공연 승인 성공!');
+      toast('공연 승인 성공!');
     },
     onError: () => {
-      alert('공연 승인 실패!');
+      toast.error('공연 승인 실패!');
     },
   });
 };
