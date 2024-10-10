@@ -33,7 +33,7 @@ const FavoriteMusicianSection = () => {
 
   const show = getComponent(user, data);
 
-  return <>{show}</>;
+  return <div className="flex gap-2">{show}</div>;
 };
 
 export default FavoriteMusicianSection;
