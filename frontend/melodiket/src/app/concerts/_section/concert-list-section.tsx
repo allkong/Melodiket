@@ -24,6 +24,10 @@ const ConcertListSection = () => {
     }
   }, [isOnScreen, hasNextPage, fetchNextPage]);
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   return (
     <>
       <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">
@@ -32,9 +36,11 @@ const ConcertListSection = () => {
             ?.flatMap((page) => page.result)
             .map((concert) => (
               <ConcertCard
-                key={`${concert.concertUuid}-${concert.posterCid}`}
+                key={concert.concertUuid}
                 href={`/concerts/${concert.concertUuid}`}
+                isFavorite={concert?.isLike}
                 {...concert}
+                onClickFavorite={refetch}
               />
             ))}
         {isFetching && <ConcertCardSkeleton count={6} />}

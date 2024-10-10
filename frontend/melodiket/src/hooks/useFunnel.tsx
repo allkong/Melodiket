@@ -55,12 +55,15 @@ interface UseFunnelReturn<T> {
  * @param initialStep 초기 페이지
  * @returns 현재 query string의 step에 해당하는 컴포넌트를 보여주는 Funnel 컴포넌트와 query string을 교체하는 setStep 함수
  */
-const useFunnel = <T extends string>(
-  addToHistory: boolean = false,
-  preventForwardNavigate: boolean = false,
-  initialStep?: T
-): UseFunnelReturn<T> => {
-  'use client';
+const useFunnel = <T extends string>({
+  addToHistory = false,
+  preventForwardNavigate = false,
+  initialStep,
+}: {
+  addToHistory?: boolean;
+  preventForwardNavigate?: boolean;
+  initialStep?: T;
+}): UseFunnelReturn<T> => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
