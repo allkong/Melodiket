@@ -17,11 +17,14 @@ interface MusicianSearchResultProps {
   currentTab: keyof typeof FAVORITE_TYPES;
 }
 
-const MusicianSearchResult = ({ currentTab }: MusicianSearchResultProps) => {
+const MusicianSearchResult = ({
+  currentTab,
+  query,
+}: MusicianSearchResultProps) => {
   const endRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useIsOnScreen(endRef);
   const { data, error, isFetching, hasNextPage, refetch, fetchNextPage } =
-    useMusiciansQuery();
+    useMusiciansQuery(4, 'uuid', 'ASC', query);
 
   const { pages } = data ?? {};
 
