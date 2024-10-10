@@ -11,6 +11,7 @@ import FavoriteButton from '@/components/atoms/button/FavoriteButton';
 import toast from 'react-hot-toast';
 import { useToggleFavoriteConcert } from '@/services/favorite/fetchFavorite';
 import { memo } from 'react';
+import useAuthStore from '@/store/authStore';
 
 interface ConcertCardProps
   extends Pick<
@@ -32,9 +33,15 @@ const ConcertCard = ({
   isFavorite,
   onClickFavorite,
 }: ConcertCardProps) => {
+  const { user } = useAuthStore();
   const mutate = useToggleFavoriteConcert();
 
   const handleToggleFavorite = async (concertUuid: string) => {
+    if (!user) {
+      toast('로그인이 필요한 서비스입니다', { icon: `😥` });
+      return;
+    }
+
     const { isFavorite } = await mutate.mutateAsync({ concertUuid });
 
     if (isFavorite) {

@@ -10,6 +10,7 @@ import { getCidUrl } from '@/utils/getUrl';
 
 import DarkedImage from '@/components/atoms/image/DarkedImage';
 import FavoriteButton from '@/components/atoms/button/FavoriteButton';
+import useAuthStore from '@/store/authStore';
 
 interface ConcertPosterProps {
   uuid: string;
@@ -31,12 +32,18 @@ const getFavorites = (
 const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
   const { data: concert } = useFetchConcertDetail(uuid);
   const mutate = useToggleFavoriteConcert();
+  const { user } = useAuthStore();
 
   const [isFavorite, setIsFavorite] = useState<boolean>(
     concert?.isLike ?? false
   );
 
   const handleToggleFavorite = async () => {
+    if (!user) {
+      toast('로그인이 필요한 서비스입니다', { icon: `😥` });
+      return;
+    }
+
     const response = await mutate.mutateAsync({ concertUuid: uuid });
 
     setIsFavorite(response.isFavorite);
