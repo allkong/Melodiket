@@ -30,7 +30,7 @@ const Page = () => {
             <ConcertApproval
               concertName={concert.title}
               date={new Date(concert.ticketingAt).toLocaleDateString('ko-KR')}
-              price={`${concert.ticketPrice.toLocaleString('ko-KR')}원`}
+              price={`${concert.ticketPrice.toLocaleString('ko-KR')} MLDY`}
             />
           </div>
         ))}
