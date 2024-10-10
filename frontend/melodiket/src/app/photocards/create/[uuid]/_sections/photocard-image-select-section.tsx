@@ -3,6 +3,7 @@ import usePosterStore from '@/store/posterStore';
 import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
 import MediumButton from '@/components/atoms/button/MediumButton';
 import { ImageLine, Ticket } from '@/public/icons';
+import { getCidUrl } from '@/utils/getUrl';
 
 interface PhotocardImageSelectSection {
   onNext: (value: string) => void;
@@ -15,7 +16,7 @@ const PhotocardImageSelectSection = ({
 
   const handlePosterSelect = () => {
     if (posterCid) {
-      onNext(posterCid);
+      onNext(getCidUrl(posterCid));
     }
   };
 
