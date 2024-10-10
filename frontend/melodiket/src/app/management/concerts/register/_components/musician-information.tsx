@@ -65,6 +65,13 @@ const MusicianInformation = ({
       )
     : allMusicians;
 
+  const selectedMusicians = filteredMusicians.filter((musician) =>
+    musicianList.includes(musician.uuid)
+  );
+  const unselectedMusicians = filteredMusicians.filter(
+    (musician) => !musicianList.includes(musician.uuid)
+  );
+
   return (
     <div className="flex flex-col h-full p-4">
       <div className="flex-grow h-0 overflow-y-auto">
@@ -80,11 +87,24 @@ const MusicianInformation = ({
           />
         </div>
         <div className="overflow-y-auto">
-          {filteredMusicians.map((musician) => (
+          {selectedMusicians.length > 0 && (
+            <>
+              {selectedMusicians.map((musician) => (
+                <MusicianSelectButton
+                  key={musician.uuid}
+                  label={musician.nickname}
+                  isSelected={true}
+                  onClick={() => toggleMusician(musician.uuid)}
+                />
+              ))}
+              <LineDivider />
+            </>
+          )}
+          {unselectedMusicians.map((musician) => (
             <MusicianSelectButton
               key={musician.uuid}
               label={musician.nickname}
-              isSelected={musicianList.includes(musician.uuid)}
+              isSelected={false}
               onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
