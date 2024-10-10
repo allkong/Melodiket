@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import useTicketStore from '@/store/ticketStore';
 
@@ -13,7 +13,6 @@ import LoadingSpinner from '@/components/atoms/feedback/LoadingSpinner';
 
 const Page = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const { ticketDetail } = useTicketStore();
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -22,7 +21,7 @@ const Page = () => {
   }, []);
 
   const handleQRButtonClick = () => {
-    router.push(`${pathname}/qr`);
+    router.push(`/mytickets/${ticketDetail?.ticketUuid}/mobile-ticket/qr`);
   };
 
   return (

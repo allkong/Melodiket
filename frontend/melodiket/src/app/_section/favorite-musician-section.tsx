@@ -1,7 +1,8 @@
 'use client';
 
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
-import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavoriteMusiciansList';
+import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavorite';
+import { getCidUrl } from '@/utils/getUrl';
 
 const FavoriteMusicianSection = () => {
   const { data } = useFetchFavoriteMusiciansList();
@@ -15,10 +16,10 @@ const FavoriteMusicianSection = () => {
           <MusicianProfileCard
             key={musician.loginId}
             musicianName={musician.nickname}
-            src={musician.imageUrl}
+            src={getCidUrl(musician.imageUrl)}
           />
         ))}
-      {pageInfo?.responsedSize === 0 && <div>등록 된 뮤지션이 없어요.</div>}
+      {pageInfo?.responsedSize === 0 && <div>등록된 뮤지션이 없어요.</div>}
     </>
   );
 };

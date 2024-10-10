@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
 import type { TicketBookRequest, TicketBookResponse } from '@/types/ticket';
@@ -15,32 +15,33 @@ import useFunnel from '@/hooks/useFunnel';
 
 const Page = () => {
   const params = useParams<{ uuid: string }>();
-  const { data } = useFetchConcertDetail(params.uuid);
-  const { result } = data ?? {};
+  const { data: concert } = useFetchConcertDetail(params.uuid);
 
   const [ticketBookInformation, setTicketBookInformation] =
     useState<TicketBookRequest>({
-      concertId: result?.concertUuid ?? '',
+      concertId: '',
       seatRow: -1,
       seatCol: -1,
       favoriteMusician: '',
     });
 
-  const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>(
-    true,
-    true,
-    'seat'
-  );
+  const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>();
 
   const mutate = useBookTicket();
   const [bookResult, setBookResult] = useState<TicketBookResponse | null>(null);
+
+  useEffect(() => {
+    if (concert?.isStanding) {
+      setStep('confirm');
+    }
+  }, [concert, setStep]);
 
   return (
     <div className="w-full h-full bg-gray-100">
       <Funnel>
         <Funnel.Step step="seat">
           <SeatSection
-            price={data?.result.ticketPrice ?? 0}
+            price={concert?.ticketPrice ?? 0}
             onNext={(data) => {
               setTicketBookInformation((prev) => ({ ...prev, ...data }));
               setStep('confirm');
@@ -55,6 +56,7 @@ const Page = () => {
               const data: TicketBookRequest = {
                 ...ticketBookInformation,
                 favoriteMusician,
+                concertId: concert?.concertUuid ?? '',
               };
 
               const result = await mutate.mutateAsync({

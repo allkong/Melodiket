@@ -4,11 +4,11 @@ import useAutoIndex from '@/hooks/useAutoIndex';
 import { RoundQueueMusic } from '@/public/icons';
 
 interface TicketInfoCarouselProps {
-  datas: string[];
+  data: string[];
 }
 
-const TicketInfoCarousel = ({ datas }: TicketInfoCarouselProps) => {
-  const [autoIndex] = useAutoIndex(0, 0, datas.length - 1, 4000);
+const TicketInfoCarousel = ({ data }: TicketInfoCarouselProps) => {
+  const [autoIndex] = useAutoIndex(0, 0, data.length - 1, 4000);
 
   return (
     <div className="flex gap-2 items-center w-full h-[30px] rounded-lg px-[10px] py-1 text-white bg-gradient-to-r from-secondary to-primary">
@@ -22,9 +22,9 @@ const TicketInfoCarousel = ({ datas }: TicketInfoCarouselProps) => {
             transitionTimingFunction: 'linear',
           }}
         >
-          {datas.map((data, index) => (
+          {data.map((text, index) => (
             <p key={index} className="text-current text-sm truncate">
-              {data}
+              {text}
             </p>
           ))}
         </div>

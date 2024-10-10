@@ -2,7 +2,7 @@
 
 import { useParams } from 'next/navigation';
 
-import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
+import { useFetchRemainSeat } from '@/services/concert/fetchConcert';
 import type { TicketBookRequest } from '@/types/ticket';
 import SeatRadio from '@/components/atoms/radio/SeatRadio';
 
@@ -13,8 +13,7 @@ interface SeatSelectorProps {
 
 const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
   const params = useParams<{ uuid: string }>();
-  const { data } = useFetchConcertDetail(params.uuid);
-  const { result } = data ?? {};
+  const { data: remainSeat } = useFetchRemainSeat(params.uuid);
 
   const handleChange = (row: number, col: number) => {
     onChange({
@@ -28,8 +27,8 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
     <div className="flex flex-col items-center justify-center w-full h-full">
       <p className="mb-2 text-2xl font-medium text-gray-400">STAGE</p>
       <div className="flex flex-col gap-1">
-        {result &&
-          result?.isAvailableSeat.map((line, row) => (
+        {remainSeat &&
+          remainSeat.map((line, row) => (
             <div key={row} className="flex flex-row gap-1">
               {line?.map((available, col) => (
                 <SeatRadio
@@ -40,6 +39,7 @@ const SeatSelector = ({ seatInfo, onChange }: SeatSelectorProps) => {
                   row={row}
                   col={col}
                   disabled={!available}
+                  hidden={row === 0 || col === 0}
                 />
               ))}
             </div>

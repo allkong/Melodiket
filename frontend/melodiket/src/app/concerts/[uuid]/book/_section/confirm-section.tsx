@@ -21,8 +21,7 @@ interface ConfirmSectionProps {
 
 const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
   const params = useParams<{ uuid: string }>();
-  const { data } = useFetchConcertDetail(params.uuid);
-  const { result } = data ?? {};
+  const { data: concert } = useFetchConcertDetail(params.uuid);
   const { user } = useAuthStore();
 
   const [selectedMusician, setSelectedMusician] = useState<string | null>(null);
@@ -37,7 +36,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
       <div className="flex-grow h-0 w-full overflow-y-auto">
         <Accordion label="응원하는 뮤지션" isOpened>
           <div className="space-y-3">
-            {result?.musicians.map((musician) => (
+            {concert?.musicians.map((musician) => (
               <LabelCheckbox
                 key={musician.musicianUuid}
                 label={musician.name}
@@ -52,9 +51,9 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
         </div>
         <Accordion label="공연 정보">
           <div className="space-y-3">
-            <LabelValueText label="공연 제목" value={result?.title} />
-            <LabelValueText label="공연 장소" value={result?.stageName} />
-            <LabelValueText label="공연일" value={result?.startAt} />
+            <LabelValueText label="공연 제목" value={concert?.title} />
+            <LabelValueText label="공연 장소" value={concert?.stageName} />
+            <LabelValueText label="공연일" value={concert?.startAt} />
           </div>
         </Accordion>
         <div className="w-full px-4">
@@ -62,19 +61,19 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
         </div>
         <Accordion label="예매 정보">
           <div className="space-y-3">
-            {/* <LabelValueText
-              label="좌석 형태"
-              value={result?.isSeat ? '좌식' : '스탠딩'}
-            /> */}
-            {/* {result?.isSeat && ( */}
             <LabelValueText
-              label="좌석 위치"
-              value={`${seatRow + 1}행 ${seatCol + 1}열`}
+              label="좌석 형태"
+              value={concert?.isStanding ? '스탠딩' : '좌석'}
             />
-            {/* )} */}
+            {!concert?.isStanding && (
+              <LabelValueText
+                label="좌석 위치"
+                value={`${seatRow}행 ${seatCol}열`}
+              />
+            )}
             <LabelValueText
               label="가격"
-              value={formatPrice(result?.ticketPrice ?? 0)}
+              value={formatPrice(concert?.ticketPrice ?? 0)}
             />
           </div>
         </Accordion>
@@ -90,7 +89,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
             <LabelValueText
               label="응원하는 뮤지션"
               value={
-                result?.musicians.find(
+                concert?.musicians.find(
                   (musician) => musician.musicianUuid === selectedMusician
                 )?.name ?? '선택되지 않았습니다'
               }
@@ -109,7 +108,7 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
       </div>
       <div className="w-full px-6 py-3 bg-white">
         <LargeButton
-          label={`${formatPrice(result?.ticketPrice ?? 0)} 결제`}
+          label={`${formatPrice(concert?.ticketPrice ?? 0)} 결제`}
           onClick={() => onNext(selectedMusician!)}
           disabled={!isButtonValid || selectedMusician === null}
         />

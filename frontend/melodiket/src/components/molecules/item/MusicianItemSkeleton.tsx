@@ -4,16 +4,16 @@ interface MusicianItemSkeletonProps {
   count?: number;
 }
 
-const MusicianItemSkeleton = ({ count = 4 }: MusicianItemSkeletonProps) => {
+const MusicianItemSkeleton = ({ count = 1 }: MusicianItemSkeletonProps) => {
   return (
     <>
-      {Array.from({ length: count }, (_, idx) => idx).map((key) => (
-        <div className="flex w-full px-6 py-5 gap-4" key={key}>
-          <Skeleton width={52} height={52} rounded />
-          <div className="flex flex-col justify-center gap-2">
-            <Skeleton width={50} height={15} />
-            <Skeleton width={70} height={12} />
-          </div>
+      {Array.from({ length: count }, (_, idx) => idx).map((idx) => (
+        <div
+          key={idx}
+          className="flex items-center px-6 py-5 space-x-4 bg-white border-b border-purple-50"
+        >
+          <Skeleton width={56} height={56} rounded />
+          <Skeleton width={80} height={18} />
         </div>
       ))}
     </>

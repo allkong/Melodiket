@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import { CONCERT_TYPES } from '@/constants/concertTypes';
-import { useTicketList } from '@/services/ticket/useTicketList';
+import { useTicketList } from '@/services/ticket/fetchTicket';
 import { TICKET_STATUS } from '@/constants/tickets';
 
 import Header from '@/components/organisms/navigation/Header';
