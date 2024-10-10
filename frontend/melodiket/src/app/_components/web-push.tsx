@@ -63,13 +63,22 @@ async function handleServiceWorker(setIsSubscribed: (value: boolean) => void) {
   // 3. 서비스 워커 활성화 대기
   const readyRegistration = await navigator.serviceWorker.ready;
 
-  // 4. 푸시 구독 생성
+  // 4. 기존 구독 확인
+  const existingSubscription =
+    await readyRegistration.pushManager.getSubscription();
+
+  // 5. 기존 구독이 있으면 해제
+  if (existingSubscription) {
+    await existingSubscription.unsubscribe();
+  }
+
+  // 6. 새로운 푸시 구독 생성
   const subscription = await readyRegistration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicKey),
   });
 
-  // 5. 서버로 구독 정보 전송
+  // 7. 서버로 구독 정보 전송
   await customFetch('/webpush/subscribe', {
     method: 'post',
     body: JSON.parse(JSON.stringify(subscription)),

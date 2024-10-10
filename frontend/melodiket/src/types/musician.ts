@@ -4,6 +4,7 @@ export interface PageParam {
   lastUuid?: string;
   orderKey?: string;
   orderDirection?: 'ASC' | 'DESC';
+  query?: string;
 }
 
 export interface Musician {

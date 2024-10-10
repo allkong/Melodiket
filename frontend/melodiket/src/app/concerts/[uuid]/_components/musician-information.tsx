@@ -1,4 +1,6 @@
+import { getS3Url } from '@/utils/getUrl';
 import type { Concert } from '@/types/concert';
+
 import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatusProfile';
 import { getS3Url } from '@/utils/getUrl';
 
