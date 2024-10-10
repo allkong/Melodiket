@@ -13,6 +13,7 @@ import { PHOTOCARD_EDIT_TYPES } from '@/constants/photocard';
 import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
 import Tabs from '@/components/organisms/controls/Tabs';
 import MoveableSticker from '../_components/moveable-sticker';
+import MoveableText from '../_components/moveable-text';
 
 interface PhotocardEditSelectionProps {
   uuid: string;
@@ -26,7 +27,8 @@ const PhotocardEditSelection = ({
   onNext,
 }: PhotocardEditSelectionProps) => {
   const router = useRouter();
-  const { stickers, setStickers, clearStickers } = usePhotocardStore();
+  const { stickers, setStickers, clearStickers, texts, setTexts, clearTexts } =
+    usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState<string | null>(null);
 
@@ -128,6 +130,16 @@ const PhotocardEditSelection = ({
               sticker={sticker}
               isSelected={selectedId === sticker.id}
               onSelect={() => setSelectedId(sticker.id)}
+              containerRef={photocardRef}
+            />
+          ))}
+
+          {texts?.map((text) => (
+            <MoveableText
+              key={text.id}
+              text={text}
+              isSelected={selectedId === text.id}
+              onSelect={() => setSelectedId(text.id)}
               containerRef={photocardRef}
             />
           ))}
