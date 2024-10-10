@@ -9,6 +9,7 @@ import IsErrorButton from '@/components/atoms/button/IsErrorButton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
+import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 
 interface MusicianConcertSectionProps {
   uuid: string;
@@ -45,6 +46,7 @@ const MusicianConcertSection = ({ uuid }: MusicianConcertSectionProps) => {
                 href={`/concerts/${concert.concertUuid}`}
                 isFavorite={concert?.isLike}
                 {...concert}
+                ticketingAt={formatDateToYMDHM(concert.ticketingAt)}
                 onClickFavorite={refetch}
               />
             ))}

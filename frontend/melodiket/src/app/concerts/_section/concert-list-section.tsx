@@ -9,6 +9,7 @@ import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
+import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 
 const ConcertListSection = () => {
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
@@ -40,6 +41,7 @@ const ConcertListSection = () => {
                 href={`/concerts/${concert.concertUuid}`}
                 isFavorite={concert?.isLike}
                 {...concert}
+                ticketingAt={formatDateToYMDHM(concert.ticketingAt)}
                 onClickFavorite={refetch}
               />
             ))}
