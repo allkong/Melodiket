@@ -2,44 +2,32 @@ import { CarouselConcert } from '@/types/concert';
 
 const CAROUSEL_DATAS: CarouselConcert[] = [
   {
-    description: '누구일까?\n비밀의 콘서트',
-    stageName: '고척스카이돔',
-    title: '콘서트 제목',
-    ticketingAt: '2024.09.03',
-    posterCid:
-      'https://an2-img.amz.wtchn.net/image/v2/zhP6BveaBByYE74o9uUFYg.jpg?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qZ3dOVEUxTmprM01EZzRNVFEyTVRBM0luMC5rRnByMkxWT2hNajZjclBXY1YwOXhWNXpVNGdMbW9pSnMwSm5XQWZVNHpR',
+    title: 'SE SO NEON 2024 LIVE IN SEOUL',
+    ticketingAt: '2024.10.25(금) 13:00',
+    stageName: 'Bender',
+    description: '새소년의 파워풀한 라이브!',
+    posterCid: 'https://d2zj12sxzh0609.cloudfront.net/resource/sesonyeon.webp',
   },
   {
-    description: '눈이 반짝',
-    stageName: '양재',
-    title: '콘서트 제목',
-    ticketingAt: '2024.09.03',
-    posterCid:
-      'https://www.harpersbazaar.co.kr/resources_old/online/org_online_image/3574a333-f251-4e64-8141-8861b11a1e17.jpg',
+    title: 'AAA TOUR BY HYUKOH & SUNSET ROLLERCOASTER',
+    ticketingAt: '2024.10.14(월) 13:00',
+    stageName: 'Hukez',
+    description: 'SUNSET ROLLERCOASTER와 HYUKOH의 콜라보',
+    posterCid: 'https://d2zj12sxzh0609.cloudfront.net/resource/aaatour.webp',
   },
   {
-    description: '눈 찌릿',
-    stageName: '싸피 서울캠퍼스',
-    title: '콘서트 제목',
-    ticketingAt: '2024.09.03',
-    posterCid:
-      'https://i.namu.wiki/i/3KxPCWTEPGKYT-jBZ8AcQY2AaTOEXlgBkxr-oSAzdfXrsassqyff6qYjHZqNODbB5p8PWKk_kmjfNC62z8OTww.webp',
+    title: '무신사 개러지',
+    ticketingAt: '',
+    stageName: '서울특별시 마포구 잔다리로 32',
+    description: '자체 기획 이벤트가 진행되는 홍대 최대 규모의 공연장',
+    posterCid: 'https://d2zj12sxzh0609.cloudfront.net/resource/musinsa.jpeg',
   },
   {
-    description: '내가 최고',
-    stageName: '싸피 식당',
-    title: '콘서트 제목',
-    ticketingAt: '2024.09.03',
-    posterCid:
-      'https://blog.kakaocdn.net/dn/bBn3p7/btsEWg4ENQw/nx4lRKblsQ2gATzK8temw0/img.jpg',
-  },
-  {
-    description: '하트',
-    stageName: '텐퍼센트 커피',
-    title: '콘서트 제목',
-    ticketingAt: '2024.09.03',
-    posterCid:
-      'https://thumbnail.laftel.net/items/home/acc5935b-2657-423c-bdbc-39a461b6fb4e.jpg?webp=0&w=760&c=0%2C0%2C640%2C360',
+    title: '유다빈밴드',
+    ticketingAt: '2024.10.20(일) COMMING SOON',
+    stageName: '',
+    description: '가장 가까운 마음의 목소리를 전하는 밴드',
+    posterCid: 'https://d2zj12sxzh0609.cloudfront.net/resource/yudabin.webp',
   },
 ];
 

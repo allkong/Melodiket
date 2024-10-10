@@ -2,6 +2,7 @@
 
 import ConcertRankingCard from '@/components/molecules/card/ConcertRankingCard';
 import { useFetchConcertList } from '@/services/concert/fetchConcert';
+import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { getCidUrl } from '@/utils/getUrl';
 
 const ConcertRankingSection = () => {
@@ -20,7 +21,7 @@ const ConcertRankingSection = () => {
               concertUuid={concert.concertUuid}
               stageName={concert.stageName}
               posterCid={getCidUrl(concert.posterCid)}
-              ticketingAt={concert.ticketingAt}
+              ticketingAt={formatDateToYMDHM(concert.ticketingAt)}
               title={concert.title}
               ranking={idx + 1}
               href={`/concerts/${concert.concertUuid}`}
