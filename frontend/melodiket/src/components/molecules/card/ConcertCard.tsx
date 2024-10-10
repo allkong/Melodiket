@@ -53,7 +53,7 @@ const ConcertCard = ({
       });
     } else {
       toast('찜 제거', {
-        icon: '🩶',
+        icon: '🤍',
       });
     }
     onClickFavorite?.();
