@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useGetConcertInfo } from '@/services/concert/fetchConcert';
+import { useCancelConcert } from '@/services/approval/fetchApproval';
 import Header from '@/components/organisms/navigation/Header';
 import PosterFrame from '@/components/atoms/image-frame/PosterFrame';
 import DetailSection from '@/components/molecules/section/DetailSection';
@@ -15,10 +16,12 @@ import { formatPrice } from '@/utils/concertFormatter';
 import { getCidUrl } from '@/utils/getUrl';
 
 const ConcertDetailPage = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const concertUuid = pathname.split('/').pop();
 
   const { mutate: getConcertInfo, data: concert } = useGetConcertInfo();
+  const { mutate: cancelConcert } = useCancelConcert();
 
   useEffect(() => {
     if (concertUuid) {
@@ -44,9 +47,24 @@ const ConcertDetailPage = () => {
     { label: '상태', value: concert?.status || '정보 없음' },
   ].filter(Boolean) as { label: string; value: string }[];
 
-  const showCancelButton = !concert?.musicians?.some(
-    (musician) => musician.approvalStatus === 'DENIED'
-  );
+  const showCancelButton =
+    !concert?.musicians?.some(
+      (musician) => musician.approvalStatus === 'DENIED'
+    ) && concert?.status !== 'CANCELED';
+
+  const handleCancelConcert = () => {
+    if (concertUuid) {
+      cancelConcert(concertUuid, {
+        onSuccess: () => {
+          alert('공연이 성공적으로 취소되었습니다.');
+          router.push('/management/concerts');
+        },
+        onError: () => {
+          alert('공연 취소에 실패했습니다.');
+        },
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -92,7 +110,7 @@ const ConcertDetailPage = () => {
       </div>
 
       {showCancelButton && (
-        <FixedButton label="공연 취소" onClick={() => alert('공연 취소!')} />
+        <FixedButton label="공연 취소" onClick={handleCancelConcert} />
       )}
     </div>
   );

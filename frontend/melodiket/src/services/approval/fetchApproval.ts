@@ -18,6 +18,21 @@ const denyConcert = async (id: string): Promise<void> => {
   });
 };
 
+const cancelConcert = async (id: string): Promise<void> => {
+  await customFetch(`/concerts/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+export const useCancelConcert = () => {
+  return useMutation<void, Error, string>({
+    mutationFn: (id: string) => cancelConcert(id),
+    onError: () => {
+      alert('공연 취소 실패!');
+    },
+  });
+};
+
 export const useDenyConcert = () => {
   return useMutation<void, Error, string>({
     mutationFn: (id: string) => denyConcert(id),
