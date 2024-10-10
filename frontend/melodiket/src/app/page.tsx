@@ -1,5 +1,3 @@
-'use client';
-
 import { Suspense } from 'react';
 
 import Header from '@/components/organisms/navigation/Header';
@@ -9,10 +7,8 @@ import CarouselSection from './_section/carousel-section';
 import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 import TicketSection from './_section/ticket-section';
 import WebPush from './_components/web-push';
-import useSpinner from '@/hooks/useSpinner';
 
 export default function Home() {
-  useSpinner(true);
   return (
     <>
       <WebPush />
