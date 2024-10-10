@@ -8,6 +8,7 @@ import { useEffect, useRef } from 'react';
 import IsError from '@/components/atoms/button/IsErrorButton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import TicketItemSkeleton from '@/components/molecules/item/TicketItemSkeleton';
+import { getCidUrl } from '@/utils/getUrl';
 
 interface ConcertSearchResultProps {
   query: string;
@@ -41,10 +42,10 @@ const ConcertSearchResult = ({
           data.pages.map((page) =>
             page.result.map((concert) => (
               <TicketItem
-                key={concert.posterCid}
+                key={concert.concertUuid}
                 concertTitle={concert.title}
                 stageName={concert.stageName}
-                src={'/' + concert.posterCid}
+                src={getCidUrl(concert.posterCid)}
                 startAt={concert.startAt}
               />
             ))
