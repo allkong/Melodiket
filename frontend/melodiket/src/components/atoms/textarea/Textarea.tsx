@@ -26,7 +26,7 @@ const Textarea = ({
   return (
     <div className="w-full flex flex-col items-end">
       <textarea
-        className="overflow-hidde w-full resize-none px-5 py-3 outline-none rounded-2xl border"
+        className="overflow-hidden w-full resize-none px-5 py-3 outline-none rounded-2xl border"
         value={value}
         onChange={handleChange}
         rows={rows}
