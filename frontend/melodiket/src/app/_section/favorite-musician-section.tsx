@@ -2,7 +2,7 @@
 
 import MusicianProfileCard from '@/components/molecules/profile/MusicianProfileCard';
 import { useFetchFavoriteMusiciansList } from '@/services/favorite/fetchFavorite';
-import { getCidUrl } from '@/utils/getUrl';
+import { getCidUrl, getS3Url } from '@/utils/getUrl';
 import NeedLogin from '../_components/need-login';
 import NoMusician from '../_components/no-musician';
 import useAuthStore from '@/store/authStore';
@@ -22,7 +22,7 @@ const getComponent = (user: User | null, data?: FavoriteMusician) => {
     <MusicianProfileCard
       key={musician.loginId}
       musicianName={musician.nickname}
-      src={getCidUrl(musician.imageUrl)}
+      src={getS3Url(musician.imageUrl)}
     />
   ));
 };
@@ -30,6 +30,8 @@ const getComponent = (user: User | null, data?: FavoriteMusician) => {
 const FavoriteMusicianSection = () => {
   const { data } = useFetchFavoriteMusiciansList();
   const { user } = useAuthStore();
+
+  console.log(data);
 
   const show = getComponent(user, data);
 

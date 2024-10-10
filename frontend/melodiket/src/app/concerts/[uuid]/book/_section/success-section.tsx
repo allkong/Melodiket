@@ -1,22 +1,27 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import useConfetti from '@/hooks/useConfetti';
-import type { TicketBookResponse } from '@/types/ticket';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
+import { useFetchConcertDetail } from '@/services/concert/fetchConcert';
+import { getCidUrl } from '@/utils/getUrl';
 
 interface SuccessSectionProps {
-  bookResult: TicketBookResponse | null;
+  row: number;
+  col: number;
 }
 
-const SuccessSection = ({ bookResult }: SuccessSectionProps) => {
+const SuccessSection = ({ row, col }: SuccessSectionProps) => {
   const router = useRouter();
   const fire = useConfetti();
+
+  const params = useParams<{ uuid: string }>();
+  const { data: concert } = useFetchConcertDetail(params.uuid);
 
   useEffect(() => {
     fire();
@@ -34,21 +39,21 @@ const SuccessSection = ({ bookResult }: SuccessSectionProps) => {
         />
         <div className="mt-14 flex justify-between items-center gap-4">
           <div className="relative w-28 h-36 rounded-md overflow-none">
-            {bookResult?.posterCid && (
+            {concert?.posterCid && (
               <Image
                 className="object-cover"
-                src={bookResult.posterCid}
+                src={getCidUrl(concert.posterCid)}
                 alt="공연 완료 이미지"
                 fill
               />
             )}
           </div>
           <div className="w-0 flex-grow">
-            <p className="text-tiny">{bookResult?.concertTitle}</p>
+            <p className="text-tiny">{concert?.title}</p>
             <div className="text-xs text-gray-500">
-              <p>{bookResult?.stageName}</p>
-              <p className="mb-3">{`${bookResult?.seatRow}행 ${bookResult?.seatCol}열`}</p>
-              <p>{formatDateToYMD(bookResult?.startAt ?? '')}</p>
+              <p>{concert?.stageName}</p>
+              <p className="mb-3">{`${row}행 ${col}열`}</p>
+              <p>{formatDateToYMD(concert?.startAt ?? '')}</p>
             </div>
           </div>
         </div>
