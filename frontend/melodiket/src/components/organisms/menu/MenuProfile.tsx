@@ -23,8 +23,10 @@ const MenuProfile = () => {
   };
 
   useEffect(() => {
-    getMe();
-  }, []);
+    if (user) {
+      getMe();
+    }
+  }, [user]);
 
   const handleClickProfile = () => {
     if (user) {
