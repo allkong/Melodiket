@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,9 +19,14 @@ public class EventLogController {
 
     private final EventLogService eventLogService;
 
-    @GetMapping("/api/v1/logs")
-    public ResponseEntity<EventPageResponse<EventLog>> getProducts(EventPageRequest eventPageRequest) {
+    @GetMapping("/api/v1/logs/old")
+    public ResponseEntity<EventPageResponse<EventLog>> getCursorProducts(EventPageRequest eventPageRequest) {
         return new ResponseEntity<>(eventLogService.getLogs(eventPageRequest), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/v1/logs")
+    public ResponseEntity<List<EventLog>> getProducts(@RequestParam int pageSize) {
+        return new ResponseEntity<>(eventLogService.getLatestLogs(pageSize), HttpStatus.OK);
     }
 }
 
