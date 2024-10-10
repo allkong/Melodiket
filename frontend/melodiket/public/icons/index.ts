@@ -20,6 +20,7 @@ import Music from './music.svg';
 import MyPage from './my-page.svg';
 import BackLine from './back-line.svg';
 import ForwardLine from './forward-line.svg';
+import Time from './time.svg';
 export {
   Home,
   Notification,
@@ -33,6 +34,7 @@ export {
   MyPage,
   BackLine,
   ForwardLine,
+  Time,
 };
 
 import Heart from './heart.svg';

@@ -98,8 +98,9 @@ export const useFetchConcertList = () => {
       fetchConcertList({
         isFirstPage: true,
         orderDirection: 'ASC',
-        orderKey: 'uuid',
+        orderKey: 'createdAt',
         pageSize: 10,
+        title: '',
       }),
   });
 
