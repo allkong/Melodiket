@@ -55,7 +55,7 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
       });
     } else {
       toast('찜 제거', {
-        icon: '🩶',
+        icon: '🤍',
       });
     }
   };
