@@ -6,6 +6,7 @@ import {
   PageParam,
 } from '@/types/musician';
 import musicianKey from './musicianKey';
+import useAuthStore from '@/store/authStore';
 
 export const getMusicians = async (
   pageParam: PageParam = {
@@ -33,12 +34,14 @@ export const useMusiciansQuery = (
   orderDirection: 'ASC' | 'DESC' = 'ASC',
   query: string = ''
 ) => {
+  const { user } = useAuthStore();
   return useInfiniteQuery({
     queryKey: musicianKey.list({
       orderDirection,
       orderKey,
       pageSize,
       query,
+      user,
     }),
     queryFn: ({ pageParam }) => getMusicians(pageParam),
     initialPageParam: {
