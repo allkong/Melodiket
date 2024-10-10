@@ -7,6 +7,7 @@ interface ConcertDetailProps {
   seatCapacity: number;
   ticketPrice: number;
   isStanding: boolean;
+  remainSeat: number;
 }
 
 const ConcertDetail = ({
@@ -15,6 +16,7 @@ const ConcertDetail = ({
   seatCapacity,
   ticketPrice,
   isStanding,
+  remainSeat,
 }: ConcertDetailProps) => {
   return (
     <div className="space-y-2">
@@ -23,6 +25,7 @@ const ConcertDetail = ({
       <LabelValueText label="수용인원" value={`${seatCapacity}명`} />
       <LabelValueText label="가격" value={formatPrice(ticketPrice ?? 0)} />
       <LabelValueText label="형태" value={isStanding ? '스탠딩' : '좌석'} />
+      <LabelValueText label="남은 티켓" value={`${remainSeat}`} />
     </div>
   );
 };
