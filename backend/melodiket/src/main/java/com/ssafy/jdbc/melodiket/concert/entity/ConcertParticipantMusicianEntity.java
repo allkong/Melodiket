@@ -57,4 +57,8 @@ public class ConcertParticipantMusicianEntity extends ExposableEntity {
             this.approvalStatus = ApprovalStatus.DENIED; // 거절 상태로 변경
         }
     }
+
+    public ApprovalStatus getIsApproved() {
+        return this.approvalStatus;
+    }
 }

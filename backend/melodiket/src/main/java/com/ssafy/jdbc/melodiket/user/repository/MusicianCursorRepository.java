@@ -1,5 +1,6 @@
 package com.ssafy.jdbc.melodiket.user.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.ErrorDetail;
@@ -18,7 +19,11 @@ public class MusicianCursorRepository extends BaseQueryRepository<MusicianEntity
         super(jpaQueryFactory, MusicianEntity.class, ErrorDetail.USER_NOT_FOUND);
     }
 
-    public PageResponse<MusicianResp> findAll(CursorPagingReq pagingReq) {
-        return findWithPagination(pagingReq, MusicianResp::from, entityPath.get("role").eq(Role.MUSICIAN));
+    public PageResponse<MusicianResp> findAll(CursorPagingReq pagingReq, BooleanExpression condition) {
+        BooleanExpression basicCondition = entityPath.get("role").eq(Role.MUSICIAN);
+        if (condition != null) {
+            basicCondition = basicCondition.and(condition);
+        }
+        return findWithPagination(pagingReq, MusicianResp::from, basicCondition);
     }
 }

@@ -41,14 +41,15 @@ public record ConcertResp(
                 .map(participant -> new MusicianInfo(
                         participant.getMusicianEntity().getUuid(),
                         participant.getMusicianEntity().getName(),
-                        participant.getMusicianEntity().getImageUrl()))
+                        participant.getMusicianEntity().getImageUrl(),
+                        participant.getApprovalStatus()))
                 .toList();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean _isLike = false;
         if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_AUDIENCE".equals(grantedAuthority.getAuthority()))) {
             AudienceEntity user = (AudienceEntity) authentication.getPrincipal();
-            for (FavoriteConcertEntity f : entity.getFavoriteConcerts()){
+            for (FavoriteConcertEntity f : entity.getFavoriteConcerts()) {
                 if ((long) f.getAudienceEntity().getId() == user.getId()) {
                     _isLike = true;
                     break;
