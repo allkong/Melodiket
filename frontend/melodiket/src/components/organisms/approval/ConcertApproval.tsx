@@ -6,8 +6,8 @@ interface ConcertApprovalProps {
   concertName: string;
   date: string;
   price: string;
-  onApprove: () => void;
-  onReject: () => void;
+  onApprove?: () => void;
+  onReject?: () => void;
 }
 
 const ConcertApproval = ({

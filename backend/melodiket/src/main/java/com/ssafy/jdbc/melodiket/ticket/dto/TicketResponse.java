@@ -1,5 +1,7 @@
 package com.ssafy.jdbc.melodiket.ticket.dto;
 
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertParticipantMusicianEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.Status;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import lombok.*;
@@ -43,7 +45,7 @@ public class TicketResponse {
 
     private FavoriteMusicianDto myFavoriteMusician; // 뮤지션 정보
 
-    private UUID concertUUID;
+    private UUID concertUuid;
 
     @Getter
     @Builder
@@ -52,10 +54,17 @@ public class TicketResponse {
     public static class FavoriteMusicianDto {
         private String musicianName; // 뮤지션 이름
         private String musicianImageUrl; // 뮤지션 프로필 사진 URL
+        private String musicianSignatureImageUrl;
 
-        public FavoriteMusicianDto(MusicianEntity entity) {
+        public FavoriteMusicianDto(MusicianEntity entity, ConcertEntity concert) {
             this.musicianName = entity.getNickname();
             this.musicianImageUrl = entity.getImageUrl();
+
+            for (ConcertParticipantMusicianEntity cp : entity.getConcertParticipantMusicians()) {
+                if ((long) cp.getConcertEntity().getId() == concert.getId()) {
+                    this.musicianSignatureImageUrl = cp.getSignatureImageUrl();
+                }
+            }
         }
     }
 }
