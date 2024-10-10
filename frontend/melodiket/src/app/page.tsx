@@ -1,3 +1,5 @@
+'use client';
+
 import { Suspense } from 'react';
 
 import Header from '@/components/organisms/navigation/Header';
@@ -7,8 +9,26 @@ import CarouselSection from './_section/carousel-section';
 import ConcertRankingCardSkeleton from '@/components/molecules/card/ConcertRankingCardSkeleton';
 import TicketSection from './_section/ticket-section';
 import WebPush from './_components/web-push';
+import useAuthStore from '@/store/authStore';
+import { User } from '@/types/user';
+
+const getFavoriteMusicianSection = (user: User | null) => {
+  if (!user || user.role === 'AUDIENCE') {
+    return (
+      <div>
+        <p className="text-xl font-medium">나의 뮤지션</p>
+        <section className="w-full py-2 overflow-x-auto">
+          <FavoriteMusicianSection />
+        </section>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function Home() {
+  const { user } = useAuthStore();
+
   return (
     <>
       <WebPush />
@@ -28,12 +48,13 @@ export default function Home() {
                 </div>
               </section>
             </div>
-            <div>
+            {/* <div>
               <p className="text-xl font-medium">나의 뮤지션</p>
               <section className="w-full py-2 overflow-x-auto">
                 <FavoriteMusicianSection />
               </section>
-            </div>
+            </div> */}
+            {getFavoriteMusicianSection(user)}
           </div>
         </div>
       </div>
