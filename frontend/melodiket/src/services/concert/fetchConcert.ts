@@ -32,7 +32,7 @@ export const fetchConcertList = async ({
   title,
 }: FetchConcertRequest) => {
   const response = await customFetch<FetchConcertResponse>(
-    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}&status=ACTIVE`
+    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}&status=ACTIVE&status=TRANSFERRED`
   );
   return response;
 };
