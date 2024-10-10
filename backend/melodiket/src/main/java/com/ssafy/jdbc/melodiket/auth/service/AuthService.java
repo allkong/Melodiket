@@ -7,6 +7,7 @@ import com.ssafy.jdbc.melodiket.auth.controller.dto.SignUpResp;
 import com.ssafy.jdbc.melodiket.common.controller.dto.CursorPagingReq;
 import com.ssafy.jdbc.melodiket.common.exception.HttpResponseException;
 import com.ssafy.jdbc.melodiket.common.page.PageResponse;
+import com.ssafy.jdbc.melodiket.user.controller.dto.MusicianCursorPagingReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UpdateUserReq;
 import com.ssafy.jdbc.melodiket.user.controller.dto.UserProfileResp;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianResp;
@@ -50,7 +51,7 @@ public interface AuthService {
     StageManagerResp getStageManagerDetail(UUID uuid);
 
     // PageNation 기법 활용 뮤지션들 조회
-    PageResponse<MusicianResp> getMusicians(CursorPagingReq pagingReq);
+    PageResponse<MusicianResp> getMusicians(MusicianCursorPagingReq pagingReq);
 
     // Musician 상세조회
     MusicianResp getMusicianDetail(UUID uuid);

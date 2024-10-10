@@ -1,10 +1,14 @@
 'use client';
 
-import { ChangeEvent, ForwardedRef, forwardRef, useState } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useRef, useState } from 'react';
+import useSpinner from '@/hooks/useSpinner';
+import toast from 'react-hot-toast';
+import useSpinnerStore from '@/store/spinnerStore';
 
 interface FileInputProps {
-  onChange?: (file: File | null) => void;
+  onChange?: (cid: string | null) => void;
   onBlur?: () => void;
+  value?: string;
 }
 
 const FileInput = forwardRef(
@@ -13,29 +17,57 @@ const FileInput = forwardRef(
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const [fileName, setFileName] = useState<string | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { setIsLoading } = useSpinnerStore();
+
+    const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0] || null;
       setFileName(file ? file.name : null);
 
-      if (onChange) {
-        onChange(file);
+      if (file) {
+        try {
+          setIsLoading(true);
+          const formData = new FormData();
+          formData.append('file', file);
+
+          const ipfsUrl = process.env.NEXT_PUBLIC_IPFS_URL ?? '';
+          const response = await fetch(ipfsUrl, {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            const cid = result.cid || null;
+            if (onChange) {
+              onChange(cid);
+            }
+          } else {
+            toast.error('파일 업로드 실패');
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error('파일 업로드 중 오류 발생');
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
 
     const handleIconClick = () => {
-      const input = document.getElementById('file-input');
-      if (input) {
-        input.click();
+      if (inputRef.current) {
+        inputRef.current.click();
       }
     };
 
     return (
       <div className="relative w-full">
         <input
-          ref={ref}
+          ref={inputRef}
           id="file-input"
           type="file"
+          accept="image/png"
           onChange={handleChange}
           onBlur={onBlur}
           className="absolute w-0 h-0 p-0 overflow-hidden border-0"

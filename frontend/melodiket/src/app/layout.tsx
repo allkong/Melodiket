@@ -1,7 +1,10 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Providers from '@/app/providers';
 import '../styles/globals.css';
-import { MSWComponent } from './_component/MSWComponent';
+import { MSWComponent } from './_components/MSWComponent';
+import KakaoScript from './_lib/KakaoScript';
+import { Toaster } from 'react-hot-toast';
+import Spinner from './_components/spinner';
 
 export const metadata: Metadata = {
   title: 'melodiket',
@@ -13,21 +16,39 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
-    <html lang="kor">
+    <html lang="ko">
       <body>
         <Providers>
           <MSWComponent />
           <div className="max-w-xl min-h-screen mx-auto my-0 bg-white shadow-md">
             {children}
+            {modal}
+            <Toaster position="top-center" />
+            <Spinner />
           </div>
+          <div
+            id="menu-portal"
+            className="fixed top-0 z-10 w-full max-w-xl min-h-screen mx-auto overflow-x-hidden -translate-x-1/2 pointer-events-none left-1/2"
+          ></div>
+          <div
+            id="spinner-portal"
+            className="fixed w-full max-w-xl top-0 z-20 h-screen flex items-center justify-center pointer-events-none"
+          ></div>
         </Providers>
       </body>
+      <KakaoScript />
     </html>
   );
 }

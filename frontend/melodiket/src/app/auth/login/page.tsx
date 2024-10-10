@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
-import { useLogin } from '@/services/auth/useLogin';
+import { useLogin } from '@/services/auth/fetchAuth';
 
 import { LogoText } from '@/public/icons';
 import Input from '@/components/atoms/input/Input';
@@ -23,7 +24,7 @@ const Page = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="my-7">
-        <LogoText />
+        <LogoText className="h-auto w-28" />
       </div>
       <div className="flex flex-col items-center px-6 space-y-10 mt-[8vh]">
         <div className="w-full">
@@ -33,21 +34,25 @@ const Page = () => {
             hasLogo
           />
         </div>
-        <div className="space-y-3 w-full">
+        <div className="w-full space-y-3">
           <Input value={loginId} onChange={setLoginId} placeholder="아이디" />
           <Input
             value={password}
             onChange={setPassword}
             placeholder="비밀번호"
             type="password"
+            onClickEnter={handleLogin}
           />
         </div>
         <div className="flex flex-row space-x-2.5 text-sm text-gray-400">
-          <p onClick={() => alert('준비중🔨')} className="cursor-pointer">
+          <p
+            onClick={() => toast('준비중', { icon: '🔨' })}
+            className="cursor-pointer"
+          >
             ID/PW 찾기
           </p>
           <p>|</p>
-          <Link href={'/auth/sign-up'}>회원가입</Link>
+          <Link href={'/auth/sign-up?step=policy'}>회원가입</Link>
         </div>
       </div>
       <FixedButton

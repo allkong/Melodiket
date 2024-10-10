@@ -13,7 +13,7 @@ spring:
       release: release
     active: ${CURRENT_ENV}
   elasticsearch:
-    uris: http://localhost:9200
+    uris: ${ELASTICSEARCH_HOST}
 
 server:
   port: ${SERVER_PORT}
@@ -33,6 +33,7 @@ blockchain:
     melodiket: ${MELODIKET_CONTRACT_ADDRESS}
     melody-token: ${MELODY_TOKEN_CONTRACT_ADDRESS}
     ticket: ${TICKET_CONTRACT_ADDRESS}
+    photo-card: ${PHOTO_CARD_CONTRACT_ADDRESS}
 
 cloud:
   aws:

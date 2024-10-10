@@ -6,19 +6,38 @@ const nextConfig = {
       use: ['@svgr/webpack'],
     });
 
+    config.module.rules.push({
+      test: /\.stories\.tsx?$/,
+      use: 'ignore-loader',
+    });
+
     return config;
   },
   images: {
-    domains: process.env.NODE_ENV === 'development' ? ['*'] : ['example.com'],
-    remotePatterns:
-      process.env.NODE_ENV === 'development'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'd2zj12sxzh0609.cloudfront.net',
+      },
+      ...(process.env.NODE_ENV === 'development'
         ? [
             {
               protocol: 'https',
               hostname: '**',
             },
           ]
-        : [],
+        : [
+            {
+              protocol: 'https',
+              hostname: 'j11a310.p.ssafy.io',
+            },
+          ]),
+    ],
+  },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
 };
 

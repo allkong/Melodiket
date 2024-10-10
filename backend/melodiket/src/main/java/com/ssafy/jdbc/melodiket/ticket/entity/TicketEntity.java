@@ -2,6 +2,7 @@ package com.ssafy.jdbc.melodiket.ticket.entity;
 
 import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertSeatEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
 import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import jakarta.persistence.*;
@@ -9,11 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -30,6 +28,10 @@ public class TicketEntity extends ExposableEntity {
     @JoinColumn(name = "concert_id", nullable = false)
     private ConcertEntity concertEntity;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "concert_seat_id", referencedColumnName = "id")
+    private ConcertSeatEntity concertSeatEntity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -45,13 +47,18 @@ public class TicketEntity extends ExposableEntity {
 
     private String userName;
 
-    public void updateStatusUsed(Status status){
-        this.status = status;
+    public void updateStatusUsed() {
+        this.status = Status.USED;
         this.usedAt = LocalDateTime.now();
     }
 
-    public void updateStatusRefunded(Status status){
+    public void updateStatusRefunded(Status status) {
         this.status = status;
+        this.refundedAt = LocalDateTime.now();
+    }
+
+    public void refund() {
+        this.status = Status.REFUNDED;
         this.refundedAt = LocalDateTime.now();
     }
 }

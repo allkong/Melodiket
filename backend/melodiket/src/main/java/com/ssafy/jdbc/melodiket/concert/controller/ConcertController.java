@@ -5,6 +5,7 @@ import com.ssafy.jdbc.melodiket.common.page.PageResponse;
 import com.ssafy.jdbc.melodiket.concert.controller.dto.*;
 import com.ssafy.jdbc.melodiket.concert.service.ConcertService;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
+import com.ssafy.jdbc.melodiket.webpush.controller.dto.AcceptedResp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,31 +37,35 @@ public class ConcertController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createConcert(Authentication authentication, @RequestBody CreateConcertReq createConcertReq) {
+    public ResponseEntity<AcceptedResp> createConcert(Authentication authentication, @RequestBody CreateConcertReq createConcertReq) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        concertService.createConcert(user.getLoginId(), user, createConcertReq);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.createConcert(user.getLoginId(), user, createConcertReq, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelConcert(Authentication authentication, @PathVariable UUID id) {
+    public ResponseEntity<AcceptedResp> cancelConcert(Authentication authentication, @PathVariable UUID id) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
-        concertService.cancelConcert(user.getLoginId(), user, id);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.cancelConcert(user.getLoginId(), user, id, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @PostMapping("/{id}/approve")
-    public ResponseEntity<Void> approveConcert(@PathVariable("id") UUID concertId, Principal principal) {
+    public ResponseEntity<AcceptedResp> approveConcert(@PathVariable("id") UUID concertId, Principal principal, @RequestBody ConcertApproveReq concertApproveReq) {
         String loginId = principal.getName();
-        concertService.approveConcert(concertId, loginId);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.approveConcert(concertId, loginId, concertApproveReq, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @PostMapping("/{id}/deny")
-    public ResponseEntity<Void> denyConcert(@PathVariable("id") UUID concertId, Principal principal) {
+    public ResponseEntity<AcceptedResp> denyConcert(@PathVariable("id") UUID concertId, Principal principal) {
         String loginId = principal.getName();
-        concertService.denyConcert(concertId, loginId);
-        return ResponseEntity.accepted().build();
+        String operationId = UUID.randomUUID().toString();
+        concertService.denyConcert(concertId, loginId, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
     }
 
     @GetMapping("/by-stage-managers/{id}")
@@ -85,5 +91,21 @@ public class ConcertController {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
         PageResponse<ConcertAssignmentResp> assignments = concertService.getAssignedConcerts(user, cursorPagingReq);
         return ResponseEntity.ok(assignments);
+    }
+
+    @PostMapping("/{id}/close")
+    public ResponseEntity<AcceptedResp> closeConcert(Authentication authentication, @PathVariable UUID id) {
+        AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
+        concertService.checkIsConcertClosable(user, id);
+        String operationId = UUID.randomUUID().toString();
+        concertService.closeConcert(user.getLoginId(), user, id, operationId);
+        return ResponseEntity.accepted().body(new AcceptedResp(operationId));
+    }
+
+    @GetMapping("/me/created")
+    public ResponseEntity<List<ConcertResp>> getCreatedConcerts(Authentication authentication) {
+        UUID stageManagerUuid = ((AppUserEntity) authentication.getPrincipal()).getUuid();
+        List<ConcertResp> createdConcerts = concertService.getCreatedConcertsByStageManager(stageManagerUuid);
+        return ResponseEntity.ok(createdConcerts);
     }
 }

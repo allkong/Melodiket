@@ -66,7 +66,7 @@ public abstract class BaseQueryRepository<T extends ExposableEntity, R> {
         boolean hasNext = entities.size() > pageSize;
         List<T> result = hasNext ? entities.subList(0, pageSize) : entities;
         UUID nextCursor = hasNext ? result.get(result.size() - 1).getUuid() : null;
-        List<R> responses = entities.stream().map(entityConverter).toList();
+        List<R> responses = result.stream().map(entityConverter).toList();
 
         PageInfoCursor pageInfo = new PageInfoCursor(hasNext, pageSize, responses.size(), nextCursor);
         return new PageResponse<R>(pageInfo, responses);

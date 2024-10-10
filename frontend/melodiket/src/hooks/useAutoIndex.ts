@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 /**
  * ms 시간이 지날 때마다 자동으로 증가한 인덱스를 반환하는 커스텀 훅
@@ -30,7 +24,7 @@ export default function useAutoIndex(
     return () => {
       clearInterval(interval);
     };
-  }, [autoIndex, max]);
+  }, [autoIndex, max, min, ms]);
 
   return [autoIndex, setAutoIndex];
 }

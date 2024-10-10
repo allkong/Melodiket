@@ -70,20 +70,23 @@ public class ConcertEntity extends ExposableEntity {
     @Enumerated(EnumType.STRING)
     private ConcertStatus concertStatus;
 
+    @Column(nullable = false)
+    private long likeCount = 0;
+
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TicketEntity> tickets = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ConcertParticipantMusicianEntity> concertParticipantMusicians = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<FavoriteConcertEntity> favoriteConcerts = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "concertEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<ConcertSeatEntity> concertSeats = new HashSet<>();
 
     public void cancel() {
@@ -92,5 +95,25 @@ public class ConcertEntity extends ExposableEntity {
 
     public void active() {
         this.concertStatus = ConcertStatus.ACTIVE;
+    }
+
+    public void close() {
+        this.concertStatus = ConcertStatus.TRANSFERRED;
+    }
+
+    public void increaseRemainingTicket() {
+        this.availableTickets++;
+    }
+
+    public void decreaseRemainingTicket() {
+        this.availableTickets--;
+    }
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        this.likeCount--;
     }
 }
