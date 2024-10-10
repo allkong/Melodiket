@@ -10,6 +10,7 @@ import type {
 
 import customFetch from '../customFetch';
 import { UUID } from 'crypto';
+import toast from 'react-hot-toast';
 
 const registerStandingStage = async (
   stageData: RegisterStandingStageRequest
@@ -75,7 +76,7 @@ export const useRegisterStandingStage = () => {
       router.push('/');
     },
     onError: () => {
-      alert('스탠딩 스테이지 등록 실패!');
+      toast.error('스탠딩 스테이지 등록 실패!');
     },
   });
 };
@@ -91,7 +92,7 @@ export const useRegisterSeatingStage = () => {
         router.push('/');
       },
       onError: () => {
-        alert('좌석 스테이지 등록 실패!');
+        toast.error('좌석 스테이지 등록 실패!');
       },
     }
   );
@@ -101,7 +102,7 @@ export const useGetMyStages = () => {
   return useMutation<GetStagesResponse, Error>({
     mutationFn: () => getMyStages(),
     onError: () => {
-      alert('공연장 목록 가져오기 실패!');
+      toast.error('공연장 목록 가져오기 실패!');
     },
   });
 };
