@@ -6,6 +6,7 @@ import { formatDateToYMD } from '@/utils/dayjsPlugin';
 import Header from '@/components/organisms/navigation/Header';
 import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
 import KakaoShareButton from '@/components/organisms/photocard/KakaoShareButton';
+import { getCidUrl } from '@/utils/getUrl';
 
 interface PageProps {
   params: { uuid: string };
@@ -13,6 +14,8 @@ interface PageProps {
 
 const Page = ({ params }: PageProps) => {
   const { data: photocard } = usePhotocardDetail(params.uuid);
+
+  console.log(photocard);
 
   if (!photocard) {
     return null;
@@ -24,7 +27,7 @@ const Page = ({ params }: PageProps) => {
       <div className="flex flex-col items-center py-8">
         <section className="flex flex-col items-center mb-9">
           <h1 className="flex text-lg">
-            <p className="font-semibold">{photocard.nickname}</p>님의 포토카드
+            <p className="font-semibold">{photocard.nickName}</p>님의 포토카드
           </h1>
           <div className="relative flex flex-col items-center w-fit">
             <p className="relative z-10">
@@ -37,7 +40,7 @@ const Page = ({ params }: PageProps) => {
         <div className="mb-10">
           <PhotocardFlip
             concertName={photocard.concertName}
-            src={photocard.imageCid}
+            src={getCidUrl(photocard.imageCid)}
             startAt={photocard.startAt}
             stageName={photocard.stageName}
             seatRow={photocard.seatRow}
@@ -48,9 +51,9 @@ const Page = ({ params }: PageProps) => {
         <div className="w-[20.7rem]">
           <KakaoShareButton
             photocardUuid={photocard.photocardUuid}
-            nickname={photocard.nickname}
+            nickname={photocard.nickName}
             concertName={photocard.concertName}
-            imageUrl={photocard.imageCid}
+            imageUrl={getCidUrl(photocard.imageCid)}
           />
         </div>
       </div>

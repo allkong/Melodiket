@@ -37,7 +37,7 @@ export const photocard = [
       seatCol: 12,
       musicans: ['아이유', '유애나'],
       favoriteMusician: '아이유',
-      nickname: '요아정',
+      nickName: '요아정',
     } as PhotocardDetail);
   }),
 ];

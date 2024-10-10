@@ -6,6 +6,7 @@ import { usePhotocardList } from '@/services/photocard/fetchPhotocard';
 import PhotocardCard from '@/components/molecules/card/PhotocardCard';
 import EmptyData from '@/components/molecules/text/EmptyData';
 import PhotocardListSkeleton from './photocard-list-skeleton';
+import { getCidUrl } from '@/utils/getUrl';
 
 const PhotocardListSection = () => {
   const { data: photocards, isLoading, isSuccess } = usePhotocardList();
@@ -29,7 +30,7 @@ const PhotocardListSection = () => {
               className="mb-3"
             >
               <PhotocardCard
-                src={photocard.imageCid}
+                src={getCidUrl(photocard.imageCid)}
                 title={photocard.concertName}
               />
             </Link>
