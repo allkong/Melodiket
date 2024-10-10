@@ -41,7 +41,8 @@ export interface SelectSticker extends Sticker {
 
 export interface SelectText {
   id: string;
-  text: string;
+  label: string;
+  color: string;
   x: number;
   y: number;
   scale: number;
