@@ -15,6 +15,7 @@ import { useGetMyWallet } from '@/services/wallet/fetchWallet';
 import { getS3Url } from '@/utils/getUrl';
 import toast from 'react-hot-toast';
 import { formatPrice } from '@/utils/concertFormatter';
+import { useLogout } from '@/services/auth/fetchAuth';
 
 const Page = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Page = () => {
   const { mutate: uploadImage } = useUploadImage();
   const { mutate: updateMe } = useUpdateMe();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const logout = useLogout();
 
   const isStageManager = data?.role === 'STAGE_MANAGER';
   const isAudience = data?.role === 'AUDIENCE';
@@ -179,7 +181,7 @@ const Page = () => {
             />
           </div>
           <div className="my-4 h-fit p-4">
-            <LargeButton label="로그아웃" />
+            <LargeButton label="로그아웃" onClick={logout} />
           </div>
         </div>
       </div>

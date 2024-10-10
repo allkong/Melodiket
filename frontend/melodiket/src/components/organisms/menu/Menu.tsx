@@ -50,14 +50,13 @@ const MenuWithPortal = () => {
             label="포토카드"
           />
         )}
-        {user?.role === 'STAGE_MANAGER' ||
-          (user?.role === 'MUSICIAN' && (
-            <Menu.Item
-              href="/management/concerts"
-              icon={<Microphone />}
-              label="내 공연"
-            />
-          ))}
+        {user?.role === 'STAGE_MANAGER' && (
+          <Menu.Item
+            href="/management/concerts"
+            icon={<Microphone />}
+            label="내 공연"
+          />
+        )}
         {user?.role === 'STAGE_MANAGER' && (
           <Menu.Item
             href="/management/concerts/register"

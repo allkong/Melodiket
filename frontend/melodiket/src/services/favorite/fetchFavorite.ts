@@ -92,12 +92,12 @@ export const useToggleFavoriteMusician = () => {
         });
       } else {
         toast('찜 제거', {
-          icon: '🩶',
+          icon: '🤍',
         });
       }
     },
     onError: () => {
-      toast.error('찜 실패');
+      toast.error('관객만 좋아요를 누를 수 있어요.');
     },
   });
 };
