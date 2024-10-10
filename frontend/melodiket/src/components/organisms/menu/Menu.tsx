@@ -17,6 +17,7 @@ import {
   Microphone,
   Music,
   MyPage,
+  Time,
 } from '@/public/icons';
 
 const MenuWithPortal = () => {
@@ -71,6 +72,7 @@ const MenuWithPortal = () => {
             label="공연 승인"
           />
         )}
+        <Menu.Item href="/transactions" icon={<Time />} label="트랜잭션" />
         {user ? (
           <>
             <Menu.Divider />
