@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 
 import type { TicketBookRequest, TicketBookResponse } from '@/types/ticket';
@@ -19,20 +19,22 @@ const Page = () => {
 
   const [ticketBookInformation, setTicketBookInformation] =
     useState<TicketBookRequest>({
-      concertId: concert?.concertUuid ?? '',
+      concertId: '',
       seatRow: -1,
       seatCol: -1,
       favoriteMusician: '',
     });
 
-  const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>({
-    addToHistory: true,
-    preventForwardNavigate: true,
-    initialStep: 'seat',
-  });
+  const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>();
 
   const mutate = useBookTicket();
   const [bookResult, setBookResult] = useState<TicketBookResponse | null>(null);
+
+  useEffect(() => {
+    if (concert?.isStanding) {
+      setStep('confirm');
+    }
+  }, [concert, setStep]);
 
   return (
     <div className="w-full h-full bg-gray-100">
@@ -54,6 +56,7 @@ const Page = () => {
               const data: TicketBookRequest = {
                 ...ticketBookInformation,
                 favoriteMusician,
+                concertId: concert?.concertUuid ?? '',
               };
 
               const result = await mutate.mutateAsync({

@@ -47,7 +47,7 @@ const SeatSection = ({ onNext, price }: SeatSectionProps) => {
           <p className="text-xs">
             {isDisabled(seatInfo)
               ? '좌석을 선택해주세요'
-              : `${seatInfo.seatRow + 1}행 ${seatInfo.seatCol + 1}열`}
+              : `${seatInfo.seatRow}행 ${seatInfo.seatCol}열`}
           </p>
         </div>
         <p className="text-base font-semibold">
@@ -59,8 +59,8 @@ const SeatSection = ({ onNext, price }: SeatSectionProps) => {
           label="다음 단계"
           onClick={() =>
             onNext({
-              seatCol: seatInfo.seatCol + 1,
-              seatRow: seatInfo.seatRow + 1,
+              seatCol: seatInfo.seatCol,
+              seatRow: seatInfo.seatRow,
             })
           }
           disabled={isDisabled(seatInfo)}
