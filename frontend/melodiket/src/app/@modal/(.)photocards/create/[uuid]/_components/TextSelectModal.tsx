@@ -42,7 +42,7 @@ const TextSelectModal = () => {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="텍스트를 입력하세요"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="overflow-hidden resize-none px-5 py-3 borde w-full p-2 outline-none border border-gray-300 rounded-md"
             rows={2}
           />
         </div>
