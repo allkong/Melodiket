@@ -23,6 +23,7 @@ const ConcertRankingSection = () => {
               ticketingAt={concert.ticketingAt}
               title={concert.title}
               ranking={idx + 1}
+              href={`/concerts/${concert.concertUuid}`}
             />
           ))}
     </>
