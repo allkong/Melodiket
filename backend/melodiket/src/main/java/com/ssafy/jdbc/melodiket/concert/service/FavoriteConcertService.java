@@ -105,7 +105,8 @@ public class FavoriteConcertService {
                                 .map(participant -> new MusicianInfo(
                                         participant.getMusicianEntity().getUuid(),
                                         participant.getMusicianEntity().getName(),
-                                        participant.getMusicianEntity().getImageUrl()
+                                        participant.getMusicianEntity().getImageUrl(),
+                                        participant.getIsApproved()
                                 )).collect(Collectors.toList()),
                         favorite.getStageEntity().getCapacity(),
                         favorite.getStageEntity().getIsStanding(),
