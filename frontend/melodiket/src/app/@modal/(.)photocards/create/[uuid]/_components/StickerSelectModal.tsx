@@ -10,15 +10,8 @@ import { STICKER_CATEGORIES } from '@/constants/photocard';
 
 import ScrollTabs from '@/components/organisms/controls/ScrollTabs';
 import SelectModal from '@/components/organisms/modal/SelectModal';
-import { Bear, Cherries, GrowingHeart } from '@/public/stickers';
 import MusicianSignature from './musician-signature';
-
-export const stickers: Sticker[] = [
-  { name: 'signature', category: 'favorite', image: <MusicianSignature /> },
-  { name: 'bear', category: 'animal', image: <Bear /> },
-  { name: 'cherries', category: 'fruit', image: <Cherries /> },
-  { name: 'growing-heart', category: 'heart', image: <GrowingHeart /> },
-];
+import { stickers } from './Stickers';
 
 const StickerSelectModal = () => {
   const router = useRouter();
