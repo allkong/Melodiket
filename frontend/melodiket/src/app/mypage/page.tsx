@@ -91,7 +91,6 @@ const Page = () => {
       });
     }
   };
-  console.log(walletData);
 
   return (
     <div className="flex flex-col h-screen">
