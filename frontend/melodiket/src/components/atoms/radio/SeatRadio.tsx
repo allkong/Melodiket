@@ -8,6 +8,7 @@ interface SeatRaioProps {
   disabled?: boolean;
   row: number;
   col: number;
+  hidden?: boolean;
 }
 
 const SeatRadio = ({
@@ -17,6 +18,7 @@ const SeatRadio = ({
   disabled,
   row,
   col,
+  hidden,
 }: SeatRaioProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -31,6 +33,7 @@ const SeatRadio = ({
         'bg-primary cursor-pointer': !disabled,
         'bg-gray-400': disabled,
         'border-2 border-purple-400': checked,
+        hidden: hidden,
       })}
     >
       <input

@@ -1,21 +1,20 @@
 package com.ssafy.jdbc.melodiket.wallet.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AppUserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "wallet_info")
+@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalletInfoEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@Entity
+@Table(name = "wallet_info")
+public class WalletInfoEntity extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private AppUserEntity user;
@@ -28,5 +27,4 @@ public class WalletInfoEntity {
 
     @Column(unique = true, nullable = false)
     private String publicKey;
-
 }

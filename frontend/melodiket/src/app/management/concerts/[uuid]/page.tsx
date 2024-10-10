@@ -1,115 +1,96 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
-
-import { useTicketDetail } from '@/services/ticket/fetchTicket';
-import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
-import { formatPrice, formatSeatPosition } from '@/utils/concertFormatter';
-import { TICKET_STATUS_LABELS } from '@/constants/tickets';
-
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import { useGetConcertInfo } from '@/services/concert/fetchConcert';
 import Header from '@/components/organisms/navigation/Header';
 import PosterFrame from '@/components/atoms/image-frame/PosterFrame';
-import SmallButton from '@/components/atoms/button/SmallButton';
+import DetailSection from '@/components/molecules/section/DetailSection';
 import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatusProfile';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
+import SmallButton from '@/components/atoms/button/SmallButton';
 import FixedButton from '@/components/organisms/controls/FixedButton';
-import DetailSection from '@/components/molecules/section/DetailSection';
 import { Ticket } from '@/public/icons';
+import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
+import { formatPrice } from '@/utils/concertFormatter';
+import { getCidUrl } from '@/utils/getUrl';
 
-const Page = () => {
-  const router = useRouter();
+const ConcertDetailPage = () => {
   const pathname = usePathname();
+  const concertUuid = pathname.split('/').pop();
 
-  const { data: ticket } = useTicketDetail();
+  const { mutate: getConcertInfo, data: concert } = useGetConcertInfo();
 
-  const ticketInfo = [
-    { label: '예매자', value: '정다빈' },
-    { label: '장소', value: ticket?.stageName || '정보 없음' },
+  useEffect(() => {
+    if (concertUuid) {
+      getConcertInfo(concertUuid);
+    }
+  }, [concertUuid]);
+
+  const concertInfo = [
+    { label: '공연 제목', value: concert?.title || '정보 없음' },
+    { label: '장소', value: concert?.stageName || '정보 없음' },
     {
-      label: '좌석',
-      value:
-        ticket?.seatRow && ticket?.seatCol
-          ? formatSeatPosition(ticket.seatRow, ticket.seatCol)
-          : '정보 없음',
-    },
-    ticket?.createdAt && {
-      label: '예매일',
-      value: formatDateToYMDHM(ticket?.createdAt),
-    },
-    ticket?.startAt && {
-      label: '관람일',
-      value: formatDateToYMDHM(ticket?.startAt),
-    },
-    ticket?.usedAt && {
-      label: '사용일',
-      value: formatDateToYMDHM(ticket?.usedAt),
-    },
-    ticket?.refundAt && {
-      label: '취소일',
-      value: formatDateToYMDHM(ticket?.refundAt),
-    },
-    {
-      label: '상태',
-      value: ticket?.status
-        ? TICKET_STATUS_LABELS[ticket?.status]
+      label: '공연 시작일',
+      value: concert?.startAt
+        ? formatDateToYMDHM(concert.startAt)
         : '정보 없음',
     },
+    {
+      label: '티케팅 시작일',
+      value: concert?.ticketingAt
+        ? formatDateToYMDHM(concert.ticketingAt)
+        : '정보 없음',
+    },
+    { label: '상태', value: concert?.status || '정보 없음' },
   ].filter(Boolean) as { label: string; value: string }[];
-
-  const handleScanButtonClick = () => {
-    router.push(`${pathname}/scan`);
-  };
 
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <div className="px-6 pb-24 overflow-y-auto">
-        {/* 포스터 및 제목 */}
         <div className="flex py-4 space-x-4 border-b">
-          <PosterFrame src={ticket?.posterCid || ''} size="md" />
+          <PosterFrame src={getCidUrl(concert?.posterCid || '')} size="md" />
           <div className="flex flex-col justify-between">
             <h1 className="font-medium">
-              {ticket?.concertTitle || '콘서트 정보 없음'}
+              {concert?.title || '콘서트 정보 없음'}
             </h1>
-            <SmallButton label="공연 취소" onClick={() => alert('공연 취소')} />
+            <SmallButton
+              label="예매 페이지 미리보기"
+              onClick={() => alert('예매 페이지 미리보기')}
+            />
           </div>
         </div>
 
-        {/* 참여 밴드 */}
-        <DetailSection title="참여 밴드">
-          <MusicianStatusProfile
-            src={ticket?.myFavoriteMusician.musicianImageUrl || ''}
-            musicianName={
-              ticket?.myFavoriteMusician.musicianName || '정보 없음'
-            }
-            status="pending"
-          />
+        <DetailSection title="참여 뮤지션">
+          {concert?.musicians?.map((musician) => (
+            <MusicianStatusProfile
+              key={musician.musicianUuid}
+              src={musician.imageUrl || ''}
+              musicianName={musician.name || '정보 없음'}
+              status="pending"
+            />
+          ))}
         </DetailSection>
 
-        {/* 공연 정보 */}
         <DetailSection title="공연 정보">
-          <TicketInfo fields={ticketInfo} />
+          <TicketInfo fields={concertInfo} />
         </DetailSection>
 
-        {/* 가격 정보 */}
         <DetailSection title="가격 정보" isLast>
           <div className="flex items-center justify-between">
             <p className="font-medium text-purple-400">
-              {ticket?.ticketPrice
-                ? formatPrice(ticket?.ticketPrice)
+              {concert?.ticketPrice
+                ? formatPrice(concert.ticketPrice)
                 : '정보 없음'}
             </p>
           </div>
         </DetailSection>
       </div>
 
-      <FixedButton
-        label="모바일 티켓 스캔"
-        icon={<Ticket />}
-        onClick={handleScanButtonClick}
-      />
+      <FixedButton label="공연 취소" onClick={() => alert('공연 취소!')} />
     </div>
   );
 };
 
-export default Page;
+export default ConcertDetailPage;

@@ -4,3 +4,50 @@ spring:
       on-profile: release
     import:
       - file:release.env[.properties]
+  datasource:
+    url: jdbc:mysql://localhost:3306/melodiket?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    username: yubin
+    password: qkrdbqls1001qkrdbqls1001
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: ${SERVER_PORT}
+blockchain:
+  gas-price: ${GAS_PRICE}
+  gas-limit: ${GAS_LIMIT}
+  system-private-key: ${BLOCKCHAIN_PRIVATE_KEY}
+  system-wallet-address: ${BLOCKCHAIN_WALLET_ADDRESS}
+  rpc-url: ${BLOCKCHAIN_RPC_URL}
+  contract-addresses:
+    melodiket: ${MELODIKET_CONTRACT_ADDRESS}
+    melody-token: ${MELODY_TOKEN_CONTRACT_ADDRESS}
+    ticket: ${TICKET_CONTRACT_ADDRESS}
+security:
+  allowed-origins: "${SECURITY_ALLOWED_ORIGINS}"
+jwt:
+  issuer: j11a310.p.ssafy.io
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    region:
+      static: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_BUCKET_NAME}
+      presigned-url-expired: ${PRESIGNED_EXPIRE_TIME}
+cloudfront:
+  domain: ${CLOUDFRONT_DOMAIN}
+
+vapid:
+  public:
+    key: ${VAPID_PUBLIC_KEY}
+  private:
+    key: ${VAPID_PRIVATE_KEY}
