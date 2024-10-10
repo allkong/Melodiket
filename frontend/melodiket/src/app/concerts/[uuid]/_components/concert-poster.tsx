@@ -42,12 +42,14 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
     if (!user) {
       toast('로그인이 필요한 서비스입니다', { icon: `😥` });
       return;
+    } else if (user.role !== 'AUDIENCE') {
+      toast('관객만 좋아요를 할 수 있습니다', { icon: `😥` });
+      return;
     }
-
     const response = await mutate.mutateAsync({ concertUuid: uuid });
 
-    setIsFavorite(response.isFavorite);
-    if (response.isFavorite) {
+    setIsFavorite(response.isLike);
+    if (response.isLike) {
       toast('찜 추가', {
         icon: '💜',
       });
