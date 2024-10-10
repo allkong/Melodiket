@@ -5,7 +5,6 @@ import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import com.ssafy.jdbc.melodiket.event.controller.dto.EventPageInfoCursor;
 import com.ssafy.jdbc.melodiket.event.controller.dto.EventPageRequest;
 import com.ssafy.jdbc.melodiket.event.controller.dto.EventPageResponse;
@@ -20,7 +19,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -92,4 +90,21 @@ public class EventLogService {
         return new EventPageResponse<>(pageInfo, products);
     }
 
+    // n개의 최신 로그 데이터를 가져오는 함수 추가
+    public List<EventLog> getLatestLogs(int n) {
+        // 최신순으로 정렬 (DESC)하고 n개 만큼만 데이터를 가져오는 쿼리
+        SortOptions sortOption = SortOptions.of(o -> o.field(f -> f.field("timestamp").order(SortOrder.Desc)));
+
+        NativeQueryBuilder searchQueryBuilder = NativeQuery.builder()
+                .withSort(sortOption)  // 최신순 정렬
+                .withPageable(PageRequest.of(0, n));  // n개의 로그 데이터를 가져오도록 페이지 크기를 설정
+
+        NativeQuery searchQuery = searchQueryBuilder.build();
+
+        // 엘라스틱서치 쿼리 실행
+        SearchHits<EventLog> searchHits = elasticsearchOperations.search(searchQuery, EventLog.class);
+
+        // 검색 결과를 리스트로 변환
+        return searchHits.stream().map(SearchHit::getContent).toList();
+    }
 }
