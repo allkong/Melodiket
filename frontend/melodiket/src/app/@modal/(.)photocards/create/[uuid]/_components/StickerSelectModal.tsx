@@ -10,15 +10,8 @@ import { STICKER_CATEGORIES } from '@/constants/photocard';
 
 import ScrollTabs from '@/components/organisms/controls/ScrollTabs';
 import SelectModal from '@/components/organisms/modal/SelectModal';
-import { Bear, Cherries, GrowingHeart } from '@/public/stickers';
 import MusicianSignature from './musician-signature';
-
-export const stickers: Sticker[] = [
-  { name: 'signature', category: 'favorite', image: <MusicianSignature /> },
-  { name: 'bear', category: 'animal', image: <Bear /> },
-  { name: 'cherries', category: 'fruit', image: <Cherries /> },
-  { name: 'growing-heart', category: 'heart', image: <GrowingHeart /> },
-];
+import { stickers } from './Stickers';
 
 const StickerSelectModal = () => {
   const router = useRouter();
@@ -55,7 +48,7 @@ const StickerSelectModal = () => {
         labelMap={STICKER_CATEGORIES}
         line={false}
       />
-      <div className="overflow-x-scroll space-x-4 px-4">
+      <div className="overflow-x-auto whitespace-nowrap space-x-4 px-4 h-20 w-full">
         {filteredStickers.map((sticker) => (
           <button
             key={sticker.name}
