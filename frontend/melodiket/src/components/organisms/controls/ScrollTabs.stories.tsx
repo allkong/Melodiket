@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Tabs from './Tabs';
+import ScrollTabs from './ScrollTabs';
 import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 import { useState } from 'react';
 
-const meta: Meta<typeof Tabs> = {
-  component: Tabs,
+const meta: Meta<typeof ScrollTabs> = {
+  component: ScrollTabs,
 };
 
 export default meta;
-type Story = StoryObj<typeof Tabs>;
+type Story = StoryObj<typeof ScrollTabs>;
 
 export const Default: Story = {
   render: (args) => {
@@ -19,7 +19,7 @@ export const Default: Story = {
     };
 
     return (
-      <Tabs
+      <ScrollTabs
         {...args}
         tabs={Object.keys(FAVORITE_TYPES)}
         activeTab={activeTab}

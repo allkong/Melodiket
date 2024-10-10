@@ -22,8 +22,10 @@
     "concurrently": "^9.0.0",
     "dayjs": "^1.11.13",
     "envinfo": "^7.14.0",
+    "html2canvas": "^1.4.1",
     "immer": "^10.1.1",
     "js-confetti": "^0.12.0",
+    "moveable": "^0.53.0",
     "next": "14.2.9",
     "qr-scanner": "^1.4.2",
     "qrcode.react": "^4.0.1",
@@ -31,6 +33,7 @@
     "react-dom": "^18",
     "react-error-boundary": "^4.0.13",
     "react-hot-toast": "^2.4.1",
+    "react-moveable": "^0.56.0",
     "react-signature-canvas": "^1.0.6",
     "tailwind-scrollbar-hide": "^1.1.7",
     "zustand": "^4.5.5"
