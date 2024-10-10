@@ -12,6 +12,7 @@ interface ConcertApprovalProps {
   price: string;
   onApprove?: (signatureUrl: string) => void;
   onReject?: () => void;
+  isChecked: boolean;
 }
 
 const ConcertApproval = ({
@@ -20,6 +21,7 @@ const ConcertApproval = ({
   price,
   onApprove,
   onReject,
+  isChecked,
 }: ConcertApprovalProps) => {
   const [isSigning, setIsSigning] = useState(false);
   const signatureCanvasRef = useRef<SignatureCanvas | null>(null);
@@ -91,10 +93,12 @@ const ConcertApproval = ({
           <p>{date}</p>
           <p>{price}</p>
         </div>
-        <div className="flex space-x-2">
-          <ApprovalButton label="승인" onClick={handleOpenSignature} />
-          <ApprovalButton label="거절" onClick={onReject} />
-        </div>
+        {!isChecked && (
+          <div className="flex space-x-2">
+            <ApprovalButton label="승인" onClick={handleOpenSignature} />
+            <ApprovalButton label="거절" onClick={onReject} />
+          </div>
+        )}
       </div>
 
       {isSigning && (

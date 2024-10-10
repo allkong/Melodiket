@@ -21,6 +21,8 @@ const Page = () => {
     fetchMyConcerts();
   }, []);
 
+  console.log(data);
+
   const handleApprove = (signatureUrl: string, concertUuid: string) => {
     approveConcert({
       id: concertUuid,
@@ -52,6 +54,7 @@ const Page = () => {
                 handleApprove(signatureUrl, concert.uuid)
               }
               onReject={() => handleReject(concert.uuid)}
+              isChecked={concert.approvalStatus === 'PENDING' ? false : true}
             />
           </div>
         ))}
