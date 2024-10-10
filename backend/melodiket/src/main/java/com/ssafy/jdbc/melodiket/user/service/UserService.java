@@ -235,17 +235,17 @@ public class UserService implements AuthService {
 
         Role role = appUserEntity.getRole();
         String imageUrl = null;
-        if(role == Role.STAGE_MANAGER){
+        if (role == Role.STAGE_MANAGER) {
             StageManagerEntity stageManager = stageMangerRepository.findByLoginId(loginId)
                     .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
             imageUrl = stageManager.getImageUrl();
         }
-        if(role == Role.MUSICIAN){
+        if (role == Role.MUSICIAN) {
             MusicianEntity musician = musicianRepository.findByLoginId(loginId)
                     .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
             imageUrl = musician.getImageUrl();
         }
-        if(role == Role.AUDIENCE){
+        if (role == Role.AUDIENCE) {
             AudienceEntity audience = audienceRepository.findByLoginId(loginId)
                     .orElseThrow(() -> new HttpResponseException(ErrorDetail.USER_NOT_FOUND));
             imageUrl = audience.getImageUrl();
@@ -340,15 +340,15 @@ public class UserService implements AuthService {
     @Override
     public PageResponse<MusicianResp> getMusicians(MusicianCursorPagingReq pagingReq) {
         // 필터 조건이 없으면 모든 뮤지션 목록을 조회
-        BooleanExpression condition = QMusicianEntity.musicianEntity.isNotNull();
+        BooleanExpression nameQuery = null;
 
         // name 필터가 있는 경우
         if (pagingReq.getName() != null && !pagingReq.getName().isEmpty()) {
-            condition = condition.and(QMusicianEntity.musicianEntity.name.containsIgnoreCase(pagingReq.getName()));
+            nameQuery = QMusicianEntity.musicianEntity.name.containsIgnoreCase(pagingReq.getName());
         }
 
         // 조건에 맞는 뮤지션 목록을 조회
-        return musicianCursorRepository.findWithPagination(pagingReq, MusicianResp::from, condition);
+        return musicianCursorRepository.findAll(pagingReq, nameQuery);
     }
 
     @Override
