@@ -28,7 +28,6 @@ const TextSelectModal = () => {
       scale: 1,
       rotate: 0,
     });
-    console.log(selectedColor);
 
     router.back();
   };
