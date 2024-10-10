@@ -4,6 +4,7 @@ import Header from '@/components/organisms/navigation/Header';
 import MusicianProfileSection from './_section/musician-profile-section';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import ControlsBarSkeleton from '@/components/organisms/controls/ControlsBarSkeleton';
+import MusicianConcertSection from './_section/musician-concert-section';
 
 interface PageProps {
   params: { uuid: string };
@@ -19,7 +20,7 @@ const Page = ({ params }: PageProps) => {
         <Suspense fallback={<ControlsBarSkeleton />}>
           <ControlsBar />
         </Suspense>
-        <div className="mx-5 bg-purple-100 h-96">공연 목록</div>
+        <MusicianConcertSection uuid={params.uuid} />
       </div>
     </div>
   );
