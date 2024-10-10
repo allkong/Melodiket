@@ -70,7 +70,7 @@ const Input = forwardRef(
         onKeyDown={handleKeyDown}
         onBlur={onBlur}
         disabled={disabled}
-        inputMode={type === 'number' ? 'numeric' : undefined} // 모바일 키패드에 숫자 패드 표시
+        inputMode={type === 'number' ? 'numeric' : undefined}
       />
     );
   }
