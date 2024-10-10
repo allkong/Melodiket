@@ -2,7 +2,7 @@ import { LogoImage } from '@/public/icons';
 
 interface PageTitleProps {
   title: string;
-  total: number;
+  total?: number;
 }
 
 const PageTitle = ({ title, total }: PageTitleProps) => {
