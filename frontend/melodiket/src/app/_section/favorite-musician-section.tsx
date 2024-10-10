@@ -31,8 +31,6 @@ const FavoriteMusicianSection = () => {
   const { data } = useFetchFavoriteMusiciansList();
   const { user } = useAuthStore();
 
-  console.log(data);
-
   const show = getComponent(user, data);
 
   return <div className="flex gap-2">{show}</div>;
