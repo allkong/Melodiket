@@ -5,6 +5,7 @@ import type { TicketBookRequest } from '@/types/ticket';
 import { Suspense, useState } from 'react';
 import SeatSelector from '../_components/seat-selector';
 import { formatPrice } from '@/utils/concertFormatter';
+import LoadingSpinner from '@/components/atoms/feedback/LoadingSpinner';
 
 interface SeatSectionProps {
   onNext: (data: Pick<TicketBookRequest, 'seatRow' | 'seatCol'>) => void;
@@ -32,7 +33,7 @@ const SeatSection = ({ onNext, price }: SeatSectionProps) => {
   return (
     <div className="flex flex-col w-full h-full pb-20">
       <div className="h-0 flex-grow overflow-auto">
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<LoadingSpinner />}>
           <SeatSelector
             seatInfo={seatInfo}
             onChange={(data) => setSeatInfo(data)}
@@ -56,7 +57,12 @@ const SeatSection = ({ onNext, price }: SeatSectionProps) => {
       <div className="fixed w-full max-w-xl bottom-0 left-1/2 -translate-x-1/2 px-6 py-3 bg-white">
         <LargeButton
           label="다음 단계"
-          onClick={() => onNext(seatInfo)}
+          onClick={() =>
+            onNext({
+              seatCol: seatInfo.seatCol + 1,
+              seatRow: seatInfo.seatRow + 1,
+            })
+          }
           disabled={isDisabled(seatInfo)}
         />
       </div>
