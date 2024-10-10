@@ -4,22 +4,34 @@ interface MediumButtonProps {
   label: string;
   color?: 'primary' | 'gray';
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  icon?: React.ReactElement;
 }
 
 const MediumButton = ({
   label,
   color = 'primary',
   onClick,
+  icon,
 }: MediumButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={clsx('rounded-md w-28 h-10 text-white font-medium', {
-        'bg-primary': color === 'primary',
-        'bg-gray-300': color === 'gray',
-      })}
+      className={clsx(
+        'rounded-md min-w-28 h-10 text-white font-medium flex items-center justify-center px-4',
+        {
+          'bg-primary': color === 'primary',
+          'bg-gray-300': color === 'gray',
+        }
+      )}
     >
-      {label}
+      <div className="flex items-center justify-center gap-2">
+        {icon && (
+          <div className="flex items-center justify-center w-5 h-auto">
+            {icon}
+          </div>
+        )}
+        <p>{label}</p>
+      </div>
     </button>
   );
 };

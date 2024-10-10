@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { getBlurDataUrl } from '@/utils/getUrl';
 
 import RotateButton from '@/components/atoms/button/RotateButton';
+import PhotocardFrame from './PhotocardFrame';
 
 interface PhotocardFrontProps {
   src: string;
@@ -11,7 +12,7 @@ interface PhotocardFrontProps {
 
 const PhotocardFront = ({ src, onClick }: PhotocardFrontProps) => {
   return (
-    <div className="w-[20.7rem] h-[33.3rem] relative rounded-lg overflow-hidden border border-gray-200">
+    <PhotocardFrame isCreated>
       <Image
         src={src}
         alt="photocard"
@@ -24,7 +25,7 @@ const PhotocardFront = ({ src, onClick }: PhotocardFrontProps) => {
       <div className="absolute bottom-0 right-0 px-3 py-3">
         <RotateButton onClick={onClick} />
       </div>
-    </div>
+    </PhotocardFrame>
   );
 };
 

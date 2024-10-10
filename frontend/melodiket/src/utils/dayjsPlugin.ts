@@ -12,6 +12,10 @@ dayjs.extend(timezone);
 // 한국어 로케일 설정
 dayjs.locale('ko');
 
+export const getDatetime = (): string => {
+  return dayjs().tz().format();
+};
+
 // 날짜 형식 커스텀
 export const formatDateToYMD = (dateString: string): string => {
   if (!dateString) {

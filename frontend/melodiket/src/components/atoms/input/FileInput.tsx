@@ -25,7 +25,8 @@ const FileInput = forwardRef(
           const formData = new FormData();
           formData.append('file', file);
 
-          const response = await fetch('https://j11a310.p.ssafy.io/kubo/ipfs', {
+          const ipfsUrl = process.env.NEXT_PUBLIC_IPFS_URL ?? '';
+          const response = await fetch(ipfsUrl, {
             method: 'POST',
             body: formData,
           });

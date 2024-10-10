@@ -7,8 +7,12 @@ import Header from '@/components/organisms/navigation/Header';
 import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
 import KakaoShareButton from '@/components/organisms/photocard/KakaoShareButton';
 
-const Page = () => {
-  const { data: photocard } = usePhotocardDetail();
+interface PageProps {
+  params: { uuid: string };
+}
+
+const Page = ({ params }: PageProps) => {
+  const { data: photocard } = usePhotocardDetail(params.uuid);
 
   if (!photocard) {
     return null;

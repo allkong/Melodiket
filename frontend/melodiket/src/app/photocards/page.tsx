@@ -1,5 +1,5 @@
 import Header from '@/components/organisms/navigation/Header';
-import PageTitle from '@/components/molecules/title/PageTitle';
+import PhotocardTitle from './_components/photocard-title';
 import PhotocardListSection from './_components/photocard-list-section';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { Card } from '@/public/icons';
@@ -9,9 +9,9 @@ const Page = () => {
     <div className="flex flex-col h-screen">
       <div>
         <Header />
-        <PageTitle title="포토카드" total={2} />
+        <PhotocardTitle />
       </div>
-      <div className="overflow-y-scroll">
+      <div className="overflow-y-scroll flex-grow">
         <PhotocardListSection />
       </div>
       <FixedButton
