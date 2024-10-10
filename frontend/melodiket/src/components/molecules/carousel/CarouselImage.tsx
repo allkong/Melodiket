@@ -38,17 +38,28 @@ const CarouselImage = ({
         )}
       ></div>
       <div className="absolute flex flex-col bottom-3 left-3 text-white">
-        <p className="text-2xl mb-2 font-bold whitespace-pre-wrap leading-tight">
-          {data.description}
-        </p>
-        <div className="flex items-center gap-1">
-          <CalendarFilled width="8" height="10" className="fill-current" />
-          <p className="text-sm">{data.ticketingAt}</p>
-        </div>
-        <div className="flex items-center gap-1">
-          <Location width="8" height="10" className="fill-current" />
-          <p className="text-sm">{data.stageName}</p>
-        </div>
+        {data.title !== '' && (
+          <p className="text-2xl mb-2 font-bold whitespace-pre-wrap leading-tight">
+            {data.title}
+          </p>
+        )}
+        {data.description !== '' && (
+          <p className="text-lg mb-2 font-medium whitespace-pre-wrap leading-tight">
+            {data.description}
+          </p>
+        )}
+        {data.ticketingAt !== '' && (
+          <div className="flex items-center gap-1">
+            <CalendarFilled width="8" height="10" className="fill-current" />
+            <p className="text-sm">{data.ticketingAt}</p>
+          </div>
+        )}
+        {data.stageName !== '' && (
+          <div className="flex items-center gap-1">
+            <Location width="8" height="10" className="fill-current" />
+            <p className="text-sm">{data.stageName}</p>
+          </div>
+        )}
       </div>
     </div>
   );

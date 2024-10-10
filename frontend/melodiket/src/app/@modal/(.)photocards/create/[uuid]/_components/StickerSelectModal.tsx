@@ -52,7 +52,7 @@ const StickerSelectModal = () => {
         {filteredStickers.map((sticker) => (
           <button
             key={sticker.name}
-            onClick={() => handleStickerSelect(sticker)}
+            onClick={() => handleStickerSelect(sticker as Sticker)}
             className="w-20 h-20"
           >
             {sticker.image}

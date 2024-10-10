@@ -19,6 +19,7 @@ const FavoriteConcert = ({ data, refetch }: FavoriteConcertProps) => {
           isFavorite={concert.isLike}
           href={`/concerts/${concert.concertUuid}`}
           {...concert}
+          ticketingAt={concert.ticketingAt}
         />
       ))}
     </div>
