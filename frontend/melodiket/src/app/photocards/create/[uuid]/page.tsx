@@ -10,6 +10,7 @@ import { usePhotocardUpload } from '@/services/photocard/fetchPhotocard';
 import SubHeader from '@/components/organisms/navigation/SubHeader';
 import PhotocardImageSelectSection from './_sections/photocard-image-select-section';
 import toast from 'react-hot-toast';
+import useSpinner from '@/hooks/useSpinner';
 const PhotocardEditSelection = dynamic(
   () => import('./_sections/photocard-edit-selection'),
   {
@@ -23,7 +24,8 @@ interface PageProps {
 
 const Page = ({ params }: PageProps) => {
   const router = useRouter();
-  const { mutateAsync: photocardUpload } = usePhotocardUpload();
+  const { mutateAsync: photocardUpload, isPending } = usePhotocardUpload();
+  useSpinner(isPending);
 
   const { Funnel, setStep } = useFunnel<'select' | 'edit'>({
     addToHistory: true,

@@ -35,7 +35,8 @@ const ReservedTicketListSection = () => {
   ) => {
     setPosterCid(posterCid);
     setSignatureImage(musicianSignatureImage);
-    router.push(`/photocards/create/${ticketUuid}`);
+    // router.push(`/photocards/create/${ticketUuid}`);
+    window.location.href = `/photocards/create/${ticketUuid}`;
   };
 
   return (
