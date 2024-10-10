@@ -1,6 +1,9 @@
 'use client';
 
 import { ChangeEvent, ForwardedRef, forwardRef, useRef, useState } from 'react';
+import useSpinner from '@/hooks/useSpinner';
+import toast from 'react-hot-toast';
+import useSpinnerStore from '@/store/spinnerStore';
 
 interface FileInputProps {
   onChange?: (cid: string | null) => void;
@@ -16,12 +19,15 @@ const FileInput = forwardRef(
     const [fileName, setFileName] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
 
+    const { setIsLoading } = useSpinnerStore();
+
     const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0] || null;
       setFileName(file ? file.name : null);
 
       if (file) {
         try {
+          setIsLoading(true);
           const formData = new FormData();
           formData.append('file', file);
 
@@ -38,10 +44,13 @@ const FileInput = forwardRef(
               onChange(cid);
             }
           } else {
-            console.error('파일 업로드 실패:', response.statusText);
+            toast.error('파일 업로드 실패');
           }
         } catch (error) {
-          console.error('파일 업로드 중 오류 발생:', error);
+          console.log(error);
+          toast.error('파일 업로드 중 오류 발생');
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -58,6 +67,7 @@ const FileInput = forwardRef(
           ref={inputRef}
           id="file-input"
           type="file"
+          accept="image/png"
           onChange={handleChange}
           onBlur={onBlur}
           className="absolute w-0 h-0 p-0 overflow-hidden border-0"
