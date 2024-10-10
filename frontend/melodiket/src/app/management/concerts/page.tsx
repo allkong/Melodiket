@@ -27,6 +27,8 @@ const Page = () => {
     ? concertData
     : concertData?.result || [];
 
+  console.log(concerts);
+
   const filteredConcerts = useMemo(() => {
     return (
       concerts.filter((concert) => {
@@ -34,7 +36,7 @@ const Page = () => {
           return (
             concert.status === 'PREPARING' ||
             concert.status === 'ACTIVE' ||
-            concert.status === 'TRANSFERED'
+            concert.status === 'TRANSFERRED'
           );
         }
         return concert.status === 'CANCELED';
