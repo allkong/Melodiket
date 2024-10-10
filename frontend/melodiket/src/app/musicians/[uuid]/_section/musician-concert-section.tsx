@@ -19,7 +19,6 @@ const MusicianConcertSection = ({ uuid }: MusicianConcertSectionProps) => {
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
     useConcertsByMusician(uuid);
   const { pages } = data ?? {};
-  console.log(pages);
 
   const endRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useIsOnScreen(endRef);

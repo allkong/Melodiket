@@ -24,7 +24,6 @@ const MusicianProfileSection = ({
   const handleFavoriteToggle = async () => {
     toggleFavorite(musicianUuid, {
       onSuccess: (data) => {
-        console.log(data.status);
         setIsFavorite(data.status);
         setLikeCount((prevCount) =>
           data.status ? prevCount + 1 : prevCount - 1
