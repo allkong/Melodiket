@@ -18,3 +18,18 @@ export const useGetMyWallet = () => {
     },
   });
 };
+
+const concertClose = async (id: string): Promise<void> => {
+  await customFetch(`/concerts/${id}/close`, {
+    method: 'POST',
+  });
+};
+
+export const useConcertClose = () => {
+  return useMutation({
+    mutationFn: (id: string) => concertClose(id),
+    onError: () => {
+      toast.error('공연 정산 실패!');
+    },
+  });
+};
