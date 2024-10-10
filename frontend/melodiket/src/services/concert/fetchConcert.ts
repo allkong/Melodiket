@@ -148,7 +148,7 @@ export const useBookTicket = () => {
     }: {
       ticketBookRequest: TicketBookRequest;
     }) => bookTicket(ticketBookRequest),
-    throwOnError: true,
+    // throwOnError: true,
   });
   return mutate;
 };
@@ -223,4 +223,20 @@ export const useCreateConcert = () => {
       alert('공연 등록 실패!');
     },
   });
+};
+
+export const fetchRemainSeat = async (concertUuid: string) => {
+  const response = await customFetch<boolean[][]>(
+    `/concerts/seats/${concertUuid}`
+  );
+  return response;
+};
+
+export const useFetchRemainSeat = (concertUuid: string) => {
+  const result = useQuery({
+    queryKey: [],
+    queryFn: () => fetchRemainSeat(concertUuid),
+    gcTime: 0,
+  });
+  return result;
 };

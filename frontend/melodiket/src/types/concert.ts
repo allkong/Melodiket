@@ -65,6 +65,16 @@ export interface FetchConcertResponse {
   >[];
 }
 
+export interface FetchFavoriteResponse {
+  posterCid: string;
+  concertUuid: string;
+  startAt: string;
+  ticketingAt: string;
+  stageName: string;
+  title: string;
+  isLike: boolean;
+}
+
 export interface ConcertDetail {
   availableTickets: number;
   isAvailableSeat?: boolean[][];
