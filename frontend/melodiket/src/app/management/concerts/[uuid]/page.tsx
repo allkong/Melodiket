@@ -10,7 +10,6 @@ import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatus
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 import SmallButton from '@/components/atoms/button/SmallButton';
 import FixedButton from '@/components/organisms/controls/FixedButton';
-import { Ticket } from '@/public/icons';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice } from '@/utils/concertFormatter';
 import { getCidUrl } from '@/utils/getUrl';
@@ -45,6 +44,10 @@ const ConcertDetailPage = () => {
     { label: '상태', value: concert?.status || '정보 없음' },
   ].filter(Boolean) as { label: string; value: string }[];
 
+  const showCancelButton = !concert?.musicians?.some(
+    (musician) => musician.approvalStatus === 'DENIED'
+  );
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -68,7 +71,7 @@ const ConcertDetailPage = () => {
               key={musician.musicianUuid}
               src={musician.imageUrl || ''}
               musicianName={musician.name || '정보 없음'}
-              status="pending"
+              status={musician.approvalStatus}
             />
           ))}
         </DetailSection>
@@ -88,7 +91,9 @@ const ConcertDetailPage = () => {
         </DetailSection>
       </div>
 
-      <FixedButton label="공연 취소" onClick={() => alert('공연 취소!')} />
+      {showCancelButton && (
+        <FixedButton label="공연 취소" onClick={() => alert('공연 취소!')} />
+      )}
     </div>
   );
 };
