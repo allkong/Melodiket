@@ -49,7 +49,6 @@ export const useIsNicknameDuplicated = () => {
   const mutate = useMutation({
     mutationFn: ({ nickname }: { nickname: string }) =>
       isNicknameDuplicated(nickname),
-    throwOnError: true,
   });
   return mutate;
 };
@@ -71,7 +70,6 @@ export const useIsLoginIdDuplicated = () => {
   const mutate = useMutation({
     mutationFn: ({ loginId }: { loginId: string }) =>
       isLoginIdDuplicated(loginId),
-    throwOnError: true,
   });
   return mutate;
 };
