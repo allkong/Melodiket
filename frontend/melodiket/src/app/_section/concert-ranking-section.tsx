@@ -12,17 +12,19 @@ const ConcertRankingSection = () => {
     <>
       {pageInfo &&
         pageInfo?.responsedSize > 0 &&
-        result?.map((concert, idx) => (
-          <ConcertRankingCard
-            key={`${concert.concertUuid}-${concert.posterCid}`}
-            concertUuid={concert.concertUuid}
-            stageName={concert.stageName}
-            posterCid={getCidUrl(concert.posterCid)}
-            ticketingAt={concert.ticketingAt}
-            title={concert.title}
-            ranking={idx + 1}
-          />
-        ))}
+        result
+          ?.slice()
+          .map((concert, idx) => (
+            <ConcertRankingCard
+              key={`${concert.concertUuid}-${concert.posterCid}`}
+              concertUuid={concert.concertUuid}
+              stageName={concert.stageName}
+              posterCid={getCidUrl(concert.posterCid)}
+              ticketingAt={concert.ticketingAt}
+              title={concert.title}
+              ranking={idx + 1}
+            />
+          ))}
     </>
   );
 };

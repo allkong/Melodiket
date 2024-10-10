@@ -8,6 +8,7 @@ import SearchButton from '@/components/atoms/button/SearchButton';
 import { LogoText } from '@/public/icons';
 import useMenuStore from '@/store/menuStore';
 import Menu from '@/components/organisms/menu/Menu';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   isFixed?: boolean;
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 const Header = ({ isFixed = false }: HeaderProps) => {
   const { isOpen: isMenuOpen, setIsOpen: setIsMenuOpen } = useMenuStore();
+  const router = useRouter();
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -41,7 +43,7 @@ const Header = ({ isFixed = false }: HeaderProps) => {
       >
         <div className="flex items-center justify-between max-w-xl px-6 py-4 mx-auto">
           <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)} />
-          <LogoText className="h-auto w-28" />
+          <LogoText className="h-auto w-28" onClick={() => router.push('/')} />
           <SearchButton />
         </div>
       </header>
