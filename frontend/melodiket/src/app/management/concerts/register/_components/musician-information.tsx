@@ -1,16 +1,19 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-
 import { useMusiciansQuery } from '@/services/musician/fetchMusician';
-import { ConcertData } from '@/types/concert';
+import { getS3Url } from '@/utils/getUrl';
+import useIsOnScreen from '@/hooks/useIsOnScreen';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
 import MusicianSelectButton from '@/components/molecules/button/MusicianSelectButton';
 import TextBanner from '@/components/molecules/text/TextBanner';
-
 import LineDivider from '@/components/atoms/divider/LineDivider';
+import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
+import IsEnd from '@/components/atoms/label/IsEnd';
+import IsError from '@/components/atoms/button/IsErrorButton';
+import { ConcertData } from '@/types/concert';
 
 interface MusicianInformationProps {
   concertData: ConcertData;
@@ -24,31 +27,16 @@ const MusicianInformation = ({
   const [musicianList, setMusicianList] = useState<string[]>([]);
   const [musicianName, setMusicianName] = useState('');
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
     useMusiciansQuery();
-
   const endRef = useRef<HTMLDivElement>(null);
+  const isOnScreen = useIsOnScreen(endRef);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1.0 }
-    );
-
-    if (endRef.current) {
-      observer.observe(endRef.current);
+    if (isOnScreen && hasNextPage) {
+      fetchNextPage();
     }
-
-    return () => {
-      if (endRef.current) {
-        observer.unobserve(endRef.current);
-      }
-    };
-  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
+  }, [isOnScreen, hasNextPage, fetchNextPage]);
 
   const isFormValid = musicianList.length > 0;
 
@@ -71,20 +59,11 @@ const MusicianInformation = ({
   };
 
   const allMusicians = data?.pages.flatMap((page) => page.result) || [];
-
-  const filteredMusicians =
-    musicianName.trim().length > 0
-      ? allMusicians.filter((musician) =>
-          musician.nickname.toLowerCase().includes(musicianName.toLowerCase())
-        )
-      : [];
-
-  const selectedMusicians = allMusicians.filter((musician) =>
-    musicianList.includes(musician.uuid)
-  );
-  const unselectedMusicians = allMusicians.filter(
-    (musician) => !musicianList.includes(musician.uuid)
-  );
+  const filteredMusicians = musicianName.trim()
+    ? allMusicians.filter((musician) =>
+        musician.nickname.toLowerCase().includes(musicianName.toLowerCase())
+      )
+    : allMusicians;
 
   return (
     <div className="flex flex-col h-full p-4">
@@ -101,17 +80,7 @@ const MusicianInformation = ({
           />
         </div>
         <div className="overflow-y-auto">
-          {filteredMusicians.length > 0 &&
-            filteredMusicians.map((musician) => (
-              <MusicianSelectButton
-                key={musician.uuid}
-                label={musician.nickname}
-                isSelected={musicianList.includes(musician.uuid)}
-                onClick={() => toggleMusician(musician.uuid)}
-              />
-            ))}
-          {filteredMusicians.length > 0 && <LineDivider />}
-          {selectedMusicians.map((musician) => (
+          {filteredMusicians.map((musician) => (
             <MusicianSelectButton
               key={musician.uuid}
               label={musician.nickname}
@@ -119,16 +88,10 @@ const MusicianInformation = ({
               onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
-          {unselectedMusicians.map((musician) => (
-            <MusicianSelectButton
-              key={musician.uuid}
-              label={musician.nickname}
-              isSelected={musicianList.includes(musician.uuid)}
-              onClick={() => toggleMusician(musician.uuid)}
-            />
-          ))}
+          {isFetching && <MusicianItemSkeleton count={6} />}
+          {error && <IsError onClick={refetch} />}
+          {data && !hasNextPage && <IsEnd />}
           <div ref={endRef} className="h-10" />
-          {isFetchingNextPage && <p>Loading more...</p>}
         </div>
       </div>
       <div className="my-4 h-fit">

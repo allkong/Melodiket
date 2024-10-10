@@ -5,7 +5,7 @@ import getQueryClient from '@/utils/getQueryClient';
 import favoriteKey from './favoriteKey';
 import useAuthStore from '@/store/authStore';
 import toast from 'react-hot-toast';
-import { FetchConcertResponse } from '@/types/concert';
+import { FetchFavoriteResponse } from '@/types/concert';
 
 export const fetchFavoriteMusiciansList = async () => {
   const response = await customFetch<FavoriteMusician>(
@@ -18,7 +18,7 @@ export const useFetchFavoriteMusiciansList = () => {
   const { user } = useAuthStore();
 
   const response = useQuery({
-    queryKey: favoriteKey.musicians(),
+    queryKey: favoriteKey.musicians(user),
     queryFn: fetchFavoriteMusiciansList,
     enabled: !!user,
   });
@@ -27,9 +27,10 @@ export const useFetchFavoriteMusiciansList = () => {
 };
 
 export const useFetchFavoriteMusiciansListDehydrateState = () => {
+  const { user } = useAuthStore();
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
-    queryKey: favoriteKey.musicians(),
+    queryKey: favoriteKey.musicians(user),
     queryFn: fetchFavoriteMusiciansList,
   });
 
@@ -37,7 +38,7 @@ export const useFetchFavoriteMusiciansListDehydrateState = () => {
 };
 
 export const fetchFavoriteConcert = async () => {
-  const response = await customFetch<FetchConcertResponse>(
+  const response = await customFetch<FetchFavoriteResponse[]>(
     '/concerts/favorite/me'
   );
   return response;
@@ -55,7 +56,7 @@ export const useFetchFavoriteConcert = () => {
 };
 
 export const toggleFavoriteConcert = async (concertUuid: string) => {
-  const response = await customFetch<{ isFavorite: boolean }>(
+  const response = await customFetch<{ isLike: boolean }>(
     `/concerts/${concertUuid}/favorite`,
     { method: 'post' }
   );

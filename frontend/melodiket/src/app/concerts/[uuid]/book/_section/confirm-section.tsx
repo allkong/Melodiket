@@ -61,16 +61,16 @@ const ConfirmSection = ({ onNext, seatRow, seatCol }: ConfirmSectionProps) => {
         </div>
         <Accordion label="예매 정보">
           <div className="space-y-3">
-            {/* <LabelValueText
-              label="좌석 형태"
-              value={concert?.isSeat ? '좌식' : '스탠딩'}
-            /> */}
-            {/* {concert?.isSeat && ( */}
             <LabelValueText
-              label="좌석 위치"
-              value={`${seatRow}행 ${seatCol}열`}
+              label="좌석 형태"
+              value={concert?.isStanding ? '스탠딩' : '좌석'}
             />
-            {/* )} */}
+            {!concert?.isStanding && (
+              <LabelValueText
+                label="좌석 위치"
+                value={`${seatRow}행 ${seatCol}열`}
+              />
+            )}
             <LabelValueText
               label="가격"
               value={formatPrice(concert?.ticketPrice ?? 0)}

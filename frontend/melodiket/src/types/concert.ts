@@ -1,3 +1,5 @@
+import { Musician } from './musician';
+
 export interface ConcertData {
   stageUuid: string;
   title: string;
@@ -63,6 +65,16 @@ export interface FetchConcertResponse {
   >[];
 }
 
+export interface FetchFavoriteResponse {
+  posterCid: string;
+  concertUuid: string;
+  startAt: string;
+  ticketingAt: string;
+  stageName: string;
+  title: string;
+  isLike: boolean;
+}
+
 export interface ConcertDetail {
   availableTickets: number;
   isAvailableSeat?: boolean[][];
@@ -126,4 +138,31 @@ export interface CreateConcertResponse {
   favoriteMusicianStake: string;
   musicians: string[];
   isDeleted: boolean;
+}
+
+export interface ConcertResp {
+  result: ConcertRespInfo[];
+}
+
+export interface ConcertRespInfo {
+  concertUuid: string;
+  stageUuid: string;
+  title: string;
+  createdAt: string;
+  startAt: string;
+  ticketingAt: string;
+  availableTickets: number;
+  description: string;
+  posterCid: string;
+  ticketPrice: number;
+  ownerStake: number;
+  musicianStake: number;
+  favoriteMusicianStake: number;
+  stageName: string;
+  musicians: Musician[];
+  capacity: number;
+  isStanding: boolean;
+  status: string;
+  isLike: boolean;
+  likeCount: number;
 }

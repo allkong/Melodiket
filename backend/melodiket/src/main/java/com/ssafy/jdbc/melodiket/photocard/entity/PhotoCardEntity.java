@@ -1,12 +1,18 @@
 package com.ssafy.jdbc.melodiket.photocard.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.BaseEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.ticket.entity.TicketEntity;
 import jakarta.persistence.*;
+import jnr.constants.platform.Local;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,23 +20,13 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PhotoCardEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
-
-    @Column(nullable = false)
-    private String address;
-
+@SuperBuilder
+public class PhotoCardEntity extends ExposableEntity {
     @Column(nullable = false)
     private String imageCid;
 
-    @Column(nullable = false)
-    private Date createdAt;
+    private String photocardOwner;
+    private String favoriteMusician;
 
     @OneToOne
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")

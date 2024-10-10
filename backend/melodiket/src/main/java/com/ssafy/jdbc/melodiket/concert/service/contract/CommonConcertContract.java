@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.ssafy.jdbc.melodiket.blockchain.service.contract.BlockchainUtil.isZeroAddress;
@@ -81,11 +82,11 @@ public class CommonConcertContract extends Contract {
         this.blockchainConfig = blockchainConfig;
     }
 
-    public static Uint256 extractCreatedConcertIdFrom(TransactionReceipt receipt) {
+    public static Utf8String extractCreatedConcertUuidFrom(TransactionReceipt receipt) {
         EventValues eventValues = extractEvent(receipt, CONCERT_CREATED);
         if (eventValues != null) {
             List<Type> decodedValues = eventValues.getNonIndexedValues();
-            return (Uint256) decodedValues.get(0);
+            return (Utf8String) decodedValues.get(0);
         }
         return null;
     }
@@ -100,10 +101,10 @@ public class CommonConcertContract extends Contract {
         return null;
     }
 
-    public Concert getConcertById(long concertId) {
+    public Concert getConcertById(UUID concertUuid) {
         Function function = new Function(
                 "getTotalConcertInfo",
-                Collections.singletonList(new Uint256(concertId)),
+                Collections.singletonList(new Utf8String(concertUuid.toString())),
                 CONCERT_OUTPUT_PARAMS
         );
 
@@ -123,8 +124,8 @@ public class CommonConcertContract extends Contract {
         return new Concert(decoded);
     }
 
-    public boolean isStandingConcert(long concertId) {
-        Concert concert = getConcertById(concertId);
+    public boolean isStandingConcert(UUID concertUuid) {
+        Concert concert = getConcertById(concertUuid);
         return concert.isStanding;
     }
 }

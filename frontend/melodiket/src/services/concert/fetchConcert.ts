@@ -4,6 +4,8 @@ import {
   ConcertDetail,
   FetchConcertResponse,
   FetchMyConcertsResponse,
+  ConcertResp,
+  ConcertRespInfo,
 } from '@/types/concert';
 import customFetch from '../customFetch';
 import {
@@ -146,7 +148,7 @@ export const useBookTicket = () => {
     }: {
       ticketBookRequest: TicketBookRequest;
     }) => bookTicket(ticketBookRequest),
-    throwOnError: true,
+    // throwOnError: true,
   });
   return mutate;
 };
@@ -171,6 +173,38 @@ export const useGetMyAssignedConcerts = () => {
   });
 };
 
+const getMyConcerts = async () => {
+  const response = await customFetch<ConcertResp>('/concerts/me/created', {
+    method: 'GET',
+  });
+  return response;
+};
+
+export const useGetMyConcerts = () => {
+  return useMutation<ConcertResp, Error>({
+    mutationFn: () => getMyConcerts(),
+    onError: () => {
+      alert('내 공연 목록 가져오기 실패!');
+    },
+  });
+};
+
+const getConcertInfo = async (id: string) => {
+  const response = await customFetch<ConcertRespInfo>(`/concerts/${id}`, {
+    method: 'GET',
+  });
+  return response;
+};
+
+export const useGetConcertInfo = () => {
+  return useMutation<ConcertRespInfo, Error, string>({
+    mutationFn: (id) => getConcertInfo(id),
+    onError: () => {
+      alert('공연 정보 가져오기 실패!');
+    },
+  });
+};
+
 const createConcert = async (concertData: ConcertData) => {
   const response = await customFetch<CreateConcertResponse>(
     '/concerts/create',
@@ -189,4 +223,20 @@ export const useCreateConcert = () => {
       alert('공연 등록 실패!');
     },
   });
+};
+
+export const fetchRemainSeat = async (concertUuid: string) => {
+  const response = await customFetch<boolean[][]>(
+    `/concerts/seats/${concertUuid}`
+  );
+  return response;
+};
+
+export const useFetchRemainSeat = (concertUuid: string) => {
+  const result = useQuery({
+    queryKey: [],
+    queryFn: () => fetchRemainSeat(concertUuid),
+    gcTime: 0,
+  });
+  return result;
 };
