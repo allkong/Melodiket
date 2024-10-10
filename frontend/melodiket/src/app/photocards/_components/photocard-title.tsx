@@ -6,7 +6,7 @@ import PageTitle from '@/components/molecules/title/PageTitle';
 
 const PhotocardTitle = () => {
   const { data: photocards } = usePhotocardList();
-  return <PageTitle title="포토카드" total={photocards?.length ?? 0} />;
+  return <PageTitle title="포토카드" total={photocards?.length} />;
 };
 
 export default PhotocardTitle;
