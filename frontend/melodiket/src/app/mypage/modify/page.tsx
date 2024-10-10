@@ -9,8 +9,10 @@ import Input from '@/components/atoms/input/Input';
 import Textarea from '@/components/atoms/textarea/Textarea';
 
 import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+  const router = useRouter();
   const { mutate: getMe, data } = useGetMe();
   const { mutate: updateMe } = useUpdateMe();
 
@@ -38,6 +40,7 @@ const Page = () => {
     };
 
     updateMe(updateData);
+    router.push('/mypage');
   };
 
   return (
