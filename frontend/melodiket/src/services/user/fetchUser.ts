@@ -7,6 +7,7 @@ import {
   UploadImageRequest,
   UploadImageResponse,
 } from '@/types/user';
+import toast from 'react-hot-toast';
 
 const getMe = async () => {
   const response = await customFetch<GetMeResponse>('/users/me', {
@@ -38,7 +39,7 @@ export const useUploadImage = () => {
   return useMutation<UploadImageResponse, Error, UploadImageRequest>({
     mutationFn: (uploadImageRequest) => uploadImage(uploadImageRequest),
     onError: () => {
-      alert('이미지 업로드 실패!');
+      toast.error('이미지 업로드 실패!');
     },
   });
 };
@@ -47,7 +48,7 @@ export const useGetMe = () => {
   return useMutation<GetMeResponse, Error>({
     mutationFn: () => getMe(),
     onError: () => {
-      alert('정보 가져오기 실패!');
+      toast.error('정보 가져오기 실패!');
     },
   });
 };
@@ -56,7 +57,10 @@ export const useUpdateMe = () => {
   return useMutation<GetMeResponse, Error, UpdateMeRequest>({
     mutationFn: (updateData) => updateMe(updateData),
     onError: () => {
-      alert('정보 수정 실패!');
+      toast.error('정보 수정 실패!');
+    },
+    onSuccess: () => {
+      toast.success('정보 수정 성공!');
     },
   });
 };
