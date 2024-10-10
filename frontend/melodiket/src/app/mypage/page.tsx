@@ -14,6 +14,7 @@ import { useUploadImage } from '@/services/user/fetchUser';
 import { useGetMyWallet } from '@/services/wallet/fetchWallet';
 import { getS3Url } from '@/utils/getUrl';
 import toast from 'react-hot-toast';
+import { formatPrice } from '@/utils/concertFormatter';
 
 const Page = () => {
   const router = useRouter();
@@ -133,7 +134,7 @@ const Page = () => {
                   <p className="text-purple-400 font-medium">잔액</p>
                 </div>
                 <p className="text-black ml-auto">
-                  {walletData?.tokenBalance ?? '0'} MLDY
+                  {formatPrice(walletData?.tokenBalance ?? 0)}
                 </p>
               </div>
             </div>
