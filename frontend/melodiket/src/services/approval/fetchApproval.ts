@@ -12,6 +12,21 @@ const approvalConcert = async (
   });
 };
 
+const denyConcert = async (id: string): Promise<void> => {
+  await customFetch(`/concerts/${id}/deny`, {
+    method: 'POST',
+  });
+};
+
+export const useDenyConcert = () => {
+  return useMutation<void, Error, string>({
+    mutationFn: (id: string) => denyConcert(id),
+    onError: () => {
+      alert('공연 거부 실패!');
+    },
+  });
+};
+
 export const useApprovalConcert = () => {
   return useMutation<
     void,

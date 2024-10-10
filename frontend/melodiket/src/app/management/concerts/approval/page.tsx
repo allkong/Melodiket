@@ -6,12 +6,16 @@ import Header from '@/components/organisms/navigation/Header';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import ConcertApproval from '@/components/organisms/approval/ConcertApproval';
 import { useGetMyAssignedConcerts } from '@/services/concert/fetchConcert';
-import { useApprovalConcert } from '@/services/approval/fetchApproval';
+import {
+  useApprovalConcert,
+  useDenyConcert,
+} from '@/services/approval/fetchApproval';
 
 const Page = () => {
   const router = useRouter();
   const { mutate: fetchMyConcerts, data } = useGetMyAssignedConcerts();
   const { mutate: approveConcert } = useApprovalConcert();
+  const { mutate: denyConcert } = useDenyConcert();
 
   useEffect(() => {
     fetchMyConcerts();
@@ -25,6 +29,7 @@ const Page = () => {
   };
 
   const handleReject = (concertUuid: string) => {
+    denyConcert(concertUuid);
     console.log(`거절된 콘서트 UUID: ${concertUuid}`);
   };
 
