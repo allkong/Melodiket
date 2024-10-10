@@ -17,17 +17,19 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
   const [ticketPrice, setTicketPrice] = useState('');
   const [ownerStake, setOwnerStake] = useState('');
   const [musicianStake, setMusicianStake] = useState('');
-  const [favoriteMusicianStake, setFavoriteMusicianStake] = useState('');
+
+  const musicianCount = concertData.musicians.length;
+
+  const favoriteMusicianStake =
+    Number(ticketPrice) -
+    (Number(ownerStake) + Number(musicianStake) * musicianCount);
 
   const isFormValid =
-    ticketPrice &&
-    ownerStake &&
-    musicianStake &&
-    favoriteMusicianStake &&
-    Number(ticketPrice) ===
-      Number(ownerStake) +
-        Number(musicianStake) +
-        Number(favoriteMusicianStake);
+    Number(ticketPrice) >=
+      Number(ownerStake) + Number(musicianStake) * musicianCount &&
+    Number(ticketPrice) > 0 &&
+    Number(ownerStake) >= 0 &&
+    Number(musicianStake) >= 0;
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
@@ -35,7 +37,8 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
       ticketPrice: Number(ticketPrice),
       ownerStake: Number(ownerStake),
       musicianStake: Number(musicianStake),
-      favoriteMusicianStake: Number(favoriteMusicianStake),
+      favoriteMusicianStake:
+        favoriteMusicianStake > 0 ? favoriteMusicianStake : 0,
     };
     onNext(updatedConcertData);
   };
@@ -53,6 +56,7 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
             value={ticketPrice}
             onChange={setTicketPrice}
             placeholder="티켓 가격"
+            type="number"
           />
         </div>
         <div className="mb-4">
@@ -62,6 +66,7 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
               placeholder="공연장"
               value={ownerStake}
               onChange={setOwnerStake}
+              type="number"
             />
           </div>
           <div className="mb-2">
@@ -69,12 +74,15 @@ const TicketInformation = ({ concertData, onNext }: TicketInformationProps) => {
               placeholder="뮤지션"
               value={musicianStake}
               onChange={setMusicianStake}
+              type="number"
             />
           </div>
           <Input
             placeholder="추가 비율"
-            value={favoriteMusicianStake}
-            onChange={setFavoriteMusicianStake}
+            value={
+              favoriteMusicianStake > 0 ? favoriteMusicianStake.toString() : '0'
+            }
+            disabled={true}
           />
         </div>
       </div>

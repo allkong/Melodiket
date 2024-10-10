@@ -1,25 +1,29 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useGetConcertInfo } from '@/services/concert/fetchConcert';
+import { useCancelConcert } from '@/services/approval/fetchApproval';
 import Header from '@/components/organisms/navigation/Header';
 import PosterFrame from '@/components/atoms/image-frame/PosterFrame';
 import DetailSection from '@/components/molecules/section/DetailSection';
 import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatusProfile';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 import SmallButton from '@/components/atoms/button/SmallButton';
-import FixedButton from '@/components/organisms/controls/FixedButton';
-import { Ticket } from '@/public/icons';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice } from '@/utils/concertFormatter';
 import { getCidUrl } from '@/utils/getUrl';
+import toast from 'react-hot-toast';
+import FixedButton from '@/components/organisms/controls/FixedButton';
+import { Ticket } from '@/public/icons';
 
 const ConcertDetailPage = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const concertUuid = pathname.split('/').pop();
 
   const { mutate: getConcertInfo, data: concert } = useGetConcertInfo();
+  const { mutate: cancelConcert } = useCancelConcert();
 
   useEffect(() => {
     if (concertUuid) {
@@ -45,6 +49,29 @@ const ConcertDetailPage = () => {
     { label: '상태', value: concert?.status || '정보 없음' },
   ].filter(Boolean) as { label: string; value: string }[];
 
+  const showCancelButton =
+    !concert?.musicians?.some(
+      (musician) => musician.approvalStatus === 'DENIED'
+    ) && concert?.status !== 'CANCELED';
+
+  const handleScanButtonClick = () => {
+    window.location.href = `${pathname}/scan`;
+  };
+
+  const handleCancelConcert = () => {
+    if (concertUuid) {
+      cancelConcert(concertUuid, {
+        onSuccess: () => {
+          toast('공연이 성공적으로 취소되었습니다.');
+          router.push('/management/concerts');
+        },
+        onError: () => {
+          toast.error('공연 취소에 실패했습니다.');
+        },
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -55,10 +82,9 @@ const ConcertDetailPage = () => {
             <h1 className="font-medium">
               {concert?.title || '콘서트 정보 없음'}
             </h1>
-            <SmallButton
-              label="예매 페이지 미리보기"
-              onClick={() => alert('예매 페이지 미리보기')}
-            />
+            {showCancelButton && (
+              <SmallButton label="공연 취소" onClick={handleCancelConcert} />
+            )}
           </div>
         </div>
 
@@ -68,7 +94,7 @@ const ConcertDetailPage = () => {
               key={musician.musicianUuid}
               src={musician.imageUrl || ''}
               musicianName={musician.name || '정보 없음'}
-              status="pending"
+              status={musician.approvalStatus}
             />
           ))}
         </DetailSection>
@@ -87,8 +113,11 @@ const ConcertDetailPage = () => {
           </div>
         </DetailSection>
       </div>
-
-      <FixedButton label="공연 취소" onClick={() => alert('공연 취소!')} />
+      <FixedButton
+        label="모바일 티켓 스캔"
+        icon={<Ticket />}
+        onClick={handleScanButtonClick}
+      />
     </div>
   );
 };
