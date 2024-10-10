@@ -26,7 +26,7 @@ export function uploadAndGetCid(file) {
 
     return pinata.upload.json(fileObj)
         .then(({IpfsHash}) => {
-            return Promise.resolve(ipfsClient.pin.add(IpfsHash));
+            return IpfsHash;
         });
 }
 
