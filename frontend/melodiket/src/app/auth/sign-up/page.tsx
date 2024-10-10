@@ -11,6 +11,7 @@ import SignUpDescription from './_section/sign-up-description';
 import SignUpSuccess from './_section/sign-up-success';
 import useFunnel from '@/hooks/useFunnel';
 import { useSignUp } from '@/services/auth/fetchAuth';
+import useSpinner from '@/hooks/useSpinner';
 
 const Page = () => {
   const { Funnel, setStep } = useFunnel<
@@ -33,6 +34,7 @@ const Page = () => {
   const router = useRouter();
 
   const signUpMutate = useSignUp();
+  useSpinner(signUpMutate.isPending);
 
   return (
     <Funnel>
