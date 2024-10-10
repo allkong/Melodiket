@@ -12,6 +12,7 @@ interface MusicianItemProps {
   musicianName: string;
   initialFavoriteCount: number;
   initialFavorite: boolean;
+  onClick?: () => void;
 }
 
 const MusicianItem = ({
@@ -20,6 +21,7 @@ const MusicianItem = ({
   musicianName,
   initialFavoriteCount,
   initialFavorite,
+  onClick,
 }: MusicianItemProps) => {
   const { mutate: toggleFavorite } = useToggleFavoriteMusician();
 
@@ -29,18 +31,18 @@ const MusicianItem = ({
   const handleFavoriteToggle = async () => {
     toggleFavorite(uuid, {
       onSuccess: (data) => {
-        console.log(data.status);
         setIsFavorite(data.status);
         setLikeCount((prevCount) =>
           data.status ? prevCount + 1 : prevCount - 1
         );
+        onClick?.();
       },
     });
   };
 
   return (
-    <div className="flex items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
-      <Link href={`/musicians/${uuid}` || '/'} className="w-full">
+    <Link href={`/musicians/${uuid}` || '/'} className="w-full">
+      <div className="flex items-center justify-between px-6 py-5 bg-white border-b border-purple-50">
         <div className="flex items-center space-x-4 flex-grow">
           <Profile src={src} size="sm" />
           <div className="flex space-x-3">
@@ -48,9 +50,16 @@ const MusicianItem = ({
             <span className="text-primary">{likeCount}</span>
           </div>
         </div>
-      </Link>
-      <FavoriteButton isOn={isFavorite} onClick={handleFavoriteToggle} />
-    </div>
+        <FavoriteButton
+          isOn={isFavorite}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleFavoriteToggle();
+          }}
+        />
+      </div>
+    </Link>
   );
 };
 
