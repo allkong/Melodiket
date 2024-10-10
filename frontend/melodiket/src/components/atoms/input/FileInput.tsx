@@ -75,7 +75,7 @@ const FileInput = forwardRef(
 
         <div className="w-full h-12 pl-5 pr-10 text-base bg-white border outline-none rounded-2xl placeholder:text-gray-200 flex items-center justify-between">
           <span className="text-gray-400">
-            {fileName ? fileName : '파일 선택'}
+            {fileName ? fileName : 'png 파일 선택'}
           </span>
           <div
             className="cursor-pointer z-10 bg-no-repeat bg-center w-6 h-6"
