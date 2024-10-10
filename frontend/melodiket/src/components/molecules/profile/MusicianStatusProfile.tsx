@@ -22,9 +22,9 @@ const MusicianStatusProfile = ({
           className={clsx(
             'py-0.5 px-2 rounded-full text-white text-2xs mt-0.5',
             {
-              'bg-secondary': status === 'approval',
-              'bg-gray-300': status === 'pending',
-              'bg-red-400': status === 'rejection',
+              'bg-secondary': status === 'APPROVED',
+              'bg-gray-300': status === 'PENDING',
+              'bg-red-400': status === 'DENIED',
             }
           )}
         >
