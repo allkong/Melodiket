@@ -15,7 +15,7 @@ const ReservedTicketListSection = () => {
   const router = useRouter();
 
   const { data: tickets } = useTicketList();
-  const { setPosterCid } = usePosterStore();
+  const { setPosterCid, setSignatureImage } = usePosterStore();
 
   const filteredTickets = useMemo(() => {
     return (
@@ -28,8 +28,13 @@ const ReservedTicketListSection = () => {
     );
   }, [tickets]);
 
-  const handleTicketClick = (ticketUuid: string, posterCid: string) => {
+  const handleTicketClick = (
+    ticketUuid: string,
+    posterCid: string,
+    musicianSignatureImage: string
+  ) => {
     setPosterCid(posterCid);
+    setSignatureImage(musicianSignatureImage);
     router.push(`/photocards/create/${ticketUuid}`);
   };
 
@@ -40,7 +45,11 @@ const ReservedTicketListSection = () => {
           <div
             key={ticket.ticketUuid}
             onClick={() =>
-              handleTicketClick(ticket.ticketUuid, ticket.posterCid)
+              handleTicketClick(
+                ticket.ticketUuid,
+                ticket.posterCid,
+                ticket.myFavoriteMusician.musicianSignatureImageUrl
+              )
             }
             className="cursor-pointer"
           >
