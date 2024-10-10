@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
@@ -8,6 +8,7 @@ import Textarea from '@/components/atoms/textarea/Textarea';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import FileInput from '@/components/atoms/input/FileInput';
 import DateInput from '@/components/atoms/input/DateInput';
+import AlertLabel from '@/components/atoms/label/AlertLabel';
 
 import { ConcertData } from '@/types/concert';
 import { formatDateCustom } from '@/utils/dayjsPlugin';
@@ -27,21 +28,28 @@ const ConcertInformation = ({
   const [description, setDescription] = useState('');
   const [posterCid, setPosterCid] = useState<string | null>(null);
 
-  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDateForTicketing = tomorrow.toISOString().slice(0, 16);
 
-  const getMinTicketingDate = () => {
-    if (!startAt) return '';
-    const startDate = new Date(startAt);
-    startDate.setDate(startDate.getDate() - 1);
-    return startDate.toISOString().split('T')[0];
+  const handleStartAtChange = (newStartAt: string) => {
+    setStartAt(newStartAt);
+    setTicketingAt('');
   };
 
-  useEffect(() => {
-    setTicketingAt('');
-  }, [startAt]);
+  const isTicketingDateInvalid = new Date(ticketingAt) >= new Date(startAt);
+  const isStartAtDateInvalid = new Date(startAt) <= new Date();
+  const isTicketingAtDateInvalid = new Date(ticketingAt) <= new Date();
 
   const isFormValid =
-    title && startAt && ticketingAt && description && posterCid;
+    title &&
+    startAt &&
+    ticketingAt &&
+    description &&
+    posterCid &&
+    !isTicketingDateInvalid &&
+    !isStartAtDateInvalid &&
+    !isTicketingAtDateInvalid;
 
   const handleNext = () => {
     const updatedConcertData: ConcertData = {
@@ -70,9 +78,9 @@ const ConcertInformation = ({
           <h2 className="font-semibold mb-2">공연 일시</h2>
           <DateInput
             value={startAt}
-            onChange={setStartAt}
+            onChange={handleStartAtChange}
             placeholder="공연 일시"
-            minDate={today}
+            minDate={minDateForTicketing}
           />
         </div>
         <div className="mb-4">
@@ -81,9 +89,11 @@ const ConcertInformation = ({
             value={ticketingAt}
             onChange={setTicketingAt}
             placeholder="티케팅 시작 일시"
-            minDate={today}
-            maxDate={getMinTicketingDate()}
+            minDate={minDateForTicketing}
           />
+          {isTicketingDateInvalid && (
+            <AlertLabel label="티케팅 시작 일시는 공연 일시보다 빨라야 합니다." />
+          )}
         </div>
         <div className="mb-4 flex-grow">
           <h2 className="font-semibold mb-2">공연 내용</h2>
