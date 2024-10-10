@@ -25,7 +25,9 @@ const MoveableText = ({
         className="absolute cursor-pointer"
         style={{ left: `${text.x}px`, top: `${text.y}px` }}
       >
-        <p style={{ color: text.color }}>{text.label}</p>
+        <p style={{ color: text.color, whiteSpace: 'pre-wrap' }}>
+          {text.label}
+        </p>
       </div>
 
       {isSelected && (
