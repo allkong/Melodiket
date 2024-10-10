@@ -59,5 +59,8 @@ export const useUpdateMe = () => {
     onError: () => {
       toast.error('정보 수정 실패!');
     },
+    onSuccess: () => {
+      toast.success('정보 수정 성공!');
+    },
   });
 };
