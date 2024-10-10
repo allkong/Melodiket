@@ -72,7 +72,7 @@ export const useTicketUse = () => {
 };
 
 const ticketRefund = async (ticketUuid: string) => {
-  return await customFetch(`tickets/${ticketUuid}/refund`, {
+  return await customFetch(`/tickets/${ticketUuid}/refund`, {
     method: 'POST',
   });
 };
