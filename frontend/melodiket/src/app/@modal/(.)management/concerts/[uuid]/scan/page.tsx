@@ -19,7 +19,7 @@ const Modal = () => {
   const { data: ticket } = useTicketDetail();
   const { mutate: ticketUse } = useTicketUse();
 
-  if (concertUuid !== ticket?.concertUuid) {
+  if (ticket && concertUuid !== ticket?.concertUuid) {
     return (
       <AlertModal type="error" title="티켓 사용 처리">
         <p>다른 공연의 티켓입니다.</p>
