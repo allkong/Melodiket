@@ -13,6 +13,8 @@ import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
 import { useUploadImage } from '@/services/user/fetchUser';
 import { useGetMyWallet } from '@/services/wallet/fetchWallet';
 import { getS3Url } from '@/utils/getUrl';
+import toast from 'react-hot-toast';
+import { formatPrice } from '@/utils/concertFormatter';
 
 const Page = () => {
   const router = useRouter();
@@ -68,25 +70,23 @@ const Page = () => {
                 { imageUrl },
                 {
                   onSuccess: () => {
-                    alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
+                    toast('프로필 이미지가 성공적으로 업데이트되었습니다.');
                     getMe();
                   },
                   onError: () => {
-                    alert('프로필 업데이트 실패!');
+                    toast.error('프로필 업데이트 실패!');
                   },
                 }
               );
             } else {
-              console.error('파일 업로드 실패:', uploadResponse.statusText);
-              alert('파일 업로드에 실패했습니다.');
+              toast.error('파일 업로드에 실패했습니다.');
             }
           } catch (error) {
-            console.error('파일 업로드 중 오류 발생:', error);
-            alert('파일 업로드 중 오류가 발생했습니다.');
+            toast.error('파일 업로드 중 오류가 발생했습니다.');
           }
         },
         onError: () => {
-          alert('이미지 업로드 실패!');
+          toast.error('이미지 업로드 실패!');
         },
       });
     }
@@ -134,7 +134,7 @@ const Page = () => {
                   <p className="text-purple-400 font-medium">잔액</p>
                 </div>
                 <p className="text-black ml-auto">
-                  {walletData?.tokenBalance ?? '0'} MLDY
+                  {formatPrice(walletData?.tokenBalance ?? 0)}
                 </p>
               </div>
             </div>

@@ -26,7 +26,12 @@ const nextConfig = {
               hostname: '**',
             },
           ]
-        : []),
+        : [
+            {
+              protocol: 'https',
+              hostname: 'j11a310.p.ssafy.io',
+            },
+          ]),
     ],
   },
   logging: {
