@@ -86,6 +86,15 @@ public class ConcertController {
         return ResponseEntity.ok(concerts);
     }
 
+    @GetMapping("/by-musician/{id}")
+    public ResponseEntity<PageResponse<ConcertResp>> getConcertsByMusician(
+            @PathVariable UUID id,
+            @Valid ConcertCursorPagingReq cursorPagingReq) {
+
+        PageResponse<ConcertResp> concerts = concertService.getConcertsByMusician(id, cursorPagingReq);
+        return ResponseEntity.ok(concerts);
+    }
+
     @GetMapping("/me/assigned")
     public ResponseEntity<PageResponse<ConcertAssignmentResp>> getAssignedConcerts(Authentication authentication, @Valid CursorPagingReq cursorPagingReq) {
         AppUserEntity user = (AppUserEntity) authentication.getPrincipal();
