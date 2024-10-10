@@ -1,7 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 
 import customFetch from '../customFetch';
-import { GetMeResponse, UpdateMeRequest } from '@/types/user';
+import {
+  GetMeResponse,
+  UpdateMeRequest,
+  UploadImageRequest,
+  UploadImageResponse,
+} from '@/types/user';
 
 const getMe = async () => {
   const response = await customFetch<GetMeResponse>('/users/me', {
@@ -16,6 +21,26 @@ const updateMe = async (updateData: UpdateMeRequest) => {
     body: updateData,
   });
   return response;
+};
+
+const uploadImage = async (uploadImageRequest: UploadImageRequest) => {
+  const response = await customFetch<UploadImageResponse>(
+    '/upload-image/presigned-url',
+    {
+      method: 'POST',
+      body: uploadImageRequest,
+    }
+  );
+  return response;
+};
+
+export const useUploadImage = () => {
+  return useMutation<UploadImageResponse, Error, UploadImageRequest>({
+    mutationFn: (uploadImageRequest) => uploadImage(uploadImageRequest),
+    onError: () => {
+      alert('이미지 업로드 실패!');
+    },
+  });
 };
 
 export const useGetMe = () => {

@@ -2,19 +2,31 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
 import Header from '@/components/organisms/navigation/Header';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import ConcertApproval from '@/components/organisms/approval/ConcertApproval';
 import { useGetMyAssignedConcerts } from '@/services/concert/fetchConcert';
+import { useApprovalConcert } from '@/services/approval/fetchApproval';
 
 const Page = () => {
   const router = useRouter();
   const { mutate: fetchMyConcerts, data } = useGetMyAssignedConcerts();
+  const { mutate: approveConcert } = useApprovalConcert();
 
   useEffect(() => {
     fetchMyConcerts();
   }, []);
+
+  const handleApprove = (signatureUrl: string, concertUuid: string) => {
+    approveConcert({
+      id: concertUuid,
+      approvalRequest: { signatureImageUrl: signatureUrl },
+    });
+  };
+
+  const handleReject = (concertUuid: string) => {
+    console.log(`거절된 콘서트 UUID: ${concertUuid}`);
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -30,7 +42,11 @@ const Page = () => {
             <ConcertApproval
               concertName={concert.title}
               date={new Date(concert.ticketingAt).toLocaleDateString('ko-KR')}
-              price={`${concert.ticketPrice.toLocaleString('ko-KR')}원`}
+              price={`${concert.ticketPrice.toLocaleString('ko-KR')} MLDY`}
+              onApprove={(signatureUrl) =>
+                handleApprove(signatureUrl, concert.uuid)
+              }
+              onReject={() => handleReject(concert.uuid)}
             />
           </div>
         ))}

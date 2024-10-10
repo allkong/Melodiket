@@ -14,15 +14,20 @@ const nextConfig = {
     return config;
   },
   images: {
-    remotePatterns:
-      process.env.NODE_ENV === 'development'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'd2zj12sxzh0609.cloudfront.net',
+      },
+      ...(process.env.NODE_ENV === 'development'
         ? [
             {
               protocol: 'https',
               hostname: '**',
             },
           ]
-        : [],
+        : []),
+    ],
   },
   logging: {
     fetches: {
