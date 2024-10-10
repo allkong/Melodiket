@@ -12,6 +12,7 @@ import {
 } from '@/services/concert/fetchConcert';
 import SuccessSection from './_section/success-section';
 import useFunnel from '@/hooks/useFunnel';
+import useSpinner from '@/hooks/useSpinner';
 
 const Page = () => {
   const params = useParams<{ uuid: string }>();
@@ -28,7 +29,7 @@ const Page = () => {
   const { Funnel, setStep } = useFunnel<'seat' | 'confirm' | 'success'>();
 
   const mutate = useBookTicket();
-  const [bookResult, setBookResult] = useState<TicketBookResponse | null>(null);
+  useSpinner(mutate.isPending);
 
   useEffect(() => {
     if (concert?.isStanding) {
@@ -62,13 +63,16 @@ const Page = () => {
               const result = await mutate.mutateAsync({
                 ticketBookRequest: data,
               });
-              setBookResult(result);
+
               setStep('success');
             }}
           />
         </Funnel.Step>
         <Funnel.Step step="success">
-          <SuccessSection bookResult={bookResult} />
+          <SuccessSection
+            row={ticketBookInformation.seatRow}
+            col={ticketBookInformation.seatCol}
+          />
         </Funnel.Step>
       </Funnel>
     </div>
