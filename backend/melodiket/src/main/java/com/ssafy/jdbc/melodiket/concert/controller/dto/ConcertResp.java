@@ -3,7 +3,11 @@ package com.ssafy.jdbc.melodiket.concert.controller.dto;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertStatus;
 import com.ssafy.jdbc.melodiket.user.controller.dto.musician.MusicianInfo;
+import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
+import com.ssafy.jdbc.melodiket.user.entity.favorite.FavoriteConcertEntity;
 import lombok.Builder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,7 +15,7 @@ import java.util.UUID;
 
 @Builder
 public record ConcertResp(
-        UUID uuid,                // 공연 UUID
+        UUID concertUuid,                // 공연 UUID
         UUID stageUuid,           // 공연장 UUID
         String title,             // 공연 타이틀
         LocalDateTime createdAt,  // 생성 날짜
@@ -28,18 +32,33 @@ public record ConcertResp(
         List<MusicianInfo> musicians, // 공연에 참여한 뮤지션 정보 리스트 (이름 및 이미지 URL)
         Long capacity,             // 공연장 수용 인원
         Boolean isStanding,        // 스탠딩 여부
-        ConcertStatus status       // 공연 상태
+        ConcertStatus status,       // 공연 상태
+        Boolean isLike,
+        Long likeCount
 ) {
     public static ConcertResp from(ConcertEntity entity) {
         List<MusicianInfo> musicians = entity.getConcertParticipantMusicians().stream()
                 .map(participant -> new MusicianInfo(
                         participant.getMusicianEntity().getUuid(),
                         participant.getMusicianEntity().getName(),
-                        participant.getMusicianEntity().getImageUrl()))
+                        participant.getMusicianEntity().getImageUrl(),
+                        participant.getApprovalStatus()))
                 .toList();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean _isLike = false;
+        if (authentication.getAuthorities().stream().anyMatch(grantedAuthority -> "ROLE_AUDIENCE".equals(grantedAuthority.getAuthority()))) {
+            AudienceEntity user = (AudienceEntity) authentication.getPrincipal();
+            for (FavoriteConcertEntity f : entity.getFavoriteConcerts()) {
+                if ((long) f.getAudienceEntity().getId() == user.getId()) {
+                    _isLike = true;
+                    break;
+                }
+            }
+        }
+
         return ConcertResp.builder()
-                .uuid(entity.getUuid())
+                .concertUuid(entity.getUuid())
                 .stageUuid(entity.getStageEntity().getUuid())
                 .title(entity.getTitle())
                 .createdAt(entity.getCreatedAt())
@@ -57,6 +76,8 @@ public record ConcertResp(
                 .capacity(entity.getStageEntity().getCapacity()) // 공연장 수용 인원
                 .isStanding(entity.getStageEntity().getIsStanding()) // 공연장 스탠딩 여부
                 .status(entity.getConcertStatus())
+                .isLike(_isLike)
+                .likeCount(entity.getLikeCount())
                 .build();
     }
 }

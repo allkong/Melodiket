@@ -5,5 +5,6 @@ import lombok.Data;
 
 @Data
 public class ConcertCursorPagingReq extends CursorPagingReq {
-    String[] status;
+    private String title;             // 공연 제목 필터
+    private String[] status;          // 공연 상태 필터
 }

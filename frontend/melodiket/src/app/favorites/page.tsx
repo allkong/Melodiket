@@ -5,23 +5,37 @@ import { useState } from 'react';
 import { FAVORITE_TYPES } from '@/constants/favoriteTypes';
 
 import Header from '@/components/organisms/navigation/Header';
-import FavoriteTitle from '@/components/molecules/title/FavoriteTitle';
+import PageTitle from '@/components/molecules/title/PageTitle';
 import Tabs from '@/components/organisms/controls/Tabs';
-import MusicianItem from '@/components/molecules/item/MusicianItem';
+import FavoriteConcert from './_components/favorite-concert';
+import {
+  useFetchFavoriteConcert,
+  useFetchFavoriteMusiciansList,
+} from '@/services/favorite/fetchFavorite';
+import FavoriteMusician from './_components/favorite-musician';
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState(Object.keys(FAVORITE_TYPES)[0]);
+  const { data: concertData, refetch: refetchConcert } =
+    useFetchFavoriteConcert();
+  const { data: musician, refetch: refetchMusician } =
+    useFetchFavoriteMusiciansList();
+  const { result: musicianData } = musician ?? {};
 
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <Header />
-      <FavoriteTitle
-        type={activeTab as keyof typeof FAVORITE_TYPES}
-        total={3}
+      <PageTitle
+        title={`좋아하는 ${FAVORITE_TYPES[activeTab as keyof typeof FAVORITE_TYPES]}`}
+        total={
+          activeTab === 'concert'
+            ? (concertData?.length ?? 0)
+            : (musicianData?.length ?? 0)
+        }
       />
       <Tabs
         tabs={Object.keys(FAVORITE_TYPES)}
@@ -29,17 +43,14 @@ const Page = () => {
         onClick={handleTabClick}
         labelMap={FAVORITE_TYPES}
       />
-      {activeTab === 'musician' && (
-        <div>
-          <MusicianItem
-            src={''}
-            musicianName={'장원영'}
-            favoriteCount={10}
-            bookingCount={2}
-            isFavorite
-          />
-        </div>
-      )}
+      <div className="flex-grow h-0 overflow-y-auto">
+        {activeTab === 'musician' && (
+          <FavoriteMusician data={musicianData} refetch={refetchMusician} />
+        )}
+        {activeTab === 'concert' && (
+          <FavoriteConcert data={concertData} refetch={refetchConcert} />
+        )}
+      </div>
     </div>
   );
 };

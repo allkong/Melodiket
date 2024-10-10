@@ -43,6 +43,8 @@ public enum ErrorDetail {
     CONCERT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404008", "존재하지 않는 공연 정보 입니다."),
     PARTICIPANT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404009", "존재하지 않는 승인 정보 입니다."),
     CONCERT_PARTICIPANT_MUSICIAN_NOT_FOUND(HttpStatus.NOT_FOUND, "E404010", "존재하지 않는 공연 참가 뮤지션 정보 입니다."),
+    PHOTOCARD_NOT_FOUND(HttpStatus.NOT_FOUND, "E404011", "존재하지 않는 포토카드 입니다."),
+    SEAT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404012", "존재하지 않는 공연 좌석 입니다."),
     // 409 Conflict
     CONFLICT(HttpStatus.CONFLICT, "E409000", "Conflict"),
     DUPLICATED_LOGIN_ID(HttpStatus.CONFLICT, "E409001", "중복된 아이디 입니다."),
@@ -50,6 +52,8 @@ public enum ErrorDetail {
     ALREADY_REGISTERED_ACCOUNT(HttpStatus.CONFLICT, "E409003", "Already registered account."),
     NOT_ENOUGH_TOKEN_BALANCE(HttpStatus.CONFLICT, "E409004", "Not enough token balance."),
     ALREADY_PURCHASED_SEAT(HttpStatus.CONFLICT, "E409005", "Already purchased seat."),
+    TICKET_ALREADY_USED(HttpStatus.CONFLICT, "E409006", "이미 사용된 티켓입니다."),
+    TICKET_NOT_USED(HttpStatus.CONFLICT, "E409007", "사용되지 않은 티켓입니다."),
     // 500 Internal Server Error
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500000", "Internal Server Error");
 

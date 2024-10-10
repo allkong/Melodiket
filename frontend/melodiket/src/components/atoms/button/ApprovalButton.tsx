@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 interface ApprovalButtonProps {
   label: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
 }
 
