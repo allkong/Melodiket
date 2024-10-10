@@ -55,7 +55,7 @@ export const useFetchFavoriteConcert = () => {
 };
 
 export const toggleFavoriteConcert = async (concertUuid: string) => {
-  const response = await customFetch<{ isFavorite: boolean }>(
+  const response = await customFetch<{ isLike: boolean }>(
     `/concerts/${concertUuid}/favorite`,
     { method: 'post' }
   );
