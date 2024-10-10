@@ -46,10 +46,10 @@ public class TicketContract extends Contract {
         this.credentials = credentials;
     }
 
-    public Ticket getTicketWithId(long ticketId) {
+    public Ticket getTicketWithUuid(String ticketUuid) {
         Function function = new Function(
-                "getTicketInfoArrayWithId",
-                Collections.singletonList(new Uint256(BigInteger.valueOf(ticketId))),
+                "getTicketInfoArrayWithUuid",
+                Collections.singletonList(new Utf8String(ticketUuid)),
                 TICKET_OUTPUT_PARAMS
         );
 

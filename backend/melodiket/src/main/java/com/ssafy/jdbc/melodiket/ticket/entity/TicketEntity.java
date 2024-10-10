@@ -1,32 +1,25 @@
 package com.ssafy.jdbc.melodiket.ticket.entity;
 
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
 import com.ssafy.jdbc.melodiket.concert.entity.ConcertEntity;
+import com.ssafy.jdbc.melodiket.concert.entity.ConcertSeatEntity;
 import com.ssafy.jdbc.melodiket.user.entity.AudienceEntity;
+import com.ssafy.jdbc.melodiket.user.entity.MusicianEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "ticket")
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
-
+public class TicketEntity extends ExposableEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audience_id", nullable = false)
     private AudienceEntity audienceEntity;
@@ -35,20 +28,37 @@ public class TicketEntity {
     @JoinColumn(name = "concert_id", nullable = false)
     private ConcertEntity concertEntity;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "concert_seat_id", referencedColumnName = "id")
+    private ConcertSeatEntity concertSeatEntity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
     private Long seatRow;
     private Long seatCol;
+    private LocalDateTime usedAt;
+    private LocalDateTime refundedAt;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Date createdAt;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "favorite_musician_id")
+    private MusicianEntity favoriteMusician;
 
-    private enum Status {
-        NOT_USED,
-        USED,
-        REFUNDED
+    private String userName;
+
+    public void updateStatusUsed() {
+        this.status = Status.USED;
+        this.usedAt = LocalDateTime.now();
+    }
+
+    public void updateStatusRefunded(Status status) {
+        this.status = status;
+        this.refundedAt = LocalDateTime.now();
+    }
+
+    public void refund() {
+        this.status = Status.REFUNDED;
+        this.refundedAt = LocalDateTime.now();
     }
 }

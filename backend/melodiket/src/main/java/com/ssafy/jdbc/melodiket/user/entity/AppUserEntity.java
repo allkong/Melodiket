@@ -2,35 +2,33 @@ package com.ssafy.jdbc.melodiket.user.entity;
 
 import com.ssafy.jdbc.melodiket.account.entity.AccountCertificationEntity;
 import com.ssafy.jdbc.melodiket.account.entity.AccountEntity;
+import com.ssafy.jdbc.melodiket.common.base.ExposableEntity;
+import com.ssafy.jdbc.melodiket.wallet.entity.WalletInfoEntity;
+import com.ssafy.jdbc.melodiket.webpush.entity.SubscriptionEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "app_user")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder(toBuilder = true)
-public class AppUserEntity implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
+@SuperBuilder(toBuilder = true)
+public class AppUserEntity extends ExposableEntity implements UserDetails {
+    @Column(nullable = false)
+    private String name;
 
     @Column(unique = true, nullable = false)
     private String loginId;
@@ -51,11 +49,21 @@ public class AppUserEntity implements UserDetails {
     @Column
     private String description;
 
+    @Column
+    private LocalDateTime registeredAt;
+
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountEntity> accounts = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountCertificationEntity> accountCertifications = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "appUserEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubscriptionEntity> subscriptionEntities = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "wallet_id", referencedColumnName = "id")
+    private WalletInfoEntity walletInfo;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
