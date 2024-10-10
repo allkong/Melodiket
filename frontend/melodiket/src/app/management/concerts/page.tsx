@@ -31,7 +31,6 @@ const Page = () => {
     return (
       concerts.filter((concert) => {
         if (activeTab === 'isRegistered') {
-          console.log(concert.status);
           return (
             concert.status === 'PREPARING' ||
             concert.status === 'ACTIVE' ||
