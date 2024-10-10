@@ -12,7 +12,7 @@ const StickerImage = ({ src }: StickerImageProps) => {
   return <Image src={src} alt="sticker" width={80} height={80} />;
 };
 
-const createStickers = (category: string, count: number): Sticker[] => {
+const createStickers = (category: string, count: number) => {
   return Array.from({ length: count }, (_, index) => ({
     name: `${category}${index + 1}`,
     category,
@@ -20,7 +20,7 @@ const createStickers = (category: string, count: number): Sticker[] => {
   }));
 };
 
-export const stickers: Sticker[] = [
+export const stickers = [
   { name: 'signature', category: 'favorite', image: <MusicianSignature /> },
   ...createStickers('animal', 10),
   ...createStickers('christmas', 10),
