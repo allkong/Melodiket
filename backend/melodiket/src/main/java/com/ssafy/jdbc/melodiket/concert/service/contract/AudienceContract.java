@@ -2,7 +2,6 @@ package com.ssafy.jdbc.melodiket.concert.service.contract;
 
 import com.ssafy.jdbc.melodiket.blockchain.config.BlockchainConfig;
 import org.web3j.abi.EventValues;
-import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.Contract;
@@ -30,7 +29,7 @@ public class AudienceContract extends Contract {
         return purchaseTicket(ticketUuid, concertUuid, favoriteMusicianAddress, 0, 0);
     }
 
-    public String purchaseSeatingTicket(UUID ticketUuid, UUID concertUuid, String favoriteMusicianAddress, int seatRow, int seatCol) throws Exception {
+    public String purchaseSeatingTicket(UUID ticketUuid, UUID concertUuid, String favoriteMusicianAddress, long seatRow, long seatCol) throws Exception {
         if (commonConcertContract.isStandingConcert(concertUuid)) {
             throw new IllegalArgumentException("This concert is a standing concert.");
         }
@@ -38,7 +37,7 @@ public class AudienceContract extends Contract {
 
     }
 
-    private String purchaseTicket(UUID ticketUuid, UUID concertUuid, String favoriteMusicianAddress, int seatRow, int seatCol) throws Exception {
+    private String purchaseTicket(UUID ticketUuid, UUID concertUuid, String favoriteMusicianAddress, long seatRow, long seatCol) throws Exception {
         RemoteFunctionCall<TransactionReceipt> functionCall = executeRemoteCallTransaction(new org.web3j.abi.datatypes.Function(
                 "purchaseTicket",
                 List.of(

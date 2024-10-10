@@ -68,10 +68,12 @@ public class TicketPurchaseValidator implements ConstraintValidator<ValidPurchas
             Set<ConcertSeatEntity> seats = concert.getConcertSeats();
             for (ConcertSeatEntity seat : seats) {
                 if (seat.getSeatRow().equals(ticketPurchaseRequest.getSeatRow()) && seat.getSeatCol().equals(ticketPurchaseRequest.getSeatCol())) {
-                    context.buildConstraintViolationWithTemplate("이미 구매된 좌석입니다.")
-                            .addPropertyNode("info")
-                            .addConstraintViolation();
-                    return false;
+                    if (!seat.getIsAvailable()) {
+                        context.buildConstraintViolationWithTemplate("이미 구매된 좌석입니다.")
+                                .addPropertyNode("info")
+                                .addConstraintViolation();
+                        return false;
+                    }
                 }
             }
         }
