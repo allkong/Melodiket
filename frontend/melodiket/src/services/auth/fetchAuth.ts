@@ -49,7 +49,6 @@ export const useIsNicknameDuplicated = () => {
   const mutate = useMutation({
     mutationFn: ({ nickname }: { nickname: string }) =>
       isNicknameDuplicated(nickname),
-    throwOnError: true,
   });
   return mutate;
 };
@@ -71,7 +70,6 @@ export const useIsLoginIdDuplicated = () => {
   const mutate = useMutation({
     mutationFn: ({ loginId }: { loginId: string }) =>
       isLoginIdDuplicated(loginId),
-    throwOnError: true,
   });
   return mutate;
 };
@@ -109,6 +107,16 @@ export const useLogout = () => {
       await logout();
       clearAuth();
       sessionStorage.clear();
+
+      const readyRegistration = await navigator.serviceWorker.ready;
+
+      const existingSubscription =
+        await readyRegistration.pushManager.getSubscription();
+
+      if (existingSubscription) {
+        await existingSubscription.unsubscribe();
+      }
+
       toast.success('로그아웃 완료');
       router.push('/');
     } catch (error) {
