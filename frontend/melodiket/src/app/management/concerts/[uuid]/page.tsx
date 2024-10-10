@@ -10,10 +10,12 @@ import DetailSection from '@/components/molecules/section/DetailSection';
 import MusicianStatusProfile from '@/components/molecules/profile/MusicianStatusProfile';
 import TicketInfo from '@/components/atoms/text/TicketInfo';
 import SmallButton from '@/components/atoms/button/SmallButton';
-import FixedButton from '@/components/organisms/controls/FixedButton';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { formatPrice } from '@/utils/concertFormatter';
 import { getCidUrl } from '@/utils/getUrl';
+import toast from 'react-hot-toast';
+import FixedButton from '@/components/organisms/controls/FixedButton';
+import { Ticket } from '@/public/icons';
 
 const ConcertDetailPage = () => {
   const router = useRouter();
@@ -52,15 +54,19 @@ const ConcertDetailPage = () => {
       (musician) => musician.approvalStatus === 'DENIED'
     ) && concert?.status !== 'CANCELED';
 
+  const handleScanButtonClick = () => {
+    window.location.href = `${pathname}/scan`;
+  };
+
   const handleCancelConcert = () => {
     if (concertUuid) {
       cancelConcert(concertUuid, {
         onSuccess: () => {
-          alert('공연이 성공적으로 취소되었습니다.');
+          toast('공연이 성공적으로 취소되었습니다.');
           router.push('/management/concerts');
         },
         onError: () => {
-          alert('공연 취소에 실패했습니다.');
+          toast.error('공연 취소에 실패했습니다.');
         },
       });
     }
@@ -76,10 +82,9 @@ const ConcertDetailPage = () => {
             <h1 className="font-medium">
               {concert?.title || '콘서트 정보 없음'}
             </h1>
-            <SmallButton
-              label="예매 페이지 미리보기"
-              onClick={() => alert('예매 페이지 미리보기')}
-            />
+            {showCancelButton && (
+              <SmallButton label="공연 취소" onClick={handleCancelConcert} />
+            )}
           </div>
         </div>
 
@@ -108,10 +113,11 @@ const ConcertDetailPage = () => {
           </div>
         </DetailSection>
       </div>
-
-      {showCancelButton && (
-        <FixedButton label="공연 취소" onClick={handleCancelConcert} />
-      )}
+      <FixedButton
+        label="모바일 티켓 스캔"
+        icon={<Ticket />}
+        onClick={handleScanButtonClick}
+      />
     </div>
   );
 };
