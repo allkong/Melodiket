@@ -40,11 +40,14 @@ const ConcertCard = ({
     if (!user) {
       toast('로그인이 필요한 서비스입니다', { icon: `😥` });
       return;
+    } else if (user.role !== 'AUDIENCE') {
+      toast('관객만 좋아요를 할 수 있습니다', { icon: `😥` });
+      return;
     }
 
-    const { isFavorite } = await mutate.mutateAsync({ concertUuid });
+    const { isLike } = await mutate.mutateAsync({ concertUuid });
 
-    if (isFavorite) {
+    if (isLike) {
       toast('찜 추가', {
         icon: '💜',
       });
