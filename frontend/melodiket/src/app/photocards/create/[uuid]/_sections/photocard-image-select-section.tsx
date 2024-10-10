@@ -19,6 +19,14 @@ const PhotocardImageSelectSection = ({
     }
   };
 
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      onNext(imageUrl);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center flex-grow">
       <PhotocardFrame>
@@ -33,11 +41,21 @@ const PhotocardImageSelectSection = ({
           icon={<Ticket />}
           onClick={handlePosterSelect}
         />
-        <MediumButton
-          label="이미지 선택"
-          icon={<ImageLine />}
-          onClick={() => alert('이미지 업로드')}
-        />
+        <div>
+          <MediumButton
+            label="이미지 선택"
+            icon={<ImageLine />}
+            onClick={() => document.getElementById('image-upload')?.click()} // input 요소 클릭
+          />
+          {/* 파일 업로드 input */}
+          <input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageSelect}
+            className="hidden"
+          />
+        </div>
       </div>
     </div>
   );

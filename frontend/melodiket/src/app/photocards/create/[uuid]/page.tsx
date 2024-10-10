@@ -9,6 +9,7 @@ import { usePhotocardUpload } from '@/services/photocard/fetchPhotocard';
 
 import SubHeader from '@/components/organisms/navigation/SubHeader';
 import PhotocardImageSelectSection from './_sections/photocard-image-select-section';
+import toast from 'react-hot-toast';
 const PhotocardEditSelection = dynamic(
   () => import('./_sections/photocard-edit-selection'),
   {
@@ -46,6 +47,7 @@ const Page = ({ params }: PageProps) => {
 
   const handlePhotocardUpload = (cid: string) => {
     photocardUpload({ uuid: params.uuid, cid: cid });
+    toast.success('제작 완료되면 알림이 가요');
     router.push('/photocards');
   };
 
