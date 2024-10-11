@@ -27,8 +27,6 @@ const Page = () => {
     ? concertData
     : concertData?.result || [];
 
-  console.log(concerts);
-
   const filteredConcerts = useMemo(() => {
     return (
       concerts.filter((concert) => {
