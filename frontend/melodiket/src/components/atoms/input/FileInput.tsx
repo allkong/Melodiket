@@ -47,7 +47,6 @@ const FileInput = forwardRef(
             toast.error('파일 업로드 실패');
           }
         } catch (error) {
-          // console.log(error);
           toast.error('파일 업로드 중 오류 발생');
         } finally {
           setIsLoading(false);

@@ -15,8 +15,6 @@ interface PageProps {
 const Page = ({ params }: PageProps) => {
   const { data: photocard } = usePhotocardDetail(params.uuid);
 
-  console.log(photocard);
-
   if (!photocard) {
     return null;
   }
