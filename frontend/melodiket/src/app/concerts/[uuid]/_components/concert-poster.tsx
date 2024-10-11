@@ -40,7 +40,7 @@ const ConcertPoster = ({ uuid }: ConcertPosterProps) => {
 
   const handleToggleFavorite = async () => {
     if (!user) {
-      toast('로그인이 필요한 서비스에요', { icon: `😥` });
+      toast('로그인이 필요한 서비스예요', { icon: `😥` });
       return;
     } else if (user.role !== 'AUDIENCE') {
       toast('관객만 좋아요를 누를 수 있어요', { icon: `😥` });
