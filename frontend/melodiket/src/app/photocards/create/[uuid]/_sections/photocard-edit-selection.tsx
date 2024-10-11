@@ -14,6 +14,7 @@ import PhotocardFrame from '@/components/organisms/photocard/PhotocardFrame';
 import Tabs from '@/components/organisms/controls/Tabs';
 import MoveableSticker from '../_components/moveable-sticker';
 import MoveableText from '../_components/moveable-text';
+import useSpinner from '@/hooks/useSpinner';
 
 interface PhotocardEditSelectionProps {
   uuid: string;
@@ -37,9 +38,11 @@ const PhotocardEditSelection = ({
   } = usePhotocardStore();
 
   const [activeTab, setActiveTab] = useState<string | null>(null);
-
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const photocardRef = useRef<HTMLDivElement | null>(null);
+
+  useSpinner(isLoading);
 
   const handleTabClick = (tabValue: string) => {
     setActiveTab(tabValue);
@@ -73,6 +76,7 @@ const PhotocardEditSelection = ({
 
   const handlePhotocardCapture = async () => {
     if (photocardRef.current) {
+      setIsLoading(true);
       const canvas = await html2canvas(photocardRef.current);
       canvas.toBlob(async (blob) => {
         if (blob) {
@@ -96,6 +100,8 @@ const PhotocardEditSelection = ({
             onNext(result.cid);
           } catch (error) {
             throw error;
+          } finally {
+            setIsLoading(false);
           }
         }
       });
