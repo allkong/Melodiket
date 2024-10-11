@@ -1,6 +1,8 @@
+import { User } from '@/types/user';
+
 const photocardKey = {
   default: ['photocard'],
-  list: () => [...photocardKey.default, 'list'],
+  list: (user: User | null) => [...photocardKey.default, 'list', { ...user }],
   detail: (uuid: string) => [...photocardKey.default, 'detail', uuid],
 } as const;
 
