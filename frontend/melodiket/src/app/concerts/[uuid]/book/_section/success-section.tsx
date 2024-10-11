@@ -41,7 +41,7 @@ const SuccessSection = ({ row, col }: SuccessSectionProps) => {
           <div className="relative w-28 h-36 rounded-md overflow-none">
             {concert?.posterCid && (
               <Image
-                className="object-cover"
+                className="object-cover rounded-md"
                 src={getCidUrl(concert.posterCid)}
                 alt="공연 완료 이미지"
                 fill

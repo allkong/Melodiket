@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 import { useTicketDetail } from '@/services/ticket/fetchTicket';
 import { useTicketUse } from '@/services/ticket/fetchTicket';
@@ -12,7 +12,6 @@ import TicketInfo from '@/components/atoms/text/TicketInfo';
 import AlertModal from '@/components/organisms/modal/AlertModal';
 
 const Modal = () => {
-  const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
   const concertUuid = params.uuid;
@@ -44,9 +43,8 @@ const Modal = () => {
   const handleTicketUse = () => {
     if (ticketUuid) {
       ticketUse(ticketUuid);
-      router.back();
     } else {
-      console.error('티켓 정보가 없어요');
+      toast.error('티켓 정보가 없어요');
     }
   };
 
