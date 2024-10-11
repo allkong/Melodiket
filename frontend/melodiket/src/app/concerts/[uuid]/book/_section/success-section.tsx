@@ -59,8 +59,11 @@ const SuccessSection = ({ row, col }: SuccessSectionProps) => {
         </div>
       </div>
       <div className="my-4 flex px-3 h-fit gap-3">
+        <LargeButton
+          label="공연 상세"
+          onClick={() => router.push(`/concerts/${concert?.concertUuid}`)}
+        />
         <LargeButton label="메인 화면" onClick={() => router.push('/')} />
-        <LargeButton label="티켓 확인" onClick={() => router.push('/')} />
       </div>
     </div>
   );

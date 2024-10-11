@@ -10,12 +10,15 @@ import {
   useApprovalConcert,
   useDenyConcert,
 } from '@/services/approval/fetchApproval';
+import useSpinner from '@/hooks/useSpinner';
 
 const Page = () => {
   const router = useRouter();
   const { mutate: fetchMyConcerts, data } = useGetMyAssignedConcerts();
-  const { mutate: approveConcert } = useApprovalConcert();
+  const { mutate: approveConcert, isPending } = useApprovalConcert();
   const { mutate: denyConcert } = useDenyConcert();
+
+  useSpinner(isPending);
 
   useEffect(() => {
     fetchMyConcerts();
