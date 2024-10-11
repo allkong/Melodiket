@@ -39,7 +39,7 @@ const ConcertApproval = ({
   };
 
   const handleMove = () => {
-    router.push(`/management/concerts/${concertUuid}`);
+    router.push(`/concerts/${concertUuid}`);
   };
 
   const handleClearSignature = () => {

@@ -15,8 +15,6 @@ interface PageProps {
 const Page = ({ params }: PageProps) => {
   const { data: photocard } = usePhotocardDetail(params.uuid);
 
-  console.log(photocard);
-
   if (!photocard) {
     return null;
   }
@@ -45,6 +43,8 @@ const Page = ({ params }: PageProps) => {
             stageName={photocard.stageName}
             seatRow={photocard.seatRow}
             seatCol={photocard.seatCol}
+            musicians={photocard.musicians}
+            favoriteMusician={photocard.favoriteMusician}
           />
         </div>
 

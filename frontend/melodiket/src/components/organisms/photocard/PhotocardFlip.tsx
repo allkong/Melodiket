@@ -10,6 +10,8 @@ interface PhotocardFlipProps {
   stageName: string;
   seatRow: number;
   seatCol: number;
+  musicians: string[];
+  favoriteMusician: string;
 }
 
 const PhotocardFlip = ({
@@ -19,6 +21,8 @@ const PhotocardFlip = ({
   stageName,
   seatRow,
   seatCol,
+  musicians,
+  favoriteMusician,
 }: PhotocardFlipProps) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
@@ -49,6 +53,8 @@ const PhotocardFlip = ({
           stageName={stageName}
           seatRow={seatRow}
           seatCol={seatCol}
+          musicians={musicians}
+          favoriteMusician={favoriteMusician}
           onClick={() => setIsFlipped(!isFlipped)}
         />
       </div>

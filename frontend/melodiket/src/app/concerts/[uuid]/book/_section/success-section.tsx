@@ -41,7 +41,7 @@ const SuccessSection = ({ row, col }: SuccessSectionProps) => {
           <div className="relative w-28 h-36 rounded-md overflow-none">
             {concert?.posterCid && (
               <Image
-                className="object-cover"
+                className="object-cover rounded-md"
                 src={getCidUrl(concert.posterCid)}
                 alt="공연 완료 이미지"
                 fill
@@ -59,8 +59,11 @@ const SuccessSection = ({ row, col }: SuccessSectionProps) => {
         </div>
       </div>
       <div className="my-4 flex px-3 h-fit gap-3">
+        <LargeButton
+          label="공연 상세"
+          onClick={() => router.push(`/concerts/${concert?.concertUuid}`)}
+        />
         <LargeButton label="메인 화면" onClick={() => router.push('/')} />
-        <LargeButton label="티켓 확인" onClick={() => router.push('/')} />
       </div>
     </div>
   );

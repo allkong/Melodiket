@@ -36,6 +36,7 @@ export interface TicketDetail {
   usedAt: string;
   createdAt: string;
   startAt: string;
+  userName: string;
   myFavoriteMusician: {
     musicianName: string;
     musicianImageUrl: string;
