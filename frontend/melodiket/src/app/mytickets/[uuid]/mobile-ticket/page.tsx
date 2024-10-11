@@ -10,6 +10,7 @@ import TicketFrame from '@/components/atoms/image-frame/TicketFrame';
 import FixedButton from '@/components/organisms/controls/FixedButton';
 import { QrCode } from '@/public/icons';
 import LoadingSpinner from '@/components/atoms/feedback/LoadingSpinner';
+import { getCidUrl } from '@/utils/getUrl';
 
 const Page = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const Page = () => {
             </h1>
 
             <div className="flex-grow flex items-center justify-center max-h-[70vh]">
-              <TicketFrame src={ticketDetail?.posterCid || ''} />
+              <TicketFrame src={getCidUrl(ticketDetail?.posterCid || '')} />
             </div>
           </>
         ) : (
