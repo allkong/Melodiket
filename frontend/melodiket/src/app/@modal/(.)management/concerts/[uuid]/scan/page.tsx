@@ -29,7 +29,7 @@ const Modal = () => {
 
   const ticketInfo = [
     { label: '공연명', value: ticket?.concertTitle || '' },
-    { label: '예매자', value: '정다빈' },
+    { label: '예매자', value: ticket?.userName || '' },
     {
       label: '좌석',
       value:
