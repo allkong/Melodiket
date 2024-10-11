@@ -27,7 +27,7 @@ const Page = () => {
   const { mutate: ticketRefund } = useTicketRefund();
 
   const ticketInfo = [
-    { label: '예매자', value: '정다빈' },
+    { label: '예매자', value: ticket?.userName },
     { label: '장소', value: ticket?.stageName || '정보 없음' },
     {
       label: '좌석',
