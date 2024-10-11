@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { Sticker } from '@/types/photocard';
+// import { Sticker } from '@/types/photocard';
 
 import MusicianSignature from './musician-signature';
 
@@ -20,17 +20,25 @@ const createStickers = (category: string, count: number) => {
   }));
 };
 
+const createStickersForSvg = (category: string, count: number) => {
+  return Array.from({ length: count }, (_, index) => ({
+    name: `${category}${index + 1}`,
+    category,
+    image: <StickerImage src={`/stickers/${category}/${index + 1}.svg`} />,
+  }));
+};
+
 export const stickers = [
   { name: 'signature', category: 'favorite', image: <MusicianSignature /> },
-  ...createStickers('animal', 10),
-  ...createStickers('christmas', 10),
-  ...createStickers('emoji', 10),
-  ...createStickers('flower', 10),
-  ...createStickers('fruit', 10),
-  ...createStickers('heart', 10),
-  ...createStickers('instrument', 10),
-  ...createStickers('member', 6),
-  ...createStickers('ocean', 10),
-  ...createStickers('pixel', 10),
-  ...createStickers('real_cat', 6),
+  ...createStickersForSvg('animal', 10),
+  ...createStickersForSvg('christmas', 10),
+  ...createStickersForSvg('emoji', 10),
+  ...createStickersForSvg('flower', 10),
+  ...createStickersForSvg('fruit', 10),
+  ...createStickersForSvg('heart', 10),
+  ...createStickersForSvg('instrument', 10),
+  ...createStickersForSvg('member', 6),
+  ...createStickersForSvg('ocean', 10),
+  ...createStickersForSvg('pixel', 10),
+  ...createStickersForSvg('real_cat', 6),
 ];
