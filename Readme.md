@@ -10,6 +10,10 @@
 
 2024.08.19(월) ~ 2024.10.11(금) [8주]
 
+<a href="https://www.youtube.com/watch?v=h0mi9xzEnPc">
+  <img src="https://img.youtube.com/vi/h0mi9xzEnPc/3.jpg" width="250px" />
+</a>
+
 </div>
 </br>
 
