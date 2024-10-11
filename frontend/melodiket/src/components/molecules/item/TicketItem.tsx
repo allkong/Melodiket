@@ -10,6 +10,7 @@ interface TicketItemProps {
   createdAt?: string;
   refundAt?: string;
   startAt?: string;
+  onClick?: () => void;
 }
 
 const TicketItem = ({
@@ -19,6 +20,7 @@ const TicketItem = ({
   createdAt,
   refundAt,
   startAt,
+  onClick,
 }: TicketItemProps) => {
   const ticketInfo = [
     { label: '장소', value: stageName },
@@ -28,7 +30,10 @@ const TicketItem = ({
   ].filter(Boolean) as { label: string; value: string }[];
 
   return (
-    <div className="flex items-center px-5 py-4 bg-white border-b border-purple-50">
+    <div
+      onClick={onClick}
+      className="flex items-center px-5 py-4 bg-white border-b border-purple-50"
+    >
       <PosterFrame src={src} size="sm" />
       <div className="flex flex-col ms-4 justify-between h-full py-1.5">
         <h2 className="text-lg font-semibold line-clamp-1">{concertTitle}</h2>

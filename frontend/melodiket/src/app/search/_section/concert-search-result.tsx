@@ -9,6 +9,7 @@ import IsError from '@/components/atoms/button/IsErrorButton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import TicketItemSkeleton from '@/components/molecules/item/TicketItemSkeleton';
 import { getCidUrl } from '@/utils/getUrl';
+import { useRouter } from 'next/navigation';
 
 interface ConcertSearchResultProps {
   query: string;
@@ -21,6 +22,7 @@ const ConcertSearchResult = ({
 }: ConcertSearchResultProps) => {
   const endRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useIsOnScreen(endRef);
+  const router = useRouter();
   const { data, error, hasNextPage, isFetching, fetchNextPage, refetch } =
     useFetchInfiniteConcert({
       pageSize: 10,
@@ -28,6 +30,10 @@ const ConcertSearchResult = ({
       orderKey: 'createdAt',
       title: query,
     });
+
+  const handleClick = (uuid: string) => {
+    router.push(`/concerts/${uuid}`);
+  };
 
   useEffect(() => {
     if (isOnScreen && currentTab === 'concert' && hasNextPage) {
@@ -47,6 +53,7 @@ const ConcertSearchResult = ({
                 stageName={concert.stageName}
                 src={getCidUrl(concert.posterCid)}
                 startAt={concert.startAt}
+                onClick={() => handleClick(concert.concertUuid)}
               />
             ))
           )}
