@@ -46,7 +46,7 @@ export const useFetchInfiniteConcert = (
   } = {}
 ) => {
   const {
-    pageSize = 6,
+    pageSize = 4,
     orderKey = 'createdAt',
     orderDirection = 'ASC',
     title = '',
