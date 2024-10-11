@@ -1,6 +1,7 @@
 'use client';
 
 import { useParams, useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { useTicketDetail } from '@/services/ticket/fetchTicket';
 import { useTicketUse } from '@/services/ticket/fetchTicket';
@@ -16,7 +17,7 @@ const Modal = () => {
   const concertUuid = params.uuid;
   const ticketUuid = searchParams.get('ticket');
 
-  const { data: ticket } = useTicketDetail();
+  const { data: ticket } = useTicketDetail(ticketUuid || '');
   const { mutate: ticketUse } = useTicketUse();
 
   if (ticket && concertUuid !== ticket?.concertUuid) {
@@ -29,7 +30,7 @@ const Modal = () => {
 
   const ticketInfo = [
     { label: '공연명', value: ticket?.concertTitle || '' },
-    { label: '예매자', value: '정다빈' },
+    { label: '예매자', value: ticket?.userName || '' },
     {
       label: '좌석',
       value:
@@ -43,7 +44,7 @@ const Modal = () => {
     if (ticketUuid) {
       ticketUse(ticketUuid);
     } else {
-      console.error('티켓 정보가 없어요');
+      toast.error('티켓 정보가 없어요');
     }
   };
 

@@ -5,6 +5,7 @@ export interface Photocard {
   concertName: string;
   imageCid: string;
   createdAt: string;
+  nickName: string;
 }
 
 export interface PhotocardList {
@@ -20,7 +21,7 @@ export interface PhotocardDetail {
   stageName: string;
   seatRow: number;
   seatCol: number;
-  musicans: string[];
+  musicians: string[];
   favoriteMusician: string;
   nickName: string;
 }

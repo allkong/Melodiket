@@ -33,10 +33,7 @@ const getTicketDetail = async (uuid: string) => {
   return response;
 };
 
-export const useTicketDetail = () => {
-  const params = useParams();
-  const uuid = params?.uuid as string;
-
+export const useTicketDetail = (uuid: string) => {
   const { setTicketDetail } = useTicketStore();
 
   const { data, error, isLoading } = useQuery<TicketDetail, Error>({

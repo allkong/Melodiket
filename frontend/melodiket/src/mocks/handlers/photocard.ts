@@ -35,7 +35,7 @@ export const photocard = [
       stageName: '고척스카이돔',
       seatRow: 2,
       seatCol: 12,
-      musicans: ['아이유', '유애나'],
+      musicians: ['아이유', '유애나'],
       favoriteMusician: '아이유',
       nickName: '요아정',
     } as PhotocardDetail);
