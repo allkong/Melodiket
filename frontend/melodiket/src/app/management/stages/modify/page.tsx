@@ -31,6 +31,7 @@ const Page = () => {
               title={stage.name}
               content={stage.address}
               isModify={false}
+              isRemove={true}
               uuid={stage.uuid}
             />
           ))}
