@@ -31,6 +31,10 @@ const nextConfig = {
               protocol: 'https',
               hostname: 'j11a310.p.ssafy.io',
             },
+            {
+              protocol: 'https',
+              hostname: 'developers.kakao.com',
+            },
           ]),
     ],
   },
