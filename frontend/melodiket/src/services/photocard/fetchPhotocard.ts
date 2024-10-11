@@ -15,7 +15,7 @@ export const usePhotocardList = () => {
   const { user } = useAuthStore();
 
   const response = useQuery<Photocard[], Error>({
-    queryKey: photocardKey.list(),
+    queryKey: photocardKey.list(user),
     queryFn: async () => {
       const response = await getPhotocardList();
       return response.result;
@@ -28,8 +28,9 @@ export const usePhotocardList = () => {
 
 export const usePhotocardListDehydrateState = () => {
   const queryClient = getQueryClient();
+  const { user } = useAuthStore();
   queryClient.prefetchQuery<Photocard[], Error>({
-    queryKey: photocardKey.list(),
+    queryKey: photocardKey.list(user),
     queryFn: async () => {
       const response = await getPhotocardList();
       return response.result;
