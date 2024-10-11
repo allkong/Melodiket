@@ -18,7 +18,7 @@ const Modal = () => {
   const concertUuid = params.uuid;
   const ticketUuid = searchParams.get('ticket');
 
-  const { data: ticket } = useTicketDetail();
+  const { data: ticket } = useTicketDetail(ticketUuid || '');
   const { mutate: ticketUse } = useTicketUse();
 
   if (ticket && concertUuid !== ticket?.concertUuid) {
