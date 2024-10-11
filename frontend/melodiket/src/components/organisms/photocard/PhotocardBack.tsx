@@ -11,6 +11,8 @@ interface PhotocardBackProps {
   stageName: string;
   seatRow: number;
   seatCol: number;
+  musicians: string[];
+  favoriteMusician: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -20,8 +22,11 @@ const PhotocardBack = ({
   stageName,
   seatRow,
   seatCol,
+  musicians,
+  favoriteMusician,
   onClick,
 }: PhotocardBackProps) => {
+  console.log(musicians);
   return (
     <PhotocardFrame isCreated back>
       <section className="py-6 border-t border-b border-black">
@@ -40,13 +45,13 @@ const PhotocardBack = ({
         </section>
 
         <section className="space-y-1">
-          <p>카리나, 윈터, 닝닝, 지젤</p>
+          <p>{musicians?.join(', ')}</p>
           <div className="flex space-x-1.5 items-center">
             <Heart
               className="w-[1.1rem] h-auto text-black"
               fill="currentColor"
             />
-            <p>윈터</p>
+            <p>{favoriteMusician}</p>
           </div>
         </section>
       </div>

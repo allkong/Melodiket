@@ -50,6 +50,8 @@ const Page = ({ params }: PageProps) => {
             stageName={photocard.stageName}
             seatRow={photocard.seatRow}
             seatCol={photocard.seatCol}
+            musicians={photocard.musicians}
+            favoriteMusician={photocard.favoriteMusician}
           />
         </div>
 
