@@ -23,7 +23,7 @@ const NeedLogin = () => {
       </div>
       <div className="absolute flex flex-col items-center justify-center gap-2 w-full h-full backdrop-blur-md px-5">
         <p className="text-lg font-semibold text-primary">
-          로그인이 필요한 서비스에요 😥
+          로그인이 필요한 서비스예요 😥
         </p>
         <div className="w-full px-14">
           <LargeButton
