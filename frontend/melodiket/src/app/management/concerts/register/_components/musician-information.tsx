@@ -10,10 +10,10 @@ import Input from '@/components/atoms/input/Input';
 import MusicianSelectButton from '@/components/molecules/button/MusicianSelectButton';
 import TextBanner from '@/components/molecules/text/TextBanner';
 import LineDivider from '@/components/atoms/divider/LineDivider';
-import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
 import { ConcertData } from '@/types/concert';
+import MusicianSelectButtonSkeleton from '@/components/molecules/button/MusicianSelectButtonSkeleton';
 
 interface MusicianInformationProps {
   concertData: ConcertData;
@@ -108,7 +108,7 @@ const MusicianInformation = ({
               onClick={() => toggleMusician(musician.uuid)}
             />
           ))}
-          {isFetching && <MusicianItemSkeleton count={6} />}
+          {isFetching && <MusicianSelectButtonSkeleton count={6} />}
           {error && <IsError onClick={refetch} />}
           {data && !hasNextPage && <IsEnd />}
           <div ref={endRef} className="h-10" />
