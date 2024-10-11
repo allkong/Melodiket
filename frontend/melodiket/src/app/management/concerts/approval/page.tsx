@@ -18,7 +18,7 @@ const Page = () => {
   const { mutate: approveConcert, isPending } = useApprovalConcert();
   const { mutate: denyConcert } = useDenyConcert();
 
-  useSpinner(isPending);
+  // useSpinner(isPending);
 
   useEffect(() => {
     fetchMyConcerts();

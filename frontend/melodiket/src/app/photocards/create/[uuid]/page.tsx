@@ -25,7 +25,7 @@ interface PageProps {
 const Page = ({ params }: PageProps) => {
   const router = useRouter();
   const { mutateAsync: photocardUpload, isPending } = usePhotocardUpload();
-  useSpinner(isPending);
+  // useSpinner(isPending);
 
   const { Funnel, setStep } = useFunnel<'select' | 'edit'>({
     addToHistory: true,
