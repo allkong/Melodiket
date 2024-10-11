@@ -29,7 +29,7 @@ const Page = () => {
       id: concertUuid,
       approvalRequest: { signatureImageUrl: signatureUrl },
     });
-    router.push(`/management/concerts/${concertUuid}`);
+    router.push(`/concerts/${concertUuid}`);
   };
 
   const handleReject = (concertUuid: string) => {

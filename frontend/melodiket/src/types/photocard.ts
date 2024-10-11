@@ -21,7 +21,7 @@ export interface PhotocardDetail {
   stageName: string;
   seatRow: number;
   seatCol: number;
-  musicans: string[];
+  musicians: string[];
   favoriteMusician: string;
   nickName: string;
 }

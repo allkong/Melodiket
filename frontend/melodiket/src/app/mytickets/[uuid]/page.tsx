@@ -21,9 +21,15 @@ import { Ticket } from '@/public/icons';
 import DetailSection from '@/components/molecules/section/DetailSection';
 import toast from 'react-hot-toast';
 
-const Page = () => {
+interface PageProps {
+  params: {
+    uuid: string;
+  };
+}
+
+const Page = ({ params }: PageProps) => {
   const router = useRouter();
-  const { data: ticket } = useTicketDetail();
+  const { data: ticket } = useTicketDetail(params.uuid);
   const { mutate: ticketRefund } = useTicketRefund();
 
   const ticketInfo = [
