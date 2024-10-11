@@ -5,6 +5,7 @@ export interface Photocard {
   concertName: string;
   imageCid: string;
   createdAt: string;
+  nickName: string;
 }
 
 export interface PhotocardList {
