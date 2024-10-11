@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 import { usePhotocardDetail } from '@/services/photocard/fetchPhotocard';
 import { formatDateToYMD } from '@/utils/dayjsPlugin';
+import { getCidUrl } from '@/utils/getUrl';
 
 import Header from '@/components/organisms/navigation/Header';
 import PhotocardFlip from '@/components/organisms/photocard/PhotocardFlip';
@@ -44,7 +45,7 @@ const Page = ({ params }: PageProps) => {
         <div className="mb-10">
           <PhotocardFlip
             concertName={photocard.concertName}
-            src={photocard.imageCid}
+            src={getCidUrl(photocard.imageCid)}
             startAt={photocard.startAt}
             stageName={photocard.stageName}
             seatRow={photocard.seatRow}
