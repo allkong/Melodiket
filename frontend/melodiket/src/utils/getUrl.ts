@@ -16,6 +16,6 @@ export const getCidUrl = (filename: string) => {
     return '';
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_CID_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_IPFS_URL;
   return `${baseUrl}/${filename}`;
 };
