@@ -11,6 +11,8 @@ import ConcertDetail from './concert-detail';
 import MusiciansInformation from './musician-information';
 import ConcertDescription from './concert-description';
 import LargeButton from '@/components/atoms/button/LargeButton';
+import useAuthStore from '@/store/authStore';
+import toast from 'react-hot-toast';
 
 const getButtonMessage = (disabled: boolean, remainSeat: number) => {
   if (disabled) {
@@ -30,9 +32,15 @@ interface ConcertInformationProps {
 
 const ConcertInformation = ({ uuid }: ConcertInformationProps) => {
   const router = useRouter();
+  const { user } = useAuthStore();
   const { data: concert } = useFetchConcertDetail(uuid);
 
   const handleClick = () => {
+    if (!user) {
+      toast('로그인 후 이용해 주세요', { icon: '😥' });
+      return;
+    }
+
     if (concert?.isStanding) {
       router.push(`/concerts/${uuid}/book?step=confirm`);
     } else {
