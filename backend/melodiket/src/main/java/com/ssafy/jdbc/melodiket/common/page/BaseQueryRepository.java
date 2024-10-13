@@ -54,12 +54,19 @@ public abstract class BaseQueryRepository<T extends ExposableEntity, R> {
                 findIdByUuid(lastCursor)
                         .orElseThrow(() -> new HttpResponseException(errorDetail));
 
-        // 동적 where 조건 추가 및 커서 처리
-        BooleanExpression cursorCondition = cursorCondition(lastCursorId);
+        // 정렬 방향 추출
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifier(sort);
+        OrderSpecifier<?> orderSpecifier = orderSpecifiers.get(0); // 첫 번째 정렬 기준 사용
+        Order sortOrder = orderSpecifier.getOrder();
+
+        // 커서 조건 생성 시 정렬 방향 전달
+        BooleanExpression cursorCondition = cursorCondition(lastCursorId, sortOrder);
+
+        // 조건을 기반으로 쿼리 실행
         List<T> entities = jpaQueryFactory
                 .selectFrom(entityPath)
                 .where(cursorCondition, mergeConditions(conditions))  // 동적 필터 적용
-                .orderBy(getOrderSpecifier(sort).toArray(OrderSpecifier[]::new))  // 동적 정렬 적용
+                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))  // 동적 정렬 적용
                 .limit(pageSize + 1L)
                 .fetch();
 
@@ -74,7 +81,7 @@ public abstract class BaseQueryRepository<T extends ExposableEntity, R> {
 
     protected List<OrderSpecifier<?>> getOrderSpecifier(Sort sort) {
         List<OrderSpecifier<?>> orders = new ArrayList<>();
-        sort.stream().forEach(order -> {
+        sort.forEach(order -> {
             Order direction = order.isAscending() ? Order.ASC : Order.DESC;
             String prop = order.getProperty();
             orders.add(new OrderSpecifier(direction, entityPath.get(prop)));
@@ -83,20 +90,23 @@ public abstract class BaseQueryRepository<T extends ExposableEntity, R> {
     }
 
     // 커서 처리 - ID를 기준으로 커서를 넘길 때 사용
-    protected BooleanExpression cursorCondition(Long lastCursorId) {
+    protected BooleanExpression cursorCondition(Long lastCursorId, Order sortOrder) {
         if (lastCursorId == null) {
             return null;
         }
-        return entityPath.getNumber("id", Long.class).gt(lastCursorId);
+        if (sortOrder == Order.ASC) {
+            return entityPath.getNumber("id", Long.class).gt(lastCursorId);
+        } else {
+            return entityPath.getNumber("id", Long.class).lt(lastCursorId);
+        }
     }
-
 
     // 여러 조건을 병합하기 위한 메소드
     protected BooleanExpression mergeConditions(BooleanExpression... conditions) {
         BooleanExpression result = null;
         for (BooleanExpression condition : conditions) {
             if (condition != null) {
-                result = result == null ? condition : result.and(condition);
+                result = (result == null) ? condition : result.and(condition);
             }
         }
         return result;
