@@ -1,4 +1,15 @@
 import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+
+import customFetch from '../customFetch';
+import concertKey from './concertKey';
+import useAuthStore from '@/store/authStore';
+import {
   ConcertData,
   CreateConcertResponse,
   ConcertDetail,
@@ -7,21 +18,12 @@ import {
   ConcertResp,
   ConcertRespInfo,
 } from '@/types/concert';
-import customFetch from '../customFetch';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import concertKey from './concertKey';
 import type {
   TicketBookRequest,
   TicketBookResponse,
   FetchConcertRequest,
 } from '@/types/ticket';
-import useAuthStore from '@/store/authStore';
-import toast from 'react-hot-toast';
+import { Error } from '@/types/error';
 
 export const fetchConcertList = async ({
   isFirstPage,
@@ -136,7 +138,11 @@ export const useBookTicket = () => {
     }: {
       ticketBookRequest: TicketBookRequest;
     }) => bookTicket(ticketBookRequest),
-    // throwOnError: true,
+    onError: (error: Error) => {
+      if (error.detailCode === 'E409004') {
+        toast.error('잔액이 부족합니다.');
+      }
+    },
   });
   return mutate;
 };
