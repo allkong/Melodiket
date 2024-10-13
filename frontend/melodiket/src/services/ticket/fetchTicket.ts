@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 import customFetch from '../customFetch';
