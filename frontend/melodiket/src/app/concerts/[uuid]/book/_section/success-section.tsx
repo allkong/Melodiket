@@ -52,7 +52,11 @@ const SuccessSection = ({ row, col }: SuccessSectionProps) => {
             <p className="text-tiny">{concert?.title}</p>
             <div className="text-xs text-gray-500">
               <p>{concert?.stageName}</p>
-              <p className="mb-3">{`${row}행 ${col}열`}</p>
+              {row === -1 || col === -1 ? (
+                <p>스탠딩</p>
+              ) : (
+                <p className="mb-3">{`${row}행 ${col}열`}</p>
+              )}
               <p>{formatDateToYMD(concert?.startAt ?? '')}</p>
             </div>
           </div>
