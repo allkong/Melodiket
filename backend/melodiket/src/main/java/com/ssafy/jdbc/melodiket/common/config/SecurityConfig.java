@@ -43,7 +43,7 @@ public class SecurityConfig {
             Pattern.compile("^/api/v1/users/stage-managers$"),
             Pattern.compile("^/api/v1/users/stage-managers/[^/]+$"),
 //            Pattern.compile("^/api/v1/users/musicians$"),
-            Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
+//            Pattern.compile("^/api/v1/users/musicians/[^/]+$"),
             Pattern.compile("^/api/v1/upload-image/presiged-url$"),
 //            Pattern.compile("^/api/v1/concerts$"),
             Pattern.compile("^/api/v1/logs$"),
@@ -81,6 +81,8 @@ public class SecurityConfig {
                         .hasAnyRole(Role.AUDIENCE.name(), Role.MUSICIAN.name(), Role.STAGE_MANAGER.name())
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/users/musicians").permitAll()
+                        .requestMatchers("/api/v1/users/musicians/{id}").permitAll()
+                        .requestMatchers("/api/v1/users/musicians/{id}/like").hasRole(Role.AUDIENCE.name())
                         .requestMatchers("/api/v1/concerts").permitAll()
                         .requestMatchers("/api/v1/users/me").authenticated()
                         .requestMatchers(request -> {
