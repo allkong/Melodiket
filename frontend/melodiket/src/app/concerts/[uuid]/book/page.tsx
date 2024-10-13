@@ -60,7 +60,7 @@ const Page = () => {
                 concertId: concert?.concertUuid ?? '',
               };
 
-              const result = await mutate.mutateAsync({
+              await mutate.mutateAsync({
                 ticketBookRequest: data,
               });
 
