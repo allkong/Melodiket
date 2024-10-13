@@ -10,10 +10,19 @@ import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton
 import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
+import { SORT_OPTIONS } from '@/constants/controlOptions';
 
-const ConcertListSection = () => {
+interface ConcertListSectionProps {
+  isNowBooking: boolean;
+  currentSort: keyof typeof SORT_OPTIONS;
+}
+
+const ConcertListSection = ({
+  isNowBooking,
+  currentSort,
+}: ConcertListSectionProps) => {
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
-    useFetchInfiniteConcert();
+    useFetchInfiniteConcert({ isNowBooking, currentSort });
   const { pages } = data ?? {};
 
   const endRef = useRef<HTMLDivElement>(null);
@@ -27,7 +36,7 @@ const ConcertListSection = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [refetch, isNowBooking, currentSort]);
 
   return (
     <>
