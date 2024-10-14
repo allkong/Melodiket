@@ -1,12 +1,15 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useMusicianDetail } from '@/services/musician/fetchMusician';
 import { useToggleFavoriteMusician } from '@/services/favorite/fetchFavorite';
 import { getS3Url } from '@/utils/getUrl';
 
 import BackgroundFrame from '@/components/atoms/image-frame/BackgroundFrame';
 import FavoriteProfile from '@/components/molecules/profile/FavoriteProfile';
-import { useEffect, useState } from 'react';
+import useAuthStore from '@/store/authStore';
+import toast from 'react-hot-toast';
 
 interface MusicianProfileSectionProps {
   musicianUuid: string;
@@ -15,6 +18,7 @@ interface MusicianProfileSectionProps {
 const MusicianProfileSection = ({
   musicianUuid,
 }: MusicianProfileSectionProps) => {
+  const { user } = useAuthStore();
   const { data: musician } = useMusicianDetail(musicianUuid);
   const { mutate: toggleFavorite } = useToggleFavoriteMusician();
 
@@ -22,6 +26,14 @@ const MusicianProfileSection = ({
   const [likeCount, setLikeCount] = useState(musician?.likeCount ?? 0);
 
   const handleFavoriteToggle = async () => {
+    if (!user) {
+      toast('로그인이 필요한 서비스예요', { icon: `😥` });
+      return;
+    } else if (user.role !== 'AUDIENCE') {
+      toast('관객만 좋아요를 누를 수 있어요', { icon: `😥` });
+      return;
+    }
+
     toggleFavorite(musicianUuid, {
       onSuccess: (data) => {
         setIsFavorite(data.status);
