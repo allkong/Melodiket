@@ -1,3 +1,4 @@
+import { SORT_OPTIONS } from '@/constants/controlOptions';
 import { User } from '@/types/user';
 
 const concertKey = {
@@ -12,24 +13,24 @@ const concertKey = {
   ],
   infinite: ({
     pageSize,
-    orderKey,
-    orderDirection,
     title,
     user,
+    isNowBooking,
+    currentSort,
   }: {
     pageSize: number;
-    orderKey: string;
-    orderDirection: 'ASC' | 'DESC';
     title: string;
     user: User | null;
+    isNowBooking: boolean;
+    currentSort: keyof typeof SORT_OPTIONS;
   }) => [
     ...concertKey.list(),
     'infinite',
     pageSize,
-    orderKey,
-    orderDirection,
     title,
     user ? `${user.nickname}${user.role}` : 'null',
+    `${isNowBooking ? 'true' : 'false'}`,
+    currentSort,
   ],
 } as const;
 

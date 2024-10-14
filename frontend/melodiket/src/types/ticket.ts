@@ -1,3 +1,4 @@
+import { SORT_OPTIONS } from '@/constants/controlOptions';
 import { TICKET_STATUS } from '@/constants/tickets';
 
 export interface Ticket {
@@ -84,7 +85,8 @@ export interface FetchConcertRequest {
   isFirstPage?: boolean;
   lastUuid?: string;
   pageSize?: number;
-  orderKey?: string;
   orderDirection?: 'ASC' | 'DESC';
   title?: string;
+  isNowBooking?: boolean;
+  currentSort?: keyof typeof SORT_OPTIONS;
 }
