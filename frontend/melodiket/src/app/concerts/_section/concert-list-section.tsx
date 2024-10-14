@@ -34,10 +34,6 @@ const ConcertListSection = ({
     }
   }, [isOnScreen, hasNextPage, fetchNextPage]);
 
-  useEffect(() => {
-    refetch();
-  }, [refetch, isNowBooking, currentSort]);
-
   return (
     <>
       <div className="px-3 grid grid-flow-row lg:grid-cols-3 grid-cols-2 w-full place-items-center">

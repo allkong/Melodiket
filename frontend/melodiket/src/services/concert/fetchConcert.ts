@@ -25,6 +25,7 @@ import type {
 } from '@/types/ticket';
 import { Error } from '@/types/error';
 import { SORT_OPTIONS } from '@/constants/controlOptions';
+import { useEffect } from 'react';
 
 export const fetchConcertList = async ({
   isFirstPage,
@@ -51,7 +52,7 @@ export const fetchConcertList = async ({
   }
 
   const response = await customFetch<FetchConcertResponse>(
-    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}&status=ACTIVE${isNowBooking ? '' : '&status=TRANSFERRED'}&orderKey=${orderKey}`
+    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}${title ? `&title=${title}` : ''}&status=ACTIVE${isNowBooking ? '' : '&status=TRANSFERRED'}&orderKey=${orderKey}`
   );
   return response;
 };
@@ -105,6 +106,10 @@ export const useFetchInfiniteConcert = (
       currentSort,
     },
   });
+
+  useEffect(() => {
+    result.refetch();
+  }, [result.refetch, pageSize, title, user, isNowBooking, currentSort]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return result;
 };
