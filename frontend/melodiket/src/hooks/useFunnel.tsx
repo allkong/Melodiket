@@ -83,9 +83,12 @@ const useFunnel = <T extends string>(options?: {
     [addToHistory, router] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  const setStep = (step: T) => {
-    addQueryString(step, addToHistory);
-  };
+  const setStep = useCallback(
+    (step: T) => {
+      addQueryString(step, addToHistory);
+    },
+    [addQueryString, addToHistory]
+  );
 
   useEffect(() => {
     if (initialStep) {
