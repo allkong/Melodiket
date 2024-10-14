@@ -7,7 +7,11 @@ import { FILTER_OPTIONS, SORT_OPTIONS } from '@/constants/controlOptions';
 import OptionButton from '@/components/atoms/button/OptionButton';
 import SelectButton from '@/components/atoms/button/SelectButton';
 
-const ControlsBar = () => {
+interface ControlsBarProps {
+  isFilter?: boolean;
+}
+
+const ControlsBar = ({ isFilter = true }: ControlsBarProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -34,11 +38,13 @@ const ControlsBar = () => {
 
   return (
     <div className="flex flex-row gap-3 px-6 py-3 bg-white overflow-x-auto whitespace-nowrap scrollbar-hide justify-end">
-      <OptionButton
-        label={FILTER_OPTIONS.booking}
-        isSelected={filterQuery}
-        onClick={handleFilterClick}
-      />
+      {isFilter && (
+        <OptionButton
+          label={FILTER_OPTIONS.booking}
+          isSelected={filterQuery}
+          onClick={handleFilterClick}
+        />
+      )}
       <SelectButton
         options={sortOptions}
         selectedOption={

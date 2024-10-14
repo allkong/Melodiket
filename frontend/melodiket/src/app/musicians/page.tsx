@@ -14,7 +14,7 @@ const Page = () => {
       <Header isFixed />
       <Carousel data={CAROUSEL_DATAS} />
       <Suspense fallback={<ControlsBarSkeleton />}>
-        <ControlsBar />
+        <ControlsBar isFilter={false} />
       </Suspense>
       <MusicianListSection />
     </div>

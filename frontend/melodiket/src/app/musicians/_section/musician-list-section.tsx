@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import { useMusiciansQuery } from '@/services/musician/fetchMusician';
 import { getS3Url } from '@/utils/getUrl';
 import useIsOnScreen from '@/hooks/useIsOnScreen';
+import { SORT_OPTIONS } from '@/constants/controlOptions';
 
 import MusicianItem from '@/components/molecules/item/MusicianItem';
 import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
@@ -12,8 +14,12 @@ import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
 
 const MusicianListSection = () => {
+  const searchParams = useSearchParams();
+  const currentSort = (searchParams.get('sort') ??
+    'popularity') as keyof typeof SORT_OPTIONS;
+
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
-    useMusiciansQuery();
+    useMusiciansQuery({ currentSort });
   const { pages } = data ?? {};
 
   const endRef = useRef<HTMLDivElement>(null);
