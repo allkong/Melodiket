@@ -11,16 +11,16 @@ import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
 import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 import { SORT_OPTIONS } from '@/constants/controlOptions';
+import { useSearchParams } from 'next/navigation';
 
-interface ConcertListSectionProps {
-  isNowBooking: boolean;
-  currentSort: keyof typeof SORT_OPTIONS;
-}
+interface ConcertListSectionProps {}
 
-const ConcertListSection = ({
-  isNowBooking,
-  currentSort,
-}: ConcertListSectionProps) => {
+const ConcertListSection = ({}: ConcertListSectionProps) => {
+  const searchParams = useSearchParams();
+  const isNowBooking = searchParams.get('filter') === 'true' ? true : false;
+  const currentSort = (searchParams.get('sort') ??
+    'popularity') as keyof typeof SORT_OPTIONS;
+
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
     useFetchInfiniteConcert({ isNowBooking, currentSort });
   const { pages } = data ?? {};

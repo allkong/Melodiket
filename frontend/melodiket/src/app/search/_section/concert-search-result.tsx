@@ -26,9 +26,9 @@ const ConcertSearchResult = ({
   const { data, error, hasNextPage, isFetching, fetchNextPage, refetch } =
     useFetchInfiniteConcert({
       pageSize: 10,
-      orderDirection: 'ASC',
-      orderKey: 'createdAt',
       title: query,
+      currentSort: 'latest',
+      isNowBooking: true,
     });
 
   const handleClick = (uuid: string) => {
