@@ -1,3 +1,5 @@
+'use client';
+
 import { Suspense } from 'react';
 
 import CAROUSEL_DATAS from '@/constants/carousel';
@@ -7,8 +9,9 @@ import ConcertListSection from './_section/concert-list-section';
 import Carousel from '@/components/molecules/carousel/Carousel';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import ControlsBarSkeleton from '@/components/organisms/controls/ControlsBarSkeleton';
+import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
 
-const Page = async () => {
+const Page = () => {
   return (
     <div className="w-full">
       <Header isFixed />
@@ -16,7 +19,9 @@ const Page = async () => {
       <Suspense fallback={<ControlsBarSkeleton />}>
         <ControlsBar />
       </Suspense>
-      <ConcertListSection />
+      <Suspense fallback={<ConcertCardSkeleton count={4} />}>
+        <ConcertListSection />
+      </Suspense>
     </div>
   );
 };
