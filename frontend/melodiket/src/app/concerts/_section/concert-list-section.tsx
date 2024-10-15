@@ -46,7 +46,7 @@ const ConcertListSection = ({}: ConcertListSectionProps) => {
                 href={`/concerts/${concert.concertUuid}`}
                 isFavorite={concert?.isLike}
                 {...concert}
-                ticketingAt={formatDateToYMDHM(concert.ticketingAt)}
+                ticketingAt={formatDateToYMDHM(concert.startAt)}
                 onClickFavorite={refetch}
               />
             ))}
