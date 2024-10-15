@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useMusiciansQuery } from '@/services/musician/fetchMusician';
-import { getS3Url } from '@/utils/getUrl';
+
 import useIsOnScreen from '@/hooks/useIsOnScreen';
+import { ConcertData } from '@/types/concert';
 
 import LargeButton from '@/components/atoms/button/LargeButton';
 import Input from '@/components/atoms/input/Input';
@@ -12,7 +13,6 @@ import TextBanner from '@/components/molecules/text/TextBanner';
 import LineDivider from '@/components/atoms/divider/LineDivider';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import IsError from '@/components/atoms/button/IsErrorButton';
-import { ConcertData } from '@/types/concert';
 import MusicianSelectButtonSkeleton from '@/components/molecules/button/MusicianSelectButtonSkeleton';
 
 interface MusicianInformationProps {
