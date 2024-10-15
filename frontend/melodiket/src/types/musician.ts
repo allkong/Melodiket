@@ -1,3 +1,5 @@
+import { SORT_OPTIONS } from '@/constants/controlOptions';
+
 export interface PageParam {
   isFirstPage: boolean;
   pageSize: number;
@@ -5,6 +7,7 @@ export interface PageParam {
   orderKey?: string;
   orderDirection?: 'ASC' | 'DESC';
   query?: string;
+  currentSort?: keyof typeof SORT_OPTIONS;
 }
 
 export interface Musician {
@@ -52,6 +55,8 @@ export interface MusicianDetail {
 
 export interface ConcertByMusicianRequest {
   musicianUuid: string;
+  isNowBooking: boolean;
+  currentSort: keyof typeof SORT_OPTIONS;
   isFirstPage?: boolean;
   lastUuid?: string;
   pageSize?: number;
@@ -66,9 +71,12 @@ export interface ConcertByMusicianResponse {
 
 export interface ConcertByMusician {
   concertUuid: string;
+  stageUuid: string;
   title: string;
-  posterCid: string;
+  createdAt: string;
+  startAt: string;
   ticketingAt: string;
+  posterCid: string;
   stageName: string;
   isLike: boolean;
 }

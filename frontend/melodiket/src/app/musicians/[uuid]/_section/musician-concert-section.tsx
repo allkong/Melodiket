@@ -2,26 +2,34 @@
 
 import { useEffect, useRef } from 'react';
 import { useConcertsByMusician } from '@/services/musician/fetchMusician';
+import { useSearchParams } from 'next/navigation';
 
 import useIsOnScreen from '@/hooks/useIsOnScreen';
+import dayjs, { formatDateToYMDHM } from '@/utils/dayjsPlugin';
+import { SORT_OPTIONS } from '@/constants/controlOptions';
 
 import IsErrorButton from '@/components/atoms/button/IsErrorButton';
 import IsEnd from '@/components/atoms/label/IsEnd';
 import ConcertCard from '@/components/molecules/card/ConcertCard';
 import ConcertCardSkeleton from '@/components/molecules/card/ConcertCardSkeleton';
-import { formatDateToYMDHM } from '@/utils/dayjsPlugin';
 
 interface MusicianConcertSectionProps {
   uuid: string;
 }
 
 const MusicianConcertSection = ({ uuid }: MusicianConcertSectionProps) => {
+  const searchParams = useSearchParams();
+  const isNowBooking = (searchParams.get('filter') ?? 'true') === 'true';
+  const currentSort = (searchParams.get('sort') ??
+    'popularity') as keyof typeof SORT_OPTIONS;
+
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
-    useConcertsByMusician(uuid);
+    useConcertsByMusician(uuid, isNowBooking, currentSort);
   const { pages } = data ?? {};
 
   const endRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useIsOnScreen(endRef);
+  const now = dayjs();
 
   useEffect(() => {
     if (isOnScreen && hasNextPage) {
@@ -39,13 +47,16 @@ const MusicianConcertSection = ({ uuid }: MusicianConcertSectionProps) => {
         {pages &&
           pages
             ?.flatMap((page) => page.result)
+            .filter((concert) =>
+              isNowBooking ? dayjs(concert.startAt).isAfter(now) : true
+            )
             .map((concert) => (
               <ConcertCard
                 key={concert.concertUuid}
                 href={`/concerts/${concert.concertUuid}`}
                 isFavorite={concert?.isLike}
                 {...concert}
-                ticketingAt={formatDateToYMDHM(concert.ticketingAt)}
+                ticketingAt={formatDateToYMDHM(concert.startAt)}
                 onClickFavorite={refetch}
               />
             ))}
