@@ -7,6 +7,7 @@ import Carousel from '@/components/molecules/carousel/Carousel';
 import ControlsBar from '@/components/organisms/controls/ControlsBar';
 import MusicianListSection from './_section/musician-list-section';
 import ControlsBarSkeleton from '@/components/organisms/controls/ControlsBarSkeleton';
+import MusicianItemSkeleton from '@/components/molecules/item/MusicianItemSkeleton';
 
 const Page = () => {
   return (
@@ -14,9 +15,11 @@ const Page = () => {
       <Header isFixed />
       <Carousel data={CAROUSEL_DATAS} />
       <Suspense fallback={<ControlsBarSkeleton />}>
-        <ControlsBar />
+        <ControlsBar isFilter={false} />
       </Suspense>
-      <MusicianListSection />
+      <Suspense fallback={<MusicianItemSkeleton count={6} />}>
+        <MusicianListSection />
+      </Suspense>
     </div>
   );
 };
