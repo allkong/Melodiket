@@ -1,7 +1,5 @@
 import Image from 'next/image';
 
-// import { Sticker } from '@/types/photocard';
-
 import MusicianSignature from './musician-signature';
 
 interface StickerImageProps {
@@ -12,7 +10,7 @@ const StickerImage = ({ src }: StickerImageProps) => {
   return <Image src={src} alt="sticker" width={80} height={80} />;
 };
 
-const createStickers = (category: string, count: number) => {
+const createStickersForPng = (category: string, count: number) => {
   return Array.from({ length: count }, (_, index) => ({
     name: `${category}${index + 1}`,
     category,
@@ -37,7 +35,7 @@ export const stickers = [
   ...createStickersForSvg('fruit', 10),
   ...createStickersForSvg('heart', 10),
   ...createStickersForSvg('instrument', 10),
-  ...createStickersForSvg('member', 6),
+  ...createStickersForPng('member', 6),
   ...createStickersForSvg('ocean', 10),
   ...createStickersForSvg('pixel', 10),
   ...createStickersForSvg('real_cat', 6),
