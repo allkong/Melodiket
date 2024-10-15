@@ -22,7 +22,7 @@ const MusicianConcertSection = ({ uuid }: MusicianConcertSectionProps) => {
   const isNowBooking = (searchParams.get('filter') ?? 'true') === 'true';
   const currentSort = (searchParams.get('sort') ??
     'popularity') as keyof typeof SORT_OPTIONS;
-  console.log(searchParams.get('filter'), isNowBooking);
+
   const { data, isFetching, error, hasNextPage, fetchNextPage, refetch } =
     useConcertsByMusician(uuid, isNowBooking, currentSort);
   const { pages } = data ?? {};
