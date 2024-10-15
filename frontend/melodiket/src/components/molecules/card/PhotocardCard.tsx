@@ -1,5 +1,7 @@
-import { getBlurDataUrl } from '@/utils/getUrl';
 import Image from 'next/image';
+
+import { getBlurDataUrl } from '@/utils/getUrl';
+import defaultImage from '@/public/images/default-image.png';
 
 interface PhotocardCardProps {
   src: string;
@@ -11,7 +13,7 @@ const PhotocardCard = ({ src, title }: PhotocardCardProps) => {
     <div className="w-[10.6rem] space-y-2">
       <div className="relative w-full h-60 overflow-hidden rounded-md border border-gray-200">
         <Image
-          src={src}
+          src={src || defaultImage}
           alt="photocard"
           className="object-cover"
           fill

@@ -1,4 +1,15 @@
 import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+
+import customFetch from '../customFetch';
+import concertKey from './concertKey';
+import useAuthStore from '@/store/authStore';
+import {
   ConcertData,
   CreateConcertResponse,
   ConcertDetail,
@@ -7,32 +18,41 @@ import {
   ConcertResp,
   ConcertRespInfo,
 } from '@/types/concert';
-import customFetch from '../customFetch';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import concertKey from './concertKey';
 import type {
   TicketBookRequest,
   TicketBookResponse,
   FetchConcertRequest,
 } from '@/types/ticket';
-import useAuthStore from '@/store/authStore';
-import toast from 'react-hot-toast';
+import { Error } from '@/types/error';
+import { SORT_OPTIONS } from '@/constants/controlOptions';
+import { useEffect } from 'react';
 
 export const fetchConcertList = async ({
   isFirstPage,
   lastUuid,
   pageSize,
-  orderKey,
-  orderDirection,
   title,
+  isNowBooking,
+  currentSort,
 }: FetchConcertRequest) => {
+  let orderKey: string;
+  let orderDirection: 'ASC' | 'DESC';
+  if (currentSort === 'alphabetical') {
+    orderKey = 'title';
+    orderDirection = 'ASC';
+  } else if (currentSort === 'latest') {
+    orderKey = 'ticketingAt';
+    orderDirection = 'DESC';
+  } else if (currentSort === 'registration') {
+    orderKey = 'createdAt';
+    orderDirection = 'DESC';
+  } else {
+    orderKey = 'likeCount';
+    orderDirection = 'DESC';
+  }
+
   const response = await customFetch<FetchConcertResponse>(
-    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}&title=${title}&status=ACTIVE&status=TRANSFERRED`
+    `/concerts?isFirstPage=${isFirstPage}&pageSize=${pageSize}&orderDirection=${orderDirection}&lastUuid=${lastUuid ?? ''}${title ? `&title=${title}` : ''}&status=ACTIVE${isNowBooking ? '' : '&status=TRANSFERRED'}&orderKey=${orderKey}`
   );
   return response;
 };
@@ -40,16 +60,16 @@ export const fetchConcertList = async ({
 export const useFetchInfiniteConcert = (
   options: {
     pageSize?: number;
-    orderKey?: string;
-    orderDirection?: 'ASC' | 'DESC';
     title?: string;
+    isNowBooking?: boolean;
+    currentSort?: keyof typeof SORT_OPTIONS;
   } = {}
 ) => {
   const {
     pageSize = 4,
-    orderKey = 'createdAt',
-    orderDirection = 'ASC',
     title = '',
+    isNowBooking = false,
+    currentSort = 'popularity',
   } = options;
 
   const { user } = useAuthStore();
@@ -57,10 +77,10 @@ export const useFetchInfiniteConcert = (
   const result = useInfiniteQuery({
     queryKey: concertKey.infinite({
       pageSize,
-      orderKey,
-      orderDirection,
       title,
       user,
+      isNowBooking,
+      currentSort,
     }),
     queryFn: ({ pageParam }) => fetchConcertList(pageParam),
     getNextPageParam: (lastPage) => {
@@ -72,20 +92,24 @@ export const useFetchInfiniteConcert = (
       return {
         isFirstPage: false,
         lastUuid: lastPage.pageInfo.lastUuid,
-        orderDirection,
-        orderKey,
         pageSize,
         title,
+        isNowBooking,
+        currentSort,
       };
     },
     initialPageParam: {
       isFirstPage: true,
-      orderDirection,
-      orderKey,
       pageSize,
       title,
+      isNowBooking,
+      currentSort,
     },
   });
+
+  useEffect(() => {
+    result.refetch();
+  }, [result.refetch, pageSize, title, user, isNowBooking, currentSort]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return result;
 };
@@ -96,10 +120,10 @@ export const useFetchConcertList = () => {
     queryFn: () =>
       fetchConcertList({
         isFirstPage: true,
-        orderDirection: 'ASC',
-        orderKey: 'createdAt',
+        orderDirection: 'DESC',
         pageSize: 10,
         title: '',
+        currentSort: 'popularity',
       }),
   });
 
@@ -136,7 +160,11 @@ export const useBookTicket = () => {
     }: {
       ticketBookRequest: TicketBookRequest;
     }) => bookTicket(ticketBookRequest),
-    // throwOnError: true,
+    onError: (error: Error) => {
+      if (error.detailCode === 'E409004') {
+        toast.error('잔액이 부족합니다.');
+      }
+    },
   });
   return mutate;
 };

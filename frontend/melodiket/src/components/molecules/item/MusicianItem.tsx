@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useToggleFavoriteMusician } from '@/services/favorite/fetchFavorite';
+import useAuthStore from '@/store/authStore';
 
 import Profile from '@/components/atoms/profile/Profile';
 import FavoriteButton from '@/components/atoms/button/FavoriteButton';
@@ -23,12 +25,21 @@ const MusicianItem = ({
   initialFavorite,
   onClick,
 }: MusicianItemProps) => {
+  const { user } = useAuthStore();
   const { mutate: toggleFavorite } = useToggleFavoriteMusician();
 
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
   const [likeCount, setLikeCount] = useState(initialFavoriteCount);
 
   const handleFavoriteToggle = async () => {
+    if (!user) {
+      toast('로그인이 필요한 서비스예요', { icon: `😥` });
+      return;
+    } else if (user.role !== 'AUDIENCE') {
+      toast('관객만 좋아요를 누를 수 있어요', { icon: `😥` });
+      return;
+    }
+
     toggleFavorite(uuid, {
       onSuccess: (data) => {
         setIsFavorite(data.status);

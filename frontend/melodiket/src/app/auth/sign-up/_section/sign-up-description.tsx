@@ -20,7 +20,7 @@ const SignUpDescription = ({ onNext }: SignUpDescriptionProps) => {
           hasLogo
           title="회원 소개를 입력해주세요"
           description={
-            '회원가입을 할 때 블록체인 지갑을 만들어 드릴거에요.\n지갑을 생성하는데 최대 20초가 소요될 수 있어요.'
+            '회원가입을 할 때 블록체인 지갑을 만들어 드릴 거예요.\n지갑을 생성하는데 최대 20초가 소요될 수 있어요.'
           }
         />
         <div className="flex flex-col mt-9 gap-3">
