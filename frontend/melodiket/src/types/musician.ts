@@ -71,9 +71,12 @@ export interface ConcertByMusicianResponse {
 
 export interface ConcertByMusician {
   concertUuid: string;
+  stageUuid: string;
   title: string;
-  posterCid: string;
+  createdAt: string;
+  startAt: string;
   ticketingAt: string;
+  posterCid: string;
   stageName: string;
   isLike: boolean;
 }
