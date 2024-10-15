@@ -24,7 +24,7 @@ const MusicianSearchResult = ({
   const endRef = useRef<HTMLDivElement>(null);
   const isOnScreen = useIsOnScreen(endRef);
   const { data, error, isFetching, hasNextPage, refetch, fetchNextPage } =
-    useMusiciansQuery(4, 'uuid', 'ASC', query);
+    useMusiciansQuery({ query });
 
   const { pages } = data ?? {};
 

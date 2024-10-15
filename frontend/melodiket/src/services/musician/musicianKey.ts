@@ -13,9 +13,9 @@ const musicianKey = {
   detail: (uuid: string) => [...musicianKey.default, 'detail', uuid],
   concerts: (options: {
     musicianUuid: string;
+    isNowBooking: boolean;
+    currentSort: keyof typeof SORT_OPTIONS;
     pageSize: number;
-    orderKey: string;
-    orderDirection: 'ASC' | 'DESC';
   }) => [...musicianKey.default, 'concerts', { ...options }],
 } as const;
 

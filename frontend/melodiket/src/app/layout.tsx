@@ -6,6 +6,8 @@ import KakaoScript from './_lib/KakaoScript';
 import { Toaster } from 'react-hot-toast';
 import Spinner from './_components/spinner';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
 export const metadata: Metadata = {
   title: 'melodiket',
   description: '밴드 공연 티케팅 서비스',
@@ -13,6 +15,18 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     apple: '/pwa/icon-192x192.png',
+  },
+  openGraph: {
+    type: 'website',
+    url: siteUrl,
+    title: 'melodiket',
+    description: '밴드 공연 티케팅 서비스',
+    images: [
+      {
+        url: `${siteUrl}/images/melodiket.png`,
+        alt: 'Melodiket Thumbnail',
+      },
+    ],
   },
 };
 

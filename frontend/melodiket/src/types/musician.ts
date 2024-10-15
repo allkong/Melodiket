@@ -55,6 +55,8 @@ export interface MusicianDetail {
 
 export interface ConcertByMusicianRequest {
   musicianUuid: string;
+  isNowBooking: boolean;
+  currentSort: keyof typeof SORT_OPTIONS;
   isFirstPage?: boolean;
   lastUuid?: string;
   pageSize?: number;
@@ -69,9 +71,12 @@ export interface ConcertByMusicianResponse {
 
 export interface ConcertByMusician {
   concertUuid: string;
+  stageUuid: string;
   title: string;
-  posterCid: string;
+  createdAt: string;
+  startAt: string;
   ticketingAt: string;
+  posterCid: string;
   stageName: string;
   isLike: boolean;
 }
