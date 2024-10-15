@@ -26,7 +26,6 @@ const PhotocardBack = ({
   favoriteMusician,
   onClick,
 }: PhotocardBackProps) => {
-  console.log(musicians);
   return (
     <PhotocardFrame isCreated back>
       <section className="py-6 border-t border-b border-black">

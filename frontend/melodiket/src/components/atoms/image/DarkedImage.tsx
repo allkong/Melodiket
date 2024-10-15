@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import defaultImage from '@/public/images/default-image.png';
+
 interface DarkedImageProps {
   src: string;
 }
@@ -8,7 +10,7 @@ const DarkedImage = ({ src }: DarkedImageProps) => {
   return (
     <div className="relative w-full h-full">
       <Image
-        src={src}
+        src={src || defaultImage}
         alt="콘서트 상세 페이지 배경 이미지"
         fill
         className="object-cover"
