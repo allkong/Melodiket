@@ -1,4 +1,8 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import customFetch from '../customFetch';
 import {
   ConcertByMusicianRequest,
@@ -9,20 +13,33 @@ import {
 } from '@/types/musician';
 import musicianKey from './musicianKey';
 import useAuthStore from '@/store/authStore';
+import { SORT_OPTIONS } from '@/constants/controlOptions';
+import { useEffect } from 'react';
 
-export const getMusicians = async (
-  pageParam: PageParam = {
-    isFirstPage: true,
-    pageSize: 5,
-    orderKey: 'uuid',
-    orderDirection: 'ASC',
-    query: '',
+export const getMusicians = async ({
+  isFirstPage,
+  lastUuid,
+  pageSize,
+  query,
+  currentSort,
+}: PageParam): Promise<FetchMusiciansResponse> => {
+  let orderKey: string;
+  let orderDirection: 'ASC' | 'DESC';
+  if (currentSort === 'alphabetical') {
+    orderKey = 'nickname';
+    orderDirection = 'ASC';
+  } else if (currentSort === 'latest') {
+    orderKey = 'ASC';
+    orderDirection = 'DESC';
+  } else if (currentSort === 'registration') {
+    orderKey = 'registeredAt';
+    orderDirection = 'DESC';
+  } else {
+    orderKey = 'likeCount';
+    orderDirection = 'DESC';
   }
-): Promise<FetchMusiciansResponse> => {
-  const { isFirstPage, lastUuid, pageSize, query } = pageParam;
-  const queryParams = isFirstPage
-    ? `isFirstPage=true&pageSize=${pageSize}&name=${query}`
-    : `isFirstPage=false&lastUuid=${lastUuid}&pageSize=${pageSize}&name=${query}`;
+
+  const queryParams = `isFirstPage=${isFirstPage}&lastUuid=${lastUuid || ''}&pageSize=${pageSize}&name=${query}&orderKey=${orderKey}&orderDirection=${orderDirection}`;
 
   const response = await customFetch<FetchMusiciansResponse>(
     `/users/musicians?${queryParams}`
@@ -31,27 +48,28 @@ export const getMusicians = async (
 };
 
 export const useMusiciansQuery = (
-  pageSize: number = 5,
-  orderKey: string = 'uuid',
-  orderDirection: 'ASC' | 'DESC' = 'ASC',
-  query: string = ''
+  options: {
+    pageSize?: number;
+    query?: string;
+    currentSort?: keyof typeof SORT_OPTIONS;
+  } = {}
 ) => {
+  const { pageSize = 5, query = '', currentSort = 'popularity' } = options;
   const { user } = useAuthStore();
-  return useInfiniteQuery({
-    queryKey: musicianKey.list({
-      orderDirection,
-      orderKey,
+
+  const result = useInfiniteQuery({
+    queryKey: musicianKey.infinite({
       pageSize,
       query,
       user,
+      currentSort,
     }),
     queryFn: ({ pageParam }) => getMusicians(pageParam),
     initialPageParam: {
       isFirstPage: true,
       pageSize,
-      orderKey,
-      orderDirection,
       query,
+      currentSort,
     },
     getNextPageParam: (lastPage) => {
       const { pageInfo } = lastPage;
@@ -60,13 +78,34 @@ export const useMusiciansQuery = (
             isFirstPage: false,
             lastUuid: lastPage.pageInfo.lastUuid,
             pageSize,
-            orderKey,
-            orderDirection,
             query,
+            currentSort,
           }
         : null;
     },
   });
+
+  useEffect(() => {
+    result.refetch();
+  }, [result.refetch, pageSize, query, user, currentSort]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return result;
+};
+
+export const useFetchMusicianList = () => {
+  const result = useSuspenseQuery<FetchMusiciansResponse>({
+    queryKey: musicianKey.list(),
+    queryFn: () =>
+      getMusicians({
+        isFirstPage: true,
+        orderDirection: 'DESC',
+        pageSize: 10,
+        query: '',
+        currentSort: 'popularity',
+      }),
+  });
+
+  return result;
 };
 
 export const getMusicianDetail = async (uuid: string) => {

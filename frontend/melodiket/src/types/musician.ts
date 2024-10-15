@@ -1,3 +1,5 @@
+import { SORT_OPTIONS } from '@/constants/controlOptions';
+
 export interface PageParam {
   isFirstPage: boolean;
   pageSize: number;
@@ -5,6 +7,7 @@ export interface PageParam {
   orderKey?: string;
   orderDirection?: 'ASC' | 'DESC';
   query?: string;
+  currentSort?: keyof typeof SORT_OPTIONS;
 }
 
 export interface Musician {
