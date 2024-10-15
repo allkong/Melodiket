@@ -55,6 +55,8 @@ export interface MusicianDetail {
 
 export interface ConcertByMusicianRequest {
   musicianUuid: string;
+  isNowBooking: boolean;
+  currentSort: keyof typeof SORT_OPTIONS;
   isFirstPage?: boolean;
   lastUuid?: string;
   pageSize?: number;
