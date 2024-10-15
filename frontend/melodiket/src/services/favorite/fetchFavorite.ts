@@ -97,7 +97,7 @@ export const useToggleFavoriteMusician = () => {
       }
     },
     onError: () => {
-      toast.error('관객만 좋아요를 누를 수 있어요.');
+      toast.error('찜 실패');
     },
   });
 };

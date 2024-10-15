@@ -31,7 +31,8 @@ const customFetch = async <T>(
     const response = await fetch(`${BASE_URL}${url}`, fetchOptions);
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
+      const errorResponse = await response.json();
+      throw { status: response.status, ...errorResponse };
     }
 
     const responseText = await response.text();
