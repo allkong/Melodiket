@@ -1,21 +1,22 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+
+import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
+import { useUploadImage } from '@/services/user/fetchUser';
+import { useGetMyWallet } from '@/services/wallet/fetchWallet';
+import { getS3Url } from '@/utils/getUrl';
+import { formatPrice } from '@/utils/concertFormatter';
+import { useLogout } from '@/services/auth/fetchAuth';
+
 import Header from '@/components/organisms/navigation/Header';
 import Profile from '@/components/atoms/profile/Profile';
 import MyPageItem from '@/components/molecules/item/MyPageItem';
 import LineDivider from '@/components/atoms/divider/LineDivider';
 import LargeButton from '@/components/atoms/button/LargeButton';
-
 import { MLDY, Authority } from '@/public/icons';
-import { useRouter } from 'next/navigation';
-import { useGetMe, useUpdateMe } from '@/services/user/fetchUser';
-import { useUploadImage } from '@/services/user/fetchUser';
-import { useGetMyWallet } from '@/services/wallet/fetchWallet';
-import { getS3Url } from '@/utils/getUrl';
-import toast from 'react-hot-toast';
-import { formatPrice } from '@/utils/concertFormatter';
-import { useLogout } from '@/services/auth/fetchAuth';
 
 const Page = () => {
   const router = useRouter();
@@ -167,7 +168,10 @@ const Page = () => {
                   label="찜한 공연/뮤지션"
                   onClick={() => handleNavigation('/favorites')}
                 />
-                <MyPageItem label="예매 내역" />
+                <MyPageItem
+                  label="예매 내역"
+                  onClick={() => handleNavigation('/mytickets')}
+                />
                 <LineDivider />
               </>
             )}
