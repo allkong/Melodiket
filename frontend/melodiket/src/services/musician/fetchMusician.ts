@@ -29,11 +29,11 @@ export const getMusicians = async ({
     orderKey = 'nickname';
     orderDirection = 'ASC';
   } else if (currentSort === 'latest') {
-    orderKey = 'ASC';
+    orderKey = 'registeredAt';
     orderDirection = 'DESC';
   } else if (currentSort === 'registration') {
     orderKey = 'registeredAt';
-    orderDirection = 'DESC';
+    orderDirection = 'ASC';
   } else {
     orderKey = 'likeCount';
     orderDirection = 'DESC';
@@ -122,13 +122,29 @@ export const useMusicianDetail = (uuid: string) => {
 
 const getConcertsByMusician = async ({
   musicianUuid,
+  isNowBooking,
+  currentSort,
   isFirstPage = true,
   lastUuid = '',
   pageSize = 5,
-  orderKey = 'startAt',
-  orderDirection = 'ASC',
 }: ConcertByMusicianRequest) => {
-  const queryParams = `isFirstPage=${isFirstPage}&lastUuid=${lastUuid}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}`;
+  let orderKey: string;
+  let orderDirection: 'ASC' | 'DESC';
+  if (currentSort === 'alphabetical') {
+    orderKey = 'title';
+    orderDirection = 'ASC';
+  } else if (currentSort === 'latest') {
+    orderKey = 'ticketingAt';
+    orderDirection = 'DESC';
+  } else if (currentSort === 'registration') {
+    orderKey = 'createdAt';
+    orderDirection = 'DESC';
+  } else {
+    orderKey = 'likeCount';
+    orderDirection = 'DESC';
+  }
+
+  const queryParams = `isFirstPage=${isFirstPage}&lastUuid=${lastUuid}&pageSize=${pageSize}&orderKey=${orderKey}&orderDirection=${orderDirection}&status=ACTIVE${isNowBooking ? '' : '&status=TRANSFERRED'}`;
 
   const response = await customFetch<ConcertByMusicianResponse>(
     `/concerts/by-musician/${musicianUuid}?${queryParams}`
@@ -138,32 +154,33 @@ const getConcertsByMusician = async ({
 
 export const useConcertsByMusician = (
   musicianUuid: string,
-  pageSize: number = 5,
-  orderKey: string = 'startAt',
-  orderDirection: 'ASC' | 'DESC' = 'ASC'
+  isNowBooking: boolean,
+  currentSort: keyof typeof SORT_OPTIONS,
+  pageSize: number = 5
 ) => {
   return useInfiniteQuery({
     queryKey: musicianKey.concerts({
       musicianUuid,
+      isNowBooking,
+      currentSort,
       pageSize,
-      orderKey,
-      orderDirection,
     }),
     queryFn: ({ pageParam = { isFirstPage: true, lastUuid: '' } }) =>
       getConcertsByMusician({
         musicianUuid,
+        isNowBooking,
+        currentSort,
         isFirstPage: pageParam.isFirstPage,
         lastUuid: pageParam.lastUuid || '',
         pageSize,
-        orderKey,
-        orderDirection,
       }),
     initialPageParam: {
       isFirstPage: true,
       lastUuid: '',
       pageSize,
-      orderKey,
-      orderDirection,
+      musicianUuid,
+      isNowBooking,
+      currentSort,
     },
     getNextPageParam: (lastPage) => {
       const { pageInfo } = lastPage;
@@ -172,8 +189,9 @@ export const useConcertsByMusician = (
             isFirstPage: false,
             lastUuid: lastPage.pageInfo.lastUuid,
             pageSize,
-            orderKey,
-            orderDirection,
+            musicianUuid,
+            isNowBooking,
+            currentSort,
           }
         : null;
     },
