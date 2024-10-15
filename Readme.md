@@ -1,12 +1,14 @@
 # 밴드 공연 티케팅 서비스, Melodiket 🎵
 
-![image.png](./image.png)
+![image.png](assets/melodiket.png)
 
 ## 📅 프로젝트 정보
 
 <div align=center>
 
 ### SSAFY 11기 2학기 특화 프로젝트
+
+**✨ 특화 프로젝트 우수팀 ✨**
 
 2024.08.19(월) ~ 2024.10.11(금) [8주]
 
@@ -17,7 +19,9 @@
 </div>
 </br>
 
-## 주제
+## 🍇☂💜🎶🎵🤩👾🎆🎉✨🎀🔮🪀 주제
+
+**밴드 공연 티케팅 서비스**
 
 </br>
 
@@ -79,11 +83,11 @@
 
 ## 🥝 팀원
 
-| Name      | Roles          | Development                                                                                                              | GitHub                                         |
-| :-------- | :------------- | :----------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------- |
-| 정다빈 👑 | 팀장, Frontend | - MSW를 활용한 API Mocking 구축</br>- 모바일 티켓(QR) 생성 및 스캔 기능 구현</br>- NFT 포토카드 제작 및 공유 기능 구현   | [@allempti](https://github.com/allkong)        |
-| 강혁준 🐹 | Frontend       | - Carousel, Menu 컴포넌트 설계</br>- Funnel UI 커스텀 훅 구현</br>- 클라이언트 무한 스크롤 구현                          | [@kanghyukjun](https://github.com/kanghyukjun) |
-| 윤병서 🍀 | Frontend       | - 프론트엔드 API 연동</br>- 마이페이지, 공연장 및 공연 관리 기능 구현</br>- 공연 계약 승인, 거절 및 취소 기능 구현       | [@bsyun0571](https://github.com/bsyun0571)     |
-| 김경호 🐶 | Backend        | - ELK 기반 블록체인 트랜잭션 로그 수집/관리</br>- NFT 발급 기능 등 백엔드 API 개발</br>- Jenkins 기반 CI/CD 구축 및 관리 | [@kkho9654](https://github.com/kkho9654)       |
-| 박세빈 🍬 | Backend        | - 3-tier 아키텍처 설계/핵심 로직 구현</br>- Authentication/Error handling 구현</br>- 공연 계약 주요 비즈니스 로직 구현   | [@sevin98](https://github.com/sevin98)         |
-| 박유빈 🐰 | Backend, CI/CD | - 솔리디티 스마트 컨트랙트 및 클라이언트 개발</br>IPFS 노드 서버 개발</br>- Redis 분산 락 기반 트랜잭션 처리 개발        | [@pcjs156](https://github.com/pcjs156)         |
+| Name      | Roles              | Development                                                                                                                                                                                                                              | GitHub                                         |
+| :-------- | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------- |
+| 정다빈 👑 | 팀장,</br>Frontend | - MSW를 활용한 API Mocking 구축</br>- 예매 내역 조회 및 티켓 사용/취소 구현</br>- 모바일 티켓(QR) 생성 및 스캔 기능 구현</br>- NFT 포토카드 제작 및 카카오톡 공유 기능 구현</br>- 뮤지션 조회 및 찜 기능 구현</br>- 로그인/로그아웃 구현 | [@allempti](https://github.com/allkong)        |
+| 강혁준 🥁 | Frontend           | - Carousel, Menu 컴포넌트 설계</br>- Funnel UI 커스텀 훅 구현</br>- 클라이언트 무한 스크롤 구현                                                                                                                                          | [@kanghyukjun](https://github.com/kanghyukjun) |
+| 윤병서 🎤 | Frontend           | - 프론트엔드 API 연동</br>- 마이페이지, 공연장 및 공연 관리 기능 구현</br>- 공연 계약 승인, 거절 및 취소 기능 구현                                                                                                                       | [@bsyun0571](https://github.com/bsyun0571)     |
+| 김경호 🎹 | Backend            | - ELK 기반 블록체인 트랜잭션 로그 수집/관리</br>- NFT 발급 기능 등 백엔드 API 개발</br>- Jenkins 기반 CI/CD 구축 및 관리                                                                                                                 | [@kkho9654](https://github.com/kkho9654)       |
+| 박세빈 🎥 | Backend            | - 3-tier 아키텍처 설계/핵심 로직 구현</br>- Authentication/Error handling 구현</br>- 공연 계약 주요 비즈니스 로직 구현                                                                                                                   | [@sevin98](https://github.com/sevin98)         |
+| 박유빈 🎸 | Backend            | - 솔리디티 스마트 컨트랙트 및 클라이언트 개발</br>IPFS 노드 서버 개발</br>- Redis 분산 락 기반 트랜잭션 처리 개발                                                                                                                        | [@pcjs156](https://github.com/pcjs156)         |
