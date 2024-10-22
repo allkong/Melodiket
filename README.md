@@ -8,7 +8,7 @@
 
 ### SSAFY 11기 2학기 특화 프로젝트
 
-**✨ 특화 프로젝트 우수팀 ✨**
+**✨ 특화 프로젝트 우수팀 (반 1등) ✨**
 
 2024.08.19(월) ~ 2024.10.11(금) [8주]
 
@@ -38,63 +38,64 @@
 
 </br>
 
-## 📱 서비스 화면
+## 📱 서비스 소개
 
 </br>
 
 ## 🔎 기술 스택
 
-> Frontend
+### 🐹 Frontend
 
 <div>
-  <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=black"/>
-    <img src="https://img.shields.io/badge/Next.js-000000?style=flat&logo=Next.js&logoColor=white"/>
-  <img src="https://img.shields.io/badge/PWA-5A0FC8?style=flat&logo=PWA&logoColor=white"/>
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=PWA&logoColor=white"/>
 </div>
 <div>
-  <img src="https://img.shields.io/badge/Zustand-3578E5?style=flat&logo=Zustand&logoColor=white"/>
-  <img src="https://img.shields.io/badge/React Query-FF4154?style=flat&logo=ReactQuery&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Zustand-433E38?style=for-the-badge&logo=Zustand&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React Query-FF4154?style=for-the-badge&logo=ReactQuery&logoColor=white"/>
 </div>
 <div>
-  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Storybook-FF4785?style=flat&logo=storybook&logoColor=white"/>
-</div>
-</br>
-
-> Backend
-
-<div>
-  <img src="https://img.shields.io/badge/Spring Boot 3-6DB33F?style=flat&logo=springboot&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat&logo=springsecurity&logoColor=white"/>
-</div>
-<div>
-  <img src="https://img.shields.io/badge/Node.js-5FA04E?style=flat&logo=node.js&logoColor=white"/>
-  <img src="https://img.shields.io/badge/IPFS-65C2CB?style=flat&logo=IPFS&logoColor=white"/>
-</div>
-<div>
-  <img src="https://img.shields.io/badge/JPA-59666C?style=flat&logo=hibernate&logoColor=white"/>
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white"/>
-  <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white"/>
 </div>
 </br>
 
-> Blockchain
+### 🐸 Backend
 
 <div>
-  <img src="https://img.shields.io/badge/Solidity-2C4F7C?style=flat&logo=Solidity&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Web3j-3C3C3D?style=flat&logo=ethereum&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring Boot 3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"/>
+</div>
+<div>
+  <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=node.js&logoColor=white"/>
+  <img src="https://img.shields.io/badge/IPFS-65C2CB?style=for-the-badge&logo=IPFS&logoColor=white"/>
+</div>
+<div>
+  <img src="https://img.shields.io/badge/JPA-59666C?style=for-the-badge&logo=hibernate&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white"/>
 </div>
 </br>
 
-> CI/CD
+### 🧱 Blockchain
 
 <div>
-  <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=flat&logo=amazonec2&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat&logo=amazons3&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=jenkins&logoColor=white"/>
-  <img src="https://img.shields.io/badge/nginx-009639?style=flat&logo=nginx&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Solidity-2C4F7C?style=for-the-badge&logo=Solidity&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Web3j-3C3C3D?style=for-the-badge&logo=ethereum&logoColor=white"/>
+</div>
+</br>
+
+### ☁ CI/CD
+
+<div>
+  <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"/>
+</div>
+<div>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
+  <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
 </div>
 </br>
 
@@ -111,6 +112,10 @@
 ## 🧩 ERD
 
 ![ERD](assets/erd.png)
+
+## 🎨 Wireframe
+
+![wireframe](assets/wireframe.png)
 
 ## 🥝 팀원
 
