@@ -99,23 +99,14 @@
 </div>
 </br>
 
-## 🗃️ Architecture Diagram
+## 🗃️ 산출물
 
-![architecture](assets/architecture.jpg)
-
-## 📫 Sequence Diagram
-
-예외 케이스가 발생하지 않도록 꼼꼼히 점검했어요.
-
-![sequence diagram](assets/sequence-diagram.png)
-
-## 🧩 ERD
-
-![ERD](assets/erd.png)
-
-## 🎨 Wireframe
-
-![wireframe](assets/wireframe.png)
+|                  |                                                     |
+| :--------------: | --------------------------------------------------: |
+|   Architecture   |     <img width="700" src="assets/architecture.jpg"> |
+| Sequence Diagram | <img width="700" src="assets/sequence-diagram.png"> |
+|       ERD        |              <img width="700" src="assets/erd.png"> |
+|    Wireframe     |        <img width="700" src="assets/wireframe.png"> |
 
 ## 🥝 팀원
 
