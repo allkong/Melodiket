@@ -1,6 +1,6 @@
 # 밴드 공연 티케팅 서비스, Melodiket 🎵
 
-<img src="assets/melodiket.png" width="90%" />
+<img src="assets/melodiket.png" />
 
 ## 📅 프로젝트 정보
 
@@ -27,7 +27,7 @@
 - 🎭 **뮤지션**에게는 정당한 수익 분배를 받을 수 있도록
 - 🎫 **관객**에게는 좋아하는 뮤지션의 공연을 관람하고 응원할 수 있도록
 
-<img src="assets/subject.png" width="90%" />
+<img src="assets/subject.png" />
 
 </br>
 
@@ -90,7 +90,7 @@
 
 ## 🔮 서비스 특징
 
-<img src="assets/feature.png" width="600px" />
+<img src="assets/feature.png" width="700px" />
 
 ### 💰 스마트 컨트랙트 기반의 수익 분배
 
@@ -98,7 +98,7 @@
 - 관객은 공연을 예매할 때 최애 밴드를 선택하여 해당 밴드를 응원해요.
 - 공연 이후에 공연 관리자가 정산을 요청하면 공연 관리자와 뮤지션에게 수익이 분배돼요.
 
-<img src="assets/user-flow.png" width="600px" />
+<img src="assets/user-flow.png" width="700px" />
 
 ### 🎫 NFT 포토카드
 
@@ -106,7 +106,18 @@
 - 뮤지션은 공연을 승인할 때 싸인을 해요.
 - 관객은 포토카드를 제작할 때 선택한 최애 밴드의 싸인만 스티커로 사용할 수 있어요.
 
-<img src="assets/nft-photocard.png" width="600px" />
+<img src="assets/nft-photocard.png" width="700px" />
+
+</br>
+
+## 🗃️ 산출물
+
+|                  |                                                       |
+| :--------------: | ----------------------------------------------------: |
+|   Architecture   |     <img src="assets/architecture.jpg" width="700px"> |
+| Sequence Diagram | <img src="assets/sequence-diagram.png" width="700px"> |
+|       ERD        |              <img src="assets/erd.png" width="700px"> |
+|    Wireframe     |        <img src="assets/wireframe.png" width="700px"> |
 
 </br>
 
@@ -165,17 +176,6 @@
   <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white"/>
   <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"/>
 </div>
-</br>
-
-## 🗃️ 산출물
-
-|                  |                                                       |
-| :--------------: | ----------------------------------------------------: |
-|   Architecture   |     <img src="assets/architecture.jpg" width="700px"> |
-| Sequence Diagram | <img src="assets/sequence-diagram.png" width="700px"> |
-|       ERD        |              <img src="assets/erd.png" width="700px"> |
-|    Wireframe     |        <img src="assets/wireframe.png" width="700px"> |
-
 </br>
 
 ## 🥝 팀원
