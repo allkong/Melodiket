@@ -1,18 +1,22 @@
-##  서버 목록
+## 서버 목록
+
 1. nginx 웹서버
-2. 맬로디켓 메인 서버 
+2. 맬로디켓 메인 서버
 3. ipfs서버
 4. melodiket-client
 5. eventCollector서버
 6. ELK
 7. jenkins
+
 ## 데이터베이스 정보
+
 - 3306 포트
 - mysql
 - id: kyungho
 - pw : kkho9654kkho9654
 
-##  1. nginx.conf
+## 1. nginx.conf
+
 ```
 user www-data;
 worker_processes auto;
@@ -120,14 +124,16 @@ http {
 
 ```
 
-##  2. 멜로디켓 api 백엔드 서버
+## 2. 멜로디켓 api 백엔드 서버
+
 - 경로 : `/S11P21A310/backend/melodiket`
-> **메인 로직이 담겨있는 멜로디켓 API 백엔드 서버입니다.**
+  > **메인 로직이 담겨있는 멜로디켓 API 백엔드 서버입니다.**
 - 버전
 
-    - 자바 17, spring boot 3.3.3
+  - 자바 17, spring boot 3.3.3
 
 - 빌드 스크립트
+
 ```
 #!/bin/bash
 set -x  # 이 부분을 추가하여 모든 명령이 출력되도록 설정
@@ -155,11 +161,14 @@ fi
 
 - env파일
 - .env
+
 ```
 CURRENT_ENV=release
 SERVER_PORT=8077
 ```
+
 - release.env
+
 ```
 # 은행 서버 URL
 BANK_SERVER_URL=http://localhost:9091
@@ -202,10 +211,13 @@ ELASTICSEARCH_HOST=j11a310.p.ssafy.io
 ```
 
 ## 3. ipfs서버
+
 - 경로 : `/S11P21A310/backend/ipfs-server`
-> **ipfs이미지 캐싱을 위한 ipfs서버**
+
+  > **ipfs이미지 캐싱을 위한 ipfs서버**
 
 - 빌드 스크립트
+
 ```
 #!/bin/bash
 export NVM_DIR="$HOME/.nvm"
@@ -228,10 +240,13 @@ echo "IPFS server deployment completed." &>> "$LOG_FILE"
 ```
 
 ## 4. melodiket-client
+
 - 경로 : `/S11P21A310/frontend/melodiket`
-> nextjs기반 ssr을 위한 배포
+
+  > nextjs기반 ssr을 위한 배포
 
 - 빌드 스크립트
+
 ```
 #!/bin/bash
 export NVM_DIR="$HOME/.nvm"
@@ -257,14 +272,14 @@ echo "Frontend deployment completed." &>> "$LOG_FILE"
 ```
 
 - 환경변수
-    - .env
+  - .env
+
 ```
 NEXT_PUBLIC_API_MOCKING=disabled
 NEXT_PUBLIC_BASE_URL=https://j11a310.p.ssafy.io/melodiket/api/v1
 NEXT_PUBLIC_SITE_URL=https://j11a310.p.ssafy.io
 
 NEXT_PUBLIC_S3_URL='https:/'
-NEXT_PUBLIC_CID_URL='https://j11a310.p.ssafy.io/kubo/ipfs'
 NEXT_PUBLIC_IPFS_URL='https://j11a310.p.ssafy.io/kubo/ipfs'
 
 NEXT_PUBLIC_KAKAO_API_KEY=083407cc8986f898c83f457cee580c3a
@@ -273,11 +288,14 @@ NEXT_PUBLIC_SITE_URL=https://j11a310.p.ssafy.io
 ```
 
 ## 5. eventCollector서버
+
 - 경로 : `/S11P21A310/backend/event-subscribe-server`
-> 이더리움 네트워크를 체크하며 나오는 이벤트들을 감지하여 elastic-search에 저장한다.  
-elk 배포(6번 참조) 필요합니다.
+
+  > 이더리움 네트워크를 체크하며 나오는 이벤트들을 감지하여 elastic-search에 저장한다.  
+  > elk 배포(6번 참조) 필요합니다.
 
 - 빌드 스크립트
+
 ```
 #!/bin/bash
 export NVM_DIR="$HOME/.nvm"
@@ -302,8 +320,10 @@ wait # 'pm2 restart'가 완료될 때까지 대기
 echo "event-collector server deployment completed." &>> "$LOG_FILE"
 
 ```
+
 - 환경변수
-    - .env
+  - .env
+
 ```
 # Ethereum 노드 URL (예: Infura)
 ETHEREUM_NODE_RPC_URL=https://rpc.ssafy-blockchain.com
@@ -330,12 +350,14 @@ LOGSTASH_PORT=5000
 
 ```
 
-
 ## 6. ELK
+
 - 경로 : `/S11P21A310/backend/event-subscribe-server/elk`
-> 블록체인 네트워크 내의 이벤트를 기록하기 위한 로깅 서버
+
+  > 블록체인 네트워크 내의 이벤트를 기록하기 위한 로깅 서버
 
 - 배포 스크립트 (docekr-compose.yml)
+
 ```
 version: '3.3'
 services:
@@ -377,6 +399,7 @@ volumes:
 ```
 
 - logstash 설정 (logstash.conf)
+
 ```
 input {
   tcp {
@@ -399,6 +422,7 @@ output {
 ```
 
 ## 7. jenkins
+
 > 무중단 배포를 위한 CI/CD툴
 
 - http://j11a310.p.ssafy.io:8080
@@ -407,6 +431,7 @@ output {
 - pw : jdbc123@
 
 - 빌드스크립트
+
 ```
 pipeline {
     agent any
