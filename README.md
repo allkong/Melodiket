@@ -2,6 +2,10 @@
 
 <img src="assets/melodiket.png" />
 
+[회고 보러가기 ✍️](https://allkong.tistory.com/80)
+
+</br>
+
 ## 📅 프로젝트 정보
 
 <div align=center>
@@ -132,7 +136,7 @@
 </div>
 <div>
   <img src="https://img.shields.io/badge/Zustand-433E38?style=for-the-badge&logo=Zustand&logoColor=white"/>
-  <img src="https://img.shields.io/badge/React Query-FF4154?style=for-the-badge&logo=ReactQuery&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TanStack Query-FF4154?style=for-the-badge&logo=ReactQuery&logoColor=white"/>
 </div>
 <div>
   <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"/>
